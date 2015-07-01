@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!-- 项目相关sql -->
+<Scheme>
+	<!-- 新建项目 -->
+	<select id="create_project">
+		insert into
+		t_project(project_id,project_name,head,parent_id,root_id,create_user,address,longitude,latitude,status,create_time)
+		values('#project_id#','#project_name#','#head#','#parent_id#','#root_id#','#create_user#','#address#','#longitude#','#latitude#','0',to_date('#create_time#','yyyy-MM-dd
+		HH24:mi:ss'))
+	</select>
+	<select id="query_project_by_id">
+		select
+		t_project.project_id as
+		project_id,(select
+		project_name from t_project where 1=1 and a.project_id!=a.parent_id
+		and project_id = a.parent_id)
+		||
+		'-' || a.project_name as
+		project_name,t_project.head as
+		head,t_project.parent_id as
+		parent_id,t_project.root_id as
+		root_id,t_user.user_name as
+		create_user,t_project.address as
+		address,t_project.longitude as
+		longitude,t_project.latitude as
+		latitude,t_project.status as
+		status,(to_char(t_project.create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		create_time
+		from t_project right join t_user on
+		t_project.create_user=t_user.user_id
+		where 1=1
+		[and
+		t_project.project_id='#project_id#' and t_project.status='0']
+	</select>
+	<select id="query_project_by_create_user">
+		select
+		a.project_id as
+		project_id,(select
+		project_name
+		from t_project where 1=1 and a.project_id!=a.parent_id
+		and project_id =
+		a.parent_id)
+		|| '-' ||
+		a.project_name as project_name,a.head as
+		head,a.parent_id as
+		parent_id,a.root_id as
+		root_id,b.user_name as
+		create_user,a.address
+		address,a.longitude as longitude,a.latitude as
+		latitude,a.status as
+		status,(to_char(a.create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		create_time
+		from t_project a right join t_user b on
+		a.create_user=b.user_id
+		where
+		1=1
+		[and
+		a.create_user='#create_user#' and
+		a.status='0']
+		order
+		by
+		a.create_time asc
+	</select>
+	<select id="query_user_current_project">
+		select
+		t_project.project_id as
+		project_id,(select
+		project_name from t_project where 1=1 and a.project_id!=a.parent_id
+		and project_id = a.parent_id)
+		||
+		'-' || a.project_name as
+		project_name,t_project.head as
+		head,t_project.parent_id as
+		parent_id,t_project.root_id as
+		root_id,t_user.user_name as
+		create_user,t_project.address as
+		address,t_project.longitude as
+		longitude,t_project.latitude as
+		latitude,t_project.status as
+		status,(to_char(t_project.create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		create_time
+		from t_project right join t_user on
+		t_project.create_user=t_user.user_id
+		where 1=1
+		[and
+		t_user.user_id='#user_id#' and t_project.status='0']
+		order by
+		t_project.create_time asc
+	</select>
+	<select id="query_leaf_count">
+		select count(*) from t_project where 1=1
+		[and
+		parent_id='#project_id#']
+		[and
+		project_id!='#project_id#' and
+		status='0']
+	</select>
+	<select id="update_parent_project">
+		update t_project set parent_id='#parent_id#',
+		root_id='#root_id#'
+		where 1=1
+		[and project_id='#project_id#']
+	</select>
+	<select id="delete_project">
+		update t_project set status='1'
+		where 1=1
+		[and
+		root_id='#project_id#' or project_id='#project_id#']
+	</select>
+</Scheme>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <LinearLayout style="@style/layout_body" >
+
+        <EditText
+            android:id="@+id/project_name"
+            style="@style/base_edit_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="30dp"
+            android:hint="@string/project_hint_name"
+            android:inputType="textPostalAddress"
+            android:maxLength="32" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/project_address"
+                style="@style/base_edit_text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:hint="@string/project_hint_address"
+                android:inputType="textPostalAddress"
+                android:maxLength="128" />
+
+            <Button
+                android:id="@+id/address_location"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/ic_location" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp" >
+
+            <com.baidu.mapapi.map.MapView
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true" />
+
+            <Button
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_margin="5dp"
+                android:background="@drawable/ic_location" />
+        </FrameLayout>
+    </LinearLayout>
+
+</LinearLayout>

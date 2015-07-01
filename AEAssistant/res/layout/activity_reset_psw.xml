@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <ScrollView
+        style="@style/layout_body"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" >
+
+            <EditText
+                android:id="@+id/reset_password"
+                style="@style/base_edit_text"
+                android:layout_marginTop="30dp"
+                android:drawableLeft="@drawable/ic_password"
+                android:hint="@string/reset_psw_hint"
+                android:inputType="textPassword"
+                android:maxLength="32" />
+            
+            <EditText
+                android:id="@+id/reset_password_again"
+                style="@style/base_edit_text"
+                android:layout_marginTop="10dp"
+                android:drawableLeft="@drawable/ic_password"
+                android:hint="@string/reset_psw_hint2"
+                android:inputType="textPassword"
+                android:maxLength="32" />
+
+            <Button
+                android:id="@+id/reset_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/btn_common"
+                android:padding="10dp"
+                android:text="@string/reset_psw"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

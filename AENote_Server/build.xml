@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="AENote-Server" default="build-war" basedir=".">
+	<property name="build.dir" value="${basedir}/ant-build" />
+	<property name="dist.dir" value="${basedir}/dist" />
+	<property name="pro.war" value="IFIP-Server.war" />
+
+	<path id="classpath">
+		<fileset dir="${basedir}/lib-compile">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="jarfiles">
+		<fileset dir="${basedir}/webapp/WEB-INF/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="init">
+		<delete dir="${dist.dir}" quiet="true" />
+		<delete dir="${build.dir}" quiet="true" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.dir}/WEB-INF/classes" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="compile-class" depends="init">
+		<echo>compile AENote-Server source</echo>
+		<javac destdir="${build.dir}/WEB-INF/classes"
+    	       encoding="UTF-8" target="1.5" debug="on" debuglevel="lines,vars,source">
+			<src path="${basedir}/src"/>
+			<include name="**/*.java" />
+			<classpath refid="jarfiles" />
+			<classpath refid="classpath" />
+		</javac>
+		<echo>copy config files</echo>
+		<copy todir="${build.dir}/WEB-INF/classes">
+			<fileset dir="${basedir}/src/">
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+		<echo>copy WebContent source</echo>
+		<copy todir="${build.dir}/">
+			<fileset dir="${basedir}/webapp/">
+				<exclude name="**/*.bak" />
+				<exclude name="**/*.db" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build-war" depends="compile-class">
+		<echo>build WAR</echo>
+		<war destfile="${dist.dir}/${pro.war}" webxml="${build.dir}/WEB-INF/web.xml">
+			<fileset dir="${build.dir}">
+				<exclude name="**/*.db"/>
+				<exclude name="**/*.bak"/>
+			</fileset>
+		</war>
+	</target>
+</project>

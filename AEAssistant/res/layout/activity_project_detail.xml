@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <ScrollView style="@style/layout_body" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/project_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@color/text_normal"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/project_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/project_status_close"
+                android:textColor="@color/red"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
+
+            <TextView
+                android:id="@+id/project_manager_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@drawable/text_light"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
+
+            <TextView
+                android:id="@+id/project_create_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@drawable/text_light"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
+
+            <TextView
+                android:id="@+id/project_leaf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_top"
+                android:text="@string/project_leaf_click"
+                android:padding="10dp"
+                android:textColor="@drawable/text_light"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
+
+            <TextView
+                android:id="@+id/project_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@drawable/text_light"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
+
+            <com.baidu.mapapi.map.MapView
+                android:id="@+id/project_mapview"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-autowire="byName">
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:resource/application.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${dataSource.driver}" />
+		<property name="url" value="${dataSource.url}" />
+		<property name="username" value="${dataSource.user}" />
+		<property name="password" value="${dataSource.password}" />
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+	</bean>
+	<!-- 用户信息 -->
+	<bean id="userService" class="com.zzn.aenote.http.service.UserService">
+	</bean>
+	<!-- 项目信息 -->
+	<bean id="projectService" class="com.zzn.aenote.http.service.ProjectService">
+	</bean>
+	<!-- 考勤信息 -->
+	<bean id="attendanceService" class="com.zzn.aenote.http.service.AttendanceService">
+	</bean>
+	<!-- 附件 -->
+	<bean id="attchService" class="com.zzn.aenote.http.service.AttchService">
+	</bean>
+	<!-- 注册 -->
+	<bean id="register" class="com.zzn.aenote.http.server.user.Register">
+		<property name="userService">
+			<ref local="userService" />
+		</property>
+	</bean>
+	<!-- 登陆 -->
+	<bean id="login" class="com.zzn.aenote.http.server.user.Login">
+		<property name="userService">
+			<ref local="userService" />
+		</property>
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
+	<!-- 短信验证 -->
+	<bean id="verifySmsCode" class="com.zzn.aenote.http.server.user.VerifySmsCode">
+	</bean>
+	<!-- 修改密码 -->
+	<bean id="resetPassword" class="com.zzn.aenote.http.server.user.ResetPassword">
+		<property name="userService">
+			<ref local="userService" />
+		</property>
+	</bean>
+	<!-- 修改用户头像 -->
+	<bean id="updateHead" class="com.zzn.aenote.http.server.user.UpdateHead">
+		<property name="userService">
+			<ref local="userService" />
+		</property>
+		<property name="attchService">
+			<ref local="attchService" />
+		</property>
+		<property name="charset"><!-- 默认编码为UTF-8 -->
+			<value>UTF-8</value>
+		</property>
+		<property name="maxSize"><!-- 默认接收最大文件大小为10M -->
+			<value>104857600</value>
+		</property>
+	</bean>
+	<!-- 创建项目 -->
+	<bean id="createProject" class="com.zzn.aenote.http.server.project.CreateProject">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
+	<!-- 更新上级项目 -->
+	<bean id="joinProject" class="com.zzn.aenote.http.server.project.JoinProject">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
+	<!-- 查询所有详情 -->
+	<bean id="queryProjectList" class="com.zzn.aenote.http.server.project.QueryProjectList">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
+	<!-- 查询项目详情 -->
+	<bean id="queryProjectDetail" class="com.zzn.aenote.http.server.project.QueryProjectDetail">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
+	<!-- 删除项目 -->
+	<bean id="deleteProject" class="com.zzn.aenote.http.server.project.DeleteProject">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
+	<!-- 打卡 -->
+	<bean id="scanning" class="com.zzn.aenote.http.server.attendance.Scanning">
+	    <property name="userService">
+			<ref local="userService" />
+		</property>
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+		<property name="attendanceService">
+			<ref local="attendanceService" />
+		</property>
+		<property name="attchService">
+			<ref local="attchService" />
+		</property>
+		<property name="charset"><!-- 默认编码为UTF-8 -->
+			<value>UTF-8</value>
+		</property>
+		<property name="maxSize"><!-- 默认接收最大文件大小为10M -->
+			<value>104857600</value>
+		</property>
+	</bean>
+</beans>

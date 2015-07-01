@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!-- 用户相关sql -->
+<Scheme>
+	<!-- 注册 -->
+	<select id="insert_user_info">
+		insert into
+		t_user(user_id,user_name,phone,remark,sex,password,small_head,big_head,create_time)
+		values('#user_id#','#user_name#','#phone#','','#sex#','#password#','','',to_date('#create_time#','yyyy-MM-dd
+		HH24:mi:ss'))
+	</select>
+	<!-- 登陆验证 -->
+	<select id="valid_user_info">
+		select
+		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as create_time
+		from t_user
+		where 1=1
+		[and phone='#phone#']
+		[and
+		password='#password#']
+	</select>
+	<!-- 修改密码 -->
+	<select id="reset_password">
+		update t_user set password='#password#'
+		where 1=1
+		[and
+		user_id='#user_id#']
+	</select>
+	<!-- 更新个人资料 -->
+	<select id="update_user_info">
+		update t_user set user_name='#user_name#',
+		phone='#phone#',
+		remark='#remark#',sex='#sex#'
+		where 1=1
+		[and user_id='#user_id#']
+	</select>
+	<!-- 加入项目 -->
+	<select id="update_project">
+		update t_user set project='#project#'
+		where 1=1
+		[and user_id='#user_id#']
+	</select>
+	<!-- 修改头像 -->
+	<select id="update_user_head">
+		update t_user set small_head='#small_head#',
+		big_head='#big_head#'
+		where 1=1
+		[and user_id='#user_id#']
+	</select>
+	<!-- 根据用户id查询用户资料 -->
+	<select id="query_user_by_id">
+		select
+		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as create_time
+		from t_user
+		where 1=1
+		[and
+		user_id='#user_id#']
+	</select>
+	<!-- 根据用户电话查询用户资料 -->
+	<select id="query_user_by_phone">
+		select
+		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as create_time
+		from t_user
+		where 1=1
+		[and phone='#phone#']
+	</select>
+	<!-- 根据用户名查询用户资料 -->
+	<select id="query_user_by_name">
+		select
+		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as create_time
+		from t_user
+		where 1=1
+		[and user_name like
+		%'#user_name#'%]
+	</select>
+</Scheme>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql-map-config>
+	<sql-map resource="com/zzn/aenote/http/service/user-query.xml" />
+	<sql-map resource="com/zzn/aenote/http/service/attch-query.xml" />
+	<sql-map resource="com/zzn/aenote/http/service/project-query.xml" />
+	<sql-map resource="com/zzn/aenote/http/service/attendance-query.xml" />
+</sql-map-config>

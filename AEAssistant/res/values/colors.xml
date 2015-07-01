@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 白色 -->
+    <color name="white">#FFFFFF</color>
+    <!-- 黑色 -->
+    <color name="black">#000000</color>
+    <!-- 透明 -->
+    <color name="transparent">#00000000</color>
+    <!-- 淡灰色 -->
+    <color name="gainsboro">#DCDCDC</color>
+    <!-- 暗金黄色 -->
+    <color name="darkgoldenrod">#B8860B</color>
+    <!-- 暗灰色 -->
+    <color name="darkgray">#A9A9A9</color>
+    <!-- 红色 -->
+    <color name="red">#FF0000</color>
+    <color name="red_pressed">#EA0000</color>
+    
+    <color name="theme_green">#1FBBA6</color>
+    <color name="theme_green_pressed">#00CACA</color>
+    <color name="text_normal">#333333</color>
+    <color name="body_bg">#FCFCFC</color>
+    <color name="menu_bg">#70B3B3B3</color>
+    
+    <drawable name="btn_text_normal">#333333</drawable>
+    <drawable name="btn_text_light">#A9A9A9</drawable>
+    <drawable name="btn_text_pressed">#FFFFFF</drawable>
+    <drawable name="transparent">#00000000</drawable>
+</resources>

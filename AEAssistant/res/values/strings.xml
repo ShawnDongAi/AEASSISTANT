@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">简正点工</string>
+    <string name="app_error">程序异常退出</string>
+    <string name="settings">设置</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="warning">提示</string>
+    <string name="loading">拼命加载中…</string>
+    <string name="http_error">网络不给力,请检查您的网络连接</string>
+    <string name="http_null">当前无网络连接,请设置您的网络连接</string>
+    <string name="sdcard_error">请检查存储卡是否挂载</string>
+    <string name="developing">小猿努力coding中，尽请期待</string>
+    <string name="exit_toast">再按一次返回键退出</string>
+    <string name="unknow">未知</string>
+    <string name="delete">删除</string>
+
+    <!-- 登陆&注册 -->
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="login_hint_name">请输入姓名</string>
+    <string name="login_hint_phone">请输入手机号码</string>
+    <string name="login_hint_password">请输入密码</string>
+    <string name="login_hint_sms">请输入验证码</string>
+    <string name="login_sms_verify">获取短信验证码</string>
+    <string name="login_sms_timer">重新发送(%d)</string>
+    <string name="login_remember_pwd">记住密码</string>
+    <string name="login_empty_name">请输入姓名</string>
+    <string name="login_empty_phone">请输入手机号码</string>
+    <string name="login_empty_psw">请输入密码</string>
+    <string name="login_empty_sms">请输入短信验证码</string>
+    <string name="login_sms_send">短信验证码已发送至您的手机,请注意查收</string>
+    <string name="login_sms_send_error">短信验证码发送失败,请重试</string>
+    <string name="login_error_phone">请输入正确的手机号码</string>
+    <string name="register_new_account">注册新账号</string>
+    <string name="forget_psw">忘记密码</string>
+    <string name="verify_sms">短信验证</string>
+    <string name="reset_psw">修改密码</string>
+    <string name="reset_psw_hint">请输入新密码</string>
+    <string name="reset_psw_hint2">请再次输入新密码</string>
+    <string name="reset_psw2_null">请输入确认密码</string>
+    <string name="different_psw">两次输入的密码不一致</string>
+
+    <!-- 主页 -->
+    <string name="title_project_manager">项目管理</string>
+    <string name="title_scanning">开工啦</string>
+    <string name="title_attendance_record">考勤记录</string>
+    <string name="title_user_center">个人中心</string>
+    <string name="title_setting">设置</string>
+    <string name="out_of_project_location">您当前无任何激活项目</string>
+    <string name="current_project">当前激活项目：%s</string>
+    <string name="scanning_for_other">温馨提示：接收到他人未接来电后可为其拍照打卡</string>
+    <string name="scanning_null_photo">请确认拍照是否成功</string>
+    <string name="scanning_call_listen">是否为%s打卡?</string>
+    <string name="scanning_join_current">是否将%s添加到您管理的项目中</string>
+    <string name="scanning_history">历史工友</string>
+
+    <!-- 个人信息 -->
+    <string name="sex">性别:</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="lable_head">头像</string>
+    <string name="lable_name">姓名</string>
+    <string name="lable_phone">电话</string>
+    <string name="lable_qrcode">我的二维码</string>
+    <string name="lable_sex">性别</string>
+    <string name="lable_remark">个人说明</string>
+    <string name="lable_address">位置</string>
+
+    <!-- 附件 -->
+    <string name="photograph">拍照</string>
+    <string name="album">从相册选取</string>
+
+    <!-- 项目管理 -->
+    <string name="project_join">加入</string>
+    <string name="project_exit">退出</string>
+    <string name="project_close">关闭</string>
+    <string name="project_current">当前激活项目</string>
+    <string name="project_manager">管理的项目</string>
+    <string name="project_create">新建项目</string>
+    <string name="project_hint_name">请输入项目名称</string>
+    <string name="project_hint_address">请输入项目地址</string>
+    <string name="address_search_failed">地址解析失败,请确认地址信息</string>
+    <string name="location_search_failed">获取地址失败,请重试</string>
+    <string name="location_failed">定位失败,请重试</string>
+    <string name="null_project_name">请填写项目名</string>
+    <string name="null_project_location">缺少项目位置信息</string>
+    <string name="null_project">无任何项目</string>
+
+    <!-- 项目详情 -->
+    <string name="project_detail">项目详情</string>
+    <string name="project_create_leaf">创建子项目</string>
+    <string name="project_name">项目名称：%s</string>
+    <string name="project_status_close">已关闭</string>
+    <string name="project_manager_user">管理员：%s</string>
+    <string name="project_create_time">创建时间：%s</string>
+    <string name="project_address">项目地址：%s</string>
+    <string name="project_leaf_click">点击查看组织架构</string>
+    <string name="project_user_click">点击查看项目通讯录</string>
+    <string name="project_phone_hint">请输入管理员手机号</string>
+    <string name="project_leaf_phone_lable">温馨提示：接收到他人未接来电后可设置其为管理员</string>
+    <string name="null_project_manager">请填写管理员手机号</string>
+    <string name="project_leaf_call_listen">监听到%s的来电,是否设置其为管理员?</string>
+
+</resources>

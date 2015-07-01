@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!-- 附件相关sql -->
+<Scheme>
+	<!-- 插入附件 -->
+	<select id="insert_attch">
+		insert into
+		t_attch(attch_id,type,url,name)
+		values('#attch_id#','#type#','#url#','#name#')
+	</select>
+	<!-- 查询附件 -->
+	<select id="query_attch">
+		select
+		*
+		from t_attch
+		where 1=1
+		[and
+		attch_id='#attch_id#']
+	</select>
+</Scheme>
