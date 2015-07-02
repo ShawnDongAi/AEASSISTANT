@@ -96,6 +96,10 @@ public class SwipeMenuListView extends ListView {
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 		return super.onInterceptTouchEvent(ev);
 	}
+	
+	public boolean isSwipeMode() {
+		return mTouchState == TOUCH_STATE_X;
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {

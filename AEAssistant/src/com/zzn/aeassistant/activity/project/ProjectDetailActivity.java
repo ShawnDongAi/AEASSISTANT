@@ -16,8 +16,8 @@ import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 public class ProjectDetailActivity extends BaseActivity {
-	private TextView name, status, managerUser, createTime, leafProject,
-			address;
+	private TextView name, status, managerUser, createTime, projectStructure,
+			projectUsers, projectUpdateParent, address;
 	private MapView mMapView;
 	private BaiduMap mBaiduMap;
 	private ProjectVO project;
@@ -38,9 +38,9 @@ public class ProjectDetailActivity extends BaseActivity {
 		status = (TextView) findViewById(R.id.project_status);
 		managerUser = (TextView) findViewById(R.id.project_manager_user);
 		createTime = (TextView) findViewById(R.id.project_create_time);
-		leafProject = (TextView) findViewById(R.id.project_leaf);
+		projectStructure = (TextView) findViewById(R.id.project_leaf);
 		address = (TextView) findViewById(R.id.project_address);
-		leafProject.setOnClickListener(this);
+		projectStructure.setOnClickListener(this);
 
 		mMapView = (MapView) findViewById(R.id.project_mapview);
 		mBaiduMap = mMapView.getMap();

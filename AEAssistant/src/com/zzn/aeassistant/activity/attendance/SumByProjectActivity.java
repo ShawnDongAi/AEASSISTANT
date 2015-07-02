@@ -1,21 +1,19 @@
-package com.zzn.aeassistant.activity.project;
+package com.zzn.aeassistant.activity.attendance;
 
 import java.util.List;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageButton;
 
 import com.baidu.location.BDLocation;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.project.ProjectAdapter;
 import com.zzn.aeassistant.activity.project.ProjectAdapter.ProjectItem;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
@@ -24,45 +22,37 @@ import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.util.ToolsUtil;
-import com.zzn.aeassistant.view.AEProgressDialog;
-import com.zzn.aeassistant.view.pinnedsection.PinnedSectionSwipeMenuListView;
+import com.zzn.aeassistant.view.pinnedsection.PinnedSectionListView;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPinnedSwipeMenuListView;
-import com.zzn.aeassistant.view.swipemenu.SwipeMenu;
-import com.zzn.aeassistant.view.swipemenu.SwipeMenuCreator;
-import com.zzn.aeassistant.view.swipemenu.SwipeMenuItem;
-import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView.OnMenuItemClickListener;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPinnedListView;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
-public class ProjectManagerActivity extends BaseActivity implements
+public class SumByProjectActivity extends BaseActivity implements
 		OnItemClickListener {
-	private PullToRefreshPinnedSwipeMenuListView pullListView;
-	private PinnedSectionSwipeMenuListView listView;
-	private ImageButton btnAdd;
+	private PullToRefreshPinnedListView pullListView;
+	private PinnedSectionListView listView;
 	private ProjectAdapter adapter;
 	private ProjectItem currentSection, managerSection;
 	private ListProjectTask listTask;
 	private InitProjectTask initProjectTask;
-	private DeleteProjectTask deleteProjectTask;
+	private String startDate, endDate;
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_project_manager;
+		return R.layout.activity_sum_by_project;
 	}
 
 	@Override
 	protected int titleStringID() {
-		return R.string.title_project_manager;
+		return R.string.sum_by_project;
 	}
 
 	@Override
 	protected void initView() {
-		btnAdd = (ImageButton) findViewById(R.id.project_btn_add);
-		btnAdd.setOnClickListener(this);
-		pullListView = (PullToRefreshPinnedSwipeMenuListView) findViewById(R.id.project_listview);
+		pullListView = (PullToRefreshPinnedListView) findViewById(R.id.project_listview);
 		listView = pullListView.getRefreshableView();
 		adapter = new ProjectAdapter(mContext);
 		currentSection = new ProjectItem(ProjectItem.SECTION,
@@ -73,8 +63,9 @@ public class ProjectManagerActivity extends BaseActivity implements
 		adapter.addItem(managerSection);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
-		initSwipeMenu();
 		initPullToRefresh();
+		startDate = getIntent().getStringExtra(CodeConstants.KEY_START_DATE);
+		endDate = getIntent().getStringExtra(CodeConstants.KEY_END_DATE);
 		initProjectTask = new InitProjectTask();
 		if (AEApp.getCurrentLoc() == null) {
 			initProjectTask.execute(new Double[] { 0.0, 0.0 });
@@ -85,49 +76,13 @@ public class ProjectManagerActivity extends BaseActivity implements
 		}
 	}
 
-	private void initSwipeMenu() {
-		SwipeMenuCreator creator = new SwipeMenuCreator() {
-			@Override
-			public void create(SwipeMenu menu) {
-				switch (menu.getViewType()) {
-				case ProjectItem.CURRENT_PROJECT:
-				case ProjectItem.MANAGER_PROJECT:
-					SwipeMenuItem item = new SwipeMenuItem(
-							getApplicationContext());
-					item.setBackground(R.drawable.swipe_menu_item1);
-					item.setWidth(ToolsUtil.dip2px(mContext, 90));
-					item.setTitle(R.string.delete);
-					item.setTitleSize(18);
-					item.setTitleColor(Color.WHITE);
-					menu.addMenuItem(item);
-					break;
-				default:
-					break;
-				}
-			}
-		};
-		listView.setMenuCreator(creator);
-		listView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(int position, SwipeMenu menu,
-					int index) {
-				ProjectVO item = adapter.getItem(position).project;
-				deleteProjectTask = new DeleteProjectTask();
-				deleteProjectTask.execute(item.getPROJECT_ID());
-				return false;
-			}
-		});
-		listView.setOpenInterpolator(new DecelerateInterpolator(1.0f));
-		listView.setCloseInterpolator(new DecelerateInterpolator(1.0f));
-	}
-
 	private void initPullToRefresh() {
 		pullListView.setMode(Mode.PULL_FROM_START);
 		pullListView
-				.setOnRefreshListener(new OnRefreshListener<PinnedSectionSwipeMenuListView>() {
+				.setOnRefreshListener(new OnRefreshListener<PinnedSectionListView>() {
 					@Override
 					public void onRefresh(
-							PullToRefreshBase<PinnedSectionSwipeMenuListView> refreshView) {
+							PullToRefreshBase<PinnedSectionListView> refreshView) {
 						String label = DateUtils.formatDateTime(
 								getApplicationContext(),
 								System.currentTimeMillis(),
@@ -141,20 +96,6 @@ public class ProjectManagerActivity extends BaseActivity implements
 						listTask.execute();
 					}
 				});
-	}
-
-	@Override
-	public void onClick(View v) {
-		super.onClick(v);
-		switch (v.getId()) {
-		case R.id.project_btn_add:
-			startActivityForResult(
-					new Intent(this, CreateProjectActivity.class),
-					CodeConstants.REQUEST_CODE_REFRESH);
-			break;
-		default:
-			break;
-		}
 	}
 
 	private class ListProjectTask extends
@@ -236,10 +177,10 @@ public class ProjectManagerActivity extends BaseActivity implements
 			return;
 		}
 		ProjectVO vo = item.project;
-		if (vo != null) {
-			startActivity(new Intent(this, ProjectDetailActivity.class)
-					.putExtra(CodeConstants.KEY_PROJECT_VO, vo));
-		}
+//		if (vo != null) {
+//			startActivity(new Intent(this, ProjectDetailActivity.class)
+//					.putExtra(CodeConstants.KEY_PROJECT_VO, vo));
+//		}
 	}
 
 	@Override
@@ -251,10 +192,6 @@ public class ProjectManagerActivity extends BaseActivity implements
 		if (initProjectTask != null) {
 			initProjectTask.cancel(true);
 			initProjectTask = null;
-		}
-		if (deleteProjectTask != null) {
-			deleteProjectTask.cancel(true);
-			deleteProjectTask = null;
 		}
 		super.onDestroy();
 	}
@@ -334,59 +271,6 @@ public class ProjectManagerActivity extends BaseActivity implements
 				adapter.addItem(managerProject);
 			}
 			adapter.notifyDataSetChanged();
-		}
-	}
-
-	private class DeleteProjectTask extends
-			AsyncTask<String, Integer, HttpResult> {
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			AEProgressDialog.showLoadingDialog(mContext);
-		}
-
-		@Override
-		protected HttpResult doInBackground(String... params) {
-			String project_id = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
-					+ "&project_id=" + project_id;
-			HttpResult result = AEHttpUtil.doPost(
-					URLConstants.URL_DELETE_PRJECT, param);
-			return result;
-		}
-
-		@Override
-		protected void onPostExecute(HttpResult result) {
-			super.onPostExecute(result);
-			AEProgressDialog.dismissLoadingDialog();
-			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				initProjectTask = new InitProjectTask();
-				try {
-					List<ProjectVO> projects = GsonUtil.getInstance().fromJson(
-							result.getRES_OBJ().toString(),
-							new TypeToken<List<ProjectVO>>() {
-							}.getType());
-					AEApp.getCurrentUser().setPROJECTS(projects);
-					initProjectTask = new InitProjectTask();
-					if (AEApp.getCurrentLoc() == null) {
-						initProjectTask.execute(new Double[] { 0.0, 0.0 });
-					} else {
-						initProjectTask.execute(new Double[] {
-								AEApp.getCurrentLoc().getLatitude(),
-								AEApp.getCurrentLoc().getLongitude() });
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					ToastUtil.show(R.string.http_error);
-				}
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
-			AEProgressDialog.dismissLoadingDialog();
 		}
 	}
 }

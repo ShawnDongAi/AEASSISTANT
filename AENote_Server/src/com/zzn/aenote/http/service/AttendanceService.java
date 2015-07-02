@@ -17,14 +17,18 @@ public class AttendanceService extends BaseService {
 	private static SimpleDateFormat format = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 
-	public boolean scanning(String user_id, String project_id, String photo,
+	public boolean scanning(String user_id, String project_id,
+			String parent_id, String root_id, String photo, String address,
 			String longitude, String latitude, String normal) {
 		boolean result = false;
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("user_id", user_id);
 			data.put("project_id", project_id);
+			data.put("parent_id", parent_id);
+			data.put("root_id", root_id);
 			data.put("photo", photo);
+			data.put("address", address);
 			data.put("longitude", longitude);
 			data.put("latitude", latitude);
 			data.put("normal", normal);

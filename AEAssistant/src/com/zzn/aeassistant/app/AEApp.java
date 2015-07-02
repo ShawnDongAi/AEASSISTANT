@@ -5,6 +5,7 @@ import java.io.File;
 import net.sqlcipher.database.SQLiteDatabase;
 import android.app.Application;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.database.AESQLiteHelper;
@@ -23,6 +24,7 @@ public class AEApp extends Application {
 	private static AEApp instance = null;
 	private static AESQLiteHelper mAESQLiteHelper = null;
 	private static UserVO mUser;
+	private static BDLocation mCurrentLoc;
 
 	public AEApp() {
 		instance = this;
@@ -53,6 +55,14 @@ public class AEApp extends Application {
 	
 	public static UserVO getCurrentUser() {
 		return mUser;
+	}
+	
+	public static BDLocation getCurrentLoc() {
+		return mCurrentLoc;
+	}
+	
+	public static void setCurrentLoc(BDLocation currentLoc) {
+		mCurrentLoc = currentLoc;
 	}
 
 	private void creatFileOrDir() {

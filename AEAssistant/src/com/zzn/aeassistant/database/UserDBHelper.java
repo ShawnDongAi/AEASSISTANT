@@ -47,6 +47,9 @@ public class UserDBHelper {
 	
 	public static List<UserVO> getUserHistory() {
 		List<UserVO> result = new ArrayList<UserVO>();
+		if (AEApp.getCurrentUser().getUSER_ID() == null) {
+			return result;
+		}
 		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
 				AESQLiteHelper.ENCRYPT_KEY);
 		Cursor cursor = db.query(table, null, "logon_user_id=?", new String[]{AEApp.getCurrentUser().getUSER_ID()}, null, null, null);

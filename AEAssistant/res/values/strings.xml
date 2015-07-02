@@ -97,11 +97,20 @@
     <string name="project_manager_user">管理员：%s</string>
     <string name="project_create_time">创建时间：%s</string>
     <string name="project_address">项目地址：%s</string>
-    <string name="project_leaf_click">点击查看组织架构</string>
-    <string name="project_user_click">点击查看项目通讯录</string>
+    <string name="project_leaf">查看组织架构</string>
+    <string name="project_user">查看项目通讯录</string>
+    <string name="project_update_parent">项目迁移(将相同顶级项目下的其他项目迁移至当前所属项目)</string>
     <string name="project_phone_hint">请输入管理员手机号</string>
     <string name="project_leaf_phone_lable">温馨提示：接收到他人未接来电后可设置其为管理员</string>
     <string name="null_project_manager">请填写管理员手机号</string>
     <string name="project_leaf_call_listen">监听到%s的来电,是否设置其为管理员?</string>
+    
+    <!-- 考勤记录-->
+    <string name="select_date">选取日期</string>
+    <string name="sum_start_date">起始日期:</string>
+    <string name="sum_end_date">结束日期:</string>
+    <string name="startdate_after_enddate">起始日期不能大于结束日期,请重新选择日期</string>
+    <string name="sum_by_user">查询个人考勤记录</string>
+    <string name="sum_by_project">查询项目考勤记录</string>
 
 </resources>

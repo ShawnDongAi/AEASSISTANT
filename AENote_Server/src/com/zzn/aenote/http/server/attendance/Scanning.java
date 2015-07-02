@@ -104,11 +104,11 @@ public class Scanning extends CmHandlerFile {
 			double current_longitude = Double.parseDouble(longitude);
 			double current_latitude = Double.parseDouble(latitude);
 			Map<String, String> datas = new HashMap<String, String>();
+			String parent_id = "";
+			String root_id = "";
 			// 帮人打卡
 			if (forWho != null && forWho.equals("1")) {
 				project_id = "";
-				String parent_id = "";
-				String root_id = "";
 				String current_root_id = "";
 				String current_parent_id = "";
 				List<Map<String, Object>> parentUsers = userService
@@ -153,7 +153,8 @@ public class Scanning extends CmHandlerFile {
 					}
 					root_id = parentProject.getROOT_ID();
 					parent_id = parentProject.getPROJECT_ID();
-					datas.put("new_project", GsonUtil.getInstance().toJson(parentProject));
+					datas.put("new_project",
+							GsonUtil.getInstance().toJson(parentProject));
 				}
 				List<Map<String, Object>> projects = projectService
 						.queryProjectByCreateUser(user_id);
@@ -167,7 +168,8 @@ public class Scanning extends CmHandlerFile {
 								current_latitude, project_longitude,
 								project_latitude) < 500) {
 							project_id = project.get("project_id").toString();
-							current_parent_id = project.get("parent_id").toString();
+							current_parent_id = project.get("parent_id")
+									.toString();
 							current_root_id = project.get("root_id").toString();
 							break;
 						}
@@ -202,7 +204,10 @@ public class Scanning extends CmHandlerFile {
 						return;
 					}
 					project_id = project.getPROJECT_ID();
-					datas.put("new_project", GsonUtil.getInstance().toJson(project));
+					parent_id = project.getPARENT_ID();
+					root_id = project.getROOT_ID();
+					datas.put("new_project",
+							GsonUtil.getInstance().toJson(project));
 				}
 			}
 			rs.setRES_OBJ(GsonUtil.getInstance().toJson(datas));
@@ -216,8 +221,8 @@ public class Scanning extends CmHandlerFile {
 								+ format.format(new Date(System
 										.currentTimeMillis())), imgFile);
 				boolean result = attendanceService.scanning(user_id,
-						project_id, attch.getATTCH_ID(), longitude, latitude,
-						"0");
+						project_id, parent_id, root_id, attch.getATTCH_ID(),
+						address, longitude, latitude, "0");
 				if (result) {
 					logger.info("打卡成功");
 					rs.setRES_CODE(Global.RESP_SUCCESS);

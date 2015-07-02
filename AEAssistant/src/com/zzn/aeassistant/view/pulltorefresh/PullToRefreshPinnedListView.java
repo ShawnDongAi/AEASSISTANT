@@ -14,11 +14,11 @@ import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.view.pinnedsection.PinnedSectionSwipeMenuListView;
+import com.zzn.aeassistant.view.pinnedsection.PinnedSectionListView;
 import com.zzn.aeassistant.view.pulltorefresh.internal.EmptyViewMethodAccessor;
 import com.zzn.aeassistant.view.pulltorefresh.internal.LoadingLayout;
 
-public class PullToRefreshPinnedSwipeMenuListView extends PullToRefreshAdapterViewBase<PinnedSectionSwipeMenuListView> {
+public class PullToRefreshPinnedListView extends PullToRefreshAdapterViewBase<PinnedSectionListView> {
 
 	private LoadingLayout mHeaderLoadingView;
 	private LoadingLayout mFooterLoadingView;
@@ -27,19 +27,19 @@ public class PullToRefreshPinnedSwipeMenuListView extends PullToRefreshAdapterVi
 
 	private boolean mListViewExtrasEnabled;
 
-	public PullToRefreshPinnedSwipeMenuListView(Context context) {
+	public PullToRefreshPinnedListView(Context context) {
 		super(context);
 	}
 
-	public PullToRefreshPinnedSwipeMenuListView(Context context, AttributeSet attrs) {
+	public PullToRefreshPinnedListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
 
-	public PullToRefreshPinnedSwipeMenuListView(Context context, Mode mode) {
+	public PullToRefreshPinnedListView(Context context, Mode mode) {
 		super(context, mode);
 	}
 
-	public PullToRefreshPinnedSwipeMenuListView(Context context, Mode mode, AnimationStyle style) {
+	public PullToRefreshPinnedListView(Context context, Mode mode, AnimationStyle style) {
 		super(context, mode, style);
 	}
 
@@ -188,8 +188,8 @@ public class PullToRefreshPinnedSwipeMenuListView extends PullToRefreshAdapterVi
 		return proxy;
 	}
 
-	protected PinnedSectionSwipeMenuListView createListView(Context context, AttributeSet attrs) {
-		final PinnedSectionSwipeMenuListView lv;
+	protected PinnedSectionListView createListView(Context context, AttributeSet attrs) {
+		final PinnedSectionListView lv;
 		if (VERSION.SDK_INT >= VERSION_CODES.GINGERBREAD) {
 			lv = new InternalListViewSDK9(context, attrs);
 		} else {
@@ -199,8 +199,8 @@ public class PullToRefreshPinnedSwipeMenuListView extends PullToRefreshAdapterVi
 	}
 
 	@Override
-	protected PinnedSectionSwipeMenuListView createRefreshableView(Context context, AttributeSet attrs) {
-		PinnedSectionSwipeMenuListView lv = createListView(context, attrs);
+	protected PinnedSectionListView createRefreshableView(Context context, AttributeSet attrs) {
+		PinnedSectionListView lv = createListView(context, attrs);
 
 		// Set it to this so it can be used in ListActivity/ListFragment
 		lv.setId(android.R.id.list);
@@ -254,13 +254,13 @@ public class PullToRefreshPinnedSwipeMenuListView extends PullToRefreshAdapterVi
 					scrollRangeY, maxOverScrollX, maxOverScrollY, isTouchEvent);
 
 			// Does all of the hard work...
-			OverscrollHelper.overScrollBy(PullToRefreshPinnedSwipeMenuListView.this, deltaX, scrollX, deltaY, scrollY, isTouchEvent);
+			OverscrollHelper.overScrollBy(PullToRefreshPinnedListView.this, deltaX, scrollX, deltaY, scrollY, isTouchEvent);
 
 			return returnValue;
 		}
 	}
 
-	protected class InternalListView extends PinnedSectionSwipeMenuListView implements EmptyViewMethodAccessor {
+	protected class InternalListView extends PinnedSectionListView implements EmptyViewMethodAccessor {
 
 		private boolean mAddedLvFooter = false;
 
@@ -310,7 +310,7 @@ public class PullToRefreshPinnedSwipeMenuListView extends PullToRefreshAdapterVi
 
 		@Override
 		public void setEmptyView(View emptyView) {
-			PullToRefreshPinnedSwipeMenuListView.this.setEmptyView(emptyView);
+			PullToRefreshPinnedListView.this.setEmptyView(emptyView);
 		}
 
 		@Override
@@ -319,12 +319,5 @@ public class PullToRefreshPinnedSwipeMenuListView extends PullToRefreshAdapterVi
 		}
 
 	}
-	
-	@Override
-	protected boolean isReadyForPullStart() {
-		if (getRefreshableView().isSwipeMode()) {
-			return false;
-		}
-		return super.isReadyForPullStart();
-	}
+
 }

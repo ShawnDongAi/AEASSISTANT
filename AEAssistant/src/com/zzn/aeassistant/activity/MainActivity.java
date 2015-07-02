@@ -68,7 +68,6 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	private UserHistoryAdapter mUserAdapter;
 	private Button mScanning;
 	private ProjectVO project;
-	private BDLocation currentLoc;
 
 	// 打卡拍照的照片路径
 	private String scanningPath = "";
@@ -217,12 +216,16 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	protected void onActivityReceiveLocation(BDLocation location) {
 		super.onActivityReceiveLocation(location);
-		currentLoc = location;
+		AEApp.setCurrentLoc(location);
 		if (location == null) {
 			project = null;
 			ToastUtil.show(R.string.location_failed);
 			mCurrentProject.setText(R.string.out_of_project_location);
 			return;
+		}
+		if (initProjectTask != null) {
+			initProjectTask.cancel(true);
+			initProjectTask = null;
 		}
 		initProjectTask = new InitProjectTask();
 		initProjectTask.execute(new Double[] { location.getLatitude(),
@@ -337,7 +340,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			ToastUtil.show(R.string.scanning_null_photo);
 			return;
 		}
-		if (currentLoc == null) {
+		if (AEApp.getCurrentLoc() == null) {
 			return;
 		}
 		// 拍照后获取位置并打卡
@@ -350,8 +353,9 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		}
 		scanningTask = new ScanningTask();
 		scanningTask.execute(new String[] { scanningPhone, scanningPath,
-				currentLoc.getLongitude() + "", currentLoc.getLatitude() + "",
-				forWho, currentLoc.getAddrStr() });
+				AEApp.getCurrentLoc().getLongitude() + "",
+				AEApp.getCurrentLoc().getLatitude() + "", forWho,
+				AEApp.getCurrentLoc().getAddrStr() });
 	}
 
 	/**
@@ -409,51 +413,25 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 									obj.getString("new_project"),
 									ProjectVO.class);
 							AEApp.getCurrentUser().getPROJECTS().add(project);
+							if (initProjectTask != null) {
+								initProjectTask.cancel(true);
+								initProjectTask = null;
+							}
 							initProjectTask = new InitProjectTask();
-							if (currentLoc == null) {
+							if (AEApp.getCurrentLoc() == null) {
 								initProjectTask
 										.execute(new Double[] { 0.0, 0.0 });
 							} else {
 								initProjectTask.execute(new Double[] {
-										currentLoc.getLatitude(),
-										currentLoc.getLongitude() });
+										AEApp.getCurrentLoc().getLatitude(),
+										AEApp.getCurrentLoc().getLongitude() });
 							}
 						}
-						final String project_id = obj.getString("project_id");
-						String parent_project_id = obj
-								.getString("parent_project_id");
 						String user_name = obj.getString("user_name");
 						String user_phone = obj.getString("user_phone");
 						UserDBHelper.insertUser(user_phone, user_name);
 						mUserAdapter.setUsers(UserDBHelper.getUserHistory());
 						mUserAdapter.notifyDataSetChanged();
-						if (project != null
-								&& !parent_project_id.equals(project
-										.getPROJECT_ID())) {
-							new AlertDialog.Builder(mContext)
-									.setTitle(R.string.warning)
-									.setMessage(
-											getString(
-													R.string.scanning_join_current,
-													user_name))
-									.setPositiveButton(
-											R.string.confirm,
-											new DialogInterface.OnClickListener() {
-												@Override
-												public void onClick(
-														DialogInterface dialog,
-														int which) {
-													// 添加到当前项目中
-													new UpdateParentTask()
-															.execute(new String[] {
-																	project_id,
-																	project.getPROJECT_ID(),
-																	project.getROOT_ID() });
-												}
-											})
-									.setNegativeButton(R.string.cancel, null)
-									.create().show();
-						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -504,22 +482,6 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 				}
 				scanningForOther(incomingNumber);
 			}
-		}
-	}
-
-	private class UpdateParentTask extends
-			AsyncTask<String, Integer, HttpResult> {
-
-		@Override
-		protected HttpResult doInBackground(String... params) {
-			String project_id = params[0];
-			String parent_id = params[1];
-			String root_id = params[2];
-			String param = "project_id=" + project_id + "&parent_project_id="
-					+ parent_id + "&root_project_id=" + root_id;
-			HttpResult result = AEHttpUtil.doPost(
-					URLConstants.URL_UPDATE_PARENT, param);
-			return result;
 		}
 	}
 }

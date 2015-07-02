@@ -4,8 +4,8 @@
 	<!-- 打卡 -->
 	<select id="scanning">
 		insert into
-		t_attendance(user_id,time,photo,project_id,longitude,latitude,normal)
+		t_attendance(user_id,time,photo,project_id,parent_id,root_id,address,longitude,latitude,normal)
 		values('#user_id#',to_date('#time#','yyyy-MM-dd
-		HH24:mi:ss'),'#photo#','#project_id#','#longitude#','#latitude#','#normal#')
+		HH24:mi:ss'),'#photo#','#project_id#','#parent_id#','#root_id#','#address#','#longitude#','#latitude#','#normal#')
 	</select>
 </Scheme>
