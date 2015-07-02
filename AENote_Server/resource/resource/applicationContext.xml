@@ -87,6 +87,9 @@
 		<property name="projectService">
 			<ref local="projectService" />
 		</property>
+		<property name="userService">
+			<ref local="userService" />
+		</property>
 	</bean>
 	<!-- 查询所有详情 -->
 	<bean id="queryProjectList" class="com.zzn.aenote.http.server.project.QueryProjectList">

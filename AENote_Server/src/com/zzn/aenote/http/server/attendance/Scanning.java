@@ -185,7 +185,7 @@ public class Scanning extends CmHandlerFile {
 				} else if (!current_root_id.equals(root_id)) {
 					logger.info("用户在当前位置已经有项目");
 					rs.setRES_CODE(Global.PROJECT_NULL);
-					rs.setRES_MESSAGE("该用户在当前位置已加入其他项目，请提示对方删除已加入项目");
+					rs.setRES_MESSAGE("该用户在当前位置已加入其他项目，请提示对方删除当前所属项目");
 					return;
 				}
 				datas.put("project_id", project_id);

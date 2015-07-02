@@ -36,7 +36,7 @@ public class QueryProjectDetail implements CmHandler {
 					.queryProjectByID(project_id);
 			HashMap<String, Object> result = new HashMap<String, Object>();
 			if (projects != null && projects.size() > 0) {
-				ProjectVO project = assembleProject(projects.get(0));
+				ProjectVO project = ProjectVO.assembleProject(projects.get(0));
 				result.put("project", project);
 				result.put("leaf_count",
 						projectService.queryLeafCount(project.getPROJECT_ID()));
@@ -53,27 +53,5 @@ public class QueryProjectDetail implements CmHandler {
 
 	public void setProjectService(ProjectService projectService) {
 		this.projectService = projectService;
-	}
-
-	private ProjectVO assembleProject(Map<String, Object> project) {
-		ProjectVO vo = new ProjectVO();
-		vo.setPROJECT_ID(project.get("project_id").toString());
-		vo.setPROJECT_NAME(project.get("project_name").toString());
-		if (project.get("head") != null) {
-			vo.setHEAD(project.get("head").toString());
-		}
-		if (project.get("parent_id") != null) {
-			vo.setPARENT_ID(project.get("parent_id").toString());
-		}
-		vo.setROOT_ID(project.get("root_id").toString());
-		vo.setCREATE_TIME(project.get("create_time").toString());
-		vo.setCREATE_USER(project.get("create_user").toString());
-		if (project.get("address") != null) {
-			vo.setADDRESS(project.get("address").toString());
-		}
-		vo.setLONGITUDE(project.get("longitude").toString());
-		vo.setLATITUDE(project.get("latitude").toString());
-		vo.setSTATUS(project.get("status").toString());
-		return vo;
 	}
 }
