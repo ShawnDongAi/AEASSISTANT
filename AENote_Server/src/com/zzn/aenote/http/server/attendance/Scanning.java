@@ -1,6 +1,7 @@
 package com.zzn.aenote.http.server.attendance;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -220,9 +221,22 @@ public class Scanning extends CmHandlerFile {
 								+ "_"
 								+ format.format(new Date(System
 										.currentTimeMillis())), imgFile);
-				boolean result = attendanceService.scanning(user_id,
-						project_id, parent_id, root_id, attch.getATTCH_ID(),
-						address, longitude, latitude, "0");
+				scanningParent(parent_id, address, longitude, latitude);
+				boolean result = false;
+				if (attendanceService.isScanningToday(project_id)) {
+					if (attendanceService.isScanningTodayVaild(project_id)) {
+						attendanceService.updateScanning(user_id, project_id,
+								parent_id, root_id, attch.getATTCH_ID(), address,
+								longitude, latitude, "0");
+					} else {
+						rs.setRES_CODE(Global.ORACLE_ERROR);
+						rs.setRES_MESSAGE("今天已经打过卡了,明天再来哟");
+					}
+				} else {
+					result = attendanceService.scanning(user_id, project_id,
+							parent_id, root_id, attch.getATTCH_ID(), address,
+							longitude, latitude, "0");
+				}
 				if (result) {
 					logger.info("打卡成功");
 					rs.setRES_CODE(Global.RESP_SUCCESS);
@@ -258,5 +272,24 @@ public class Scanning extends CmHandlerFile {
 
 	public void setAttendanceService(AttendanceService attendanceService) {
 		this.attendanceService = attendanceService;
+	}
+
+	public void scanningParent(String project_id, String address, String longitude, String latitude) {
+		List<Map<String, Object>> projects = projectService
+				.queryProjectByID(project_id);
+		if (projects != null && projects.size() > 0) {
+			ProjectVO project = ProjectVO.assembleProject(projects.get(0));
+			boolean isScanning = attendanceService.isScanningToday(project_id);
+			if (!isScanning) {
+				List<Map<String, Object>> users = userService.queryUserByID(project.getCREATE_USER());
+				if (users != null && users.size() > 0) {
+					UserVO user = UserVO.assembleUserVO(users.get(0));
+					attendanceService.scanning(user.getUSER_ID(), project_id,
+							project.getPARENT_ID(), project.getROOT_ID(), "",
+							address, longitude, latitude, "0");
+				}
+				scanningParent(project.getPARENT_ID(), address, longitude, latitude);
+			}
+		}
 	}
 }

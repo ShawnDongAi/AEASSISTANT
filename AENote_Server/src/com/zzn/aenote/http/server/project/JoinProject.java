@@ -29,7 +29,7 @@ public class JoinProject implements CmHandler {
 			BaseRep rs) throws Exception {
 		try {
 			String parent_project_id = req.getParameter("parent_project_id");
-			String leaf_user_phone = req.getParameter("leaf_user_id");
+			String leaf_user_phone = req.getParameter("leaf_user_phone");
 			if (StringUtil.isEmpty(parent_project_id)) {
 				logger.info("缺少项目信息");
 				rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);

@@ -1,5 +1,6 @@
 package com.zzn.aeassistant.activity.project;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -39,35 +40,33 @@ public class ProjectDetailActivity extends BaseActivity {
 		managerUser = (TextView) findViewById(R.id.project_manager_user);
 		createTime = (TextView) findViewById(R.id.project_create_time);
 		projectStructure = (TextView) findViewById(R.id.project_leaf);
+		projectUpdateParent = (TextView) findViewById(R.id.project_update_parent);
 		address = (TextView) findViewById(R.id.project_address);
 		projectStructure.setOnClickListener(this);
+		projectUpdateParent.setOnClickListener(this);
 
 		mMapView = (MapView) findViewById(R.id.project_mapview);
 		mBaiduMap = mMapView.getMap();
 
 		project = (ProjectVO) getIntent().getSerializableExtra(
 				CodeConstants.KEY_PROJECT_VO);
-		if (project != null) {
-			name.setText(getString(R.string.project_name,
-					project.getPROJECT_NAME()));
-			status.setVisibility(project.getSTATUS().equals("1") ? View.VISIBLE
-					: View.GONE);
-			managerUser.setText(getString(R.string.project_manager_user,
-					project.getCREATE_USER()));
-			createTime.setText(getString(R.string.project_create_time,
-					project.getCREATE_TIME()));
-			address.setText(getString(R.string.project_address,
-					project.getADDRESS()));
-			double longitude = Double.parseDouble(project.getLONGITUDE());
-			double latitude = Double.parseDouble(project.getLATITUDE());
-			LatLng ll = new LatLng(latitude, longitude);
-			MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll, 17f);
-			mBaiduMap.clear();
-			mBaiduMap.addOverlay(new MarkerOptions().position(ll).icon(
-					BitmapDescriptorFactory
-							.fromResource(R.drawable.ic_location)));
-			mBaiduMap.animateMapStatus(u);
-		}
+		name.setText(getString(R.string.project_name, project.getPROJECT_NAME()));
+		status.setVisibility(project.getSTATUS().equals("1") ? View.VISIBLE
+				: View.GONE);
+		managerUser.setText(getString(R.string.project_manager_user,
+				project.getCREATE_USER()));
+		createTime.setText(getString(R.string.project_create_time,
+				project.getCREATE_TIME()));
+		address.setText(getString(R.string.project_address,
+				project.getADDRESS()));
+		double longitude = Double.parseDouble(project.getLONGITUDE());
+		double latitude = Double.parseDouble(project.getLATITUDE());
+		LatLng ll = new LatLng(latitude, longitude);
+		MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll, 17f);
+		mBaiduMap.clear();
+		mBaiduMap.addOverlay(new MarkerOptions().position(ll).icon(
+				BitmapDescriptorFactory.fromResource(R.drawable.ic_location)));
+		mBaiduMap.animateMapStatus(u);
 	}
 
 	@Override
@@ -75,6 +74,10 @@ public class ProjectDetailActivity extends BaseActivity {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.project_leaf:
+			break;
+		case R.id.project_update_parent:
+			startActivity(new Intent(mContext, UpdateParentActivity.class)
+					.putExtra(CodeConstants.KEY_PROJECT_VO, project));
 			break;
 		default:
 			break;

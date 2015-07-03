@@ -123,9 +123,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent"
             android:launchMode="singleInstance" />
-        <!-- 创建子项目页 -->
+        <!-- 项目迁移页 -->
         <activity
-            android:name=".activity.project.CreateLeafProjectActivity"
+            android:name=".activity.project.UpdateParentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent"
             android:launchMode="singleInstance" />

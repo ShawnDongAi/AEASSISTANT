@@ -7,7 +7,7 @@
     <RelativeLayout style="@style/layout_body" >
 
         <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPinnedListView
-            android:id="@+id/project_listview"
+            android:id="@+id/base_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:cacheColorHint="@color/transparent"

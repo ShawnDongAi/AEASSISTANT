@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <RelativeLayout style="@style/layout_body" >
+
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_centerInParent="true"
+        android:padding="5dp"
+        android:text="@string/project_update_parent_hint"
+        android:textColor="@color/darkgray"
+        android:textSize="16sp" />
+    </RelativeLayout>
+
+</LinearLayout>

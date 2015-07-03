@@ -42,7 +42,7 @@ public class SumByProjectActivity extends BaseActivity implements
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_sum_by_project;
+		return R.layout.activity_base_list;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class SumByProjectActivity extends BaseActivity implements
 
 	@Override
 	protected void initView() {
-		pullListView = (PullToRefreshPinnedListView) findViewById(R.id.project_listview);
+		pullListView = (PullToRefreshPinnedListView) findViewById(R.id.base_list);
 		listView = pullListView.getRefreshableView();
 		adapter = new ProjectAdapter(mContext);
 		currentSection = new ProjectItem(ProjectItem.SECTION,
@@ -177,10 +177,13 @@ public class SumByProjectActivity extends BaseActivity implements
 			return;
 		}
 		ProjectVO vo = item.project;
-//		if (vo != null) {
-//			startActivity(new Intent(this, ProjectDetailActivity.class)
-//					.putExtra(CodeConstants.KEY_PROJECT_VO, vo));
-//		}
+		if (vo != null) {
+			Intent intent = new Intent(this, SumByProListActivity.class);
+			intent.putExtra(CodeConstants.KEY_START_DATE, startDate);
+			intent.putExtra(CodeConstants.KEY_END_DATE, startDate);
+			intent.putExtra(CodeConstants.KEY_PROJECT_ID, vo.getPROJECT_ID());
+			startActivity(intent);
+		}
 	}
 
 	@Override
