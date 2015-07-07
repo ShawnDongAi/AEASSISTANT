@@ -194,4 +194,40 @@ public class ProjectService extends BaseService {
 			return false;
 		}
 	}
+	
+	/**
+	 * 查询组织架构
+	 * @param project_id
+	 * @return
+	 */
+	public List<Map<String, Object>> queryProjectStructure(String project_id) {
+		List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("project_id", project_id);
+			projectList = getJdbc().queryForList(
+					getSql("query_project_structure", data));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return projectList;
+	}
+
+	/**
+	 * 查询项目成员
+	 * @param project_id
+	 * @return
+	 */
+	public List<Map<String, Object>> queryProjectUsers(String project_id) {
+		List<Map<String, Object>> userList = new ArrayList<Map<String, Object>>();
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("project_id", project_id);
+			userList = getJdbc().queryForList(
+					getSql("query_project_users", data));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return userList;
+	}
 }

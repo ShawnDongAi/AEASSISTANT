@@ -152,4 +152,19 @@ public class AttendanceService extends BaseService {
 		}
 		return result;
 	}
+
+	public List<Map<String, Object>> sumListByUser(String startDate,
+			String endDate, String user_id) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("start_date", startDate);
+			data.put("end_date", endDate);
+			data.put("user_id", user_id);
+			result = getJdbc().queryForList(getSql("sum_list_by_user", data));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

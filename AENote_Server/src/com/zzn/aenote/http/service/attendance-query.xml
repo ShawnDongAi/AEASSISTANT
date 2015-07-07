@@ -86,4 +86,29 @@
 		between to_date('#start_date#','yyyy/mm/dd') and
 		to_date('#end_date#','yyyy/mm/dd')]
 	</select>
+	<select id="sum_list_by_user">
+		select t.*, a.user_name, a.phone, (select
+		project_name
+		from t_project where 1=1 and t.project_id!=t.parent_id
+		and
+		project_id =
+		t.parent_id)
+		|| '-' ||
+		b.project_name as project_name
+		from
+		t_attendance t
+		right join t_user a on
+		t.user_id=a.user_id
+		right join
+		t_project b on
+		t.project_id=b.project_id
+		where 1=1
+		and
+		[and
+		t.user_id='#user_id#']
+		[and t.time
+		between
+		to_date('#start_date#','yyyy/mm/dd') and
+		to_date('#end_date#','yyyy/mm/dd')]
+	</select>
 </Scheme>

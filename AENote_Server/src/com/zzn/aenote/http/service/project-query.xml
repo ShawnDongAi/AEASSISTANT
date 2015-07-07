@@ -110,4 +110,46 @@
 		[and
 		root_id='#project_id#' or project_id='#project_id#']
 	</select>
+	<!-- 查询组织架构 -->
+	<select id="query_project_structure">
+		t_project.project_id as
+		project_id,(select
+		project_name from t_project where 1=1 and
+		a.project_id!=a.parent_id
+		and
+		project_id = a.parent_id)
+		||
+		'-' ||
+		a.project_name as
+		project_name,t_project.head as
+		head,t_project.parent_id as
+		parent_id,t_project.root_id as
+		root_id,t_user.user_name as
+		create_user,t_project.address as
+		address,t_project.longitude as
+		longitude,t_project.latitude as
+		latitude,t_project.status as
+		status,(to_char(t_project.create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		create_time
+		from t_project right join t_user on
+		t_project.create_user=t_user.user_id
+		where 1=1
+		and
+		t_project.root_id=(select root_id from t_project where 1=1 [and
+		project_id='#project_id#'])
+		[and t_project.status='0']
+		order by
+		t_project.create_time asc
+	</select>
+	<!-- 查询项目成员 -->
+	<select id="query_project_users">
+		select
+		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
+		HH24:mi:ss')) as create_time
+		from t_user
+		where 1=1
+		and user_id=(select
+		create_user from t_project where 1=1 [and project_id='#project_id#'])
+	</select>
 </Scheme>
