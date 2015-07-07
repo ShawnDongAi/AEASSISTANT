@@ -7,22 +7,12 @@
 
     <style name="ae_theme_translucent" parent="@style/AppTheme">
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 
     <style name="ae_theme" parent="@style/AppTheme">
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 
     <style name="ae_theme_fullscreen" parent="@style/AppTheme_Fullscreen">
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
-    </style>
-
-    <style name="AnimationActivity" mce_bogus="1" parent="@android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
-        <item name="android:activityOpenExitAnimation">@anim/out_to_left</item>
-        <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
-        <item name="android:activityCloseExitAnimation">@anim/out_to_right</item>
     </style>
 
     <style name="layout_bg" parent="@android:style/TextAppearance.Widget">
