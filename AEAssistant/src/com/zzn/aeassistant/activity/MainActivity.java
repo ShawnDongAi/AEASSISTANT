@@ -32,6 +32,7 @@ import com.zzn.aeassistant.activity.setting.SettingActivity;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.database.UserDBHelper;
@@ -307,6 +308,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			ToastUtil.show(R.string.exit_toast);
 		} else {
 			super.onBackPressed();
+			PreConfig.clearUserVO();
+			AEApp.getInstance().exit();
 		}
 	}
 

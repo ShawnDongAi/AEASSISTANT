@@ -1,8 +1,15 @@
 package com.zzn.aeassistant.util;
 
-import com.zzn.aeassistant.app.AEApp;
-
+import android.graphics.PixelFormat;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.app.AEApp;
 
 /**
  * Toast提示类
@@ -14,25 +21,33 @@ public class ToastUtil {
 
 	public static void show(String msg) {
 		cancelToast();
-		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_SHORT);
+//		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_SHORT);
+		toast = createToast(msg);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
 	public static void show(int msg) {
 		cancelToast();
-		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_SHORT);
+//		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_SHORT);
+		toast = createToast(msg);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
 	public static void showLong(String msg) {
 		cancelToast();
-		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_LONG);
+//		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_LONG);
+		toast = createToast(msg);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
 	public static void showLong(int msg) {
 		cancelToast();
-		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_LONG);
+//		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_LONG);
+		toast = createToast(msg);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
@@ -41,5 +56,33 @@ public class ToastUtil {
 			toast.cancel();
 			toast = null;
 		}
+	}
+
+	private static Toast createToast(String msg) {
+		View view = View.inflate(AEApp.getInstance(), R.layout.loading, null);
+		ImageView spaceshipImage = (ImageView) view.findViewById(R.id.img);
+		spaceshipImage.setVisibility(View.GONE);
+		TextView tipTextView = (TextView) view.findViewById(R.id.tipTextView);
+		tipTextView.setText(msg);
+		Toast toast = new Toast(AEApp.getInstance());
+		toast.setGravity(Gravity.CENTER, 0,
+				0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(view);
+		return toast;
+	}
+	
+	private static Toast createToast(int msg) {
+		View view = View.inflate(AEApp.getInstance(), R.layout.loading, null);
+		ImageView spaceshipImage = (ImageView) view.findViewById(R.id.img);
+		spaceshipImage.setVisibility(View.GONE);
+		TextView tipTextView = (TextView) view.findViewById(R.id.tipTextView);
+		tipTextView.setText(msg);
+		Toast toast = new Toast(AEApp.getInstance());
+		toast.setGravity(Gravity.CENTER, 0,
+				0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(view);
+		return toast;
 	}
 }

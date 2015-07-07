@@ -6,6 +6,7 @@ public class AttendanceVO implements Serializable {
 
 	private static final long serialVersionUID = -7726149466890260677L;
 	private String project_id;
+	private String project_name;
 	private String parent_id;
 	private String root_id;
 	private String date;
@@ -17,6 +18,7 @@ public class AttendanceVO implements Serializable {
 	private String longitude;
 	private String latitude;
 	private String normal;
+	private String status;
 
 	public String getProject_id() {
 		return project_id;
@@ -24,6 +26,14 @@ public class AttendanceVO implements Serializable {
 
 	public void setProject_id(String project_id) {
 		this.project_id = project_id;
+	}
+
+	public String getProject_name() {
+		return project_name;
+	}
+
+	public void setProject_name(String project_name) {
+		this.project_name = project_name;
 	}
 
 	public String getParent_id() {
@@ -112,5 +122,13 @@ public class AttendanceVO implements Serializable {
 
 	public void setNormal(String normal) {
 		this.normal = normal;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

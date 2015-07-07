@@ -1,11 +1,13 @@
 package com.zzn.aenote.http.vo;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class AttendanceVO implements Serializable {
 
 	private static final long serialVersionUID = -7726149466890260677L;
 	private String project_id;
+	private String project_name;
 	private String parent_id;
 	private String root_id;
 	private String date;
@@ -17,6 +19,7 @@ public class AttendanceVO implements Serializable {
 	private String longitude;
 	private String latitude;
 	private String normal;
+	private String status;
 
 	public String getProject_id() {
 		return project_id;
@@ -24,6 +27,14 @@ public class AttendanceVO implements Serializable {
 
 	public void setProject_id(String project_id) {
 		this.project_id = project_id;
+	}
+
+	public String getProject_name() {
+		return project_name;
+	}
+
+	public void setProject_name(String project_name) {
+		this.project_name = project_name;
 	}
 
 	public String getParent_id() {
@@ -112,5 +123,32 @@ public class AttendanceVO implements Serializable {
 
 	public void setNormal(String normal) {
 		this.normal = normal;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public static AttendanceVO assembleAttendance(Map<String, Object> attendance) {
+		AttendanceVO vo = new AttendanceVO();
+		vo.setUser_id(attendance.get("user_id").toString());
+		vo.setUser_name(attendance.get("user_name").toString());
+		vo.setUser_phone(attendance.get("phone").toString());
+		vo.setProject_id(attendance.get("project_id").toString());
+		vo.setProject_name(attendance.get("project_name").toString());
+		vo.setParent_id(attendance.get("parent_id").toString());
+		vo.setRoot_id(attendance.get("root_id").toString());
+		vo.setDate(attendance.get("time").toString());
+		vo.setImgURL(attendance.get("photo").toString());
+		vo.setAddress(attendance.get("address").toString());
+		vo.setLongitude(attendance.get("longitude").toString());
+		vo.setLatitude(attendance.get("latitude").toString());
+		vo.setNormal(attendance.get("normal").toString());
+		vo.setStatus(attendance.get("status").toString());
+		return vo;
 	}
 }

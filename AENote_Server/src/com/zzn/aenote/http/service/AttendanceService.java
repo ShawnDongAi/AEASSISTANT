@@ -1,6 +1,7 @@
 package com.zzn.aenote.http.service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class AttendanceService extends BaseService {
 		}
 		return result;
 	}
-	
+
 	public boolean isScanningTodayVaild(String project_id) {
 		boolean result = false;
 		try {
@@ -81,7 +82,7 @@ public class AttendanceService extends BaseService {
 		}
 		return result;
 	}
-	
+
 	public boolean updateScanning(String user_id, String project_id,
 			String parent_id, String root_id, String photo, String address,
 			String longitude, String latitude, String normal) {
@@ -103,6 +104,49 @@ public class AttendanceService extends BaseService {
 			data.put("date", dateFormat.format(date));
 			getJdbc().execute(getSql("update_scanning", data));
 			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public List<Map<String, Object>> sumListByProject(String startDate,
+			String endDate, String projectID) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		try {
+			// Date start = dateFormat.parse(startDate);
+			// Date end = dateFormat.parse(endDate);
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("start_date", startDate);
+			data.put("end_date", endDate);
+			data.put("project_id", projectID);
+			List<Map<String, Object>> attendanceList = getJdbc().queryForList(
+					getSql("sum_list_by_project", data));
+			if (attendanceList != null && attendanceList.size() > 0) {
+				result.addAll(attendanceList);
+				result.addAll(sumListByParent(startDate, endDate, projectID));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public List<Map<String, Object>> sumListByParent(String startDate,
+			String endDate, String parent_id) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("start_date", startDate);
+			data.put("end_date", endDate);
+			data.put("project_id", parent_id);
+			List<Map<String, Object>> attendanceList = getJdbc().queryForList(
+					getSql("sum_list_by_parent", data));
+			if (attendanceList != null && attendanceList.size() > 0) {
+				result.addAll(attendanceList);
+				result.addAll(sumListByParent(startDate, endDate,
+						attendanceList.get(0).get("project_id").toString()));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

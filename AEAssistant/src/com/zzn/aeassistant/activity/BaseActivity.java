@@ -16,6 +16,8 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.BitmapUtil;
@@ -84,6 +86,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		AEApp.getInstance().add(this);
 		mContext = this;
 		displayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -222,6 +225,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putString("imagePath", getImgPath());
 		outState.putBoolean("compress", compress);
+		PreConfig.saveUserVO(AEApp.getCurrentUser());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -229,6 +233,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	protected void onDestroy() {
 		mLocClient = null;
 		AEProgressDialog.dismissLoadingDialog();
+		AEApp.getInstance().remove(this);
 		super.onDestroy();
 	}
 
