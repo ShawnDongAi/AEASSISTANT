@@ -31,7 +31,7 @@ public class AttchUtil {
 		}
 		File file = new File(savePath);
 		FilePathUtil.CreateFilePath(savePath);
-		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 		intent.putExtra("photoPath", file);
@@ -51,7 +51,7 @@ public class AttchUtil {
 		}
 		File file = new File(savePath);
 		FilePathUtil.CreateFilePath(savePath);
-		Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 		intent.putExtra("photoPath", file);

@@ -55,12 +55,10 @@
 		t_project b on
 		t.project_id=b.project_id
 		where 1=1
-		and
-		t.project_id!=t.parent_id
 		[and t.project_id='#project_id#']
 		[and t.time
-		between to_date('#start_date#','yyyy/mm/dd') and
-		to_date('#end_date#','yyyy/mm/dd')]
+		between to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')]
 	</select>
 	<select id="sum_list_by_parent">
 		select t.*, a.user_name, a.phone, (select
@@ -80,11 +78,11 @@
 		t.project_id=b.project_id
 		where 1=1
 		and
-		t.project_id!=parent_id
+		t.project_id!=t.parent_id
 		[and t.parent_id='#parent_id#']
 		[and t.time
-		between to_date('#start_date#','yyyy/mm/dd') and
-		to_date('#end_date#','yyyy/mm/dd')]
+		between to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')]
 	</select>
 	<select id="sum_list_by_user">
 		select t.*, a.user_name, a.phone, (select
@@ -108,8 +106,8 @@
 		t.user_id='#user_id#']
 		[and t.time
 		between
-		to_date('#start_date#','yyyy/mm/dd') and
-		to_date('#end_date#','yyyy/mm/dd')]
+		to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')]
 		[and where rn between '#start#'
 		and
 		'#end#']

@@ -19,7 +19,8 @@ import com.zzn.aenote.http.vo.AttendanceVO;
 import com.zzn.aenote.http.vo.BaseRep;
 
 public class SumListByProject implements CmHandler {
-	protected static final Logger logger = Logger.getLogger(SumListByProject.class);
+	protected static final Logger logger = Logger
+			.getLogger(SumListByProject.class);
 	private AttendanceService attendanceService;
 
 	@Override
@@ -36,7 +37,9 @@ public class SumListByProject implements CmHandler {
 				rs.setRES_MESSAGE("请选择查询日期或项目");
 				return;
 			}
-			List<Map<String, Object>> attendanceList = attendanceService.sumListByProject(startDate, endDate, projectID);
+			logger.info(startDate + "-" + endDate);
+			List<Map<String, Object>> attendanceList = attendanceService
+					.sumListByProject(startDate, endDate, projectID);
 			if (attendanceList == null) {
 				rs.setRES_CODE(Global.RESP_SUCCESS);
 				rs.setRES_MESSAGE("无相关考勤记录");
