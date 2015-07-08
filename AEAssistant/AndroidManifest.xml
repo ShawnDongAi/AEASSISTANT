@@ -149,6 +149,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent"
             android:launchMode="singleInstance" />
+        <!-- 按项目查询 -->
+        <activity
+            android:name=".activity.attendance.SumByProListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent"
+            android:launchMode="singleInstance" />
+        <!-- 按用户查询 -->
+        <activity
+            android:name=".activity.attendance.SumByUsersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent"
+            android:launchMode="singleInstance" />
     </application>
 
 </manifest>

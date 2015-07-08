@@ -109,7 +109,11 @@
     <string name="startdate_after_enddate">起始日期不能大于结束日期,请重新选择日期</string>
     <string name="sum_by_user">个人考勤记录</string>
     <string name="sum_by_project">项目考勤记录</string>
+    <string name="sum_exception_section">异常考勤记录</string>
+    <string formatted="false" name="sum_normal_section">总用工人数:%d人次</string>
     <string name="sum_exception_null">无异常考勤记录</string>
     <string name="sum_normal_null">无任何考勤记录</string>
+    <string name="sum_exception_total">有%d条异常考勤记录</string>
+    <string name="sum_normal_total">总用工人数:%d人次</string>
 
 </resources>

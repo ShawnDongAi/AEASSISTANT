@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.view.pinnedsection.PinnedSectionListAdapter;
+import com.zzn.aeassistant.vo.AttendanceVO;
 
 public class SumProjectAdapter extends BaseAdapter implements
 		PinnedSectionListAdapter, SectionIndexer {
@@ -149,6 +150,7 @@ public class SumProjectAdapter extends BaseAdapter implements
 		public String date;
 		public int sectionPosition;
 		public int listPosition;
+		public List<AttendanceVO> attendanceVOs;
 
 		public AttendanceItem(int type, String title, String date) {
 			this.type = type;

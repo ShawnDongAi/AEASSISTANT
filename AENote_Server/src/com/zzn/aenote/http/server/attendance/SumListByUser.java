@@ -1,6 +1,7 @@
 package com.zzn.aenote.http.server.attendance;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,11 +44,19 @@ public class SumListByUser implements CmHandler {
 				rs.setRES_MESSAGE("无相关考勤记录");
 				return;
 			}
-			List<AttendanceVO> result = new ArrayList<AttendanceVO>();
+			Map<String, Object> result = new HashMap<String, Object>();
+			List<AttendanceVO> normalAttendances = new ArrayList<AttendanceVO>();
+			List<AttendanceVO> exceptionAttendances = new ArrayList<AttendanceVO>();
 			for (Map<String, Object> attendance : attendanceList) {
 				AttendanceVO vo = AttendanceVO.assembleAttendance(attendance);
-				result.add(vo);
+				if (vo.getNormal().equals("1")) {
+					exceptionAttendances.add(vo);
+				} else {
+					normalAttendances.add(vo);
+				}
 			}
+			result.put("normal", normalAttendances);
+			result.put("exception", exceptionAttendances);
 			rs.setRES_CODE(Global.RESP_SUCCESS);
 			rs.setRES_OBJ(GsonUtil.getInstance().toJson(result));
 		} catch (Exception e) {

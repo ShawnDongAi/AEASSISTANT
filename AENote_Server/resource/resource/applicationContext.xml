@@ -103,6 +103,18 @@
 			<ref local="projectService" />
 		</property>
 	</bean>
+	<!-- 查询项目组织架构 -->
+	<bean id="queryProjectStructure" class="com.zzn.aenote.http.server.project.QueryProjectStructure">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
+	<!-- 查询项目成员 -->
+	<bean id="queryProjectUsers" class="com.zzn.aenote.http.server.project.QueryProjectUsers">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
 	<!-- 删除项目 -->
 	<bean id="deleteProject" class="com.zzn.aenote.http.server.project.DeleteProject">
 		<property name="projectService">
@@ -128,6 +140,18 @@
 		</property>
 		<property name="maxSize"><!-- 默认接收最大文件大小为10M -->
 			<value>104857600</value>
+		</property>
+	</bean>
+	<!-- 根据项目查询考勤记录 -->
+	<bean id="sumListByProject" class="com.zzn.aenote.http.server.attendance.SumListByProject">
+		<property name="attendanceService">
+			<ref local="attendanceService" />
+		</property>
+	</bean>
+	<!-- 根据用户查询考勤记录 -->
+	<bean id="sumListByUser" class="com.zzn.aenote.http.server.attendance.SumListByUser">
+		<property name="attendanceService">
+			<ref local="attendanceService" />
 		</property>
 	</bean>
 </beans>

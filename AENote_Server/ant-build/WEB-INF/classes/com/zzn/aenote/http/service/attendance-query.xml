@@ -4,8 +4,111 @@
 	<!-- 打卡 -->
 	<select id="scanning">
 		insert into
-		t_attendance(user_id,time,photo,project_id,longitude,latitude,normal)
+		t_attendance(user_id,time,photo,project_id,parent_id,root_id,address,longitude,latitude,normal,status)
 		values('#user_id#',to_date('#time#','yyyy-MM-dd
-		HH24:mi:ss'),'#photo#','#project_id#','#longitude#','#latitude#','#normal#')
+		HH24:mi:ss'),'#photo#','#project_id#','#parent_id#','#root_id#','#address#','#longitude#','#latitude#','#normal#','#status#')
+	</select>
+	<!-- 查询今天有没有考勤数据 -->
+	<select id="query_project_attendance_for_today">
+		select * from t_attendance
+		where 1=1
+		[and
+		project_id='#project_id#']
+		[and to_char(time,'yyyy-mm-dd')='#date#']
+	</select>
+	<!-- 查询今天有没有有效的考勤数据 -->
+	<select id="query_project_vaild_attendance_for_today">
+		select * from t_attendance
+		where 1=1
+		and photo != ''
+		and photo != 'null'
+		[and project_id='#project_id#']
+		[and
+		to_char(time,'yyyy-mm-dd')='#date#']
+	</select>
+	<!-- 更新考勤数据 -->
+	<select id="update_scanning">
+		update t_attendance
+		set
+		time=to_date('#time#','yyyy-MM-dd HH24:mi:ss'),
+		photo='#photo#',address='#address#',longitude='#longitude#',latitude='#latitude#',normal='#normal#',status='#status#'
+		where 1=1
+		[and project_id='#project_id#']
+		[and
+		to_char(time,'yyyy-mm-dd')='#date#']
+	</select>
+	<!-- 根据项目查询某时间段内的考勤记录 -->
+	<select id="sum_list_by_project">
+		select t.*, a.user_name, a.phone, (select
+		project_name
+		from t_project where 1=1 and t.project_id!=t.parent_id
+		and
+		project_id =
+		t.parent_id)
+		|| '-' ||
+		b.project_name as project_name
+		from
+		t_attendance t
+		right join t_user a on
+		t.user_id=a.user_id
+		right join
+		t_project b on
+		t.project_id=b.project_id
+		where 1=1
+		and
+		t.project_id!=t.parent_id
+		[and t.project_id='#project_id#']
+		[and t.time
+		between to_date('#start_date#','yyyy/mm/dd') and
+		to_date('#end_date#','yyyy/mm/dd')]
+	</select>
+	<select id="sum_list_by_parent">
+		select t.*, a.user_name, a.phone, (select
+		project_name
+		from t_project where 1=1 and t.project_id!=t.parent_id
+		and
+		project_id =
+		t.parent_id)
+		|| '-' ||
+		b.project_name as project_name
+		from
+		t_attendance t
+		right join t_user a on
+		t.user_id=a.user_id
+		right join
+		t_project b on
+		t.project_id=b.project_id
+		where 1=1
+		and
+		t.project_id!=parent_id
+		[and t.parent_id='#parent_id#']
+		[and t.time
+		between to_date('#start_date#','yyyy/mm/dd') and
+		to_date('#end_date#','yyyy/mm/dd')]
+	</select>
+	<select id="sum_list_by_user">
+		select t.*, a.user_name, a.phone, (select
+		project_name
+		from t_project where 1=1 and t.project_id!=t.parent_id
+		and
+		project_id =
+		t.parent_id)
+		|| '-' ||
+		b.project_name as project_name
+		from
+		t_attendance t
+		right join t_user a on
+		t.user_id=a.user_id
+		right join
+		t_project b on
+		t.project_id=b.project_id
+		where 1=1
+		and
+		[and
+		t.user_id='#user_id#']
+		[and t.time
+		between
+		to_date('#start_date#','yyyy/mm/dd') and
+		to_date('#end_date#','yyyy/mm/dd')]
 	</select>
 </Scheme>
