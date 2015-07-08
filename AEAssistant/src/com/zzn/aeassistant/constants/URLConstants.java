@@ -9,10 +9,9 @@ public class URLConstants {
 	//个人电脑
 //	public static final String URL_HOST = "http://192.168.0.105:8080/AENote_Server/app/";
 	//服务器
-//	 public static final String URL_HOST =
-//	 "http://112.124.16.245:8080/AENote_Server/app/";
+	public static final String URL_HOST = "http://112.124.16.245:8080/AENote_Server/app/";
 	//公司
-	public static final String URL_HOST = "http://192.168.85.1:8080/AENote_Server/app/";
+//	public static final String URL_HOST = "http://192.168.85.1:8080/AENote_Server/app/";
 	/**
 	 * 注册接口
 	 */

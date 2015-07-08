@@ -30,6 +30,7 @@ public class SumListByUser implements CmHandler {
 			String startDate = req.getParameter("start_date");
 			String endDate = req.getParameter("end_date");
 			String user_id = req.getParameter("user_id");
+			String pageString = req.getParameter("page");
 			if (StringUtil.isEmpty(startDate) || StringUtil.isEmpty(endDate)
 					|| StringUtil.isEmpty(user_id)) {
 				logger.info("缺少参数");
@@ -37,26 +38,30 @@ public class SumListByUser implements CmHandler {
 				rs.setRES_MESSAGE("请选择查询日期或用户信息");
 				return;
 			}
+			int page = 0;
+			if (StringUtil.isEmpty(pageString)) {
+				page = 0;
+			}
+			try {
+				page = Integer.parseInt(pageString);
+			} catch (Exception e) {
+				e.printStackTrace();
+				page = 0;
+			}
+			if (page < 0) {
+				page = 0;
+			}
 			List<Map<String, Object>> attendanceList = attendanceService
-					.sumListByUser(startDate, endDate, user_id);
+					.sumListByUser(startDate, endDate, user_id, page);
 			if (attendanceList == null) {
 				rs.setRES_CODE(Global.RESP_SUCCESS);
 				rs.setRES_MESSAGE("无相关考勤记录");
 				return;
 			}
-			Map<String, Object> result = new HashMap<String, Object>();
-			List<AttendanceVO> normalAttendances = new ArrayList<AttendanceVO>();
-			List<AttendanceVO> exceptionAttendances = new ArrayList<AttendanceVO>();
+			List<AttendanceVO> result = new ArrayList<AttendanceVO>();
 			for (Map<String, Object> attendance : attendanceList) {
-				AttendanceVO vo = AttendanceVO.assembleAttendance(attendance);
-				if (vo.getNormal().equals("1")) {
-					exceptionAttendances.add(vo);
-				} else {
-					normalAttendances.add(vo);
-				}
+				result.add(AttendanceVO.assembleAttendance(attendance));
 			}
-			result.put("normal", normalAttendances);
-			result.put("exception", exceptionAttendances);
 			rs.setRES_CODE(Global.RESP_SUCCESS);
 			rs.setRES_OBJ(GsonUtil.getInstance().toJson(result));
 		} catch (Exception e) {

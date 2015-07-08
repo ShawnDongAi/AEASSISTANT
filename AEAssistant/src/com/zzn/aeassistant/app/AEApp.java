@@ -10,6 +10,15 @@ import android.app.Application;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.database.AESQLiteHelper;
@@ -42,6 +51,7 @@ public class AEApp extends Application {
 		creatFileOrDir();
 		createDatabase();
 		SDKInitializer.initialize(this);
+		initImageLoader();
 	}
 
 	public static AEApp getInstance() {
@@ -93,6 +103,27 @@ public class AEApp extends Application {
 		// GroupDBHelper.createTable();
 		UserDBHelper.createTable();
 		// AttchDBHelper.createTable();
+	}
+
+	private void initImageLoader() {
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
+				instance)
+				.threadPoolSize(3)
+				.threadPriority(Thread.NORM_PRIORITY - 2)
+				.denyCacheImageMultipleSizesInMemory()
+				.memoryCache(new WeakMemoryCache())
+				.memoryCacheSize(2 * 1024 * 1024)
+				.discCacheFileNameGenerator(new Md5FileNameGenerator())
+				.tasksProcessingOrder(QueueProcessingType.LIFO)
+				.discCacheFileCount(30)
+				.discCache(
+						new UnlimitedDiskCache(new File(
+								FileCostants.DIR_SCANNING)))
+				.defaultDisplayImageOptions(DisplayImageOptions.createSimple())
+				.imageDownloader(
+						new BaseImageDownloader(instance, 10 * 1000, 30 * 1000))
+				.build();
+		ImageLoader.getInstance().init(config);
 	}
 
 	public void remove(Activity activity) {

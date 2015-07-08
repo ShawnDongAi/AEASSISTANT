@@ -110,5 +110,9 @@
 		between
 		to_date('#start_date#','yyyy/mm/dd') and
 		to_date('#end_date#','yyyy/mm/dd')]
+		[and where rn between '#start#'
+		and
+		'#end#']
+		order by t.time asc
 	</select>
 </Scheme>
