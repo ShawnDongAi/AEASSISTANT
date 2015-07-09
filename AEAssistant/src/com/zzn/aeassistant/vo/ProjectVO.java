@@ -2,13 +2,19 @@ package com.zzn.aeassistant.vo;
 
 import java.io.Serializable;
 
+import com.zzn.aeassistant.view.tree.TreeNodeLabel;
+import com.zzn.aeassistant.view.tree.TreeNodePid;
+
 public class ProjectVO implements Serializable {
 
 	private static final long serialVersionUID = 8812820014809331279L;
 
+	@com.zzn.aeassistant.view.tree.TreeNodeId
 	private String PROJECT_ID;
+	@TreeNodeLabel
 	private String PROJECT_NAME;
 	private String HEAD;
+	@TreeNodePid
 	private String PARENT_ID;
 	private String ROOT_ID;
 	private String CREATE_TIME;

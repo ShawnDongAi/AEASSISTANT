@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="40dip" >
+
+    <ImageView
+        android:id="@+id/treenode_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/tree_ec" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/treenode_icon" >
+
+        <TextView
+            android:id="@+id/treenode_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@drawable/text_normal"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/treenode_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/treenode_label"
+            android:layout_below="@+id/treenode_label"
+            android:layout_marginTop="3dp"
+            android:textColor="@drawable/text_light"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

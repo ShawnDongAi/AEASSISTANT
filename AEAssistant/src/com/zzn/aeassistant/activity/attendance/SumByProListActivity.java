@@ -47,7 +47,7 @@ public class SumByProListActivity extends BaseActivity implements
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_base_list;
+		return R.layout.activity_pinned_list;
 	}
 
 	@Override

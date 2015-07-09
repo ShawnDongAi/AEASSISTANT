@@ -74,6 +74,9 @@ public class ProjectDetailActivity extends BaseActivity {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.project_leaf:
+			startActivity(new Intent(mContext, ProjectStructureActivity.class)
+					.putExtra(CodeConstants.KEY_PROJECT_ID,
+							project.getPROJECT_ID()));
 			break;
 		case R.id.project_update_parent:
 			startActivity(new Intent(mContext, UpdateParentActivity.class)
