@@ -3,7 +3,6 @@ package com.zzn.aeassistant.activity.attendance;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -64,15 +63,19 @@ public class AttendanceRecordActivity extends BaseActivity {
 			if (!checkDate()) {
 				break;
 			}
+			Intent userIntent = new Intent(mContext, SumByUsersActivity.class);
+			userIntent.putExtra(CodeConstants.KEY_START_DATE, startDateBtn.getText().toString());
+			userIntent.putExtra(CodeConstants.KEY_END_DATE, endDateBtn.getText().toString());
+			startActivity(userIntent);
 			break;
 		case R.id.sum_by_project:
 			if (!checkDate()) {
 				break;
 			}
-			Intent intent = new Intent(mContext, SumByProjectActivity.class);
-			intent.putExtra(CodeConstants.KEY_START_DATE, startDateBtn.getText().toString());
-			intent.putExtra(CodeConstants.KEY_END_DATE, endDateBtn.getText().toString());
-			startActivity(intent);
+			Intent proIntent = new Intent(mContext, SumByProjectActivity.class);
+			proIntent.putExtra(CodeConstants.KEY_START_DATE, startDateBtn.getText().toString());
+			proIntent.putExtra(CodeConstants.KEY_END_DATE, endDateBtn.getText().toString());
+			startActivity(proIntent);
 			break;
 		}
 	}

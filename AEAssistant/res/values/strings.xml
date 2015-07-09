@@ -115,5 +115,6 @@
     <string name="sum_normal_null">无任何考勤记录</string>
     <string name="sum_exception_total">有%d条异常考勤记录</string>
     <string name="sum_normal_total">总用工人数:%d人次</string>
+    <string name="sum_user_total">共有%d次考勤记录</string>
 
 </resources>

@@ -39,9 +39,46 @@
 	</select>
 	<!-- 根据项目查询某时间段内的考勤记录 -->
 	<select id="sum_list_by_project">
-		select t.*, a.user_name, a.phone, (select
+		select
+		t.user_id, t.time, (select url from t_attch
+		where
+		attch_id=t.photo) as
+		photo, t.project_id, t.parent_id, t.root_id,
+		t.address, t.longitude, t.latitude, t.normal, t.status,
+		a.user_name,
+		a.phone, (select
 		project_name
-		from t_project where 1=1 and t.project_id!=t.parent_id
+		from t_project where 1=1 and
+		t.project_id!=t.parent_id
+		and
+		project_id =
+		t.parent_id)
+		|| '-' ||
+		b.project_name as project_name
+		from
+		t_attendance t
+		right join t_user a on
+		t.user_id=a.user_id
+		right join
+		t_project b on
+		t.project_id=b.project_id
+		where 1=1
+		[and
+		t.project_id='#project_id#']
+		[and t.time
+		between
+		to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')]
+	</select>
+	<select id="sum_list_by_parent">
+		select
+		t.user_id,t.time,(select url from t_attch where
+		attch_id=t.photo) as
+		photo,t.project_id,t.parent_id,t.root_id,t.address,t.longitude,t.latitude,t.normal,t.status,
+		a.user_name, a.phone, (select
+		project_name
+		from t_project where 1=1 and
+		t.project_id!=t.parent_id
 		and
 		project_id =
 		t.parent_id)
@@ -57,39 +94,23 @@
 		where 1=1
 		and
 		t.project_id!=t.parent_id
-		[and t.project_id='#project_id#']
-		[and t.time
-		between to_date('#start_date#','yyyy/mm/dd') and
-		to_date('#end_date#','yyyy/mm/dd')]
-	</select>
-	<select id="sum_list_by_parent">
-		select t.*, a.user_name, a.phone, (select
-		project_name
-		from t_project where 1=1 and t.project_id!=t.parent_id
-		and
-		project_id =
-		t.parent_id)
-		|| '-' ||
-		b.project_name as project_name
-		from
-		t_attendance t
-		right join t_user a on
-		t.user_id=a.user_id
-		right join
-		t_project b on
-		t.project_id=b.project_id
-		where 1=1
-		and
-		t.project_id!=parent_id
 		[and t.parent_id='#parent_id#']
 		[and t.time
-		between to_date('#start_date#','yyyy/mm/dd') and
-		to_date('#end_date#','yyyy/mm/dd')]
+		between to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')]
 	</select>
 	<select id="sum_list_by_user">
-		select t.*, a.user_name, a.phone, (select
+		select
+		t.user_id, t.time, (select url from t_attch
+		where
+		attch_id=t.photo) as
+		photo, t.project_id, t.parent_id, t.root_id,
+		t.address, t.longitude, t.latitude, t.normal, t.status,
+		a.user_name,
+		a.phone, (select
 		project_name
-		from t_project where 1=1 and t.project_id!=t.parent_id
+		from t_project where 1=1 and
+		t.project_id!=t.parent_id
 		and
 		project_id =
 		t.parent_id)
@@ -103,12 +124,15 @@
 		t_project b on
 		t.project_id=b.project_id
 		where 1=1
-		and
 		[and
 		t.user_id='#user_id#']
 		[and t.time
 		between
-		to_date('#start_date#','yyyy/mm/dd') and
-		to_date('#end_date#','yyyy/mm/dd')]
+		to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')]
+		[and ROWNUM between '#start#']
+		[and
+		'#end#']
+		order by t.time asc
 	</select>
 </Scheme>

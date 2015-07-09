@@ -36,9 +36,9 @@ public class AttendanceService extends BaseService {
 			data.put("longitude", longitude);
 			data.put("latitude", latitude);
 			data.put("normal", normal);
-			data.put("status", "0");
 			String date = format.format(new Date(System.currentTimeMillis()));
 			data.put("time", date);
+			data.put("status", "0");
 			getJdbc().execute(getSql("scanning", data));
 			result = true;
 		} catch (Exception e) {
@@ -102,6 +102,7 @@ public class AttendanceService extends BaseService {
 			Date date = new Date(System.currentTimeMillis());
 			data.put("time", format.format(date));
 			data.put("date", dateFormat.format(date));
+			data.put("status", "0");
 			getJdbc().execute(getSql("update_scanning", data));
 			result = true;
 		} catch (Exception e) {
@@ -161,8 +162,8 @@ public class AttendanceService extends BaseService {
 			data.put("start_date", startDate);
 			data.put("end_date", endDate);
 			data.put("user_id", user_id);
-			data.put("start", page * 20);
-			data.put("end", (page + 1) * 20);
+			data.put("start", page * 20 + "");
+			data.put("end", (page + 1) * 20 + "");
 			result = getJdbc().queryForList(getSql("sum_list_by_user", data));
 		} catch (Exception e) {
 			e.printStackTrace();

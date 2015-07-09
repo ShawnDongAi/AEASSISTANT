@@ -4,6 +4,6 @@
     <item name="gridview" type="id"/>
     <item name="webview" type="id"/>
     <item name="scrollview" type="id"/>
-    <item name="scrapped_view" type="id"/>
+    <item type="id" name="stgv" />
 
 </resources>

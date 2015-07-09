@@ -1,37 +1,47 @@
 package com.zzn.aeassistant.activity.attendance;
 
+import java.util.List;
+
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
+import com.zzn.aeassistant.util.GsonUtil;
+import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
-import com.zzn.aeassistant.view.multicolumn.MultiColumnListView;
-import com.zzn.aeassistant.view.multicolumn.internal.PLA_AdapterView;
-import com.zzn.aeassistant.view.multicolumn.internal.PLA_AdapterView.OnItemClickListener;
+import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshStaggeredGridView;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshMultiListView;
+import com.zzn.aeassistant.view.staggered.StaggeredGridView;
+import com.zzn.aeassistant.view.staggered.StaggeredGridView.OnLoadmoreListener;
+import com.zzn.aeassistant.vo.AttendanceVO;
 import com.zzn.aeassistant.vo.HttpResult;
 
-public class SumByUsersActivity extends BaseActivity implements
-		OnItemClickListener {
-	private PullToRefreshMultiListView pullListView;
-	private MultiColumnListView listView;
-	private SumProjectAdapter adapter;
+public class SumByUsersActivity extends BaseActivity {
+	private PullToRefreshStaggeredGridView pullListView;
+	private View headerView, footerView;
+	private TextView headerLable;
+	private SumUserAdapter adapter;
 	private String startDate, endDate;
 	private SumByUserTask sumByUserTask;
 	private int page = 0;
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_multi_list;
+		return R.layout.activity_staggered_list;
 	}
 
 	@Override
@@ -41,11 +51,22 @@ public class SumByUsersActivity extends BaseActivity implements
 
 	@Override
 	protected void initView() {
-		pullListView = (PullToRefreshMultiListView) findViewById(R.id.base_list);
-		listView = pullListView.getRefreshableView();
-		adapter = new SumProjectAdapter(mContext);
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(this);
+		pullListView = (PullToRefreshStaggeredGridView) findViewById(R.id.base_list);
+		headerView = View.inflate(mContext, R.layout.item_list_header, null);
+		headerLable = (TextView) headerView.findViewById(R.id.lable);
+		footerView = View.inflate(mContext, R.layout.item_list_footer, null);
+		ImageView spaceshipImage = (ImageView) footerView
+				.findViewById(R.id.img);
+		Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
+				mContext, R.anim.loading_anim);
+		spaceshipImage.startAnimation(hyperspaceJumpAnimation);
+		pullListView.getRefreshableView().setHeaderView(headerView);
+		pullListView.getRefreshableView().setFooterView(footerView);
+		footerView.setVisibility(View.GONE);
+
+		adapter = new SumUserAdapter(mContext);
+		pullListView.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
 		startDate = getIntent().getStringExtra(CodeConstants.KEY_START_DATE);
 		endDate = getIntent().getStringExtra(CodeConstants.KEY_END_DATE);
 		initPullToRefresh();
@@ -68,10 +89,10 @@ public class SumByUsersActivity extends BaseActivity implements
 	private void initPullToRefresh() {
 		pullListView.setMode(Mode.PULL_FROM_START);
 		pullListView
-				.setOnRefreshListener(new OnRefreshListener<MultiColumnListView>() {
+				.setOnRefreshListener(new OnRefreshListener<StaggeredGridView>() {
 					@Override
 					public void onRefresh(
-							PullToRefreshBase<MultiColumnListView> refreshView) {
+							PullToRefreshBase<StaggeredGridView> refreshView) {
 						String label = DateUtils.formatDateTime(
 								getApplicationContext(),
 								System.currentTimeMillis(),
@@ -86,13 +107,16 @@ public class SumByUsersActivity extends BaseActivity implements
 								.execute(new String[] { startDate, endDate });
 					}
 				});
-		pullListView.setRefreshing(true);
-	}
-
-	@Override
-	public void onItemClick(PLA_AdapterView<?> parent, View view, int position,
-			long id) {
-
+		pullListView.setOnLoadmoreListener(new OnLoadmoreListener() {
+			@Override
+			public void onLoadmore() {
+				sumByUserTask = new SumByUserTask();
+				sumByUserTask.execute(new String[] { startDate, endDate });
+			}
+		});
+		AEProgressDialog.showLoadingDialog(mContext);
+		sumByUserTask = new SumByUserTask();
+		sumByUserTask.execute(new String[] { startDate, endDate });
 	}
 
 	private class SumByUserTask extends AsyncTask<String, Integer, HttpResult> {
@@ -100,6 +124,9 @@ public class SumByUsersActivity extends BaseActivity implements
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			if (page > 0) {
+				footerView.setVisibility(View.VISIBLE);
+			}
 		}
 
 		@Override
@@ -117,8 +144,25 @@ public class SumByUsersActivity extends BaseActivity implements
 		@Override
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			pullListView.onRefreshComplete();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				page++;
+				if (result.getRES_OBJ() != null
+						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
+					List<AttendanceVO> attendances = GsonUtil.getInstance()
+							.fromJson(result.getRES_OBJ().toString(),
+									new TypeToken<List<AttendanceVO>>() {
+									}.getType());
+					adapter.addData(attendances);
+					headerLable.setText(getString(R.string.sum_user_total,
+							adapter.getCount()));
+					if (attendances.size() < 20) {
+						footerView.setVisibility(View.GONE);
+					}
+					page++;
+				} else {
+					footerView.setVisibility(View.GONE);
+				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}
@@ -127,6 +171,8 @@ public class SumByUsersActivity extends BaseActivity implements
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
+			pullListView.onRefreshComplete();
 		}
 	}
 }

@@ -38,7 +38,7 @@
 
     <application
         android:name="com.zzn.aeassistant.app.AEApp"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
          >
@@ -59,7 +59,6 @@
             android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -67,20 +66,17 @@
         <activity
             android:name=".activity.user.RegisterActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 短信验证页面 -->
         <activity
             android:name=".activity.user.VerifyActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 重设密码页面 -->
         <activity
             android:name=".activity.user.ResetPswActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 短信注册,弃用 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -91,76 +87,58 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme" />
         <!-- 用户详情页面 -->
         <activity
             android:name=".activity.user.UserActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 设置页面 -->
         <activity
             android:name=".activity.setting.SettingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 项目管理页 -->
         <activity
             android:name="com.zzn.aeassistant.activity.project.ProjectManagerActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 创建项目页 -->
         <activity
             android:name=".activity.project.CreateProjectActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 项目详情页 -->
         <activity
             android:name=".activity.project.ProjectDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 项目迁移页 -->
         <activity
             android:name=".activity.project.UpdateParentActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
-        
-        <!-- 考勤页 -->
-        <activity
-            android:name=".activity.scanning.ScanningActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         
         <!-- 考勤记录页 -->
         <activity
             android:name=".activity.attendance.AttendanceRecordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 按项目查询 -->
         <activity
             android:name=".activity.attendance.SumByProjectActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 按项目查询 -->
         <activity
             android:name=".activity.attendance.SumByProListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
         <!-- 按用户查询 -->
         <activity
             android:name=".activity.attendance.SumByUsersActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent"
-            android:launchMode="singleInstance" />
+            android:theme="@style/ae_theme_translucent" />
     </application>
 
 </manifest>

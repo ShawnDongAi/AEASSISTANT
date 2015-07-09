@@ -111,7 +111,7 @@
 		root_id='#project_id#' or project_id='#project_id#']
 	</select>
 	<!-- 查询组织架构 -->
-	<!-- <select id="query_project_structure">
+	<select id="query_project_structure">
 		select t.project_id as
 		project_id,(select
 		project_name
@@ -139,12 +139,12 @@
 		where 1=1
 		and
 		t.root_id=(select root_id from
-		t_project where 1=1 [and
-		project_id='#project_id#'])
-		[and t.status='0']
+		t_project where
+		project_id='#project_id#')
+		and t.status='0'
 		order by
 		t.create_time asc
-	</select> -->
+	</select>
 	<!-- 查询项目成员 -->
 	<select id="query_project_users">
 		select
