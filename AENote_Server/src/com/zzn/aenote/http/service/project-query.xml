@@ -10,28 +10,24 @@
 	</select>
 	<select id="query_project_by_id">
 		select
-		t_project.project_id as
-		project_id,(select
-		project_name from t_project where 1=1 and a.project_id!=a.parent_id
-		and project_id = a.parent_id)
+		t.project_id,(select
+		project_name from t_project
+		where 1=1 and project_id!=parent_id
+		and project_id = t.parent_id)
 		||
-		'-' || a.project_name as
-		project_name,t_project.head as
-		head,t_project.parent_id as
-		parent_id,t_project.root_id as
-		root_id,t_user.user_name as
-		create_user,t_project.address as
-		address,t_project.longitude as
-		longitude,t_project.latitude as
-		latitude,t_project.status as
-		status,(to_char(t_project.create_time,'yyyy-MM-dd
+		'-'
+		|| t.project_name as
+		project_name,t.head,t.parent_id,t.root_id,b.user_name as
+		create_user,t.address,t.longitude,t.latitude,t.status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
-		create_time
-		from t_project right join t_user on
-		t_project.create_user=t_user.user_id
+		create_time,
+		t.status
+		from t_project t right join t_user b on
+		t.create_user=b.user_id
 		where 1=1
 		[and
-		t_project.project_id='#project_id#' and t_project.status='0']
+		t.project_id='#project_id#' and
+		t.status='0']
 	</select>
 	<select id="query_project_by_create_user">
 		select
@@ -51,7 +47,8 @@
 		latitude,a.status as
 		status,(to_char(a.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
-		create_time
+		create_time,
+		a.status
 		from t_project a right join t_user b on
 		a.create_user=b.user_id
 		where
@@ -81,7 +78,8 @@
 		latitude,t_project.status as
 		status,(to_char(t_project.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
-		create_time
+		create_time,
+		t_project.status
 		from t_project right join t_user on
 		t_project.create_user=t_user.user_id
 		where 1=1

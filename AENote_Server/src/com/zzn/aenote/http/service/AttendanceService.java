@@ -2,7 +2,6 @@ package com.zzn.aenote.http.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +10,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.zzn.aenote.http.BaseService;
-import com.zzn.aenote.http.utils.StringUtil;
-import com.zzn.aenote.http.utils.UtilUniqueKey;
 
 public class AttendanceService extends BaseService {
 	private static final Logger logger = Logger
@@ -28,16 +25,16 @@ public class AttendanceService extends BaseService {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("user_id", user_id);
+			String date = format.format(new Date(System.currentTimeMillis()));
+			data.put("time", date);
+			data.put("photo", photo);
 			data.put("project_id", project_id);
 			data.put("parent_id", parent_id);
 			data.put("root_id", root_id);
-			data.put("photo", photo);
 			data.put("address", address);
 			data.put("longitude", longitude);
 			data.put("latitude", latitude);
 			data.put("normal", normal);
-			String date = format.format(new Date(System.currentTimeMillis()));
-			data.put("time", date);
 			data.put("status", "0");
 			getJdbc().execute(getSql("scanning", data));
 			result = true;
@@ -98,7 +95,6 @@ public class AttendanceService extends BaseService {
 			data.put("longitude", longitude);
 			data.put("latitude", latitude);
 			data.put("normal", normal);
-			data.put("status", "0");
 			Date date = new Date(System.currentTimeMillis());
 			data.put("time", format.format(date));
 			data.put("date", dateFormat.format(date));
@@ -140,7 +136,7 @@ public class AttendanceService extends BaseService {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("start_date", startDate);
 			data.put("end_date", endDate);
-			data.put("project_id", parent_id);
+			data.put("parent_id", parent_id);
 			List<Map<String, Object>> attendanceList = getJdbc().queryForList(
 					getSql("sum_list_by_parent", data));
 			if (attendanceList != null && attendanceList.size() > 0) {
@@ -162,7 +158,7 @@ public class AttendanceService extends BaseService {
 			data.put("start_date", startDate);
 			data.put("end_date", endDate);
 			data.put("user_id", user_id);
-			data.put("start", page * 20 + "");
+			data.put("start", (page * 20 + 1) + "");
 			data.put("end", (page + 1) * 20 + "");
 			result = getJdbc().queryForList(getSql("sum_list_by_user", data));
 		} catch (Exception e) {

@@ -155,6 +155,7 @@ public class SumProjectAdapter extends BaseAdapter implements
 		public AttendanceItem(int type, String title, String date) {
 			this.type = type;
 			this.title = title;
+			this.date = date;
 		}
 
 		public String toString() {

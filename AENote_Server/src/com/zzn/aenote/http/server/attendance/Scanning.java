@@ -195,21 +195,27 @@ public class Scanning extends CmHandlerFile {
 				datas.put("user_name", user_name);
 				datas.put("user_phone", phone);
 			} else {
+				ProjectVO project = null;
 				if (StringUtil.isEmpty(project_id)) {
-					ProjectVO project = projectService.createProject(user_name,
+					project = projectService.createProject(user_name,
 							"", "", "", user_id, address, longitude, latitude);
-					if (project == null) {
-						logger.info("当前未加入任何项目");
-						rs.setRES_CODE(Global.PROJECT_NULL);
-						rs.setRES_MESSAGE("当前未加入任何项目");
-						return;
-					}
-					project_id = project.getPROJECT_ID();
-					parent_id = project.getPARENT_ID();
-					root_id = project.getROOT_ID();
 					datas.put("new_project",
 							GsonUtil.getInstance().toJson(project));
+				} else {
+					List<Map<String, Object>> projects = projectService.queryProjectByID(project_id);
+					if (projects != null && projects.size() > 0) {
+						project = ProjectVO.assembleProject(projects.get(0));
+					}
 				}
+				if (project == null) {
+					logger.info("当前未加入任何项目");
+					rs.setRES_CODE(Global.PROJECT_NULL);
+					rs.setRES_MESSAGE("当前未加入任何项目");
+					return;
+				}
+				project_id = project.getPROJECT_ID();
+				parent_id = project.getPARENT_ID();
+				root_id = project.getROOT_ID();
 			}
 			rs.setRES_OBJ(GsonUtil.getInstance().toJson(datas));
 
@@ -221,16 +227,20 @@ public class Scanning extends CmHandlerFile {
 								+ "_"
 								+ format.format(new Date(System
 										.currentTimeMillis())), imgFile);
-				scanningParent(parent_id, address, longitude, latitude);
+				if (!project_id.equals(parent_id)) {
+					scanningParent(parent_id, address, longitude, latitude);
+				}
 				boolean result = false;
 				if (attendanceService.isScanningToday(project_id)) {
 					if (attendanceService.isScanningTodayVaild(project_id)) {
-						attendanceService.updateScanning(user_id, project_id,
+						result = attendanceService.updateScanning(user_id, project_id,
 								parent_id, root_id, attch.getATTCH_ID(), address,
 								longitude, latitude, "0");
 					} else {
+						logger.info("今天已经打过卡了");
 						rs.setRES_CODE(Global.ORACLE_ERROR);
 						rs.setRES_MESSAGE("今天已经打过卡了,明天再来哟");
+						return;
 					}
 				} else {
 					result = attendanceService.scanning(user_id, project_id,
@@ -277,8 +287,12 @@ public class Scanning extends CmHandlerFile {
 	public void scanningParent(String project_id, String address, String longitude, String latitude) {
 		List<Map<String, Object>> projects = projectService
 				.queryProjectByID(project_id);
+		boolean lastOne = false;
 		if (projects != null && projects.size() > 0) {
 			ProjectVO project = ProjectVO.assembleProject(projects.get(0));
+			if (project.getPARENT_ID().equals(project.getPROJECT_ID())) {
+				lastOne = true;
+			}
 			boolean isScanning = attendanceService.isScanningToday(project_id);
 			if (!isScanning) {
 				List<Map<String, Object>> users = userService.queryUserByID(project.getCREATE_USER());
@@ -288,7 +302,9 @@ public class Scanning extends CmHandlerFile {
 							project.getPARENT_ID(), project.getROOT_ID(), "",
 							address, longitude, latitude, "0");
 				}
-				scanningParent(project.getPARENT_ID(), address, longitude, latitude);
+				if (!lastOne) {
+					scanningParent(project.getPARENT_ID(), address, longitude, latitude);
+				}
 			}
 		}
 	}

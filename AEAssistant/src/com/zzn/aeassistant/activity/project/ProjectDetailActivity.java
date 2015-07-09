@@ -51,8 +51,8 @@ public class ProjectDetailActivity extends BaseActivity {
 		project = (ProjectVO) getIntent().getSerializableExtra(
 				CodeConstants.KEY_PROJECT_VO);
 		name.setText(getString(R.string.project_name, project.getPROJECT_NAME()));
-		status.setVisibility(project.getSTATUS().equals("1") ? View.VISIBLE
-				: View.GONE);
+		status.setVisibility(project.getSTATUS() != null
+				&& project.getSTATUS().equals("1") ? View.VISIBLE : View.GONE);
 		managerUser.setText(getString(R.string.project_manager_user,
 				project.getCREATE_USER()));
 		createTime.setText(getString(R.string.project_create_time,

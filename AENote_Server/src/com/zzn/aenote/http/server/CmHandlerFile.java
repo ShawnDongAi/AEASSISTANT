@@ -57,7 +57,7 @@ public abstract class CmHandlerFile implements CmHandler {
 			while (files.hasMoreElements()) {
 				String name = (String) files.nextElement();
 				File f = multi.getFile(name);
-				filePaths.add(f.getName());
+				filePaths.add(f.getPath());
 				logger.info("添加附件文件:" + f.getName() + ",name:" + name);
 			}
 			handleFiles(filePaths, multi, rs);

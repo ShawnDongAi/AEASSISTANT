@@ -88,7 +88,7 @@ public class StaggeredGridView extends ViewGroup {
     private int mColCountSetting = 2;
     private int mColCount = 2;
     private int mMinColWidth = 0;
-    private int mItemMargin;
+    private int mItemMargin = 0;
 
     private int[] mItemTops;
     private int[] mItemBottoms;

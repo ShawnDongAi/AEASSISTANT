@@ -38,6 +38,7 @@ public class SumByUsersActivity extends BaseActivity {
 	private String startDate, endDate;
 	private SumByUserTask sumByUserTask;
 	private int page = 0;
+	private boolean hasMore = true;
 
 	@Override
 	protected int layoutResID() {
@@ -61,8 +62,8 @@ public class SumByUsersActivity extends BaseActivity {
 				mContext, R.anim.loading_anim);
 		spaceshipImage.startAnimation(hyperspaceJumpAnimation);
 		pullListView.getRefreshableView().setHeaderView(headerView);
-		pullListView.getRefreshableView().setFooterView(footerView);
-		footerView.setVisibility(View.GONE);
+//		pullListView.getRefreshableView().setFooterView(footerView);
+//		footerView.setVisibility(View.GONE);
 
 		adapter = new SumUserAdapter(mContext);
 		pullListView.setAdapter(adapter);
@@ -99,6 +100,7 @@ public class SumByUsersActivity extends BaseActivity {
 								DateUtils.FORMAT_SHOW_TIME
 										| DateUtils.FORMAT_SHOW_DATE
 										| DateUtils.FORMAT_ABBREV_ALL);
+						page = 0;
 						// Update the LastUpdatedLabel
 						refreshView.getLoadingLayoutProxy()
 								.setLastUpdatedLabel(label);
@@ -110,8 +112,10 @@ public class SumByUsersActivity extends BaseActivity {
 		pullListView.setOnLoadmoreListener(new OnLoadmoreListener() {
 			@Override
 			public void onLoadmore() {
-				sumByUserTask = new SumByUserTask();
-				sumByUserTask.execute(new String[] { startDate, endDate });
+//				if (hasMore) {
+					sumByUserTask = new SumByUserTask();
+					sumByUserTask.execute(new String[] { startDate, endDate });
+//				}
 			}
 		});
 		AEProgressDialog.showLoadingDialog(mContext);
@@ -125,7 +129,7 @@ public class SumByUsersActivity extends BaseActivity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			if (page > 0) {
-				footerView.setVisibility(View.VISIBLE);
+//				footerView.setVisibility(View.VISIBLE);
 			}
 		}
 
@@ -153,19 +157,23 @@ public class SumByUsersActivity extends BaseActivity {
 							.fromJson(result.getRES_OBJ().toString(),
 									new TypeToken<List<AttendanceVO>>() {
 									}.getType());
+					if (page == 0) {
+						adapter.clear();
+					}
 					adapter.addData(attendances);
 					headerLable.setText(getString(R.string.sum_user_total,
 							adapter.getCount()));
 					if (attendances.size() < 20) {
-						footerView.setVisibility(View.GONE);
+						hasMore = false;
 					}
 					page++;
 				} else {
-					footerView.setVisibility(View.GONE);
+					hasMore = false;
 				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}
+//			footerView.setVisibility(View.GONE);
 		}
 
 		@Override
@@ -173,6 +181,7 @@ public class SumByUsersActivity extends BaseActivity {
 			super.onCancelled();
 			AEProgressDialog.dismissLoadingDialog();
 			pullListView.onRefreshComplete();
+//			footerView.setVisibility(View.GONE);
 		}
 	}
 }
