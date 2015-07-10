@@ -53,15 +53,19 @@ public class SumListByUser implements CmHandler {
 			}
 			List<Map<String, Object>> attendanceList = attendanceService
 					.sumListByUser(startDate, endDate, user_id, page);
-			if (attendanceList == null) {
+			if (attendanceList == null || attendanceList.size() == 0) {
 				rs.setRES_CODE(Global.RESP_SUCCESS);
 				rs.setRES_MESSAGE("无相关考勤记录");
 				return;
 			}
-			List<AttendanceVO> result = new ArrayList<AttendanceVO>();
+			int count = attendanceService.sumCountByUser(startDate, endDate, user_id);
+			List<AttendanceVO> attendances = new ArrayList<AttendanceVO>();
 			for (Map<String, Object> attendance : attendanceList) {
-				result.add(AttendanceVO.assembleAttendance(attendance));
+				attendances.add(AttendanceVO.assembleAttendance(attendance));
 			}
+			Map<String, Object> result = new HashMap<String, Object>();
+			result.put("count", count);
+			result.put("attendance_list", attendances);
 			rs.setRES_CODE(Global.RESP_SUCCESS);
 			rs.setRES_OBJ(GsonUtil.getInstance().toJson(result));
 		} catch (Exception e) {

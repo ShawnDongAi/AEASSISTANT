@@ -166,4 +166,21 @@ public class AttendanceService extends BaseService {
 		}
 		return result;
 	}
+
+	public int sumCountByUser(String startDate, String endDate, String user_id) {
+		int result = 0;
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("start_date", startDate);
+			data.put("end_date", endDate);
+			data.put("user_id", user_id);
+			result = getJdbc().queryForInt(getSql("sum_count_by_user", data));
+			if (result < 0) {
+				result = 0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

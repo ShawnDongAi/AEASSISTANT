@@ -8,7 +8,9 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -98,7 +100,15 @@ public class SumByProListActivity extends BaseActivity implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-
+		AttendanceItem item = adapter.getItem(position - 1);
+		if (item.type == AttendanceItem.EXEPTION_ATTENDANCE
+				|| item.type == AttendanceItem.NORMAL_ATTENDANCE) {
+			Intent intent = new Intent(mContext, AttendanceListActivity.class);
+			intent.putParcelableArrayListExtra(
+					CodeConstants.KEY_ATTENDENCE_LIST,
+					(ArrayList<? extends Parcelable>) item.attendanceVOs);
+			startActivity(intent);
+		}
 	}
 
 	private void initPullToRefresh() {

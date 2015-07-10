@@ -12,4 +12,6 @@ public class CodeConstants {
 	
 	public static final String KEY_START_DATE = "start_date";
 	public static final String KEY_END_DATE = "end_date";
+	
+	public static final String KEY_ATTENDENCE_LIST = "attendance_list";
 }

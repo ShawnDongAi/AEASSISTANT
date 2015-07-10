@@ -139,6 +139,11 @@
             android:name=".activity.attendance.SumByProListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <!-- 异常考勤信息页 -->
+        <activity
+            android:name=".activity.attendance.AttendanceListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 按用户查询 -->
         <activity
             android:name=".activity.attendance.SumByUsersActivity"

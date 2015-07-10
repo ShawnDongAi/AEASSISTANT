@@ -42,7 +42,9 @@
 	<!-- 根据项目查询某时间段内的考勤记录 -->
 	<select id="sum_list_by_project">
 		select
-		t.user_id, t.time, t.photo, t.project_id,
+		t.user_id, t.time, t.photo,(select url from
+		t_attch where attch_id=t.photo) as photo_path,
+		t.project_id,
 		t.parent_id, t.root_id,
 		t.address, t.longitude, t.latitude, t.normal,
 		t.status,
@@ -74,7 +76,9 @@
 	</select>
 	<select id="sum_list_by_parent">
 		select
-		t.user_id,t.time,t.photo,t.project_id,t.parent_id,t.root_id,t.address,t.longitude,t.latitude,t.normal,t.status,
+		t.user_id,t.time,t.photo,(select url from
+		t_attch where attch_id=t.photo) as
+		photo_path,t.project_id,t.parent_id,t.root_id,t.address,t.longitude,t.latitude,t.normal,t.status,
 		a.user_name, a.phone, (select
 		project_name
 		from t_project where 1=1 and
@@ -105,7 +109,8 @@
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
 		t.user_id,
-		t.time, t.photo, t.project_id,
+		t.time, t.photo,(select url from t_attch
+		where attch_id=t.photo) as photo_path, t.project_id,
 		t.parent_id,
 		t.root_id,
 		t.address,
@@ -138,5 +143,14 @@
 		where 1=1 [and rn between
 		'#start#'] [and
 		'#end#']
+	</select>
+	<select id="sum_count_by_user">
+		select count(project_id) from t_attendance
+		where 1=1
+		[and
+		time
+		between
+		to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')]
 	</select>
 </Scheme>

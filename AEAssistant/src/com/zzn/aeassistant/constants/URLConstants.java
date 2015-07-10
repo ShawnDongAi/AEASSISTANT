@@ -7,11 +7,12 @@ package com.zzn.aeassistant.constants;
  */
 public class URLConstants {
 	//个人电脑
-	public static final String URL_HOST = "http://192.168.0.105:8080/AENote_Server/app/";
+//	public static final String URL_BASE = "http://192.168.0.105:8080/AENote_Server/";
 	//服务器
-//	public static final String URL_HOST = "http://112.124.16.245:8080/AENote_Server/app/";
+//	public static final String URL_BASE = "http://112.124.16.245:8080/AENote_Server/";
 	//公司
-//	public static final String URL_HOST = "http://192.168.3.125:8080/AENote_Server/app/";
+	public static final String URL_BASE = "http://192.168.3.125:8080/AENote_Server/";
+	public static final String URL_HOST = URL_BASE + "app/";
 	/**
 	 * 注册接口
 	 */
@@ -84,5 +85,5 @@ public class URLConstants {
 	/**
 	 * 文件下载
 	 */
-	public static final String URL_DOWNLOAD = "http://192.168.0.105:8080/AENote_Server/file?attch=%s";
+	public static final String URL_DOWNLOAD = URL_BASE + "file?attch=%s";
 }

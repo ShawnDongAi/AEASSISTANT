@@ -2,12 +2,10 @@ package com.zzn.aeassistant.activity.attendance;
 
 import java.util.List;
 
+import org.json.JSONObject;
+
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -22,9 +20,9 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshStaggeredGridView;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshStaggeredGridView;
 import com.zzn.aeassistant.view.staggered.StaggeredGridView;
 import com.zzn.aeassistant.view.staggered.StaggeredGridView.OnLoadmoreListener;
 import com.zzn.aeassistant.vo.AttendanceVO;
@@ -32,7 +30,7 @@ import com.zzn.aeassistant.vo.HttpResult;
 
 public class SumByUsersActivity extends BaseActivity {
 	private PullToRefreshStaggeredGridView pullListView;
-	private View headerView, footerView;
+	// private View footerView;
 	private TextView headerLable;
 	private SumUserAdapter adapter;
 	private String startDate, endDate;
@@ -53,17 +51,16 @@ public class SumByUsersActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		pullListView = (PullToRefreshStaggeredGridView) findViewById(R.id.base_list);
-		headerView = View.inflate(mContext, R.layout.item_list_header, null);
-		headerLable = (TextView) headerView.findViewById(R.id.lable);
-		footerView = View.inflate(mContext, R.layout.item_list_footer, null);
+		headerLable = (TextView) findViewById(R.id.lable);
+
+		/*footerView = View.inflate(mContext, R.layout.item_list_footer, null);
 		ImageView spaceshipImage = (ImageView) footerView
 				.findViewById(R.id.img);
 		Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
 				mContext, R.anim.loading_anim);
 		spaceshipImage.startAnimation(hyperspaceJumpAnimation);
-		pullListView.getRefreshableView().setHeaderView(headerView);
-//		pullListView.getRefreshableView().setFooterView(footerView);
-//		footerView.setVisibility(View.GONE);
+		pullListView.getRefreshableView().setFooterView(footerView);
+		footerView.setVisibility(View.GONE);*/
 
 		adapter = new SumUserAdapter(mContext);
 		pullListView.setAdapter(adapter);
@@ -112,10 +109,10 @@ public class SumByUsersActivity extends BaseActivity {
 		pullListView.setOnLoadmoreListener(new OnLoadmoreListener() {
 			@Override
 			public void onLoadmore() {
-//				if (hasMore) {
+				if (hasMore) {
 					sumByUserTask = new SumByUserTask();
 					sumByUserTask.execute(new String[] { startDate, endDate });
-//				}
+				}
 			}
 		});
 		AEProgressDialog.showLoadingDialog(mContext);
@@ -128,9 +125,6 @@ public class SumByUsersActivity extends BaseActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			if (page > 0) {
-//				footerView.setVisibility(View.VISIBLE);
-			}
 		}
 
 		@Override
@@ -153,27 +147,38 @@ public class SumByUsersActivity extends BaseActivity {
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				if (result.getRES_OBJ() != null
 						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
-					List<AttendanceVO> attendances = GsonUtil.getInstance()
-							.fromJson(result.getRES_OBJ().toString(),
-									new TypeToken<List<AttendanceVO>>() {
-									}.getType());
-					if (page == 0) {
-						adapter.clear();
+					JSONObject object;
+					try {
+						object = new JSONObject(result.getRES_OBJ().toString());
+						if (object.has("count")
+								&& object.has("attendance_list")) {
+							List<AttendanceVO> attendances = GsonUtil
+									.getInstance()
+									.fromJson(
+											object.getString("attendance_list"),
+											new TypeToken<List<AttendanceVO>>() {
+											}.getType());
+							if (page == 0) {
+								adapter.clear();
+							}
+							adapter.addData(attendances);
+							if (attendances.size() < 20) {
+								hasMore = false;
+							}
+							int count = object.getInt("count");
+							headerLable.setText(getString(
+									R.string.sum_user_total, count));
+							page++;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-					adapter.addData(attendances);
-					headerLable.setText(getString(R.string.sum_user_total,
-							adapter.getCount()));
-					if (attendances.size() < 20) {
-						hasMore = false;
-					}
-					page++;
 				} else {
 					hasMore = false;
 				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}
-//			footerView.setVisibility(View.GONE);
 		}
 
 		@Override
@@ -181,7 +186,6 @@ public class SumByUsersActivity extends BaseActivity {
 			super.onCancelled();
 			AEProgressDialog.dismissLoadingDialog();
 			pullListView.onRefreshComplete();
-//			footerView.setVisibility(View.GONE);
 		}
 	}
 }

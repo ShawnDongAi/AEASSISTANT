@@ -10,4 +10,6 @@
     <dimen name="reside_menu_width">180dp</dimen>
     <dimen name="reside_menu_real_width">250dp</dimen>
     
+    <dimen name="stgv_margin">8dp</dimen>
+    
 </resources>

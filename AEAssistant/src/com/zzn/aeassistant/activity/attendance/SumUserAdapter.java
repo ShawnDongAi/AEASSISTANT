@@ -1,13 +1,10 @@
 package com.zzn.aeassistant.activity.attendance;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory.Options;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,11 +13,15 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.view.squareprogressbar.SquareProgressView;
+import com.zzn.aeassistant.view.staggered.STGVImageView;
 import com.zzn.aeassistant.vo.AttendanceVO;
 
 public class SumUserAdapter extends BaseAdapter {
@@ -32,7 +33,7 @@ public class SumUserAdapter extends BaseAdapter {
 	public SumUserAdapter(Context context) {
 		this.mContext = context;
 		options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.ic_download) // 设置图片在下载期间显示的图片
+				.showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.icon_failed)// 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.icon_failed) // 设置图片加载/解码过程中错误时候显示的图片
 				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
@@ -84,14 +85,22 @@ public class SumUserAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		final ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = View
 					.inflate(mContext, R.layout.item_attendance, null);
 			holder.address = (TextView) convertView.findViewById(R.id.address);
 			holder.time = (TextView) convertView.findViewById(R.id.date);
-			holder.photo = (ImageView) convertView.findViewById(R.id.thumbnail);
+			holder.photo = (STGVImageView) convertView
+					.findViewById(R.id.thumbnail);
+			holder.progress = (SquareProgressView) convertView
+					.findViewById(R.id.progress);
+			holder.progress.setColor(mContext.getResources().getColor(
+					R.color.blue));
+			holder.progress.setWidthInDp(2);
+			holder.project = (TextView) convertView.findViewById(R.id.project);
+			holder.normal = (ImageView) convertView.findViewById(R.id.normal);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -99,15 +108,51 @@ public class SumUserAdapter extends BaseAdapter {
 		AttendanceVO vo = getItem(position);
 		holder.address.setText(vo.getAddress());
 		holder.time.setText(vo.getDate());
+		holder.project.setText(vo.getProject_name());
+		holder.normal.setVisibility(vo.getNormal() != null
+				&& vo.getNormal().equals("1") ? View.VISIBLE : View.GONE);
+		holder.photo.mHeight = vo.getPhoto_height();
+		holder.photo.mWidth = vo.getPhoto_width();
 		imageLoader.displayImage(
 				String.format(URLConstants.URL_DOWNLOAD, vo.getImgURL()),
-				holder.photo, options);
+				holder.photo, options, new ImageLoadingListener() {
+					@Override
+					public void onLoadingStarted(String imageUri, View view) {
+						holder.progress.setProgress(0);
+					}
+
+					@Override
+					public void onLoadingFailed(String imageUri, View view,
+							FailReason arg2) {
+						holder.progress.setProgress(0);
+					}
+
+					@Override
+					public void onLoadingComplete(String imageUri, View view,
+							Bitmap arg2) {
+						holder.progress.setProgress(0);
+					}
+
+					@Override
+					public void onLoadingCancelled(String imageUri, View view) {
+						holder.progress.setProgress(0);
+					}
+				}, new ImageLoadingProgressListener() {
+					@Override
+					public void onProgressUpdate(String imageUri, View view,
+							int current, int total) {
+						holder.progress.setProgress(current * 100.0 / total);
+					}
+				});
 		return convertView;
 	}
 
 	private class ViewHolder {
 		private TextView time;
 		private TextView address;
-		private ImageView photo;
+		private STGVImageView photo;
+		private SquareProgressView progress;
+		private TextView project;
+		private ImageView normal;
 	}
 }

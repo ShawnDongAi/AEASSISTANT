@@ -1,10 +1,10 @@
 package com.zzn.aeassistant.vo;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class AttendanceVO implements Serializable {
+public class AttendanceVO implements Parcelable {
 
-	private static final long serialVersionUID = -7726149466890260677L;
 	private String project_id;
 	private String project_name;
 	private String parent_id;
@@ -19,6 +19,8 @@ public class AttendanceVO implements Serializable {
 	private String latitude;
 	private String normal;
 	private String status;
+	private int photo_width;
+	private int photo_height;
 
 	public String getProject_id() {
 		return project_id;
@@ -130,5 +132,77 @@ public class AttendanceVO implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	
+	public int getPhoto_width() {
+		return photo_width;
+	}
+
+	public void setPhoto_width(int photo_width) {
+		this.photo_width = photo_width;
+	}
+
+	public int getPhoto_height() {
+		return photo_height;
+	}
+
+	public void setPhoto_height(int photo_height) {
+		this.photo_height = photo_height;
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(project_id);
+		out.writeString(project_name);
+		out.writeString(parent_id);
+		out.writeString(root_id);
+		out.writeString(date);
+		out.writeString(imgURL);
+		out.writeString(user_id);
+		out.writeString(user_name);
+		out.writeString(user_phone);
+		out.writeString(address);
+		out.writeString(longitude);
+		out.writeString(latitude);
+		out.writeString(normal);
+		out.writeString(status);
+		out.writeInt(photo_width);
+		out.writeInt(photo_height);
+	}
+
+	public static final Parcelable.Creator<AttendanceVO> CREATOR = new Creator<AttendanceVO>() {
+		@Override
+		public AttendanceVO[] newArray(int size) {
+			return new AttendanceVO[size];
+		}
+
+		@Override
+		public AttendanceVO createFromParcel(Parcel in) {
+			return new AttendanceVO(in);
+		}
+	};
+
+	public AttendanceVO(Parcel in) {
+		project_id = in.readString();
+		project_name = in.readString();
+		parent_id = in.readString();
+		root_id = in.readString();
+		date = in.readString();
+		imgURL = in.readString();
+		user_id = in.readString();
+		user_name = in.readString();
+		user_phone = in.readString();
+		address = in.readString();
+		longitude = in.readString();
+		latitude = in.readString();
+		normal = in.readString();
+		status = in.readString();
+		photo_width = in.readInt();
+		photo_height = in.readInt();
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
 	}
 }

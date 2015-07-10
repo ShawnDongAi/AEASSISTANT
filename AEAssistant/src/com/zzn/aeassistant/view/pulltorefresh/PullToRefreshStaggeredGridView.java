@@ -45,10 +45,14 @@ public class PullToRefreshStaggeredGridView extends
 			staggeredGridView = new StaggeredGridView(context, attrs);
 		}
 
-		staggeredGridView.setColumnCount(2);
-		staggeredGridView.setId(R.id.stgv);
-		return staggeredGridView;
-	}
+        int margin = getResources().getDimensionPixelSize(R.dimen.stgv_margin);
+        staggeredGridView.setColumnCount(2);
+        staggeredGridView.setItemMargin(margin);
+        staggeredGridView.setPadding(margin, 0, margin, 0);
+
+        staggeredGridView.setId(R.id.stgv);
+        return staggeredGridView;
+    }
 
 	@Override
 	protected boolean isReadyForPullStart() {

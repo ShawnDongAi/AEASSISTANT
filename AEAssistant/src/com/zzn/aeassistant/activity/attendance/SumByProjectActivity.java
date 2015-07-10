@@ -183,6 +183,7 @@ public class SumByProjectActivity extends BaseActivity implements
 			intent.putExtra(CodeConstants.KEY_END_DATE, endDate);
 			intent.putExtra(CodeConstants.KEY_PROJECT_ID, vo.getPROJECT_ID());
 			startActivity(intent);
+			finish();
 		}
 	}
 
