@@ -17,16 +17,19 @@
 		||
 		'-'
 		|| t.project_name as
-		project_name,t.head,t.parent_id,t.root_id,b.user_name as
-		create_user,t.address,t.longitude,t.latitude,t.status,(to_char(t.create_time,'yyyy-MM-dd
+		project_name,t.head,t.parent_id,t.root_id,b.user_id as
+		create_user,b.user_name as create_user_name,b.phone as
+		create_user_phone,t.address,t.longitude,t.latitude,t.status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time,
 		t.status
-		from t_project t right join t_user b on
+		from t_project t right join t_user
+		b on
 		t.create_user=b.user_id
 		where 1=1
 		[and
-		t.project_id='#project_id#' and
+		t.project_id='#project_id#'
+		and
 		t.status='0']
 	</select>
 	<select id="query_project_by_create_user">
@@ -41,20 +44,24 @@
 		a.project_name as project_name,a.head as
 		head,a.parent_id as
 		parent_id,a.root_id as
-		root_id,b.user_name as
-		create_user,a.address
-		address,a.longitude as longitude,a.latitude as
+		root_id,b.user_id as
+		create_user,b.user_name as create_user_name,b.phone as
+		create_user_phone,a.address
+		address,a.longitude as longitude,a.latitude
+		as
 		latitude,a.status as
 		status,(to_char(a.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time,
 		a.status
-		from t_project a right join t_user b on
+		from t_project a right join t_user
+		b on
 		a.create_user=b.user_id
 		where
 		1=1
 		[and
-		a.create_user='#create_user#' and
+		a.create_user='#create_user#'
+		and
 		a.status='0']
 		order
 		by
@@ -71,8 +78,9 @@
 		project_name,t_project.head as
 		head,t_project.parent_id as
 		parent_id,t_project.root_id as
-		root_id,t_user.user_name as
-		create_user,t_project.address as
+		root_id,t_user.user_id as
+		create_user,t_user.user_name as create_user_name,t_user.phone as
+		create_user_phone,t_project.address as
 		address,t_project.longitude as
 		longitude,t_project.latitude as
 		latitude,t_project.status as
@@ -124,8 +132,9 @@
 		project_name,t.head as
 		head,t.parent_id as
 		parent_id,t.root_id as
-		root_id,a.user_name as
-		create_user,t.address as
+		root_id,a.user_id as
+		create_user,a.user_name as create_user_name,a.phone as
+		create_user_phone,t.address as
 		address,t.longitude as
 		longitude,t.latitude as
 		latitude,t.status as
@@ -134,7 +143,8 @@
 		create_time
 		from t_project t right join t_user a on
 		t.create_user=a.user_id
-		where 1=1
+		where
+		1=1
 		and
 		t.root_id=(select root_id from
 		t_project where

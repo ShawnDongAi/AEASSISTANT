@@ -138,7 +138,7 @@ public class AttendanceVO implements Serializable {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public int getPhoto_width() {
 		return photo_width;
 	}
@@ -161,7 +161,11 @@ public class AttendanceVO implements Serializable {
 		vo.setUser_name(attendance.get("user_name").toString());
 		vo.setUser_phone(attendance.get("phone").toString());
 		vo.setProject_id(attendance.get("project_id").toString());
-		vo.setProject_name(attendance.get("project_name").toString());
+		String projectName = attendance.get("project_name").toString();
+		if (projectName.startsWith("-")) {
+			projectName = projectName.substring(1, projectName.length());
+		}
+		vo.setProject_name(projectName);
 		vo.setParent_id(attendance.get("parent_id").toString());
 		vo.setRoot_id(attendance.get("root_id").toString());
 		vo.setDate(attendance.get("time").toString());

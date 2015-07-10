@@ -19,18 +19,16 @@ import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
+import com.zzn.aeassistant.view.pla.MultiColumnListView;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshStaggeredGridView;
-import com.zzn.aeassistant.view.staggered.StaggeredGridView;
-import com.zzn.aeassistant.view.staggered.StaggeredGridView.OnLoadmoreListener;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPLAListView;
 import com.zzn.aeassistant.vo.AttendanceVO;
 import com.zzn.aeassistant.vo.HttpResult;
 
 public class SumByUsersActivity extends BaseActivity {
-	private PullToRefreshStaggeredGridView pullListView;
-	// private View footerView;
+	private PullToRefreshPLAListView pullListView;
 	private TextView headerLable;
 	private SumUserAdapter adapter;
 	private String startDate, endDate;
@@ -50,17 +48,8 @@ public class SumByUsersActivity extends BaseActivity {
 
 	@Override
 	protected void initView() {
-		pullListView = (PullToRefreshStaggeredGridView) findViewById(R.id.base_list);
+		pullListView = (PullToRefreshPLAListView) findViewById(R.id.base_list);
 		headerLable = (TextView) findViewById(R.id.lable);
-
-		/*footerView = View.inflate(mContext, R.layout.item_list_footer, null);
-		ImageView spaceshipImage = (ImageView) footerView
-				.findViewById(R.id.img);
-		Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
-				mContext, R.anim.loading_anim);
-		spaceshipImage.startAnimation(hyperspaceJumpAnimation);
-		pullListView.getRefreshableView().setFooterView(footerView);
-		footerView.setVisibility(View.GONE);*/
 
 		adapter = new SumUserAdapter(mContext);
 		pullListView.setAdapter(adapter);
@@ -85,12 +74,12 @@ public class SumByUsersActivity extends BaseActivity {
 	}
 
 	private void initPullToRefresh() {
-		pullListView.setMode(Mode.PULL_FROM_START);
+		pullListView.setMode(Mode.BOTH);
 		pullListView
-				.setOnRefreshListener(new OnRefreshListener<StaggeredGridView>() {
+				.setOnRefreshListener(new OnRefreshListener2<MultiColumnListView>() {
 					@Override
-					public void onRefresh(
-							PullToRefreshBase<StaggeredGridView> refreshView) {
+					public void onPullDownToRefresh(
+							final PullToRefreshBase<MultiColumnListView> refreshView) {
 						String label = DateUtils.formatDateTime(
 								getApplicationContext(),
 								System.currentTimeMillis(),
@@ -99,33 +88,31 @@ public class SumByUsersActivity extends BaseActivity {
 										| DateUtils.FORMAT_ABBREV_ALL);
 						page = 0;
 						// Update the LastUpdatedLabel
-						refreshView.getLoadingLayoutProxy()
+						refreshView.getLoadingLayoutProxy(true, false)
 								.setLastUpdatedLabel(label);
 						sumByUserTask = new SumByUserTask();
 						sumByUserTask
 								.execute(new String[] { startDate, endDate });
 					}
+
+					@Override
+					public void onPullUpToRefresh(
+							final PullToRefreshBase<MultiColumnListView> refreshView) {
+						if (hasMore) {
+							sumByUserTask = new SumByUserTask();
+							sumByUserTask.execute(new String[] { startDate,
+									endDate });
+						} else {
+							refreshView.onRefreshComplete();
+						}
+					}
 				});
-		pullListView.setOnLoadmoreListener(new OnLoadmoreListener() {
-			@Override
-			public void onLoadmore() {
-				if (hasMore) {
-					sumByUserTask = new SumByUserTask();
-					sumByUserTask.execute(new String[] { startDate, endDate });
-				}
-			}
-		});
 		AEProgressDialog.showLoadingDialog(mContext);
 		sumByUserTask = new SumByUserTask();
 		sumByUserTask.execute(new String[] { startDate, endDate });
 	}
 
 	private class SumByUserTask extends AsyncTask<String, Integer, HttpResult> {
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}
 
 		@Override
 		protected HttpResult doInBackground(String... params) {
@@ -178,6 +165,39 @@ public class SumByUsersActivity extends BaseActivity {
 				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
+			}
+			if (!hasMore) {
+				pullListView
+						.getLoadingLayoutProxy(false, true)
+						.setPullLabel(
+								getString(R.string.pull_to_refresh_from_bottom_null_data));
+				pullListView
+						.getLoadingLayoutProxy(false, true)
+						.setRefreshingLabel(
+								getString(R.string.pull_to_refresh_from_bottom_null_data));
+				pullListView
+						.getLoadingLayoutProxy(false, true)
+						.setReleaseLabel(
+								getString(R.string.pull_to_refresh_from_bottom_null_data));
+				pullListView.getLoadingLayoutProxy(false, true)
+						.setLoadingDrawable(null);
+			} else {
+				pullListView
+						.getLoadingLayoutProxy(false, true)
+						.setPullLabel(
+								getString(R.string.pull_to_refresh_from_bottom_pull_label));
+				pullListView
+						.getLoadingLayoutProxy(false, true)
+						.setRefreshingLabel(
+								getString(R.string.pull_to_refresh_from_bottom_refreshing_label));
+				pullListView
+						.getLoadingLayoutProxy(false, true)
+						.setReleaseLabel(
+								getString(R.string.pull_to_refresh_from_bottom_release_label));
+				pullListView.getLoadingLayoutProxy(false, true)
+						.setLoadingDrawable(
+								getResources().getDrawable(
+										R.drawable.default_ptr_rotate));
 			}
 		}
 

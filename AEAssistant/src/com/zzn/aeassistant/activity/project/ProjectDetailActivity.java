@@ -54,7 +54,7 @@ public class ProjectDetailActivity extends BaseActivity {
 		status.setVisibility(project.getSTATUS() != null
 				&& project.getSTATUS().equals("1") ? View.VISIBLE : View.GONE);
 		managerUser.setText(getString(R.string.project_manager_user,
-				project.getCREATE_USER()));
+				project.getCREATE_USER_NAME()));
 		createTime.setText(getString(R.string.project_create_time,
 				project.getCREATE_TIME()));
 		address.setText(getString(R.string.project_address,

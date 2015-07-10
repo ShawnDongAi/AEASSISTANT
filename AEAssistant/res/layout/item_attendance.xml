@@ -1,58 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/input_bg"
-    android:padding="7dp" >
+    android:layout_height="wrap_content" >
 
-    <com.zzn.aeassistant.view.staggered.STGVImageView
-        android:id="@+id/thumbnail"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:src="@drawable/icon_loading" />
-    
-    <com.zzn.aeassistant.view.squareprogressbar.SquareProgressView
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/thumbnail"
-        android:layout_alignTop="@+id/thumbnail"
-        android:layout_alignLeft="@+id/thumbnail"
-        android:layout_alignRight="@+id/thumbnail" />
+        android:layout_margin="5dp"
+        android:background="@drawable/input_bg"
+        android:padding="7dp" >
 
-    <TextView
-        android:id="@+id/project"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/thumbnail"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:textSize="15sp" />
+        <com.zzn.aeassistant.view.pla.STGVImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_loading" />
 
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/project"
-        android:drawableLeft="@drawable/ic_location_small"
-        android:gravity="center_vertical"
-        android:textSize="15sp" />
+        <com.zzn.aeassistant.view.squareprogressbar.SquareProgressView
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/thumbnail"
+            android:layout_alignLeft="@+id/thumbnail"
+            android:layout_alignRight="@+id/thumbnail"
+            android:layout_alignTop="@+id/thumbnail" />
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/address"
-        android:gravity="right"
-        android:textSize="13sp" />
+        <TextView
+            android:id="@+id/project"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/thumbnail"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:textSize="15sp" />
 
-    <ImageView
-        android:id="@+id/normal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_warning" />
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/project"
+            android:drawableLeft="@drawable/ic_location_small"
+            android:gravity="center_vertical"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/address"
+            android:gravity="right"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_warning" />
+    </RelativeLayout>
 
 </RelativeLayout>

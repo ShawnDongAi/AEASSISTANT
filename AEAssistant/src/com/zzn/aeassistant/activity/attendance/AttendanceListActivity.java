@@ -8,11 +8,11 @@ import android.widget.TextView;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.constants.CodeConstants;
-import com.zzn.aeassistant.view.staggered.StaggeredGridView;
+import com.zzn.aeassistant.view.pla.MultiColumnListView;
 import com.zzn.aeassistant.vo.AttendanceVO;
 
 public class AttendanceListActivity extends BaseActivity {
-	private StaggeredGridView listView;
+	private MultiColumnListView listView;
 	private TextView headerLable;
 	private SumUserAdapter adapter;
 	private List<AttendanceVO> attendances = new ArrayList<AttendanceVO>();
@@ -29,14 +29,9 @@ public class AttendanceListActivity extends BaseActivity {
 
 	@Override
 	protected void initView() {
-		listView = (StaggeredGridView) findViewById(R.id.base_list);
+		listView = (MultiColumnListView) findViewById(R.id.base_list);
 		headerLable = (TextView) findViewById(R.id.lable);
 		
-		int margin = getResources().getDimensionPixelSize(R.dimen.stgv_margin);
-		listView.setColumnCount(2);
-		listView.setItemMargin(margin);
-		listView.setPadding(margin, 0, margin, 0);
-
 		adapter = new SumUserAdapter(mContext);
 		attendances = getIntent().getParcelableArrayListExtra(
 				CodeConstants.KEY_ATTENDENCE_LIST);

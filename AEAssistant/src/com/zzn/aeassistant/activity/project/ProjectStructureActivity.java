@@ -3,7 +3,12 @@ package com.zzn.aeassistant.activity.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -16,6 +21,7 @@ import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
+import com.zzn.aeassistant.view.tree.Node;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
@@ -49,6 +55,21 @@ public class ProjectStructureActivity extends BaseActivity {
 		}
 		listStruTask = new ListStructureTask();
 		listStruTask.execute(project_id);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				ProjectVO project = (ProjectVO) (((Node) listView.getAdapter()
+						.getItem(position)).getData());
+				try {
+					Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"
+							+ project.getCREATE_USER_PHONE()));
+					startActivity(intent);
+				} catch (Exception e) {
+					ToastUtil.show(R.string.dial_error);
+				}
+			}
+		});
 	}
 
 	@Override

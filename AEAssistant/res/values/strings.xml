@@ -16,6 +16,7 @@
     <string name="exit_toast">再按一次返回键退出</string>
     <string name="unknow">未知</string>
     <string name="delete">删除</string>
+    <string name="dial_error">电话号码格式有误</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>

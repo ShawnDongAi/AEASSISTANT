@@ -96,8 +96,4 @@
 
     <attr name="SwipeBackLayoutStyle" format="reference" />
 
-    <declare-styleable name="StaggeredGridView">
-        <attr name="drawSelectorOnTop" format="boolean" />
-        <attr name="numColumns" format="integer" />
-    </declare-styleable>
 </resources>

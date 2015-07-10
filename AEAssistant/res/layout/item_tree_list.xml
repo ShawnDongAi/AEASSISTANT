@@ -24,17 +24,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@drawable/text_normal"
-            android:textSize="17sp" />
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/treenode_time"
+            android:id="@+id/treenode_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/treenode_label"
             android:layout_below="@+id/treenode_label"
             android:layout_marginTop="3dp"
-            android:textColor="@drawable/text_light"
-            android:textSize="14sp" />
+            android:textColor="@drawable/text_normal"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/treenode_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/treenode_label"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/treenode_user"
+            android:drawableLeft="@drawable/ic_tel"
+            android:gravity="center_vertical"
+            android:textColor="@drawable/text_normal"
+            android:textSize="16sp" />
     </RelativeLayout>
 
 </RelativeLayout>

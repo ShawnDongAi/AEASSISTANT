@@ -20,8 +20,8 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.view.pla.STGVImageView;
 import com.zzn.aeassistant.view.squareprogressbar.SquareProgressView;
-import com.zzn.aeassistant.view.staggered.STGVImageView;
 import com.zzn.aeassistant.vo.AttendanceVO;
 
 public class SumUserAdapter extends BaseAdapter {

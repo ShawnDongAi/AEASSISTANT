@@ -65,7 +65,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
 		/**
 		 * 设置节点点击时，可以展开以及关闭；并且将ItemClick事件继续往外公布
 		 */
-		mTree.setOnItemClickListener(new OnItemClickListener() {
+		/*mTree.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -77,7 +77,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
 				}
 			}
 
-		});
+		});*/
 
 	}
 

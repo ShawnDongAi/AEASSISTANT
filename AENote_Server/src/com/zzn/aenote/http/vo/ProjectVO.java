@@ -18,6 +18,8 @@ public class ProjectVO implements Serializable {
 	private String LONGITUDE;
 	private String LATITUDE;
 	private String STATUS;
+	private String CREATE_USER_NAME;
+	private String CREATE_USER_PHONE;
 
 	public String getPROJECT_ID() {
 		return PROJECT_ID;
@@ -107,6 +109,22 @@ public class ProjectVO implements Serializable {
 		STATUS = sTATUS;
 	}
 	
+	public String getCREATE_USER_NAME() {
+		return CREATE_USER_NAME;
+	}
+
+	public void setCREATE_USER_NAME(String cREATE_USER_NAME) {
+		CREATE_USER_NAME = cREATE_USER_NAME;
+	}
+
+	public String getCREATE_USER_PHONE() {
+		return CREATE_USER_PHONE;
+	}
+
+	public void setCREATE_USER_PHONE(String cREATE_USER_PHONE) {
+		CREATE_USER_PHONE = cREATE_USER_PHONE;
+	}
+
 	public static ProjectVO assembleProject(Map<String, Object> project) {
 		ProjectVO vo = new ProjectVO();
 		vo.setPROJECT_ID(project.get("project_id").toString());
@@ -124,6 +142,17 @@ public class ProjectVO implements Serializable {
 		vo.setROOT_ID(project.get("root_id").toString());
 		vo.setCREATE_TIME(project.get("create_time").toString());
 		vo.setCREATE_USER(project.get("create_user").toString());
+		String user_name = "";
+		String user_phone = "";
+		if (project.get("create_user_name") != null) {
+			user_name = project.get("create_user_name").toString();
+		}
+		if (project.get("create_user_phone") != null) {
+			user_phone = project.get("create_user_phone").toString();
+		}
+		System.out.println(user_name+":"+user_phone);
+		vo.setCREATE_USER_NAME(user_name);
+		vo.setCREATE_USER_PHONE(user_phone);
 		if (project.get("address") != null) {
 			vo.setADDRESS(project.get("address").toString());
 		}

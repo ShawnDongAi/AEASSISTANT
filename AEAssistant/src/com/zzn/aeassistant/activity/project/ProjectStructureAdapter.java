@@ -34,8 +34,10 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 					.findViewById(R.id.treenode_icon);
 			viewHolder.label = (TextView) convertView
 					.findViewById(R.id.treenode_label);
-			viewHolder.time = (TextView) convertView
-					.findViewById(R.id.treenode_time);
+			viewHolder.user = (TextView) convertView
+					.findViewById(R.id.treenode_user);
+			viewHolder.phone = (TextView) convertView
+					.findViewById(R.id.treenode_phone);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -47,13 +49,16 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 			viewHolder.icon.setImageResource(node.getIcon());
 		}
 		viewHolder.label.setText(node.getName());
-		viewHolder.time.setText(((ProjectVO) node.getData()).getCREATE_TIME());
+		ProjectVO vo = (ProjectVO) node.getData();
+		viewHolder.user.setText(vo.getCREATE_USER_NAME() + ":");
+		viewHolder.phone.setText(vo.getCREATE_USER_PHONE());
 		return convertView;
 	}
 
 	private final class ViewHolder {
 		ImageView icon;
 		TextView label;
-		TextView time;
+		TextView user;
+		TextView phone;
 	}
 }
