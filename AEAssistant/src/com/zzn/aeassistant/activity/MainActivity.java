@@ -124,6 +124,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		initUserHistory();
 	}
 
+	private long lastClickTime = 0;
 	private void initUserHistory() {
 		mUserAdapter = new UserHistoryAdapter(mContext);
 		mUserAdapter.setUsers(UserDBHelper.getUserHistory());
@@ -145,6 +146,10 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			@Override
 			public boolean onMenuItemClick(int position, SwipeMenu menu,
 					int index) {
+				if (System.currentTimeMillis() - lastClickTime < 500) {
+					return false;
+				}
+				lastClickTime = System.currentTimeMillis();
 				UserVO user = mUserAdapter.getItem(position);
 				UserDBHelper.delete(user.getPHONE());
 				mUserAdapter.removeUser(position);
@@ -161,6 +166,10 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 				if (position < 1) {
 					return;
 				}
+				if (System.currentTimeMillis() - lastClickTime < 500) {
+					return;
+				}
+				lastClickTime = System.currentTimeMillis();
 				scanningForOther(mUserAdapter.getItem(position - 1).getPHONE());
 			}
 		});
@@ -292,6 +301,10 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (System.currentTimeMillis() - lastClickTime < 500) {
+			return;
+		}
+		lastClickTime = System.currentTimeMillis();
 		startActivity(adapter.getItem(position).getIntent());
 	}
 

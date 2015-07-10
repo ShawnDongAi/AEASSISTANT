@@ -97,9 +97,14 @@ public class SumByProListActivity extends BaseActivity implements
 		super.onDestroy();
 	}
 
+	private long lastClickTime = 0;
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (System.currentTimeMillis() - lastClickTime < 500) {
+			return;
+		}
+		lastClickTime = System.currentTimeMillis();
 		AttendanceItem item = adapter.getItem(position - 1);
 		if (item.type == AttendanceItem.EXEPTION_ATTENDANCE
 				|| item.type == AttendanceItem.NORMAL_ATTENDANCE) {

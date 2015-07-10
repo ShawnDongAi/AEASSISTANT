@@ -169,9 +169,14 @@ public class SumByProjectActivity extends BaseActivity implements
 		}
 	}
 
+	private long lastClickTime = 0;
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (System.currentTimeMillis() - lastClickTime < 500) {
+			return;
+		}
+		lastClickTime = System.currentTimeMillis();
 		ProjectItem item = adapter.getItem(position - 1);
 		if (item.type == ProjectItem.SECTION) {
 			return;

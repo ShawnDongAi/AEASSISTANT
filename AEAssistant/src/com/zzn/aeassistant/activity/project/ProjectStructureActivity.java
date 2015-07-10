@@ -30,6 +30,7 @@ public class ProjectStructureActivity extends BaseActivity {
 	private ProjectStructureAdapter<ProjectVO> defaultAdapter;
 	private ListStructureTask listStruTask;
 	private String project_id;
+	private long lastClickTime = 0;
 
 	@Override
 	protected int layoutResID() {
@@ -59,6 +60,10 @@ public class ProjectStructureActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				if (System.currentTimeMillis() - lastClickTime < 500) {
+					return;
+				}
+				lastClickTime = System.currentTimeMillis();
 				ProjectVO project = (ProjectVO) (((Node) listView.getAdapter()
 						.getItem(position)).getData());
 				try {
