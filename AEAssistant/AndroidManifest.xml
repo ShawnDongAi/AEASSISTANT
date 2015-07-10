@@ -113,9 +113,14 @@
             android:name=".activity.project.ProjectDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
-        <!-- 组织结构页 -->
+        <!-- 组织架构页 -->
         <activity
             android:name=".activity.project.ProjectStructureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <!-- 项目通讯录 -->
+        <activity
+            android:name=".activity.project.ProjectUsersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 项目迁移页 -->

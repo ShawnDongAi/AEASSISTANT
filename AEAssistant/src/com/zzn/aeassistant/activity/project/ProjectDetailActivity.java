@@ -40,9 +40,11 @@ public class ProjectDetailActivity extends BaseActivity {
 		managerUser = (TextView) findViewById(R.id.project_manager_user);
 		createTime = (TextView) findViewById(R.id.project_create_time);
 		projectStructure = (TextView) findViewById(R.id.project_leaf);
+		projectUsers = (TextView) findViewById(R.id.project_users);
 		projectUpdateParent = (TextView) findViewById(R.id.project_update_parent);
 		address = (TextView) findViewById(R.id.project_address);
 		projectStructure.setOnClickListener(this);
+		projectUsers.setOnClickListener(this);
 		projectUpdateParent.setOnClickListener(this);
 
 		mMapView = (MapView) findViewById(R.id.project_mapview);
@@ -78,6 +80,10 @@ public class ProjectDetailActivity extends BaseActivity {
 					.putExtra(CodeConstants.KEY_PROJECT_ID,
 							project.getPROJECT_ID()));
 			break;
+		case R.id.project_users:
+			startActivity(new Intent(mContext, ProjectUsersActivity.class)
+					.putExtra(CodeConstants.KEY_PROJECT_ID,
+							project.getPROJECT_ID()));
 		case R.id.project_update_parent:
 			startActivity(new Intent(mContext, UpdateParentActivity.class)
 					.putExtra(CodeConstants.KEY_PROJECT_VO, project));
