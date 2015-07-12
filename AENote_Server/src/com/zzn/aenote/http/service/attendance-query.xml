@@ -147,6 +147,7 @@
 	<select id="sum_count_by_user">
 		select count(project_id) from t_attendance
 		where 1=1
+		[and user_id='#user_id#']
 		[and
 		time
 		between

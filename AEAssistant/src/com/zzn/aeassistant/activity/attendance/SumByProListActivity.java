@@ -153,6 +153,13 @@ public class SumByProListActivity extends BaseActivity implements
 					+ "&project_id=" + project_id;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_SUM_BY_PROJECT, param);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			pullListView.onRefreshComplete();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				if (result.getRES_OBJ() != null
 						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
@@ -234,17 +241,7 @@ public class SumByProListActivity extends BaseActivity implements
 						e.printStackTrace();
 					}
 				}
-			}
-			return result;
-		}
-
-		@Override
-		protected void onPostExecute(HttpResult result) {
-			super.onPostExecute(result);
-			pullListView.onRefreshComplete();
-			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				adapter.notifyDataSetChanged();
-			} else {
+			}else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}
 		}
