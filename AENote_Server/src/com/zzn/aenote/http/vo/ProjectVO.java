@@ -150,7 +150,6 @@ public class ProjectVO implements Serializable {
 		if (project.get("create_user_phone") != null) {
 			user_phone = project.get("create_user_phone").toString();
 		}
-		System.out.println(user_name+":"+user_phone);
 		vo.setCREATE_USER_NAME(user_name);
 		vo.setCREATE_USER_PHONE(user_phone);
 		if (project.get("address") != null) {

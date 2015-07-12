@@ -49,7 +49,7 @@ public class SumByProListActivity extends BaseActivity implements
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_pinned_list;
+		return R.layout.activity_base_pinned_list;
 	}
 
 	@Override
@@ -76,6 +76,7 @@ public class SumByProListActivity extends BaseActivity implements
 		adapter.addItem(normalSection);
 		adapter.addItem(normalItem);
 		listView.setAdapter(adapter);
+		adapter.notifyDataSetChanged();
 		listView.setOnItemClickListener(this);
 		startDate = getIntent().getStringExtra(CodeConstants.KEY_START_DATE);
 		endDate = getIntent().getStringExtra(CodeConstants.KEY_END_DATE);
@@ -228,6 +229,7 @@ public class SumByProListActivity extends BaseActivity implements
 											R.string.sum_normal_section, 0), ""));
 							adapter.addItem(normalItem);
 						}
+						adapter.notifyDataSetChanged();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

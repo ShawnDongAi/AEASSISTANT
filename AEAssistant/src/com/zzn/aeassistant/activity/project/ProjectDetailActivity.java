@@ -43,6 +43,7 @@ public class ProjectDetailActivity extends BaseActivity {
 		projectUsers = (TextView) findViewById(R.id.project_users);
 		projectUpdateParent = (TextView) findViewById(R.id.project_update_parent);
 		address = (TextView) findViewById(R.id.project_address);
+		name.setOnClickListener(this);
 		projectStructure.setOnClickListener(this);
 		projectUsers.setOnClickListener(this);
 		projectUpdateParent.setOnClickListener(this);
@@ -75,6 +76,8 @@ public class ProjectDetailActivity extends BaseActivity {
 	public void onClick(View v) {
 		super.onClick(v);
 		switch (v.getId()) {
+		case R.id.project_name:
+			break;
 		case R.id.project_leaf:
 			startActivity(new Intent(mContext, ProjectStructureActivity.class)
 					.putExtra(CodeConstants.KEY_PROJECT_ID,
@@ -84,6 +87,7 @@ public class ProjectDetailActivity extends BaseActivity {
 			startActivity(new Intent(mContext, ProjectUsersActivity.class)
 					.putExtra(CodeConstants.KEY_PROJECT_ID,
 							project.getPROJECT_ID()));
+			break;
 		case R.id.project_update_parent:
 			startActivity(new Intent(mContext, UpdateParentActivity.class)
 					.putExtra(CodeConstants.KEY_PROJECT_VO, project));

@@ -5,17 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class SideBar extends View {
 	private OnTouchingLetterChangedListener onTouchingLetterChangedListener;
-	public static final String TAG_SEARCH = "Search";
 	// 默认索引为24个字母加#
 	private String[] sections = { "A", "B", "C", "D", "E", "F", "G", "H", "I",
 			"J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
@@ -24,30 +20,13 @@ public class SideBar extends View {
 	private Paint paint = new Paint();
 	// 中间的提示文字
 	private TextView mTextDialog;
-	private ImageButton mImageDialog;
-	// 是否显示搜索索引
-	private boolean showSearch;
-	private Drawable iconSearch;
-	private int searchDrawableID;
-	
-	public void setPopView(TextView mTextDialog, ImageButton mImageDialog) {
+
+	public void setPopView(TextView mTextDialog) {
 		this.mTextDialog = mTextDialog;
-		this.mImageDialog = mImageDialog;
 	}
 
-	public void setSections(boolean showSearch, String[] sections, int searchDrawableID) {
-		this.showSearch = showSearch;
-		if (showSearch) {
-			this.sections = new String[sections.length + 1];
-			this.sections[0] = TAG_SEARCH;
-			for (int i = 0; i < sections.length; i++) {
-				this.sections[i + 1] = sections[i];
-			}
-		}
-		this.searchDrawableID = searchDrawableID;
-		iconSearch = getResources().getDrawable(searchDrawableID);
-		iconSearch.setBounds(0, 0, iconSearch.getIntrinsicWidth(),
-				iconSearch.getIntrinsicHeight());
+	public void setSections(String[] sections) {
+		this.sections = sections;
 		invalidate();
 	}
 
@@ -75,27 +54,17 @@ public class SideBar extends View {
 
 		for (int i = 0; i < sections.length; i++) {
 			float yPos = singleHeight * i + emptyHeight;
-			if (showSearch && i == 0) {
-				paint.setColor(Color.rgb(33, 65, 98));
-				paint.setAntiAlias(true);
-				float xPos = width / 2 - 15;
-				canvas.drawBitmap(((BitmapDrawable)iconSearch).getBitmap(), xPos, yPos, paint);
-			} else {
-				paint.setColor(Color.rgb(33, 65, 98));
-				paint.setTypeface(Typeface.DEFAULT_BOLD);
-				paint.setAntiAlias(true);
-				paint.setTextSize(30);
-				// 触摸到的文字变色
-				if (i == choose) {
-					paint.setColor(Color.parseColor("#3399ff"));
-					paint.setFakeBoldText(true);
-				}
-				if (showSearch) {
-					yPos += singleHeight;
-				}
-				float xPos = width / 2 - paint.measureText(sections[i]) / 2;
-				canvas.drawText(sections[i], xPos, yPos, paint);
+			paint.setColor(Color.rgb(33, 65, 98));
+			paint.setTypeface(Typeface.DEFAULT_BOLD);
+			paint.setAntiAlias(true);
+			paint.setTextSize(30);
+			// 触摸到的文字变色
+			if (i == choose) {
+				paint.setColor(Color.parseColor("#3399ff"));
+				paint.setFakeBoldText(true);
 			}
+			float xPos = width / 2 - paint.measureText(sections[i]) / 2;
+			canvas.drawText(sections[i], xPos, yPos, paint);
 			paint.reset();
 		}
 
@@ -125,9 +94,6 @@ public class SideBar extends View {
 			if (mTextDialog != null) {
 				mTextDialog.setVisibility(View.INVISIBLE);
 			}
-			if (mImageDialog != null) {
-				mImageDialog.setVisibility(View.INVISIBLE);
-			}
 			break;
 
 		default:
@@ -137,17 +103,8 @@ public class SideBar extends View {
 						listener.onTouchingLetterChanged(sections[c]);
 					}
 					if (mTextDialog != null) {
-						if (sections[c].equals(TAG_SEARCH) && mImageDialog != null) {
-							mImageDialog.setImageResource(searchDrawableID);
-							mImageDialog.setVisibility(View.VISIBLE);
-							mTextDialog.setVisibility(View.INVISIBLE);
-						} else {
-							mTextDialog.setText(sections[c]);
-							mTextDialog.setVisibility(View.VISIBLE);
-							if (mImageDialog != null) {
-								mImageDialog.setVisibility(View.INVISIBLE);
-							}
-						}
+						mTextDialog.setText(sections[c]);
+						mTextDialog.setVisibility(View.VISIBLE);
 					}
 					choose = c;
 					invalidate();

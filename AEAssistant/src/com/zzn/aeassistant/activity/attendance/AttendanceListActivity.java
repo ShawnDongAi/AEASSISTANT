@@ -24,7 +24,7 @@ public class AttendanceListActivity extends BaseActivity {
 
 	@Override
 	protected int titleStringID() {
-		return R.string.sum_by_user;
+		return R.string.sum_by_project;
 	}
 
 	@Override
