@@ -105,6 +105,8 @@ public class AEHttpUtil {
 		} catch (IOException e) {
 			LogUtil.i("目标没有找到");
 			e.printStackTrace();
+			result.setRES_MESSAGE(AEApp.getInstance().getString(
+					R.string.http_out));
 		}
 		return result;
 	}
@@ -159,12 +161,14 @@ public class AEHttpUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 			LogUtil.i("目标没有找到");
+			result.setRES_MESSAGE(AEApp.getInstance().getString(
+					R.string.http_out));
 		}
 		return result;
 	}
 
-	public static HttpResult doPostWithFile(String urlString, List<String> filePaths,
-			Map<String, String> params) {
+	public static HttpResult doPostWithFile(String urlString,
+			List<String> filePaths, Map<String, String> params) {
 		LogUtil.i("doPost the URL >>" + urlString);
 		HttpResult result = new HttpResult();
 		result.setRES_CODE(HttpResult.CODE_FAILED);
@@ -256,7 +260,8 @@ public class AEHttpUtil {
 	 * @param filePaths
 	 * @param mpEntity
 	 */
-	private static void addFiles(List<String> filePaths, MultipartEntity mpEntity) {
+	private static void addFiles(List<String> filePaths,
+			MultipartEntity mpEntity) {
 		if (null != filePaths && filePaths.size() > 0) {
 			for (String path : filePaths) {
 				File file = new File(path);
