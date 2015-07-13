@@ -1,6 +1,9 @@
 package com.zzn.aenote.http.server.attendance;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,7 @@ public class SumListByUser implements CmHandler {
 	protected static final Logger logger = Logger
 			.getLogger(SumListByUser.class);
 	private AttendanceService attendanceService;
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Override
 	public void doHandler(HttpServletRequest req, HttpServletResponse resp,
@@ -38,6 +42,11 @@ public class SumListByUser implements CmHandler {
 				rs.setRES_MESSAGE("请选择查询日期或用户信息");
 				return;
 			}
+			Date end = dateFormat.parse(endDate);
+			Calendar endCalendar = Calendar.getInstance();
+			endCalendar.setTime(end);
+			endCalendar.add(Calendar.DATE, 1);
+			endDate = dateFormat.format(endCalendar.getTime());
 			int page = 0;
 			if (StringUtil.isEmpty(pageString)) {
 				page = 0;

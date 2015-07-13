@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <RelativeLayout style="@style/layout_body" >
+
+        <include
+            android:id="@+id/header"
+            layout="@layout/item_list_header" />
+
+        <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPinnedListView
+            android:id="@+id/base_list"
+            style="@style/base_list"
+            android:layout_below="@+id/header" />
+    </RelativeLayout>
+
+</LinearLayout>

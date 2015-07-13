@@ -8,14 +8,7 @@
 
         <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPinnedSwipeMenuListView
             android:id="@+id/project_listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="@color/transparent"
-            android:fadingEdge="none"
-            android:fastScrollEnabled="false"
-            android:footerDividersEnabled="false"
-            android:headerDividersEnabled="false"
-            android:smoothScrollbar="true" />
+            style="@style/base_list" />
 
         <ImageButton
             android:id="@+id/project_btn_add"

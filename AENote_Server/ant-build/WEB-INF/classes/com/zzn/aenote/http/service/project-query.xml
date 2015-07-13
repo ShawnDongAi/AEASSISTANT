@@ -161,6 +161,6 @@
 		from t_user
 		where 1=1
 		and user_id=(select
-		create_user from t_project where 1=1 [and project_id='#project_id#'])
+		create_user from t_project where 1=1 [and root_id='#project_id#'])
 	</select>
 </Scheme>

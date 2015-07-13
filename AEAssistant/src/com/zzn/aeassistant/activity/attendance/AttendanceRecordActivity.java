@@ -39,10 +39,8 @@ public class AttendanceRecordActivity extends BaseActivity {
 		sumByProjectBtn = (Button) findViewById(R.id.sum_by_project);
 		Calendar now = Calendar.getInstance();
 		String currentDate = dateFormat.format(now.getTime());
-		now.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH) + 1);
-		String nextDate = dateFormat.format(now.getTime());
 		startDateBtn.setText(currentDate);
-		endDateBtn.setText(nextDate);
+		endDateBtn.setText(currentDate);
 		startDateBtn.setOnClickListener(this);
 		endDateBtn.setOnClickListener(this);
 		sumByUserBtn.setOnClickListener(this);

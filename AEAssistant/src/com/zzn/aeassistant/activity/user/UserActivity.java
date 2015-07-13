@@ -4,10 +4,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
-import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
 import com.zzn.aeassistant.R;
@@ -92,15 +90,6 @@ public class UserActivity extends BaseActivity {
 				R.color.transparent));
 		menu.setAnimationStyle(R.style.bottommenu_anim_style);
 		menu.setOutsideTouchable(false);
-		menu.setOnDismissListener(new OnDismissListener() {
-			@Override
-			public void onDismiss() {
-				WindowManager.LayoutParams params = getWindow()
-						.getAttributes();
-				params.alpha = 1.0f;
-				getWindow().setAttributes(params);
-			}
-		});
 	}
 
 	@Override
@@ -109,10 +98,6 @@ public class UserActivity extends BaseActivity {
 		switch (v.getId()) {
 		case R.id.user_layout_head:
 			if (menu != null && !menu.isShowing()) {
-				WindowManager.LayoutParams params = getWindow()
-						.getAttributes();
-				params.alpha = 0.7f;
-				getWindow().setAttributes(params);
 				menu.showAtLocation(layoutHead, Gravity.BOTTOM, 0, 0);
 			}
 			break;

@@ -38,7 +38,6 @@ import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.database.UserDBHelper;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.AttchUtil;
-import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.util.ToolsUtil;
@@ -192,14 +191,6 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initUserView() {
-		if (AEApp.getCurrentUser() == null) {
-			ToastUtil.show("用户丢失");
-			return;
-		}
-		if (AEApp.getCurrentUser().getUSER_NAME() == null) {
-			ToastUtil.show("用户昵称丢失");
-			return;
-		}
 		mUserName.setText(AEApp.getCurrentUser().getUSER_NAME());
 	}
 
@@ -231,6 +222,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			project = null;
 			ToastUtil.show(R.string.location_failed);
 			mCurrentProject.setText(R.string.out_of_project_location);
+			mScanning.setEnabled(false);
 			return;
 		}
 		if (initProjectTask != null) {
@@ -268,9 +260,11 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			super.onPostExecute(result);
 			if (result == null) {
 				mCurrentProject.setText(R.string.out_of_project_location);
+				mScanning.setEnabled(false);
 			} else {
 				mCurrentProject.setText(getString(R.string.current_project,
 						result.getPROJECT_NAME()));
+				mScanning.setEnabled(true);
 			}
 		}
 	}
@@ -424,30 +418,13 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 					JSONObject obj;
 					try {
 						obj = new JSONObject(result.getRES_OBJ().toString());
-						if (obj.has("new_project")) {
-							project = GsonUtil.getInstance().fromJson(
-									obj.getString("new_project"),
-									ProjectVO.class);
-							AEApp.getCurrentUser().getPROJECTS().add(project);
-							if (initProjectTask != null) {
-								initProjectTask.cancel(true);
-								initProjectTask = null;
-							}
-							initProjectTask = new InitProjectTask();
-							if (AEApp.getCurrentLoc() == null) {
-								initProjectTask
-										.execute(new Double[] { 0.0, 0.0 });
-							} else {
-								initProjectTask.execute(new Double[] {
-										AEApp.getCurrentLoc().getLatitude(),
-										AEApp.getCurrentLoc().getLongitude() });
-							}
+						if (obj.has("user_name") && obj.has("user_phone")) {
+							String user_name = obj.getString("user_name");
+							String user_phone = obj.getString("user_phone");
+							UserDBHelper.insertUser(user_phone, user_name);
+							mUserAdapter.setUsers(UserDBHelper.getUserHistory());
+							mUserAdapter.notifyDataSetChanged();
 						}
-						String user_name = obj.getString("user_name");
-						String user_phone = obj.getString("user_phone");
-						UserDBHelper.insertUser(user_phone, user_name);
-						mUserAdapter.setUsers(UserDBHelper.getUserHistory());
-						mUserAdapter.notifyDataSetChanged();
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -463,6 +440,9 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void scanningForOther(String phone) {
+		if (!mScanning.isEnabled()) {
+			ToastUtil.show(R.string.out_of_project_location);
+		}
 		lastComingPhone = phone;
 		comingCallDialog = new AlertDialog.Builder(mContext)
 				.setTitle(R.string.warning)

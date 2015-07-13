@@ -20,8 +20,8 @@
     
     <color name="red_pressed">#EA0000</color>
     
-    <color name="theme_green">#1FBBA6</color>
-    <color name="theme_green_pressed">#00CACA</color>
+    <color name="theme_green">#1D8AE3</color>
+    <color name="theme_green_pressed">#3E9EF7</color>
     <color name="text_normal">#333333</color>
     <color name="body_bg">#FCFCFC</color>
     <color name="menu_bg">#70B3B3B3</color>

@@ -75,6 +75,7 @@
             android:minHeight="120dp"
             android:minWidth="120dp"
             android:padding="10dp"
+            android:enabled="false"
             android:text="@string/title_scanning"
             android:textColor="@color/white"
             android:textSize="18sp" />

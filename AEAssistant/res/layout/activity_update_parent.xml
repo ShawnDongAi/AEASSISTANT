@@ -7,15 +7,15 @@
     <RelativeLayout style="@style/layout_body" >
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_centerInParent="true"
-        android:padding="5dp"
-        android:text="@string/project_update_parent_hint"
-        android:textColor="@color/darkgray"
-        android:textSize="16sp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:padding="5dp"
+            android:text="@string/project_update_parent_hint"
+            android:textColor="@color/darkgray"
+            android:textSize="16sp" />
     </RelativeLayout>
 
 </LinearLayout>

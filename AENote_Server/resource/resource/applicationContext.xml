@@ -143,6 +143,12 @@
 		</property>
 	</bean>
 	<!-- 根据项目查询考勤记录 -->
+	<bean id="sumCountByProject" class="com.zzn.aenote.http.server.attendance.SumCountByProject">
+		<property name="attendanceService">
+			<ref local="attendanceService" />
+		</property>
+	</bean>
+	<!-- 根据项目查询考勤记录 -->
 	<bean id="sumListByProject" class="com.zzn.aenote.http.server.attendance.SumListByProject">
 		<property name="attendanceService">
 			<ref local="attendanceService" />

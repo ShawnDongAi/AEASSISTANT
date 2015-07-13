@@ -14,4 +14,7 @@ public class CodeConstants {
 	public static final String KEY_END_DATE = "end_date";
 	
 	public static final String KEY_ATTENDENCE_LIST = "attendance_list";
+	
+	public static final String KEY_TOTAL_COUNT = "total_count";
+	public static final String KEY_EXCEPTION_COUNT = "exception_count";
 }

@@ -1,7 +1,6 @@
 package com.zzn.aenote.http.server.attendance;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +78,12 @@ public class Scanning extends CmHandlerFile {
 				rs.setRES_MESSAGE("定位失败,请重试");
 				return;
 			}
+			if (StringUtil.isEmpty(project_id)) {
+				logger.info("当前位置无任何项目");
+				rs.setRES_CODE(Global.ADDRESS_NULL);
+				rs.setRES_MESSAGE("当前位置无任何项目");
+				return;
+			}
 			List<Map<String, Object>> users = userService
 					.queryUserByPhone(phone);
 			String user_id = "";
@@ -111,7 +116,6 @@ public class Scanning extends CmHandlerFile {
 			if (forWho != null && forWho.equals("1")) {
 				project_id = "";
 				String current_root_id = "";
-				String current_parent_id = "";
 				List<Map<String, Object>> parentUsers = userService
 						.queryUserByID(parent_user);
 				if (parentUsers == null || parentUsers.size() == 0) {
@@ -142,20 +146,10 @@ public class Scanning extends CmHandlerFile {
 					}
 				}
 				if (StringUtil.isEmpty(root_id)) {
-					ProjectVO parentProject = projectService.createProject(
-							parentUser.getUSER_NAME(), "", "", "",
-							parentUser.getUSER_ID(), address, longitude,
-							latitude);
-					if (parentProject == null) {
-						logger.info("当前未加入任何项目");
+						logger.info("您在当前位置未加入任何项目");
 						rs.setRES_CODE(Global.PROJECT_NULL);
-						rs.setRES_MESSAGE("当前未加入任何项目");
+						rs.setRES_MESSAGE("您在当前位置未加入任何项目");
 						return;
-					}
-					root_id = parentProject.getROOT_ID();
-					parent_id = parentProject.getPROJECT_ID();
-					datas.put("new_project",
-							GsonUtil.getInstance().toJson(parentProject));
 				}
 				List<Map<String, Object>> projects = projectService
 						.queryProjectByCreateUser(user_id);
@@ -169,43 +163,25 @@ public class Scanning extends CmHandlerFile {
 								current_latitude, project_longitude,
 								project_latitude) < 500) {
 							project_id = project.get("project_id").toString();
-							current_parent_id = project.get("parent_id")
-									.toString();
 							current_root_id = project.get("root_id").toString();
 							break;
 						}
 					}
 				}
-				if (StringUtil.isEmpty(project_id)) {
-					ProjectVO project = projectService.createProject(user_name,
-							"", parent_id, root_id, user_id, address,
-							longitude, latitude);
-					project_id = project.getPARENT_ID();
-					current_parent_id = project.getPARENT_ID();
-					current_root_id = project.getROOT_ID();
-				} else if (!current_root_id.equals(root_id)) {
+				if (!current_root_id.equals(root_id)) {
 					logger.info("用户在当前位置已经有项目");
 					rs.setRES_CODE(Global.PROJECT_NULL);
-					rs.setRES_MESSAGE("该用户在当前位置已加入其他项目，请提示对方删除当前所属项目");
+					rs.setRES_MESSAGE(user_name+"在当前位置已加入其他项目，请提示他删除当前所属项目");
 					return;
 				}
-				datas.put("project_id", project_id);
-				datas.put("parent_project_id", current_parent_id);
-				datas.put("root_project_id", current_root_id);
 				datas.put("user_name", user_name);
 				datas.put("user_phone", phone);
 			} else {
 				ProjectVO project = null;
-				if (StringUtil.isEmpty(project_id)) {
-					project = projectService.createProject(user_name,
-							"", "", "", user_id, address, longitude, latitude);
-					datas.put("new_project",
-							GsonUtil.getInstance().toJson(project));
-				} else {
-					List<Map<String, Object>> projects = projectService.queryProjectByID(project_id);
-					if (projects != null && projects.size() > 0) {
-						project = ProjectVO.assembleProject(projects.get(0));
-					}
+				List<Map<String, Object>> projects = projectService
+						.queryProjectByID(project_id);
+				if (projects != null && projects.size() > 0) {
+					project = ProjectVO.assembleProject(projects.get(0));
 				}
 				if (project == null) {
 					logger.info("当前未加入任何项目");
@@ -233,9 +209,10 @@ public class Scanning extends CmHandlerFile {
 				boolean result = false;
 				if (attendanceService.isScanningToday(project_id)) {
 					if (attendanceService.isScanningTodayVaild(project_id)) {
-						result = attendanceService.updateScanning(user_id, project_id,
-								parent_id, root_id, attch.getATTCH_ID(), address,
-								longitude, latitude, "0");
+						result = attendanceService.updateScanning(user_id,
+								project_id, parent_id, root_id,
+								attch.getATTCH_ID(), address, longitude,
+								latitude, "0");
 					} else {
 						logger.info("今天已经打过卡了");
 						rs.setRES_CODE(Global.ORACLE_ERROR);
@@ -284,7 +261,8 @@ public class Scanning extends CmHandlerFile {
 		this.attendanceService = attendanceService;
 	}
 
-	public void scanningParent(String project_id, String address, String longitude, String latitude) {
+	public void scanningParent(String project_id, String address,
+			String longitude, String latitude) {
 		List<Map<String, Object>> projects = projectService
 				.queryProjectByID(project_id);
 		boolean lastOne = false;
@@ -295,15 +273,17 @@ public class Scanning extends CmHandlerFile {
 			}
 			boolean isScanning = attendanceService.isScanningToday(project_id);
 			if (!isScanning) {
-				List<Map<String, Object>> users = userService.queryUserByID(project.getCREATE_USER());
+				List<Map<String, Object>> users = userService
+						.queryUserByID(project.getCREATE_USER());
 				if (users != null && users.size() > 0) {
 					UserVO user = UserVO.assembleUserVO(users.get(0));
 					attendanceService.scanning(user.getUSER_ID(), project_id,
-							project.getPARENT_ID(), project.getROOT_ID(), "",
+							project.getPARENT_ID(), project.getROOT_ID(), "00000000000000000000000000000000",
 							address, longitude, latitude, "0");
 				}
 				if (!lastOne) {
-					scanningParent(project.getPARENT_ID(), address, longitude, latitude);
+					scanningParent(project.getPARENT_ID(), address, longitude,
+							latitude);
 				}
 			}
 		}

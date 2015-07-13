@@ -13,11 +13,8 @@
 
         <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPLAListView
             android:id="@+id/base_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            style="@style/base_list"
             android:layout_below="@+id/header"
-            android:cacheColorHint="@color/transparent"
-            android:fadingEdge="none"
             pla:plaColumnNumber="2"
             pla:plaColumnPaddingLeft="5dp"
             pla:plaColumnPaddingRight="5dp" />

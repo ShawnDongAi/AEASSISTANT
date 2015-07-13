@@ -106,8 +106,8 @@ public class AttendanceService extends BaseService {
 		}
 		return result;
 	}
-
-	public List<Map<String, Object>> sumListByProject(String startDate,
+	
+	public List<Map<String, Object>> sumCountByProject(String startDate,
 			String endDate, String projectID) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		try {
@@ -118,10 +118,10 @@ public class AttendanceService extends BaseService {
 			data.put("end_date", endDate);
 			data.put("project_id", projectID);
 			List<Map<String, Object>> attendanceList = getJdbc().queryForList(
-					getSql("sum_list_by_project", data));
+					getSql("sum_count_by_project", data));
 			if (attendanceList != null && attendanceList.size() > 0) {
 				result.addAll(attendanceList);
-				result.addAll(sumListByParent(startDate, endDate, projectID));
+				result.addAll(sumCountByParent(startDate, endDate, projectID));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,20 +129,41 @@ public class AttendanceService extends BaseService {
 		return result;
 	}
 
-	public List<Map<String, Object>> sumListByParent(String startDate,
+	public List<Map<String, Object>> sumCountByParent(String startDate,
 			String endDate, String parent_id) {
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("start_date", startDate);
 			data.put("end_date", endDate);
-			data.put("parent_id", parent_id);
+			data.put("project_id", parent_id);
 			List<Map<String, Object>> attendanceList = getJdbc().queryForList(
-					getSql("sum_list_by_parent", data));
+					getSql("sum_count_by_parent", data));
 			if (attendanceList != null && attendanceList.size() > 0) {
 				result.addAll(attendanceList);
-				result.addAll(sumListByParent(startDate, endDate,
+				result.addAll(sumCountByParent(startDate, endDate,
 						attendanceList.get(0).get("project_id").toString()));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public List<Map<String, Object>> sumListByProject(String startDate,
+			String endDate, String projectID, int page) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("start_date", startDate);
+			data.put("end_date", endDate);
+			data.put("project_id", projectID);
+			data.put("start", (page * 20 + 1) + "");
+			data.put("end", (page + 1) * 20 + "");
+			List<Map<String, Object>> attendanceList = getJdbc().queryForList(
+					getSql("sum_list_by_project", data));
+			if (attendanceList != null && attendanceList.size() > 0) {
+				result.addAll(attendanceList);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

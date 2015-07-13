@@ -17,6 +17,7 @@
     <string name="unknow">未知</string>
     <string name="delete">删除</string>
     <string name="dial_error">电话号码格式有误</string>
+    <string name="list_empty">这里什么都没有哦,下拉刷新试试吧~~~</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>
@@ -92,11 +93,11 @@
     <!-- 项目详情 -->
     <string name="project_detail">项目详情</string>
     <string name="project_create_leaf">创建子项目</string>
-    <string name="project_name">项目名称：%s</string>
+    <string name="project_name">项目名称：\n%s</string>
     <string name="project_status_close">已关闭</string>
     <string name="project_manager_user">管理员：%s</string>
-    <string name="project_create_time">创建时间：%s</string>
-    <string name="project_address">项目地址：%s</string>
+    <string name="project_create_time">创建时间：\n%s</string>
+    <string name="project_address">项目地址：\n%s</string>
     <string name="project_leaf">组织架构</string>
     <string name="project_user">项目通讯录</string>
     <string name="project_update_parent">项目迁移</string>
@@ -117,5 +118,6 @@
     <string name="sum_exception_total">有%d条异常考勤记录</string>
     <string name="sum_normal_total">总用工人数:%d人次</string>
     <string name="sum_user_total">共有%d次考勤记录</string>
+    <string name="sum_pro_total" formatted="false">共有%d次考勤记录,其中有%d次异常考勤</string>
 
 </resources>

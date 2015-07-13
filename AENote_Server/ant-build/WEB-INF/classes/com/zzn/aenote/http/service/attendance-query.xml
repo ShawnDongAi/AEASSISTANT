@@ -22,9 +22,11 @@
 	<select id="query_project_vaild_attendance_for_today">
 		select * from t_attendance
 		where 1=1
-		and photo != ''
+		and photo !=
+		'00000000000000000000000000000000'
 		and photo != 'null'
-		[and project_id='#project_id#']
+		[and
+		project_id='#project_id#']
 		[and
 		to_char(time,'yyyy-mm-dd')='#date#']
 	</select>
@@ -39,14 +41,72 @@
 		[and
 		to_char(time,'yyyy-mm-dd')='#date#']
 	</select>
+	<!-- 根据项目查询某时间段内的考勤记录数量 -->
+	<select id="sum_count_by_project">
+		select count(*) as count, count(case
+		when t.normal =
+		'1' then
+		'1'
+		end) as exception_count, t.project_id, t.parent_id,
+		t.root_id,
+		b.project_name
+		from
+		t_attendance t
+		right join t_project b on
+		t.project_id=b.project_id
+		where
+		1=1
+		[and
+		t.project_id='#project_id#']
+		[and
+		t.time
+		between
+		to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')] group by t.project_id,
+		t.parent_id, t.root_id,
+		b.project_name
+	</select>
+	<!-- 根据父项目查询某时间段内的考勤记录数量 -->
+	<select id="sum_count_by_parent">
+		select count(*) as count, count(case
+		when t.normal =
+		'1' then
+		'1'
+		end) as exception_count, t.project_id, t.parent_id,
+		t.root_id,
+		b.project_name
+		from
+		t_attendance t
+		right join t_project b on
+		t.project_id=b.project_id
+		where
+		1=1
+		and
+		t.project_id!=t.parent_id
+		[and
+		t.parent_id='#project_id#']
+		[and
+		t.time
+		between
+		to_date('#start_date#','yyyy-mm-dd')] [and
+		to_date('#end_date#','yyyy-mm-dd')] group by t.project_id,
+		t.parent_id, t.root_id,
+		b.project_name
+	</select>
 	<!-- 根据项目查询某时间段内的考勤记录 -->
 	<select id="sum_list_by_project">
-		select
-		t.user_id, t.time, t.photo,(select url from
-		t_attch where attch_id=t.photo) as photo_path,
+		select * from(
+		select ROW_NUMBER() OVER (ORDER BY
+		t.time asc) rn,
+		t.user_id,
+		t.time, t.photo,(select url from
+		t_attch where
+		attch_id=t.photo) as
+		photo_path,
 		t.project_id,
 		t.parent_id, t.root_id,
-		t.address, t.longitude, t.latitude, t.normal,
+		t.address, t.longitude,
+		t.latitude, t.normal,
 		t.status,
 		a.user_name,
 		a.phone, (select
@@ -72,37 +132,10 @@
 		[and t.time
 		between
 		to_date('#start_date#','yyyy-mm-dd')] [and
-		to_date('#end_date#','yyyy-mm-dd')] order by t.time asc
-	</select>
-	<select id="sum_list_by_parent">
-		select
-		t.user_id,t.time,t.photo,(select url from
-		t_attch where attch_id=t.photo) as
-		photo_path,t.project_id,t.parent_id,t.root_id,t.address,t.longitude,t.latitude,t.normal,t.status,
-		a.user_name, a.phone, (select
-		project_name
-		from t_project where 1=1 and
-		t.project_id!=t.parent_id
-		and
-		project_id =
-		t.parent_id)
-		|| '-' ||
-		b.project_name as project_name
-		from
-		t_attendance t
-		right join t_user a on
-		t.user_id=a.user_id
-		right join
-		t_project b on
-		t.project_id=b.project_id
-		where 1=1
-		[and t.project_id!='#parent_id#']
-		[and
-		t.parent_id='#parent_id#']
-		[and t.time
-		between
-		to_date('#start_date#','yyyy-mm-dd')] [and
-		to_date('#end_date#','yyyy-mm-dd')] order by t.time asc
+		to_date('#end_date#','yyyy-mm-dd')])
+		where 1=1 [and rn between
+		'#start#'] [and
+		'#end#']
 	</select>
 	<select id="sum_list_by_user">
 		select * from(
@@ -147,6 +180,7 @@
 	<select id="sum_count_by_user">
 		select count(project_id) from t_attendance
 		where 1=1
+		[and user_id='#user_id#']
 		[and
 		time
 		between

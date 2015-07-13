@@ -128,7 +128,6 @@ public class ProjectStructureActivity extends BaseActivity {
 						ProjectStructureAdapter<ProjectVO> adapter = new ProjectStructureAdapter<ProjectVO>(
 								listView, mContext, projectList, true);
 						listView.setAdapter(adapter);
-						defaultAdapter.notifyDataSetChanged();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

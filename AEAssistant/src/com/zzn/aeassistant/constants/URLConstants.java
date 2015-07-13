@@ -9,9 +9,9 @@ public class URLConstants {
 	//个人电脑
 //	public static final String URL_BASE = "http://192.168.0.105:8080/AENote_Server/";
 	//服务器
-	public static final String URL_BASE = "http://112.124.16.245:8080/AENote_Server/";
+//	public static final String URL_BASE = "http://112.124.16.245:8080/AENote_Server/";
 	//公司
-//	public static final String URL_BASE = "http://192.168.3.125:8080/AENote_Server/";
+	public static final String URL_BASE = "http://192.168.3.125:8080/AENote_Server/";
 	public static final String URL_HOST = URL_BASE + "app/";
 	/**
 	 * 注册接口
@@ -77,7 +77,11 @@ public class URLConstants {
 	/**
 	 * 根据项目查询考勤记录
 	 */
-	public static final String URL_SUM_BY_PROJECT = URL_HOST + "sumListByProject";
+	public static final String URL_SUM_BY_PROJECT = URL_HOST + "sumCountByProject";
+	/**
+	 * 根据项目查询考勤记录
+	 */
+	public static final String URL_SUM_LIST_BY_PROJECT = URL_HOST + "sumListByProject";
 	/**
 	 * 根据用户查询考勤记录
 	 */
