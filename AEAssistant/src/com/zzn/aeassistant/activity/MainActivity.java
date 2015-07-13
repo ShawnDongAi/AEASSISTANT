@@ -188,6 +188,14 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		super.onResume();
 		telephony.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_CALL_STATE);
+		initProjectTask = new InitProjectTask();
+		if (AEApp.getCurrentLoc() == null) {
+			initProjectTask.execute(new Double[] { 0.0, 0.0 });
+		} else {
+			initProjectTask.execute(new Double[] {
+					AEApp.getCurrentLoc().getLatitude(),
+					AEApp.getCurrentLoc().getLongitude() });
+		}
 	}
 
 	private void initUserView() {
