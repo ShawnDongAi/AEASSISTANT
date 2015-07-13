@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
@@ -48,6 +49,7 @@ public class AttendanceListActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		pullListView = (PullToRefreshPLAListView) findViewById(R.id.base_list);
+		pullListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
 		listView = pullListView.getRefreshableView();
 		headerLable = (TextView) findViewById(R.id.lable);
 

@@ -5,15 +5,24 @@ import android.content.Context;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.view.pla.MultiColumnListView;
+import com.zzn.aeassistant.view.pulltorefresh.internal.EmptyViewMethodAccessor;
 
 public class PullToRefreshPLAListView extends
 		PullToRefreshBase<MultiColumnListView> {
+	
+	private View mEmptyView;
+	private boolean mScrollEmptyView = true;
 
 	public PullToRefreshPLAListView(Context context) {
 		super(context);
@@ -167,5 +176,77 @@ public class PullToRefreshPLAListView extends
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * Sets the Empty View to be used by the Adapter View.
+	 * <p/>
+	 * We need it handle it ourselves so that we can Pull-to-Refresh when the
+	 * Empty View is shown.
+	 * <p/>
+	 * Please note, you do <strong>not</strong> usually need to call this method
+	 * yourself. Calling setEmptyView on the AdapterView will automatically call
+	 * this method and set everything up. This includes when the Android
+	 * Framework automatically sets the Empty View based on it's ID.
+	 * 
+	 * @param newEmptyView - Empty View to be used
+	 */
+	public final void setEmptyView(View newEmptyView) {
+		FrameLayout refreshableViewWrapper = getRefreshableViewWrapper();
+
+		if (null != newEmptyView) {
+			// New view needs to be clickable so that Android recognizes it as a
+			// target for Touch Events
+			newEmptyView.setClickable(true);
+
+			ViewParent newEmptyViewParent = newEmptyView.getParent();
+			if (null != newEmptyViewParent && newEmptyViewParent instanceof ViewGroup) {
+				((ViewGroup) newEmptyViewParent).removeView(newEmptyView);
+			}
+
+			// We need to convert any LayoutParams so that it works in our
+			// FrameLayout
+			FrameLayout.LayoutParams lp = convertEmptyViewLayoutParams(newEmptyView.getLayoutParams());
+			if (null != lp) {
+				refreshableViewWrapper.addView(newEmptyView, lp);
+			} else {
+				refreshableViewWrapper.addView(newEmptyView);
+			}
+		}
+
+		if (mRefreshableView instanceof EmptyViewMethodAccessor) {
+			((EmptyViewMethodAccessor) mRefreshableView).setEmptyViewInternal(newEmptyView);
+		} else {
+			mRefreshableView.setEmptyView(newEmptyView);
+		}
+		mEmptyView = newEmptyView;
+	}
+	
+	@Override
+	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+		super.onScrollChanged(l, t, oldl, oldt);
+		if (null != mEmptyView && !mScrollEmptyView) {
+			mEmptyView.scrollTo(-l, -t);
+		}
+	}
+	
+	public final void setScrollEmptyView(boolean doScroll) {
+		mScrollEmptyView = doScroll;
+	}
+	
+	private static FrameLayout.LayoutParams convertEmptyViewLayoutParams(ViewGroup.LayoutParams lp) {
+		FrameLayout.LayoutParams newLp = null;
+
+		if (null != lp) {
+			newLp = new FrameLayout.LayoutParams(lp);
+
+			if (lp instanceof LinearLayout.LayoutParams) {
+				newLp.gravity = ((LinearLayout.LayoutParams) lp).gravity;
+			} else {
+				newLp.gravity = Gravity.CENTER;
+			}
+		}
+
+		return newLp;
 	}
 }

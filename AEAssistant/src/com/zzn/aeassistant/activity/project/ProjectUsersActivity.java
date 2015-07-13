@@ -60,6 +60,7 @@ public class ProjectUsersActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		pullListView = (PullToRefreshPinnedListView) findViewById(R.id.base_list);
+		pullListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
 		listView = pullListView.getRefreshableView();
 		sideBar = (SideBar) findViewById(R.id.side_bar);
 		mTextDialog = (TextView) findViewById(R.id.text_dialog);

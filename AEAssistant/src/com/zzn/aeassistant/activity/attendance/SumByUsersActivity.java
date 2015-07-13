@@ -50,9 +50,8 @@ public class SumByUsersActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		pullListView = (PullToRefreshPLAListView) findViewById(R.id.base_list);
+		pullListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
 		headerLable = (TextView) findViewById(R.id.lable);
-		pullListView.getRefreshableView().setEmptyView(
-				View.inflate(mContext, R.layout.list_empty_view, null));
 
 		adapter = new SumUserAdapter(mContext);
 		pullListView.setAdapter(adapter);

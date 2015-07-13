@@ -21,7 +21,6 @@ import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
-import com.zzn.aeassistant.view.pinnedsection.PinnedSectionListView;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
@@ -51,6 +50,7 @@ public class SumByProListActivity extends BaseActivity implements
 	@Override
 	protected void initView() {
 		pullListView = (PullToRefreshListView) findViewById(R.id.base_list);
+		pullListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
 		listView = pullListView.getRefreshableView();
 		headerLable = (TextView) findViewById(R.id.lable);
 		listView.setOnItemClickListener(this);
