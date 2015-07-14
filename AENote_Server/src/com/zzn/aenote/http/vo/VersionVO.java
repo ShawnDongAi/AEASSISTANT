@@ -1,6 +1,7 @@
 package com.zzn.aenote.http.vo;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class VersionVO implements Serializable {
 
@@ -50,5 +51,15 @@ public class VersionVO implements Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public static VersionVO assembleAttendance(Map<String, Object> version) {
+		VersionVO vo = new VersionVO();
+		vo.setPlatform(version.get("platform").toString());
+		vo.setInstruction(version.get("instruction").toString());
+		vo.setUrl(version.get("url").toString());
+		vo.setVersion_code(version.get("version_code").toString());
+		vo.setVersion_name(version.get("version_name").toString());
+		return vo;
 	}
 }

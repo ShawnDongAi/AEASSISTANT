@@ -178,4 +178,10 @@
 			<ref local="attendanceService" />
 		</property>
 	</bean>
+	<!-- 版本更新接口 -->
+	<bean id="versionUpdate" class="com.zzn.aenote.http.server.VersionUpdate">
+	</bean>
+	<!-- 用户反馈接口 -->
+	<bean id="feedback" class="com.zzn.aenote.http.server.Feedback">
+	</bean>
 </beans>

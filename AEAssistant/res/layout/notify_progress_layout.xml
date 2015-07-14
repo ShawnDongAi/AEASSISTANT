@@ -29,7 +29,13 @@
 	        android:layout_alignParentRight="true"
 	        android:layout_alignBottom="@+id/notify_pro_txt"
 	        android:textSize="12sp" />
-	    <com.zzn.aeassistant.view.numberpro.NumberProgressBar
+	    <ProgressBar
+	        android:id="@+id/notify_pro_bar"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/notify_pro_txt"
+	        style="@android:style/Widget.ProgressBar.Horizontal" />
+	    <!-- <com.zzn.aeassistant.view.numberpro.NumberProgressBar
 	        android:id="@+id/notify_pro_bar"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
@@ -41,6 +47,6 @@
 	        app:progress_text_size="12sp"
 	        app:progress_text_color="#3498DB"
 	        app:progress_reached_bar_height="1.5dp"
-	        app:progress_unreached_bar_height="1dp" />
+	        app:progress_unreached_bar_height="1dp" /> -->
 	</RelativeLayout>
 </LinearLayout>

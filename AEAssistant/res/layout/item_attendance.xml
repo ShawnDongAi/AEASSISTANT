@@ -58,8 +58,12 @@
             android:id="@+id/normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_warning" />
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_warning_big"
+            android:layout_alignBottom="@+id/thumbnail"
+            android:layout_alignLeft="@+id/thumbnail"
+            android:layout_alignRight="@+id/thumbnail"
+            android:layout_alignTop="@+id/thumbnail" />
     </RelativeLayout>
 
 </LinearLayout>

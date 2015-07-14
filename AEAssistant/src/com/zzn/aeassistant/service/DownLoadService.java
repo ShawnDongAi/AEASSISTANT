@@ -11,10 +11,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.constants.FileCostants;
-import com.zzn.aeassistant.util.AEThreadManager;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -22,11 +18,17 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
+
+import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.constants.FileCostants;
+import com.zzn.aeassistant.util.AEThreadManager;
 
 /**
  * 下载APK服务 无需绑定Activity,适合带通知的下载服务,在后台下载
@@ -39,10 +41,10 @@ public class DownLoadService extends Service {
 	private static final int NOTIFY_ID = 0x1;
 
 	private NotificationManager mNotifyManager;
-	private Notification mNotification;
+	private NotificationCompat.Builder mNotification;
 	private PendingIntent mSusPendingIntent;
 	private PendingIntent mFailPendingIntent;
-	SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+	private SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
 	// 是否已经有apk在下载的标记
 	private boolean downLoading = false;
 	// 下载apk的存储路径
@@ -72,15 +74,16 @@ public class DownLoadService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		filePath = this.getFilesDir().getPath()+File.separator;
 		mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		mNotification = new Notification();
-		mNotification.icon = R.drawable.ic_launcher;
-		mNotification.flags = Notification.FLAG_AUTO_CANCEL;
-		mNotification.tickerText = getString(R.string.apk_downloading);
-		mNotification.defaults |= Notification.DEFAULT_ALL;
-		mNotification.setLatestEventInfo(this,
-				getString(R.string.version_update),
-				getString(R.string.apk_downloading), null);
+		mNotification = new NotificationCompat.Builder(this);
+		mNotification.setSmallIcon(R.drawable.ic_launcher);
+		mNotification.setContentTitle(getString(R.string.app_name));
+		mNotification.setOngoing(true);
+		mNotification.setAutoCancel(false);
+		mNotification.setDefaults(NotificationCompat.DEFAULT_ALL);
+		mNotification.setTicker(getString(R.string.version_update));
+		mNotification.setContentText(getString(R.string.apk_downloading));
 	}
 
 	@Override
@@ -91,9 +94,9 @@ public class DownLoadService extends Service {
 		if (intent != null) {
 			String url = intent.getStringExtra(DOWN_LOAD_URL);
 			if (!TextUtils.isEmpty(url)) {
-				mNotification.when = System.currentTimeMillis();
-				mNotifyManager.notify(NOTIFY_ID, mNotification);
-				mNotification.defaults = Notification.DEFAULT_LIGHTS;
+				mNotification.setWhen(System.currentTimeMillis());
+				mNotifyManager.notify(NOTIFY_ID, mNotification.build());
+				mNotification.setDefaults(NotificationCompat.DEFAULT_LIGHTS);
 				downLoad(url);
 			}
 		}
@@ -114,16 +117,22 @@ public class DownLoadService extends Service {
 				int length = msg.arg2;
 				RemoteViews remoteView = new RemoteViews(getPackageName(),
 						R.layout.notify_progress_layout);
-				remoteView.setInt(R.id.notify_pro_bar, "setProgress", current
-						* 100 / length);
-//				remoteView.setProgressBar(R.id.notify_pro_bar, length, current,
-//						true);
-//				remoteView.setTextViewText(R.id.notify_pro_txt, current * 100
-//						/ length + "%");
+//				remoteView.setInt(R.id.notify_pro_bar, "setProgress", current
+//						* 100 / length);
+				remoteView.setProgressBar(R.id.notify_pro_bar, length, current,
+						true);
+				remoteView.setTextViewText(R.id.notify_pro_txt, current * 100
+						/ length + "%");
 				remoteView.setTextViewText(R.id.notify_time,
 						formatter.format(new Date(System.currentTimeMillis())));
-				mNotification.contentView = remoteView;
-				mNotifyManager.notify(NOTIFY_ID, mNotification);
+				if(Build.VERSION.SDK_INT <= 10){
+					Notification notification = mNotification.build();
+					notification.contentView = remoteView;
+					mNotifyManager.notify(NOTIFY_ID, notification);
+				} else {
+					mNotification.setContent(remoteView);
+					mNotifyManager.notify(NOTIFY_ID, mNotification.build());
+				}
 				break;
 			case DOWNLOAD_FINISH:
 				// 下载成功,点击安装
@@ -136,23 +145,43 @@ public class DownLoadService extends Service {
 							DownLoadService.this, R.string.app_name, susIntent,
 							PendingIntent.FLAG_UPDATE_CURRENT);
 				}
-				mNotification.setLatestEventInfo(DownLoadService.this,
-						getString(R.string.version_update),
-						getString(R.string.apk_download_finish),
-						mSusPendingIntent);
-				mNotification.defaults |= Notification.DEFAULT_ALL;
-				mNotification.when = System.currentTimeMillis();
-				mNotifyManager.notify(NOTIFY_ID, mNotification);
+				if(Build.VERSION.SDK_INT <= 10){
+					Notification notification = mNotification.build();
+					notification.contentView = null;
+				} else {
+					mNotification.setContent(null);
+				}
+				mNotification.setTicker(getString(R.string.version_update));
+				mNotification.setContentTitle(getString(R.string.app_name));
+				mNotification.setContentText(getString(R.string.apk_download_finish));
+				mNotification.setContentIntent(mSusPendingIntent);
+				mNotification.setDefaults(NotificationCompat.DEFAULT_ALL);
+				mNotification.setWhen(System.currentTimeMillis());
+				mNotification.setOngoing(false);
+				mNotification.setAutoCancel(true);
+				mNotifyManager.notify(NOTIFY_ID, mNotification.build());
+				downLoading = false;
+				DownLoadService.this.stopSelf();
 				break;
 			case DOWNLOAD_FAILED:
 				// 下载失败,点击重新下载
-				mNotification.setLatestEventInfo(DownLoadService.this,
-						getString(R.string.version_update),
-						getString(R.string.apk_download_failed),
-						mFailPendingIntent);
-				mNotification.defaults |= Notification.DEFAULT_ALL;
-				mNotification.when = System.currentTimeMillis();
-				mNotifyManager.notify(NOTIFY_ID, mNotification);
+				if(Build.VERSION.SDK_INT <= 10){
+					Notification notification = mNotification.build();
+					notification.contentView = null;
+				} else {
+					mNotification.setContent(null);
+				}
+				mNotification.setTicker(getString(R.string.version_update));
+				mNotification.setContentTitle(getString(R.string.app_name));
+				mNotification.setContentText(getString(R.string.apk_download_failed));
+				mNotification.setContentIntent(mFailPendingIntent);
+				mNotification.setDefaults(NotificationCompat.DEFAULT_ALL);
+				mNotification.setWhen(System.currentTimeMillis());
+				mNotification.setOngoing(false);
+				mNotification.setAutoCancel(true);
+				mNotifyManager.notify(NOTIFY_ID, mNotification.build());
+				downLoading = false;
+				DownLoadService.this.stopSelf();
 				break;
 			default:
 				break;
@@ -247,8 +276,6 @@ public class DownLoadService extends Service {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					downLoading = false;
-					DownLoadService.this.stopSelf();
 				}
 			}
 		});

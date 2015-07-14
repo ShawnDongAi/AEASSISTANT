@@ -182,7 +182,7 @@ public class UserActivity extends BaseActivity {
 			remarkIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
 					getString(R.string.hint_remark));
 			remarkIntent.putExtra(CodeConstants.KEY_SINGLELINE, false);
-			startActivityForResult(remarkIntent, REQUEST_USER_NAME);
+			startActivityForResult(remarkIntent, REQUEST_USER_REMARK);
 			break;
 		case R.id.menu_photograph:
 			if (menu != null && menu.isShowing()) {

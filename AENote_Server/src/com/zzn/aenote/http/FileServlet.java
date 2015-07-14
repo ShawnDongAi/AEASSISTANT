@@ -16,7 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.zzn.aenote.http.sqlmap.SqlMapTemplate;
 import com.zzn.aenote.http.utils.StringUtil;
-import com.zzn.aenote.http.utils.UtilConfig;
 
 public class FileServlet extends HttpServlet {
 
@@ -33,11 +32,10 @@ public class FileServlet extends HttpServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("utf-8");
 		String attch_id = req.getParameter("attch");
-		logger.info("下载===>"+attch_id);
 		// 提供HTTP文件下载
 		try {
 			java.io.OutputStream os = resp.getOutputStream();
-			if (!attch_id.equals("")) {
+			if (attch_id != null && !StringUtil.isEmpty(attch_id)) {
 				JdbcTemplate jdbcTemplate = ServiceLocator.getBean2("jdbcTemplate");
 				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("attch_id", attch_id);

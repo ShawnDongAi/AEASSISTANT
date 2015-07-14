@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -25,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
 import com.baidu.location.BDLocation;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,6 +37,7 @@ import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
 import com.zzn.aeassistant.activity.project.ProjectManagerActivity;
 import com.zzn.aeassistant.activity.setting.SettingActivity;
+import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
@@ -132,6 +136,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		initImageLoader();
 		initUserView();
 		registerReceiver(userInfoReceiver, new IntentFilter(ACTION_USER_INFO_CHANGED));
+		new VersionUpdateTask(mContext, false).execute();
 	}
 
 	@SuppressWarnings("deprecation")

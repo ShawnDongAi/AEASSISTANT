@@ -27,6 +27,7 @@ public class SettingActivity extends BaseActivity {
 	public static final int REQUEST_FEEDBACK = 0;
 	private TextView modifyPsd, versionUpdate, feedBack;
 	private Button logout;
+	private VersionUpdateTask versionUpdateTask;
 
 	@Override
 	protected int layoutResID() {
@@ -62,6 +63,11 @@ public class SettingActivity extends BaseActivity {
 			startActivity(modIntent);
 			break;
 		case R.id.setting_version_update:
+			if (versionUpdateTask != null) {
+				versionUpdateTask.cancel(true);
+			}
+			versionUpdateTask = new VersionUpdateTask(mContext, true);
+			versionUpdateTask.execute();
 			break;
 		case R.id.setting_feedback:
 			Intent feedIntent = new Intent(this, TextEditActivity.class);
@@ -94,6 +100,15 @@ public class SettingActivity extends BaseActivity {
 				break;
 			}
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		if (versionUpdateTask != null) {
+			versionUpdateTask.cancel(true);
+			versionUpdateTask = null;
+		}
+		super.onDestroy();
 	}
 
 	@Override

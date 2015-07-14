@@ -65,7 +65,7 @@ public class ProAttendanceVO implements Serializable {
 	public static ProAttendanceVO assembleAttendance(Map<String, Object> attendance) {
 		ProAttendanceVO vo = new ProAttendanceVO();
 		vo.setCount(Integer.parseInt(attendance.get("count").toString()));
-		vo.setCount(Integer.parseInt(attendance.get("exception_count").toString()));
+		vo.setException_count(Integer.parseInt(attendance.get("exception_count").toString()));
 		vo.setProject_id(attendance.get("project_id").toString());
 		vo.setProject_name(attendance.get("project_name").toString());
 		vo.setParent_id(attendance.get("parent_id").toString());
