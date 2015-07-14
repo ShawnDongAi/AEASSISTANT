@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.DESCoderUtil;
@@ -112,9 +113,8 @@ public class ResetPswActivity extends BaseActivity {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				AEApp.getInstance().clearTask(ResetPswActivity.this);
 				Intent intent = new Intent(mContext, LoginActivity.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-						| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 				startActivity(intent);
 				finish();
 			} else {

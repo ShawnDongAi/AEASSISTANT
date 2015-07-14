@@ -4,13 +4,15 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical" >
-    
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_list_empty"
         android:gravity="center"
-        android:textSize="18sp"
-        android:textColor="@color/theme_green"
-        android:text="@string/list_empty" />
+        android:padding="10dp"
+        android:text="@string/list_empty"
+        android:textColor="@drawable/text_light"
+        android:textSize="18sp" />
 
 </LinearLayout>

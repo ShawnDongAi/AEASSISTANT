@@ -156,11 +156,19 @@
 	<!-- 查询项目成员 -->
 	<select id="query_project_users">
 		select
-		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
+		t.user_id,t.user_name,t.phone,t.remark,t.sex,t.password,t.small_head,t.big_head,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as create_time
-		from t_user
+		from t_user t
+		right join t_project b
+		on
+		t.user_id=b.create_user
 		where 1=1
-		and user_id=(select
-		create_user from t_project where 1=1 [and root_id='#project_id#'])
+		[and b.root_id='#project_id#']
+	</select>
+	<!-- 修改项目名-->
+	<select id="update_project_name">
+		update t_project set project_name='#project_name#'
+		where 1=1
+		[and project_id='#project_id#']
 	</select>
 </Scheme>

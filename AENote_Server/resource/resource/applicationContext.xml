@@ -76,6 +76,18 @@
 			<value>104857600</value>
 		</property>
 	</bean>
+	<!-- 修改用户名 -->
+	<bean id="updateName" class="com.zzn.aenote.http.server.user.UpdateName">
+		<property name="userService">
+			<ref local="userService" />
+		</property>
+	</bean>
+	<!-- 修改用户跟人说明 -->
+	<bean id="updateRemark" class="com.zzn.aenote.http.server.user.UpdateRemark">
+		<property name="userService">
+			<ref local="userService" />
+		</property>
+	</bean>
 	<!-- 创建项目 -->
 	<bean id="createProject" class="com.zzn.aenote.http.server.project.CreateProject">
 		<property name="projectService">
@@ -89,6 +101,12 @@
 		</property>
 		<property name="userService">
 			<ref local="userService" />
+		</property>
+	</bean>
+	<!-- 修改项目名 -->
+	<bean id="updateProjectName" class="com.zzn.aenote.http.server.project.UpdateProjectName">
+		<property name="projectService">
+			<ref local="projectService" />
 		</property>
 	</bean>
 	<!-- 查询所有详情 -->

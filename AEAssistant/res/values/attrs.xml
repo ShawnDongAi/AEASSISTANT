@@ -66,13 +66,13 @@
         <!--
         	Whether PullToRefreshListView has it's extras enabled. This allows the user to be 
         	able to scroll while refreshing, and behaves better. It acheives this by adding
-        	Header and/or Footer Views to the ListView.
+        	Header and/or Footer Views to the ListView.
         -->
         <attr name="ptrListViewExtrasEnabled" format="reference|boolean" />
 
         <!--
         	Whether the Drawable should be continually rotated as you pull. This only
-        	takes effect when using the 'Rotate' Animation Style.
+        	takes effect when using the 'Rotate' Animation Style.
         -->
         <attr name="ptrRotateDrawableWhilePulling" format="reference|boolean" />
 
@@ -95,5 +95,34 @@
     </declare-styleable>
 
     <attr name="SwipeBackLayoutStyle" format="reference" />
+    <attr name="cropImageStyle" format="reference" />
+
+    <declare-styleable name="NumberProgressBar">
+        <attr name="progress_current" format="integer" />
+        <attr name="progress_max" format="integer" />
+        <attr name="progress_unreached_color" format="color" />
+        <attr name="progress_reached_color" format="color" />
+        <attr name="progress_reached_bar_height" format="dimension" />
+        <attr name="progress_unreached_bar_height" format="dimension" />
+        <attr name="progress_text_size" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+        <attr name="progress_text_offset" format="dimension" />
+        <attr name="progress_text_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="Themes">
+        <attr name="numberProgressBarStyle" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="CropImageView">
+        <attr name="highlightColor" format="reference|color" />
+        <attr name="showThirds" format="boolean" />
+        <attr name="showHandles">
+            <enum name="changing" value="0" />
+            <enum name="always" value="1" />
+            <enum name="never" value="2" />
+        </attr>
+    </declare-styleable>
 
 </resources>

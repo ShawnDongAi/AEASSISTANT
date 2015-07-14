@@ -93,6 +93,11 @@
             android:name=".activity.user.UserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <!-- 文本编辑页面 -->
+        <activity
+            android:name=".activity.TextEditActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 设置页面 -->
         <activity
             android:name=".activity.setting.SettingActivity"
@@ -154,6 +159,14 @@
             android:name=".activity.attendance.SumByUsersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <!-- 投降裁剪页面 -->
+        <activity
+            android:name=".view.cropimage.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <!-- apk下载服务 -->
+        <service 
+            android:name=".service.DownLoadService" />
     </application>
 
 </manifest>

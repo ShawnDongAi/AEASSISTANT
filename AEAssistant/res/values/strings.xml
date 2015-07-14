@@ -6,7 +6,7 @@
     <string name="settings">设置</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
-    <string name="save">保存</string>
+    <string name="save">提交</string>
     <string name="warning">提示</string>
     <string name="loading">拼命加载中…</string>
     <string name="http_error">网络不给力,请检查您的网络连接</string>
@@ -19,6 +19,7 @@
     <string name="delete">删除</string>
     <string name="dial_error">电话号码格式有误</string>
     <string name="list_empty">这里什么都没有哦,下拉刷新试试吧~~~</string>
+    <string name="null_input">请输入有效字符</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>
@@ -70,10 +71,16 @@
     <string name="lable_sex">性别</string>
     <string name="lable_remark">个人说明</string>
     <string name="lable_address">位置</string>
+    <string name="modify_user_name">修改姓名</string>
+    <string name="modify_user_remark">修改个人说明</string>
+    <string name="hint_user">建议输入真实信息方便沟通</string>
+    <string name="hint_remark">用几句话介绍一下自己吧~~~</string>
 
     <!-- 附件 -->
     <string name="photograph">拍照</string>
     <string name="album">从相册选取</string>
+    <string name="pick_error">没有可用的图片资源管理器</string>
+    <string name="title_image_crop">头像设置</string>
 
     <!-- 项目管理 -->
     <string name="project_join">加入</string>
@@ -90,6 +97,7 @@
     <string name="null_project_name">请填写项目名</string>
     <string name="null_project_location">缺少项目位置信息</string>
     <string name="null_project">无任何项目</string>
+    <string name="modify_project_name">修改项目名称</string>
 
     <!-- 项目详情 -->
     <string name="project_detail">项目详情</string>
@@ -121,4 +129,13 @@
     <string name="sum_user_total">共有%d次考勤记录</string>
     <string name="sum_pro_total" formatted="false">共有%d次考勤记录,其中有%d次异常考勤</string>
 
+    <!-- 设置 -->
+    <string name="feed_back">意见反馈</string>
+    <string name="apk_downloading">apk下载中</string>
+    <string name="version_update">版本更新</string>
+    <string name="apk_download_finish">下载完成,点击安装</string>
+    <string name="apk_download_failed">下载失败,点击重试</string>
+    <string name="logout">退出登录</string>
+    <string name="hint_feedback">欢迎吐槽您在使用过程中的不便,我们将积极采纳您提出的宝贵意见</string>
+    <string name="thanks_for_feedback">感谢您的宝贵意见</string>
 </resources>

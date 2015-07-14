@@ -12,6 +12,7 @@ import cn.smssdk.SMSSDK;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.PlatformkEY;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
@@ -39,6 +40,12 @@ public class VerifyActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		mPhoneInput = (EditText) findViewById(R.id.register_phone);
+		if (!getIntent().getBooleanExtra(CodeConstants.KEY_USER_PHONE_EDITABLE, true)) {
+			mPhoneInput.setKeyListener(null);
+			mPhoneInput.setFocusable(false);
+			mPhoneInput.setFocusableInTouchMode(false);
+		}
+		mPhoneInput.setText(getIntent().getStringExtra(CodeConstants.KEY_USER_PHONE));
 		mSmsInput = (EditText) findViewById(R.id.register_sms);
 		mRegisterBtn = (Button) findViewById(R.id.register_btn);
 		mVerifyBtn = (Button) findViewById(R.id.register_verify);

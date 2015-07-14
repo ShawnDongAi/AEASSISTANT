@@ -26,24 +26,16 @@
 		[and
 		user_id='#user_id#']
 	</select>
-	<!-- 更新个人资料 -->
-	<select id="update_user_info">
-		update t_user set user_name='#user_name#',
-		phone='#phone#',
-		remark='#remark#',sex='#sex#'
-		where 1=1
-		[and user_id='#user_id#']
-	</select>
-	<!-- 加入项目 -->
-	<select id="update_project">
-		update t_user set project='#project#'
-		where 1=1
-		[and user_id='#user_id#']
-	</select>
 	<!-- 修改头像 -->
 	<select id="update_user_head">
 		update t_user set small_head='#small_head#',
 		big_head='#big_head#'
+		where 1=1
+		[and user_id='#user_id#']
+	</select>
+	<!-- 修改姓名 -->
+	<select id="update_user_name">
+		update t_user set user_name='#user_name#'
 		where 1=1
 		[and user_id='#user_id#']
 	</select>

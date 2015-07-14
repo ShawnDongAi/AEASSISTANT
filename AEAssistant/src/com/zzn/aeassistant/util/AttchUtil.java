@@ -1,9 +1,9 @@
 package com.zzn.aeassistant.util;
 
 import java.io.File;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.constants.CodeConstants;
 
@@ -29,14 +30,18 @@ public class AttchUtil {
 		if (!PhoneUtil.isExternalStorageMounted()) {
 			return;
 		}
-		File file = new File(savePath);
-		FilePathUtil.CreateFilePath(savePath);
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-		intent.putExtra("photoPath", file);
-		activity.startActivityForResult(intent,
-				CodeConstants.REQUEST_CODE_TAKEPHOTO);
+		try {
+			File file = new File(savePath);
+			FilePathUtil.CreateFilePath(savePath);
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+			intent.putExtra("photoPath", file);
+			activity.startActivityForResult(intent,
+					CodeConstants.REQUEST_CODE_TAKEPHOTO);
+		} catch (Exception e) {
+			ToastUtil.show(R.string.pick_error);
+		}
 	}
 
 	/**
@@ -49,14 +54,18 @@ public class AttchUtil {
 		if (!PhoneUtil.isExternalStorageMounted()) {
 			return;
 		}
-		File file = new File(savePath);
-		FilePathUtil.CreateFilePath(savePath);
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-		intent.putExtra("photoPath", file);
-		fragment.startActivityForResult(intent,
-				CodeConstants.REQUEST_CODE_TAKEPHOTO);
+		try {
+			File file = new File(savePath);
+			FilePathUtil.CreateFilePath(savePath);
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+			intent.putExtra("photoPath", file);
+			fragment.startActivityForResult(intent,
+					CodeConstants.REQUEST_CODE_TAKEPHOTO);
+		} catch (Exception e) {
+			ToastUtil.show(R.string.pick_error);
+		}
 	}
 
 	/**
@@ -68,15 +77,15 @@ public class AttchUtil {
 		if (!PhoneUtil.isExternalStorageMounted()) {
 			return;
 		}
-		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-		intent.setType("image/*");
 		try {
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("image/*");
 			activity.startActivityForResult(
 					Intent.createChooser(intent,
 							activity.getString(R.string.album)),
 					CodeConstants.REQUEST_CODE_GETPHOTO);
-		} catch (ActivityNotFoundException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			ToastUtil.show(R.string.pick_error);
 		}
 	}
 
@@ -89,15 +98,15 @@ public class AttchUtil {
 		if (!PhoneUtil.isExternalStorageMounted()) {
 			return;
 		}
-		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-		intent.setType("image/*");
 		try {
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("image/*");
 			fragment.startActivityForResult(
 					Intent.createChooser(intent,
 							fragment.getString(R.string.album)),
 					CodeConstants.REQUEST_CODE_GETPHOTO);
-		} catch (ActivityNotFoundException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			ToastUtil.show(R.string.pick_error);
 		}
 	}
 

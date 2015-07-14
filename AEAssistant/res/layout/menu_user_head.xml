@@ -14,6 +14,11 @@
         android:gravity="bottom"
         android:orientation="vertical" >
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/darkgray" />
+
         <Button
             android:id="@+id/menu_photograph"
             android:layout_width="match_parent"
@@ -38,7 +43,8 @@
             android:text="@string/album"
             android:textColor="@drawable/text_normal"
             android:textSize="18sp" />
-        <View
+
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/darkgray" />

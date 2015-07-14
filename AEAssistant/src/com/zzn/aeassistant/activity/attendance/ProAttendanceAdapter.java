@@ -22,6 +22,7 @@ public class ProAttendanceAdapter<T> extends TreeListViewAdapter<T> {
 		super(mTree, context, datas, expand);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public View getConvertView(Node node, int position, View convertView,
 			ViewGroup parent) {

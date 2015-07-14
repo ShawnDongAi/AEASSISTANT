@@ -47,6 +47,12 @@
                     android:src="@drawable/ic_head"
                     app:border_color="@color/theme_green"
                     app:border_width="2dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
             </LinearLayout>
 
             <View
@@ -84,6 +90,12 @@
                     android:singleLine="true"
                     android:textColor="@drawable/text_light"
                     android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
             </LinearLayout>
 
             <View
@@ -120,6 +132,13 @@
                     android:gravity="right"
                     android:textColor="@drawable/text_light"
                     android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <View
@@ -142,7 +161,8 @@
                 android:background="@drawable/btn_item"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -162,12 +182,18 @@
                     android:gravity="right"
                     android:textColor="@drawable/text_light"
                     android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
             </LinearLayout>
 
-            <View
+            <!-- <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gainsboro" />
+                android:background="@color/gainsboro" /> -->
 
             <!-- 个人说明 -->
 
@@ -199,6 +225,12 @@
                     android:singleLine="true"
                     android:textColor="@drawable/text_light"
                     android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
             </LinearLayout>
 
             <View

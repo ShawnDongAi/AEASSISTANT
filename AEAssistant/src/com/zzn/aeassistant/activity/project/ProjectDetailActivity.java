@@ -1,6 +1,7 @@
 package com.zzn.aeassistant.activity.project;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,10 +14,16 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.TextEditActivity;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
+import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.util.AEHttpUtil;
+import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 public class ProjectDetailActivity extends BaseActivity {
+	public static final int REQUEST_PROJECT_NAME = 0;
 	private TextView name, status, managerUser, createTime, projectStructure,
 			projectUsers, projectUpdateParent, address;
 	private MapView mMapView;
@@ -73,10 +80,45 @@ public class ProjectDetailActivity extends BaseActivity {
 	}
 
 	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case REQUEST_PROJECT_NAME:
+				String nameString = data
+						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
+				if (name.getText().toString().trim().equals(nameString)) {
+					break;
+				}
+				name.setText(getString(R.string.project_name, nameString));
+				new UpdateNameTask().execute(nameString);
+				for (ProjectVO vo : AEApp.getCurrentUser().getPROJECTS()) {
+					if (vo.getPROJECT_ID().equals(project.getPROJECT_ID())) {
+						vo.setPROJECT_NAME(nameString);
+						break;
+					}
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	@Override
 	public void onClick(View v) {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.project_name:
+			Intent intent = new Intent(mContext, TextEditActivity.class);
+			intent.putExtra(CodeConstants.KEY_TITLE,
+					getString(R.string.modify_project_name));
+			intent.putExtra(CodeConstants.KEY_DEFAULT_TEXT,
+					project.getPROJECT_NAME());
+			intent.putExtra(CodeConstants.KEY_HINT_TEXT,
+					getString(R.string.project_hint_name));
+			intent.putExtra(CodeConstants.KEY_SINGLELINE, true);
+			startActivityForResult(intent, REQUEST_PROJECT_NAME);
 			break;
 		case R.id.project_leaf:
 			startActivity(new Intent(mContext, ProjectStructureActivity.class)
@@ -125,5 +167,17 @@ public class ProjectDetailActivity extends BaseActivity {
 	@Override
 	protected boolean needLocation() {
 		return false;
+	}
+
+	private class UpdateNameTask extends AsyncTask<String, Integer, HttpResult> {
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String nameString = params[0];
+			String param = "project_id=" + project.getPROJECT_ID()
+					+ "&project_name=" + nameString;
+			HttpResult result = AEHttpUtil.doPost(
+					URLConstants.URL_UPDATE_PROJECT_NAME, param);
+			return result;
+		}
 	}
 }

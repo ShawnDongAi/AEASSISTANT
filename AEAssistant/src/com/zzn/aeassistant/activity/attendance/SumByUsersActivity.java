@@ -128,6 +128,7 @@ public class SumByUsersActivity extends BaseActivity {
 			return result;
 		}
 
+		@SuppressWarnings("deprecation")
 		@Override
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);

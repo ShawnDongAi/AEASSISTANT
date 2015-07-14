@@ -5,14 +5,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.telephony.PhoneStateListener;
@@ -23,8 +25,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.baidu.location.BDLocation;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
 import com.zzn.aeassistant.activity.project.ProjectManagerActivity;
@@ -60,6 +65,7 @@ import com.zzn.aeassistant.vo.UserVO;
  * @author Shawn
  */
 public class MainActivity extends BaseActivity implements OnItemClickListener {
+	public static final String ACTION_USER_INFO_CHANGED = "com.zzn.aeassistant.user_info_changed";
 	private TextView mUserName, mCurrentProject;
 	private CircleImageView mUserHead;
 	private FastenGridView mGridView;
@@ -82,6 +88,9 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	private InitProjectTask initProjectTask;
 	private ScanningTask scanningTask;
 
+	private ImageLoader imageLoader = ImageLoader.getInstance();
+	private DisplayImageOptions options;
+
 	@Override
 	protected int layoutResID() {
 		return R.layout.activity_main;
@@ -92,13 +101,13 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		return R.string.app_name;
 	}
 
+	@SuppressLint("InlinedApi")
 	@Override
 	protected void initView() {
 		setSwipeBackEnable(false);
 		if (AEApp.getCurrentUser() == null) {
+			AEApp.getInstance().clearTask(this);
 			Intent intent = new Intent(this, LoginActivity.class);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			startActivity(intent);
 			finish();
 		}
@@ -118,12 +127,31 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		mHistoryList.addHeaderView(headerView);
 
 		mScanning.setOnClickListener(this);
-		initUserView();
 		initModuleView();
 		initUserHistory();
+		initImageLoader();
+		initUserView();
+		registerReceiver(userInfoReceiver, new IntentFilter(ACTION_USER_INFO_CHANGED));
+	}
+
+	@SuppressWarnings("deprecation")
+	private void initImageLoader() {
+		options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.ic_head) // 设置图片在下载期间显示的图片
+				.showImageForEmptyUri(R.drawable.ic_head)// 设置图片Uri为空或是错误的时候显示的图片
+				.showImageOnFail(R.drawable.ic_head) // 设置图片加载/解码过程中错误时候显示的图片
+				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
+				.cacheOnDisc(true)// 设置下载的图片是否缓存在SD卡中
+				.considerExifParams(true) // 是否考虑JPEG图像EXIF参数（旋转，翻转）
+				.imageScaleType(ImageScaleType.EXACTLY)// 设置图片以如何的编码方式显示
+				.bitmapConfig(Bitmap.Config.RGB_565)// 设置图片的解码类型//
+				.resetViewBeforeLoading(true)// 设置图片在下载前是否重置，复位
+				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
+				.build();// 构建完成
 	}
 
 	private long lastClickTime = 0;
+
 	private void initUserHistory() {
 		mUserAdapter = new UserHistoryAdapter(mContext);
 		mUserAdapter.setUsers(UserDBHelper.getUserHistory());
@@ -200,6 +228,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 
 	private void initUserView() {
 		mUserName.setText(AEApp.getCurrentUser().getUSER_NAME());
+		imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
+				AEApp.getCurrentUser().getBIG_HEAD()), mUserHead, options);
 	}
 
 	@Override
@@ -343,6 +373,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			initProjectTask.cancel(true);
 			initProjectTask = null;
 		}
+		unregisterReceiver(userInfoReceiver);
 		super.onDestroy();
 	}
 
@@ -411,6 +442,10 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			param.put("parent_user", AEApp.getCurrentUser().getUSER_ID());
 			HttpResult result = AEHttpUtil.doPostWithFile(
 					URLConstants.URL_SCANNING, files, param);
+			File file = new File(imgPath);
+			if (file.exists()) {
+				file.delete();
+			}
 			return result;
 		}
 
@@ -430,7 +465,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 							String user_name = obj.getString("user_name");
 							String user_phone = obj.getString("user_phone");
 							UserDBHelper.insertUser(user_phone, user_name);
-							mUserAdapter.setUsers(UserDBHelper.getUserHistory());
+							mUserAdapter
+									.setUsers(UserDBHelper.getUserHistory());
 							mUserAdapter.notifyDataSetChanged();
 						}
 					} catch (JSONException e) {
@@ -488,4 +524,11 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			}
 		}
 	}
+	
+	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			initUserView();
+		}
+	};
 }

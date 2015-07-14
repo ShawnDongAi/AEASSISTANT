@@ -3,7 +3,7 @@ package com.zzn.aeassistant.activity.project;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,11 +12,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
-
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.project.ProjectUserAdapter.UserItem;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
@@ -60,7 +60,8 @@ public class ProjectUsersActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		pullListView = (PullToRefreshPinnedListView) findViewById(R.id.base_list);
-		pullListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
+		pullListView.setEmptyView(View.inflate(mContext,
+				R.layout.list_empty_view, null));
 		listView = pullListView.getRefreshableView();
 		sideBar = (SideBar) findViewById(R.id.side_bar);
 		mTextDialog = (TextView) findViewById(R.id.text_dialog);
@@ -116,8 +117,12 @@ public class ProjectUsersActivity extends BaseActivity {
 				}
 				UserItem item = adapter.getItem(position);
 				if (!adapter.isItemViewTypePinned(item.type)) {
+					if (item.user.getUSER_ID().equals(
+							AEApp.getCurrentUser().getUSER_ID())) {
+						return;
+					}
 					try {
-						Intent intent = new Intent(Intent.ACTION_CALL, Uri
+						Intent intent = new Intent(Intent.ACTION_DIAL, Uri
 								.parse("tel:" + item.user.getPHONE()));
 						startActivity(intent);
 					} catch (Exception e) {
@@ -168,6 +173,7 @@ public class ProjectUsersActivity extends BaseActivity {
 			return result;
 		}
 
+		@SuppressLint("DefaultLocale")
 		private List<UserItem> filledData(List<UserVO> userList) {
 			List<UserItem> mSortList = new ArrayList<UserItem>();
 			for (int i = 0; i < userList.size(); i++) {
@@ -192,6 +198,7 @@ public class ProjectUsersActivity extends BaseActivity {
 			super.onPostExecute(result);
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				try {
+					@SuppressWarnings("unchecked")
 					List<UserItem> userItems = (List<UserItem>) result
 							.getRES_OBJ();
 					List<UserItem> userItemList = new ArrayList<UserItem>();

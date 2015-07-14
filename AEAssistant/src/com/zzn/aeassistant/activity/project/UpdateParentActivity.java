@@ -9,7 +9,6 @@ import android.telephony.TelephonyManager;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
-import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;

@@ -1,6 +1,11 @@
 package com.zzn.aeassistant.util;
 
+import java.io.UnsupportedEncodingException;
+
 import android.content.Context;
+import android.text.InputFilter;
+import android.text.Spanned;
+import android.widget.EditText;
 
 public class ToolsUtil {
 	/**
@@ -29,6 +34,7 @@ public class ToolsUtil {
 
 	/**
 	 * 根据经纬度坐标计算两点间的距离
+	 * 
 	 * @param lon1
 	 * @param lat1
 	 * @param lon2
@@ -53,5 +59,35 @@ public class ToolsUtil {
 
 	private static double rad(double d) {
 		return d * Math.PI / 180.0;
+	}
+
+	public static void setTextMaxLength(EditText view, final int length) {
+		InputFilter inputFilter = new InputFilter() {
+			@Override
+			public CharSequence filter(CharSequence source, int start, int end,
+					Spanned dest, int dstart, int dend) {
+				try {
+					String charsetName = "UTF-8";
+					// 转换成中文字符集的长度
+					int destLen = dest.toString().getBytes(charsetName).length;
+					int sourceLen = source.toString().getBytes(charsetName).length;
+					// 如果超过length个字符
+					if (destLen + sourceLen > length) {
+						return "";
+					}
+					// 如果按回退键
+					if (source.length() < 1 && (dend - dstart >= 1)) {
+						return dest.subSequence(dstart, dend - 1);
+					}
+					// 其他情况直接返回输入的内容
+					return source;
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				return "";
+			}
+		};
+		InputFilter[] inputFilters = new InputFilter[] { inputFilter };
+		view.setFilters(inputFilters);
 	}
 }

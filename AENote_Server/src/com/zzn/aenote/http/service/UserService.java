@@ -111,12 +111,37 @@ public class UserService extends BaseService {
 	 * @param big_head
 	 * @return
 	 */
-	public boolean updateUserHead(String small_head, String big_head) {
+	public boolean updateUserHead(String small_head, String big_head, String user_id) {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("small_head", small_head);
 			data.put("big_head", big_head);
+			data.put("user_id", user_id);
 			getJdbc().execute(getSql("update_user_head", data));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public boolean updateUserName(String user_id, String user_name) {
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("user_id", user_id);
+			data.put("user_name", user_name);
+			getJdbc().execute(getSql("update_user_name", data));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
+	public boolean updateUserRemark(String user_id, String remark) {
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("user_id", user_id);
+			data.put("remark", remark);
+			getJdbc().execute(getSql("update_user_remark", data));
 			return true;
 		} catch (Exception e) {
 			return false;

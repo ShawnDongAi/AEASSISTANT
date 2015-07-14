@@ -12,14 +12,12 @@ import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.database.AESQLiteHelper;
 import com.zzn.aeassistant.database.UserDBHelper;
@@ -91,6 +89,8 @@ public class AEApp extends Application {
 		scanningDir.mkdirs();
 		File headDir = new File(FileCostants.DIR_HEAD);
 		headDir.mkdirs();
+		File apkDir = new File(FileCostants.DIR_APK);
+		apkDir.mkdirs();
 		// File imgDir = new File(FileCostants.DIR_IMG);
 		// imgDir.mkdirs();
 		// File audioDir = new File(FileCostants.DIR_AUDIO);
@@ -105,6 +105,7 @@ public class AEApp extends Application {
 		// AttchDBHelper.createTable();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void initImageLoader() {
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
 				instance)
@@ -140,6 +141,18 @@ public class AEApp extends Application {
 		try {
 			if (activityTask != null) {
 				activityTask.add(activity);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void clearTask(Activity currentActivity) {
+		try {
+			for (Activity activity : activityTask) {
+				if (activity != null && activity != currentActivity) {
+					activity.finish();
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

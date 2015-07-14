@@ -30,6 +30,7 @@ public class SumUserAdapter extends BaseAdapter {
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
 
+	@SuppressWarnings("deprecation")
 	public SumUserAdapter(Context context) {
 		this.mContext = context;
 		options = new DisplayImageOptions.Builder()
@@ -97,7 +98,7 @@ public class SumUserAdapter extends BaseAdapter {
 			holder.progress = (SquareProgressView) convertView
 					.findViewById(R.id.progress);
 			holder.progress.setColor(mContext.getResources().getColor(
-					R.color.blue));
+					R.color.theme_green_pressed));
 			holder.progress.setWidthInDp(2);
 			holder.project = (TextView) convertView.findViewById(R.id.project);
 			holder.normal = (ImageView) convertView.findViewById(R.id.normal);

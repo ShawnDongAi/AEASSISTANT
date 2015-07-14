@@ -9,9 +9,9 @@ public class URLConstants {
 	//个人电脑
 //	public static final String URL_BASE = "http://192.168.0.105:8080/AENote_Server/";
 	//服务器
-	public static final String URL_BASE = "http://112.124.16.245:8080/AENote_Server/";
+//	public static final String URL_BASE = "http://112.124.16.245:8080/AENote_Server/";
 	//公司
-//	public static final String URL_BASE = "http://192.168.3.125:8080/AENote_Server/";
+	public static final String URL_BASE = "http://192.168.3.125:8080/AENote_Server/";
 	public static final String URL_HOST = URL_BASE + "app/";
 	/**
 	 * 注册接口
@@ -34,14 +34,21 @@ public class URLConstants {
 	 */
 	public static final String URL_UPDATE_HEAD = URL_HOST + "updateHead";
 	/**
+	 * 修改用户姓名
+	 */
+	public static final String URL_UPDATE_NAME = URL_HOST + "updateName";
+	/**
+	 * 修改个人说明
+	 */
+	public static final String URL_UPDATE_REMARK = URL_HOST + "updateRemark";
+	/**
 	 * 创建项目
 	 */
 	public static final String URL_CREATE_PROJECT = URL_HOST + "createProject";
 	/**
-	 * 创建子项目接口
+	 * 更新上级项目
 	 */
-	public static final String URL_CREATE_LEAF_PROJECT = URL_HOST
-			+ "createLeafProject";
+	public static final String URL_UPDATE_PROJECT_NAME = URL_HOST + "updateProjectName";
 	/**
 	 * 查询管理项目列表
 	 */
@@ -90,4 +97,8 @@ public class URLConstants {
 	 * 文件下载
 	 */
 	public static final String URL_DOWNLOAD = URL_BASE + "file?attch=%s";
+	/**
+	 * 用户反馈
+	 */
+	public static final String URL_FEEDBACK = URL_BASE + "feedback";
 }

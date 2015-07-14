@@ -230,4 +230,16 @@ public class ProjectService extends BaseService {
 		}
 		return userList;
 	}
+	
+	public boolean updateProjectName(String project_id, String project_name) {
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("project_id", project_id);
+			data.put("project_name", project_name);
+			getJdbc().execute(getSql("update_project_name", data));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }

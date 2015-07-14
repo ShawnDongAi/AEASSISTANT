@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.view.tree.Node;
 import com.zzn.aeassistant.view.tree.TreeListViewAdapter;
 import com.zzn.aeassistant.vo.ProjectVO;
@@ -22,6 +23,7 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 		super(mTree, context, datas, expand);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public View getConvertView(Node node, int position, View convertView,
 			ViewGroup parent) {
@@ -38,6 +40,8 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 					.findViewById(R.id.treenode_user);
 			viewHolder.phone = (TextView) convertView
 					.findViewById(R.id.treenode_phone);
+			viewHolder.myPosition = (ImageView) convertView
+					.findViewById(R.id.my_position);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -52,6 +56,10 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 		ProjectVO vo = (ProjectVO) node.getData();
 		viewHolder.user.setText(vo.getCREATE_USER_NAME() + ":");
 		viewHolder.phone.setText(vo.getCREATE_USER_PHONE());
+		viewHolder.myPosition
+				.setVisibility(vo.getCREATE_USER().equals(
+						AEApp.getCurrentUser().getUSER_ID()) ? View.VISIBLE
+						: View.GONE);
 		return convertView;
 	}
 
@@ -60,5 +68,6 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 		TextView label;
 		TextView user;
 		TextView phone;
+		ImageView myPosition;
 	}
 }

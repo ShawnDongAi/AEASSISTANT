@@ -64,6 +64,10 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		this.imgPath = imgPath;
 		this.compress = compress;
 	}
+	
+	protected void setCompress(boolean compress) {
+		this.compress = compress;
+	}
 
 	protected String getImgPath() {
 		return imgPath;
@@ -114,6 +118,12 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 			option.setScanSpan(120 * 1000);
 			option.setIsNeedAddress(true);
 			mLocClient.setLocOption(option);
+		}
+	}
+	
+	protected void setTitle(String titleString) {
+		if (title != null) {
+			title.setText(titleString);
 		}
 	}
 

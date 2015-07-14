@@ -21,6 +21,7 @@ import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.MainActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.app.PreConfig;
+import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.DESCoderUtil;
@@ -81,7 +82,9 @@ public class LoginActivity extends BaseActivity {
 			startActivity(new Intent(this, RegisterActivity.class));
 			break;
 		case R.id.login_forgetpsw:
-			startActivity(new Intent(this, VerifyActivity.class));
+			Intent intent = new Intent(this, VerifyActivity.class);
+			intent.putExtra(CodeConstants.KEY_USER_PHONE, mPhoneInput.getText().toString().trim());
+			startActivity(intent);
 			break;
 		default:
 			break;

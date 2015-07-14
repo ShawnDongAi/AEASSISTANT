@@ -13,17 +13,14 @@
     <!-- 暗灰色 -->
     <color name="darkgray">#A9A9A9</color>
     <!-- 红色 -->
-    <color name="red">#FFC93437</color>
-    <color name="blue">#FF375BF1</color>
-    <color name="yellow">#FFF7D23E</color>
-    <color name="green">#FF34A350</color>
+    <color name="red">#FF0000</color>
     
     <color name="red_pressed">#EA0000</color>
     
     <color name="theme_green">#1D8AE3</color>
     <color name="theme_green_pressed">#3E9EF7</color>
     <color name="text_normal">#333333</color>
-    <color name="body_bg">#FCFCFC</color>
+    <color name="body_bg">#F5F5F5</color>
     <color name="menu_bg">#70B3B3B3</color>
     
     <color name="transparent_lightslategray">#99A9A9A9</color>
