@@ -146,10 +146,10 @@ public class Scanning extends CmHandlerFile {
 					}
 				}
 				if (StringUtil.isEmpty(root_id)) {
-						logger.info("您在当前位置未加入任何项目");
-						rs.setRES_CODE(Global.PROJECT_NULL);
-						rs.setRES_MESSAGE("您在当前位置未加入任何项目");
-						return;
+					logger.info("您在当前位置未加入任何项目");
+					rs.setRES_CODE(Global.PROJECT_NULL);
+					rs.setRES_MESSAGE("您在当前位置未加入任何项目");
+					return;
 				}
 				List<Map<String, Object>> projects = projectService
 						.queryProjectByCreateUser(user_id);
@@ -164,14 +164,20 @@ public class Scanning extends CmHandlerFile {
 								project_latitude) < 500) {
 							project_id = project.get("project_id").toString();
 							current_root_id = project.get("root_id").toString();
+							logger.info("用户在当前位置已经有项目==>"
+									+ project.get("project_name").toString());
 							break;
 						}
 					}
 				}
-				if (!current_root_id.equals(root_id)) {
-					logger.info("用户在当前位置已经有项目");
+				if (StringUtil.isEmpty(current_root_id)) {
+					ProjectVO projectVO = projectService.createProject(
+							user_name, "", parent_id, root_id, user_id,
+							address, longitude, latitude);
+					project_id = projectVO.getPROJECT_ID();
+				} else if (!current_root_id.equals(root_id)) {
 					rs.setRES_CODE(Global.PROJECT_NULL);
-					rs.setRES_MESSAGE(user_name+"在当前位置已加入其他项目，请提示他删除当前所属项目");
+					rs.setRES_MESSAGE(user_name + "在当前位置已加入其他项目，请提示他删除当前所属项目");
 					return;
 				}
 				datas.put("user_name", user_name);
@@ -203,11 +209,9 @@ public class Scanning extends CmHandlerFile {
 								+ "_"
 								+ format.format(new Date(System
 										.currentTimeMillis())), imgFile);
-				if (!project_id.equals(parent_id)) {
-					scanningParent(parent_id, address, longitude, latitude);
-				}
 				boolean result = false;
 				if (attendanceService.isScanningToday(project_id)) {
+					logger.info("今天有打卡数据");
 					if (attendanceService.isScanningTodayVaild(project_id)) {
 						result = attendanceService.updateScanning(user_id,
 								project_id, parent_id, root_id,
@@ -220,6 +224,9 @@ public class Scanning extends CmHandlerFile {
 						return;
 					}
 				} else {
+					if (!project_id.equals(parent_id)) {
+						scanningParent(parent_id, address, longitude, latitude);
+					}
 					result = attendanceService.scanning(user_id, project_id,
 							parent_id, root_id, attch.getATTCH_ID(), address,
 							longitude, latitude, "0");
@@ -278,8 +285,9 @@ public class Scanning extends CmHandlerFile {
 				if (users != null && users.size() > 0) {
 					UserVO user = UserVO.assembleUserVO(users.get(0));
 					attendanceService.scanning(user.getUSER_ID(), project_id,
-							project.getPARENT_ID(), project.getROOT_ID(), "00000000000000000000000000000000",
-							address, longitude, latitude, "0");
+							project.getPARENT_ID(), project.getROOT_ID(),
+							"00000000000000000000000000000000", address,
+							longitude, latitude, "0");
 				}
 				if (!lastOne) {
 					scanningParent(project.getPARENT_ID(), address, longitude,

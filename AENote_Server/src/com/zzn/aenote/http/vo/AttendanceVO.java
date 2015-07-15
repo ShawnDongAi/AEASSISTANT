@@ -172,15 +172,17 @@ public class AttendanceVO implements Serializable {
 		vo.setImgURL(attendance.get("photo").toString());
 		int width = 400;
 		int height = 400;
-		try {
-			File imgFile = new File(attendance.get("photo_path").toString());
-			if (imgFile.exists()) {
-				BufferedImage bufferedImage = ImageIO.read(imgFile);
-				width = bufferedImage.getWidth();
-				height = bufferedImage.getHeight();
+		if (attendance.get("photo_path") != null) {
+			try {
+				File imgFile = new File(attendance.get("photo_path").toString());
+				if (imgFile.exists()) {
+					BufferedImage bufferedImage = ImageIO.read(imgFile);
+					width = bufferedImage.getWidth();
+					height = bufferedImage.getHeight();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		vo.setPhoto_width(width);
 		vo.setPhoto_height(height);

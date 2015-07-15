@@ -21,10 +21,10 @@
 	<!-- 查询今天有没有有效的考勤数据 -->
 	<select id="query_project_vaild_attendance_for_today">
 		select * from t_attendance
-		where 1=1
-		and photo !=
-		'00000000000000000000000000000000'
-		and photo != 'null'
+		where
+		1=1
+		and photo!='null'
+		and photo!='00000000000000000000000000000000'
 		[and
 		project_id='#project_id#']
 		[and
@@ -43,11 +43,16 @@
 	</select>
 	<!-- 根据项目查询某时间段内的考勤记录数量 -->
 	<select id="sum_count_by_project">
-		select count(*) as count, count(case
+		select count(case when t.photo!='null'
+		and t.photo!='00000000000000000000000000000000' then '0'
+		end) as count,
+		count(case
 		when t.normal =
 		'1' then
 		'1'
-		end) as exception_count, t.project_id, t.parent_id,
+		end) as
+		exception_count,
+		t.project_id, t.parent_id,
 		t.root_id,
 		b.project_name
 		from
@@ -68,11 +73,16 @@
 	</select>
 	<!-- 根据父项目查询某时间段内的考勤记录数量 -->
 	<select id="sum_count_by_parent">
-		select count(*) as count, count(case
+		select count(case when t.photo!='null'
+		and t.photo!='00000000000000000000000000000000' then '0'
+		end) as count,
+		count(case
 		when t.normal =
 		'1' then
 		'1'
-		end) as exception_count, t.project_id, t.parent_id,
+		end) as
+		exception_count,
+		t.project_id, t.parent_id,
 		t.root_id,
 		b.project_name
 		from
@@ -112,7 +122,8 @@
 		a.phone, (select
 		project_name
 		from t_project where
-		1=1 and
+		1=1
+		and
 		t.project_id!=t.parent_id
 		and
 		project_id =
@@ -127,6 +138,8 @@
 		t_project b on
 		t.project_id=b.project_id
 		where 1=1
+		and t.photo!='null'
+		and t.photo!='00000000000000000000000000000000'
 		[and
 		t.project_id='#project_id#']
 		[and t.time
@@ -168,7 +181,11 @@
 		right join
 		t_project b on
 		t.project_id=b.project_id
-		where 1=1 [and t.user_id='#user_id#']
+		where 1=1
+		and t.photo!='null'
+		and
+		t.photo!='00000000000000000000000000000000'
+		[and t.user_id='#user_id#']
 		[and t.time
 		between
 		to_date('#start_date#','yyyy-mm-dd')] [and
@@ -180,6 +197,9 @@
 	<select id="sum_count_by_user">
 		select count(project_id) from t_attendance
 		where 1=1
+		and photo!='null'
+		and
+		photo!='00000000000000000000000000000000'
 		[and user_id='#user_id#']
 		[and
 		time
