@@ -30,5 +30,7 @@
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/mysql-connector-java-5.0.8-bin.jar"/>
 	<classpathentry kind="lib" path="webapp/WEB-INF/lib/ox2j-common.jar"/>
 	<classpathentry kind="lib" path="lib-compile/rt.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/youtu.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

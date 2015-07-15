@@ -257,7 +257,10 @@ public class UserActivity extends BaseActivity {
 
 	@Override
 	protected void getImg(String path) {
-		Uri outputUri = Uri.fromFile(new File(getCacheDir(), "cropped"));
+		Uri outputUri = Uri.fromFile(new File(FileCostants.DIR_HEAD, AEApp
+				.getCurrentUser().getUSER_ID()
+				+ "_"
+				+ System.currentTimeMillis()));
 		new Crop(path).output(outputUri).asSquare().start(this);
 	}
 

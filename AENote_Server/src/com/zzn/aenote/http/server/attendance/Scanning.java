@@ -216,7 +216,7 @@ public class Scanning extends CmHandlerFile {
 						result = attendanceService.updateScanning(user_id,
 								project_id, parent_id, root_id,
 								attch.getATTCH_ID(), address, longitude,
-								latitude, "0");
+								latitude, "0", imgFile);
 					} else {
 						logger.info("今天已经打过卡了");
 						rs.setRES_CODE(Global.ORACLE_ERROR);
@@ -229,7 +229,7 @@ public class Scanning extends CmHandlerFile {
 					}
 					result = attendanceService.scanning(user_id, project_id,
 							parent_id, root_id, attch.getATTCH_ID(), address,
-							longitude, latitude, "0");
+							longitude, latitude, "0", imgFile);
 				}
 				if (result) {
 					logger.info("打卡成功");
@@ -287,7 +287,7 @@ public class Scanning extends CmHandlerFile {
 					attendanceService.scanning(user.getUSER_ID(), project_id,
 							project.getPARENT_ID(), project.getROOT_ID(),
 							"00000000000000000000000000000000", address,
-							longitude, latitude, "0");
+							longitude, latitude, "0", "");
 				}
 				if (!lastOne) {
 					scanningParent(project.getPARENT_ID(), address, longitude,

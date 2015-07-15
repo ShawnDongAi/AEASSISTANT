@@ -4,7 +4,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public abstract class MD5Utils {
-
 	public static String getMD5ofStr(String key) throws Exception {
 		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 				'a', 'b', 'c', 'd', 'e', 'f' };
@@ -25,5 +24,4 @@ public abstract class MD5Utils {
 		}
 		return new String(str);
 	}
-
 }

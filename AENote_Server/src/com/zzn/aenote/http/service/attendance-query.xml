@@ -10,6 +10,27 @@
 		HH24:mi:ss')],['#photo#'],['#project_id#'],['#parent_id#'],['#root_id#'],
 		['#address#'],['#longitude#'],['#latitude#'],['#normal#'],['#status#'])
 	</select>
+	<!-- 更新考勤数据 -->
+	<select id="update_scanning">
+		update t_attendance
+		set
+		time=to_date('#time#','yyyy-MM-dd HH24:mi:ss'),
+		photo='#photo#',address='#address#',longitude='#longitude#',latitude='#latitude#',normal='#normal#',status='#status#'
+		where 1=1
+		[and project_id='#project_id#']
+		[and
+		to_char(time,'yyyy-mm-dd')='#date#']
+	</select>
+	<!-- 更新考勤状态 -->
+	<select id="update_scanning_status">
+	    update t_attendance
+		set normal='#normal#'
+		where 1=1
+		[and user_id='#user_id#']
+		[and project_id='#project_id#']
+		[and
+		to_char(time,'yyyy-mm-dd')='#date#']
+	</select>
 	<!-- 查询今天有没有考勤数据 -->
 	<select id="query_project_attendance_for_today">
 		select * from t_attendance
@@ -27,17 +48,6 @@
 		and photo!='00000000000000000000000000000000'
 		[and
 		project_id='#project_id#']
-		[and
-		to_char(time,'yyyy-mm-dd')='#date#']
-	</select>
-	<!-- 更新考勤数据 -->
-	<select id="update_scanning">
-		update t_attendance
-		set
-		time=to_date('#time#','yyyy-MM-dd HH24:mi:ss'),
-		photo='#photo#',address='#address#',longitude='#longitude#',latitude='#latitude#',normal='#normal#',status='#status#'
-		where 1=1
-		[and project_id='#project_id#']
 		[and
 		to_char(time,'yyyy-mm-dd')='#date#']
 	</select>
