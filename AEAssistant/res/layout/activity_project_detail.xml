@@ -93,6 +93,7 @@
                 android:drawableRight="@drawable/ic_to"
                 android:gravity="left|center_vertical"
                 android:padding="15dp"
+                android:visibility="gone"
                 android:text="@string/project_user"
                 android:textColor="@drawable/text_light"
                 android:textSize="16sp" />
@@ -100,6 +101,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
+                android:visibility="gone"
                 android:background="@color/gainsboro" />
 
             <TextView

@@ -1,10 +1,16 @@
 package com.zzn.aeassistant.activity;
 
+import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +28,7 @@ import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.BitmapUtil;
 import com.zzn.aeassistant.util.FilePathUtil;
+import com.zzn.aeassistant.util.PhoneUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.swipeback.SwipeBackActivity;
 
@@ -37,6 +44,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	private float screenW;// 屏幕像素宽度
 	private float screenH;// 屏幕像素高度
 	private DisplayMetrics displayMetrics;
+	private AlertDialog mDialog;
 
 	// 定位相关
 	private LocationClient mLocClient;
@@ -86,6 +94,38 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 			mLocClient.stop();
 		}
 	}
+	
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (PhoneUtil.isNetworkConnected()) {
+				if (mDialog != null && mDialog.isShowing()) {
+					mDialog.dismiss();
+				}
+				if (needLocation() && mLocClient != null && mLocClient.isStarted()) {
+					mLocClient.requestLocation();
+				}
+			} else {
+				if (mDialog == null) {
+					mDialog = new AlertDialog.Builder(BaseActivity.this)
+					.setTitle(R.string.warning)
+					.setMessage(R.string.http_null)
+					.setPositiveButton(R.string.settings,
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									startActivity(new Intent(
+											Settings.ACTION_SETTINGS));
+								}
+							}).setCancelable(false).create();
+				}
+				if (mDialog != null && !mDialog.isShowing()) {
+					mDialog.show();
+				}
+			}
+		}
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +150,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 			save.setOnClickListener(this);
 		}
 		initView();
+		IntentFilter filter = new IntentFilter(
+				ConnectivityManager.CONNECTIVITY_ACTION);
+		registerReceiver(mReceiver, filter);
 		if (needLocation()) {
 			mLocClient = new LocationClient(this);
 			LocationClientOption option = new LocationClientOption();
@@ -242,6 +285,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	@Override
 	protected void onDestroy() {
 		mLocClient = null;
+		unregisterReceiver(mReceiver);
 		AEProgressDialog.dismissLoadingDialog();
 		AEApp.getInstance().remove(this);
 		super.onDestroy();
@@ -256,6 +300,25 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+		if (!PhoneUtil.isNetworkConnected()) {
+			if (mDialog == null) {
+				mDialog = new AlertDialog.Builder(BaseActivity.this)
+				.setTitle(R.string.warning)
+				.setMessage(R.string.http_null)
+				.setPositiveButton(R.string.settings,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								startActivity(new Intent(
+										Settings.ACTION_SETTINGS));
+							}
+						}).setCancelable(false).create();
+			}
+			if (!mDialog.isShowing()) {
+				mDialog.show();
+			}
+		}
 		if (needLocation() && mLocClient != null && !mLocClient.isStarted()) {
 			startLocation();
 		}

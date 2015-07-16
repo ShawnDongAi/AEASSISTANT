@@ -42,7 +42,7 @@ public class AttendanceService extends BaseService {
 			data.put("status", "0");
 			getJdbc().execute(getSql("scanning", data));
 			result = true;
-			if (photoPath != null && !StringUtil.isEmpty(photoPath)) {
+			/*if (photoPath != null && !StringUtil.isEmpty(photoPath)) {
 				AEThreadManager.getInstance().addThread(new Runnable() {
 					@Override
 					public void run() {
@@ -56,7 +56,7 @@ public class AttendanceService extends BaseService {
 								getSql("update_scanning_status", data));
 					}
 				});
-			}
+			}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,7 +84,7 @@ public class AttendanceService extends BaseService {
 			data.put("status", "0");
 			getJdbc().execute(getSql("update_scanning", data));
 			result = true;
-			if (photoPath != null && !StringUtil.isEmpty(photoPath)) {
+			/*if (photoPath != null && !StringUtil.isEmpty(photoPath)) {
 				AEThreadManager.getInstance().addThread(new Runnable() {
 					@Override
 					public void run() {
@@ -98,7 +98,7 @@ public class AttendanceService extends BaseService {
 								getSql("update_scanning_status", data));
 					}
 				});
-			}
+			}*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
