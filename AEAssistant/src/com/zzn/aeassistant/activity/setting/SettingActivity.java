@@ -12,6 +12,7 @@ import com.zzn.aeassistant.activity.TextEditActivity;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.activity.user.VerifyActivity;
 import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
@@ -58,7 +59,7 @@ public class SettingActivity extends BaseActivity {
 		case R.id.setting_modify_password:
 			Intent modIntent = new Intent(this, VerifyActivity.class);
 			modIntent.putExtra(CodeConstants.KEY_USER_PHONE, AEApp
-					.getCurrentUser().getPHONE());
+					.getCurrentUser(this).getPHONE());
 			modIntent.putExtra(CodeConstants.KEY_USER_PHONE_EDITABLE, false);
 			startActivity(modIntent);
 			break;
@@ -73,12 +74,15 @@ public class SettingActivity extends BaseActivity {
 			Intent feedIntent = new Intent(this, TextEditActivity.class);
 			feedIntent.putExtra(CodeConstants.KEY_TITLE,
 					getString(R.string.feed_back));
-			feedIntent.putExtra(CodeConstants.KEY_HINT_TEXT, getString(R.string.hint_feedback));
+			feedIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
+					getString(R.string.hint_feedback));
 			feedIntent.putExtra(CodeConstants.KEY_SINGLELINE, false);
 			startActivityForResult(feedIntent, REQUEST_FEEDBACK);
 			break;
 		case R.id.logout:
 			AEApp.getInstance().clearTask(this);
+			AEApp.setUser(null);
+			PreConfig.setLoginStatus(false);
 			startActivity(new Intent(this, LoginActivity.class));
 			finish();
 			break;
@@ -101,7 +105,7 @@ public class SettingActivity extends BaseActivity {
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		if (versionUpdateTask != null) {
@@ -115,13 +119,16 @@ public class SettingActivity extends BaseActivity {
 	protected boolean needLocation() {
 		return false;
 	}
-	
+
 	private class FeedBackTask extends AsyncTask<String, Integer, HttpResult> {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String content = params[0];
-			String param = "user_id="+AEApp.getCurrentUser().getUSER_ID()+"&content="+content;
-			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_FEEDBACK, param);
+			String param = "user_id="
+					+ AEApp.getCurrentUser(SettingActivity.this).getUSER_ID()
+					+ "&content=" + content;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_FEEDBACK,
+					param);
 			return result;
 		}
 	}

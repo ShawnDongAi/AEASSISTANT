@@ -92,7 +92,8 @@ public class ProjectDetailActivity extends BaseActivity {
 				}
 				name.setText(getString(R.string.project_name, nameString));
 				new UpdateNameTask().execute(nameString);
-				for (ProjectVO vo : AEApp.getCurrentUser().getPROJECTS()) {
+				for (ProjectVO vo : AEApp.getCurrentUser(
+						ProjectDetailActivity.this).getPROJECTS()) {
 					if (vo.getPROJECT_ID().equals(project.getPROJECT_ID())) {
 						vo.setPROJECT_NAME(nameString);
 						break;

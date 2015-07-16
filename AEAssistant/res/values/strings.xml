@@ -59,6 +59,7 @@
     <string name="scanning_null_photo">请确认拍照是否成功</string>
     <string name="scanning_call_listen">是否为%s打卡?</string>
     <string name="scanning_history">历史工友</string>
+    <string name="login_time_out">登录超时,请重新登录</string>
 
     <!-- 个人信息 -->
     <string name="sex">性别:</string>

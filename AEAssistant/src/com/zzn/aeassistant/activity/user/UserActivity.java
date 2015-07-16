@@ -85,19 +85,21 @@ public class UserActivity extends BaseActivity {
 		remark = (TextView) findViewById(R.id.user_remark);
 		head = (CircleImageView) findViewById(R.id.user_head);
 
-		name.setText(AEApp.getCurrentUser().getUSER_NAME());
-		phone.setText(AEApp.getCurrentUser().getPHONE());
-		sex.setText(!AEApp.getCurrentUser().getSEX().trim().equals("1") ? R.string.male
-				: R.string.female);
-		String mRemark = AEApp.getCurrentUser().getREMARK();
+		name.setText(AEApp.getCurrentUser(UserActivity.this).getUSER_NAME());
+		phone.setText(AEApp.getCurrentUser(UserActivity.this).getPHONE());
+		sex.setText(!AEApp.getCurrentUser(UserActivity.this).getSEX().trim()
+				.equals("1") ? R.string.male : R.string.female);
+		String mRemark = AEApp.getCurrentUser(UserActivity.this).getREMARK();
 		if (!StringUtil.isEmpty(mRemark)) {
 			remark.setText(mRemark);
 		}
 		initImageLoader();
 		initMenu();
-		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getBIG_HEAD())) {
+		if (!StringUtil.isEmpty(AEApp.getCurrentUser(UserActivity.this)
+				.getBIG_HEAD())) {
 			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					AEApp.getCurrentUser().getBIG_HEAD()), head, options);
+					AEApp.getCurrentUser(UserActivity.this).getBIG_HEAD()),
+					head, options);
 		}
 	}
 
@@ -189,8 +191,10 @@ public class UserActivity extends BaseActivity {
 				menu.dismiss();
 			}
 			setImgPath(
-					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
-							+ "_" + System.currentTimeMillis() + ".jpg", false);
+					FileCostants.DIR_HEAD
+							+ AEApp.getCurrentUser(UserActivity.this)
+									.getUSER_ID() + "_"
+							+ System.currentTimeMillis() + ".jpg", false);
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.menu_album:
@@ -231,7 +235,8 @@ public class UserActivity extends BaseActivity {
 					break;
 				}
 				name.setText(nameString);
-				AEApp.getCurrentUser().setUSER_NAME(nameString);
+				AEApp.getCurrentUser(UserActivity.this)
+						.setUSER_NAME(nameString);
 				sendBroadcast(new Intent(MainActivity.ACTION_USER_INFO_CHANGED));
 				new UpdateNameTask().execute(nameString);
 				break;
@@ -242,7 +247,7 @@ public class UserActivity extends BaseActivity {
 					break;
 				}
 				remark.setText(remarkString);
-				AEApp.getCurrentUser().setREMARK(remarkString);
+				AEApp.getCurrentUser(UserActivity.this).setREMARK(remarkString);
 				new UpdateRemarkTask().execute(remarkString);
 				break;
 			case Crop.REQUEST_CROP:
@@ -258,7 +263,7 @@ public class UserActivity extends BaseActivity {
 	@Override
 	protected void getImg(String path) {
 		Uri outputUri = Uri.fromFile(new File(FileCostants.DIR_HEAD, AEApp
-				.getCurrentUser().getUSER_ID()
+				.getCurrentUser(UserActivity.this).getUSER_ID()
 				+ "_"
 				+ System.currentTimeMillis()));
 		new Crop(path).output(outputUri).asSquare().start(this);
@@ -280,7 +285,8 @@ public class UserActivity extends BaseActivity {
 		protected HttpResult doInBackground(String... params) {
 			String filePath = params[0];
 			Map<String, String> param = new HashMap<String, String>();
-			param.put("user_id", AEApp.getCurrentUser().getUSER_ID());
+			param.put("user_id", AEApp.getCurrentUser(UserActivity.this)
+					.getUSER_ID());
 			List<String> files = new ArrayList<String>();
 			files.add(filePath);
 			HttpResult result = AEHttpUtil.doPostWithFile(
@@ -297,10 +303,13 @@ public class UserActivity extends BaseActivity {
 						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
 					AttchVO vo = GsonUtil.getInstance().fromJson(
 							result.getRES_OBJ().toString(), AttchVO.class);
-					AEApp.getCurrentUser().setBIG_HEAD(vo.getATTCH_ID());
-					AEApp.getCurrentUser().setSMALL_HEAD(vo.getATTCH_ID());
+					AEApp.getCurrentUser(UserActivity.this).setBIG_HEAD(
+							vo.getATTCH_ID());
+					AEApp.getCurrentUser(UserActivity.this).setSMALL_HEAD(
+							vo.getATTCH_ID());
 					imageLoader.displayImage(String.format(
-							URLConstants.URL_DOWNLOAD, AEApp.getCurrentUser()
+							URLConstants.URL_DOWNLOAD,
+							AEApp.getCurrentUser(UserActivity.this)
 									.getBIG_HEAD()), head, options);
 					sendBroadcast(new Intent(
 							MainActivity.ACTION_USER_INFO_CHANGED));
@@ -321,7 +330,8 @@ public class UserActivity extends BaseActivity {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String nameString = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
+			String param = "user_id="
+					+ AEApp.getCurrentUser(UserActivity.this).getUSER_ID()
 					+ "&user_name=" + nameString;
 			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_NAME,
 					param);
@@ -335,7 +345,8 @@ public class UserActivity extends BaseActivity {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String remarkString = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
+			String param = "user_id="
+					+ AEApp.getCurrentUser(UserActivity.this).getUSER_ID()
 					+ "&remark=" + remarkString;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_UPDATE_REMARK, param);

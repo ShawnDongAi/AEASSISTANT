@@ -38,10 +38,8 @@ import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
 import com.zzn.aeassistant.activity.project.ProjectManagerActivity;
 import com.zzn.aeassistant.activity.setting.SettingActivity;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
-import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
-import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.database.UserDBHelper;
@@ -109,12 +107,6 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	protected void initView() {
 		setSwipeBackEnable(false);
-		if (AEApp.getCurrentUser() == null) {
-			AEApp.getInstance().clearTask(this);
-			Intent intent = new Intent(this, LoginActivity.class);
-			startActivity(intent);
-			finish();
-		}
 		telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		myPhoneStateListener = new MyPhoneStateListener();
 
@@ -135,7 +127,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		initUserHistory();
 		initImageLoader();
 		initUserView();
-		registerReceiver(userInfoReceiver, new IntentFilter(ACTION_USER_INFO_CHANGED));
+		registerReceiver(userInfoReceiver, new IntentFilter(
+				ACTION_USER_INFO_CHANGED));
 		new VersionUpdateTask(mContext, false).execute();
 	}
 
@@ -159,7 +152,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 
 	private void initUserHistory() {
 		mUserAdapter = new UserHistoryAdapter(mContext);
-		mUserAdapter.setUsers(UserDBHelper.getUserHistory());
+		mUserAdapter.setUsers(UserDBHelper.getUserHistory(AEApp.getCurrentUser(
+				MainActivity.this).getUSER_ID()));
 		mHistoryList.setAdapter(mUserAdapter);
 		SwipeMenuCreator creator = new SwipeMenuCreator() {
 			@Override
@@ -183,7 +177,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 				}
 				lastClickTime = System.currentTimeMillis();
 				UserVO user = mUserAdapter.getItem(position);
-				UserDBHelper.delete(user.getPHONE());
+				UserDBHelper.delete(AEApp.getCurrentUser(MainActivity.this)
+						.getUSER_ID(), user.getPHONE());
 				mUserAdapter.removeUser(position);
 				mUserAdapter.notifyDataSetChanged();
 				return false;
@@ -232,9 +227,12 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initUserView() {
-		mUserName.setText(AEApp.getCurrentUser().getUSER_NAME());
-		imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-				AEApp.getCurrentUser().getBIG_HEAD()), mUserHead, options);
+		mUserName.setText(AEApp.getCurrentUser(MainActivity.this)
+				.getUSER_NAME());
+		imageLoader.displayImage(
+				String.format(URLConstants.URL_DOWNLOAD,
+						AEApp.getCurrentUser(MainActivity.this).getBIG_HEAD()),
+				mUserHead, options);
 	}
 
 	@Override
@@ -242,7 +240,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.home_scanning:
-			String scanningPhone = AEApp.getCurrentUser().getPHONE();
+			String scanningPhone = AEApp.getCurrentUser(MainActivity.this)
+					.getPHONE();
 			if (!StringUtil.isEmpty(lastComingPhone)) {
 				scanningPhone = lastComingPhone;
 				lastComingPhone = "";
@@ -284,7 +283,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			project = null;
 			double currentLatitude = params[0];
 			double currentLongitude = params[1];
-			for (ProjectVO projectVO : AEApp.getCurrentUser().getPROJECTS()) {
+			for (ProjectVO projectVO : AEApp.getCurrentUser(MainActivity.this)
+					.getPROJECTS()) {
 				double proLatitude = Double
 						.parseDouble(projectVO.getLATITUDE());
 				double proLongitude = Double.parseDouble(projectVO
@@ -358,7 +358,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			ToastUtil.show(R.string.exit_toast);
 		} else {
 			super.onBackPressed();
-			PreConfig.clearUserVO();
+			// PreConfig.clearUserVO();
 			AEApp.getInstance().exit();
 		}
 	}
@@ -400,7 +400,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		// 拍照后获取位置并打卡
 		scanningPath = path;
 		String forWho = "0";
-		String scanningPhone = AEApp.getCurrentUser().getPHONE();
+		String scanningPhone = AEApp.getCurrentUser(MainActivity.this)
+				.getPHONE();
 		if (!StringUtil.isEmpty(lastComingPhone)) {
 			scanningPhone = lastComingPhone;
 			forWho = "1";
@@ -444,7 +445,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			param.put("latitude", latitude);
 			param.put("for_who", forWho);
 			param.put("address", address);
-			param.put("parent_user", AEApp.getCurrentUser().getUSER_ID());
+			param.put("parent_user", AEApp.getCurrentUser(MainActivity.this)
+					.getUSER_ID());
 			HttpResult result = AEHttpUtil.doPostWithFile(
 					URLConstants.URL_SCANNING, files, param);
 			File file = new File(imgPath);
@@ -469,9 +471,13 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 						if (obj.has("user_name") && obj.has("user_phone")) {
 							String user_name = obj.getString("user_name");
 							String user_phone = obj.getString("user_phone");
-							UserDBHelper.insertUser(user_phone, user_name);
-							mUserAdapter
-									.setUsers(UserDBHelper.getUserHistory());
+							UserDBHelper.insertUser(
+									AEApp.getCurrentUser(MainActivity.this)
+											.getUSER_ID(), user_phone,
+									user_name);
+							mUserAdapter.setUsers(UserDBHelper
+									.getUserHistory(AEApp.getCurrentUser(
+											MainActivity.this).getUSER_ID()));
 							mUserAdapter.notifyDataSetChanged();
 						}
 					} catch (JSONException e) {
@@ -529,7 +535,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			}
 		}
 	}
-	
+
 	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {

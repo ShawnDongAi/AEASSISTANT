@@ -157,6 +157,7 @@ public class LoginActivity extends BaseActivity {
 											new TypeToken<List<ProjectVO>>() {
 											}.getType());
 							user.setPROJECTS(projects);
+							PreConfig.setLoginStatus(true);
 						}
 						AEApp.setUser(user);
 						if (mRememberPsw.isChecked()) {

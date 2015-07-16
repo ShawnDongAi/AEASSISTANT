@@ -167,7 +167,9 @@ public class ProjectManagerActivity extends BaseActivity implements
 
 		@Override
 		protected HttpResult doInBackground(String... params) {
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID();
+			String param = "user_id="
+					+ AEApp.getCurrentUser(ProjectManagerActivity.this)
+							.getUSER_ID();
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_PROJECT_MANAGER_LIST, param);
 			return result;
@@ -183,7 +185,8 @@ public class ProjectManagerActivity extends BaseActivity implements
 							result.getRES_OBJ().toString(),
 							new TypeToken<List<ProjectVO>>() {
 							}.getType());
-					AEApp.getCurrentUser().setPROJECTS(projects);
+					AEApp.getCurrentUser(ProjectManagerActivity.this)
+							.setPROJECTS(projects);
 					if (initProjectTask != null) {
 						initProjectTask.cancel(true);
 						initProjectTask = null;
@@ -229,6 +232,7 @@ public class ProjectManagerActivity extends BaseActivity implements
 	}
 
 	private long lastClickTime = 0;
+
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -294,7 +298,8 @@ public class ProjectManagerActivity extends BaseActivity implements
 			double currentLatitude = params[0];
 			double currentLongitude = params[1];
 			ProjectVO currentProject = null;
-			for (ProjectVO projectVO : AEApp.getCurrentUser().getPROJECTS()) {
+			for (ProjectVO projectVO : AEApp.getCurrentUser(
+					ProjectManagerActivity.this).getPROJECTS()) {
 				double proLatitude = Double
 						.parseDouble(projectVO.getLATITUDE());
 				double proLongitude = Double.parseDouble(projectVO
@@ -325,14 +330,16 @@ public class ProjectManagerActivity extends BaseActivity implements
 				adapter.addItem(currentProject);
 			}
 			adapter.addItem(managerSection);
-			for (ProjectVO managerVO : AEApp.getCurrentUser().getPROJECTS()) {
+			for (ProjectVO managerVO : AEApp.getCurrentUser(
+					ProjectManagerActivity.this).getPROJECTS()) {
 				ProjectItem managerProject = new ProjectItem(
 						ProjectItem.MANAGER_PROJECT,
 						managerVO.getPROJECT_NAME());
 				managerProject.project = managerVO;
 				adapter.addItem(managerProject);
 			}
-			if (AEApp.getCurrentUser().getPROJECTS().size() <= 0) {
+			if (AEApp.getCurrentUser(ProjectManagerActivity.this).getPROJECTS()
+					.size() <= 0) {
 				ProjectItem managerProject = new ProjectItem(
 						ProjectItem.MANAGER_PROJECT_NULL,
 						getString(R.string.null_project));
@@ -354,8 +361,9 @@ public class ProjectManagerActivity extends BaseActivity implements
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String project_id = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
-					+ "&project_id=" + project_id;
+			String param = "user_id="
+					+ AEApp.getCurrentUser(ProjectManagerActivity.this)
+							.getUSER_ID() + "&project_id=" + project_id;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_DELETE_PRJECT, param);
 			return result;
@@ -372,7 +380,8 @@ public class ProjectManagerActivity extends BaseActivity implements
 							result.getRES_OBJ().toString(),
 							new TypeToken<List<ProjectVO>>() {
 							}.getType());
-					AEApp.getCurrentUser().setPROJECTS(projects);
+					AEApp.getCurrentUser(ProjectManagerActivity.this)
+							.setPROJECTS(projects);
 					initProjectTask = new InitProjectTask();
 					if (AEApp.getCurrentLoc() == null) {
 						initProjectTask.execute(new Double[] { 0.0, 0.0 });

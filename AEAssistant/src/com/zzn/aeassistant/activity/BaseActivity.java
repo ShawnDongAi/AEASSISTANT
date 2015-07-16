@@ -23,7 +23,6 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.app.AEApp;
-import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.BitmapUtil;
@@ -110,6 +109,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 					mDialog = new AlertDialog.Builder(BaseActivity.this)
 					.setTitle(R.string.warning)
 					.setMessage(R.string.http_null)
+					.setNeutralButton(R.string.cancel, null)
 					.setPositiveButton(R.string.settings,
 							new DialogInterface.OnClickListener() {
 								@Override
@@ -278,7 +278,6 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putString("imagePath", getImgPath());
 		outState.putBoolean("compress", compress);
-		PreConfig.saveUserVO(AEApp.getCurrentUser());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -305,6 +304,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 				mDialog = new AlertDialog.Builder(BaseActivity.this)
 				.setTitle(R.string.warning)
 				.setMessage(R.string.http_null)
+				.setNeutralButton(R.string.cancel, null)
 				.setPositiveButton(R.string.settings,
 						new DialogInterface.OnClickListener() {
 							@Override

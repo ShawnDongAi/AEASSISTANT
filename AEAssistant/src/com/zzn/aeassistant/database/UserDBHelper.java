@@ -21,20 +21,20 @@ public class UserDBHelper {
 		AESQLiteHelper.creatTable(table, sql);
 	}
 
-	public static void insertUser(String phone, String name) {
-		delete(phone);
+	public static void insertUser(String userID, String phone, String name) {
+		delete(userID, phone);
 		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
 				AESQLiteHelper.ENCRYPT_KEY);
 		ContentValues values = new ContentValues();
-		values.put("logon_user_id", AEApp.getCurrentUser().getUSER_ID());
+		values.put("logon_user_id", userID);
 		values.put("user_phone", phone);
 		values.put("user_name", name);
 		db.insert(table, null, values);
 	}
 
-	public static void delete(String phone) {
-		delete("user_phone=? and logon_user_id=?", new String[] { phone,
-				AEApp.getCurrentUser().getUSER_ID() });
+	public static void delete(String userID, String phone) {
+		delete("user_phone=? and logon_user_id=?",
+				new String[] { phone, userID });
 	}
 
 	private static int delete(String whereClause, String[] whereArgs) {
@@ -44,16 +44,14 @@ public class UserDBHelper {
 		db.close();
 		return result;
 	}
-	
-	public static List<UserVO> getUserHistory() {
+
+	public static List<UserVO> getUserHistory(String userID) {
 		List<UserVO> result = new ArrayList<UserVO>();
-		if (AEApp.getCurrentUser().getUSER_ID() == null) {
-			return result;
-		}
 		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
 				AESQLiteHelper.ENCRYPT_KEY);
-		Cursor cursor = db.query(table, null, "logon_user_id=?", new String[]{AEApp.getCurrentUser().getUSER_ID()}, null, null, null);
-		while(cursor.moveToNext()) {
+		Cursor cursor = db.query(table, null, "logon_user_id=?",
+				new String[] { userID }, null, null, null);
+		while (cursor.moveToNext()) {
 			UserVO user = new UserVO();
 			user.setUSER_NAME(cursor.getString(2));
 			user.setPHONE(cursor.getString(1));

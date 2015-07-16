@@ -2,6 +2,7 @@ package com.zzn.aeassistant.activity.project;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,13 @@ import com.zzn.aeassistant.view.tree.TreeListViewAdapter;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
+	private Context mContext;
 
 	public ProjectStructureAdapter(ListView mTree, Context context,
 			List<T> datas, boolean expand) throws IllegalArgumentException,
 			IllegalAccessException {
 		super(mTree, context, datas, expand);
+		this.mContext = context;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -58,7 +61,7 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 		viewHolder.phone.setText(vo.getCREATE_USER_PHONE());
 		viewHolder.myPosition
 				.setVisibility(vo.getCREATE_USER().equals(
-						AEApp.getCurrentUser().getUSER_ID()) ? View.VISIBLE
+						AEApp.getCurrentUser((Activity) mContext).getUSER_ID()) ? View.VISIBLE
 						: View.GONE);
 		return convertView;
 	}

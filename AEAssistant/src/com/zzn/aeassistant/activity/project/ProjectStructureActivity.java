@@ -74,7 +74,8 @@ public class ProjectStructureActivity extends BaseActivity {
 				ProjectVO project = (ProjectVO) (((Node) listView.getAdapter()
 						.getItem(position)).getData());
 				if (project.getCREATE_USER().equals(
-						AEApp.getCurrentUser().getUSER_ID())) {
+						AEApp.getCurrentUser(ProjectStructureActivity.this)
+								.getUSER_ID())) {
 					return;
 				}
 				try {
