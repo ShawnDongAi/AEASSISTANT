@@ -24,8 +24,8 @@ import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
-import com.zzn.aeassistant.util.DESCoderUtil;
 import com.zzn.aeassistant.util.GsonUtil;
+import com.zzn.aeassistant.util.MD5Utils;
 import com.zzn.aeassistant.util.RegexUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
@@ -112,7 +112,7 @@ public class LoginActivity extends BaseActivity {
 			return;
 		}
 		try {
-			password = DESCoderUtil.encrypt(password, phone);
+			password = MD5Utils.getMD5ofStr(password);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;

@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import com.zzn.aenote.http.Global;
 import com.zzn.aenote.http.server.CmHandler;
 import com.zzn.aenote.http.service.UserService;
-import com.zzn.aenote.http.utils.DESCoderUtil;
 import com.zzn.aenote.http.utils.GsonUtil;
 import com.zzn.aenote.http.utils.SmsVerifyUtil;
 import com.zzn.aenote.http.utils.StringUtil;
@@ -30,7 +29,6 @@ public class Register implements CmHandler {
 			String phone = req.getParameter("phone");
 			// 用户密码
 			String password = req.getParameter("password");
-			password = DESCoderUtil.decrypt(password, phone);
 			// 短信验证码
 			String smsCode = req.getParameter("code");
 			logger.info("接收到注册请求,账号--->" + phone);

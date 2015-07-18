@@ -12,7 +12,7 @@ import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
-import com.zzn.aeassistant.util.DESCoderUtil;
+import com.zzn.aeassistant.util.MD5Utils;
 import com.zzn.aeassistant.util.RegexUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
@@ -81,7 +81,7 @@ public class ResetPswActivity extends BaseActivity {
 			return;
 		}
 		try {
-			password = DESCoderUtil.encrypt(password, phone);
+			password = MD5Utils.getMD5ofStr(password);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;

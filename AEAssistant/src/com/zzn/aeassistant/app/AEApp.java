@@ -8,6 +8,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import cn.smssdk.SMSSDK;
 
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
@@ -22,6 +23,7 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.constants.FileCostants;
+import com.zzn.aeassistant.constants.PlatformkEY;
 import com.zzn.aeassistant.database.AESQLiteHelper;
 import com.zzn.aeassistant.database.UserDBHelper;
 import com.zzn.aeassistant.util.PhoneUtil;
@@ -54,6 +56,8 @@ public class AEApp extends Application {
 		createDatabase();
 		SDKInitializer.initialize(this);
 		initImageLoader();
+		SMSSDK.initSDK(this, PlatformkEY.SMS_APP_KEY,
+				PlatformkEY.SMS_APP_SECRET);
 	}
 
 	public static AEApp getInstance() {

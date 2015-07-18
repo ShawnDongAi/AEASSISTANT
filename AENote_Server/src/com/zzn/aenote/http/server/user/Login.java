@@ -14,7 +14,6 @@ import com.zzn.aenote.http.Global;
 import com.zzn.aenote.http.server.CmHandler;
 import com.zzn.aenote.http.service.ProjectService;
 import com.zzn.aenote.http.service.UserService;
-import com.zzn.aenote.http.utils.DESCoderUtil;
 import com.zzn.aenote.http.utils.GsonUtil;
 import com.zzn.aenote.http.utils.StringUtil;
 import com.zzn.aenote.http.vo.BaseRep;
@@ -34,7 +33,6 @@ public class Login implements CmHandler {
 			String phone = req.getParameter("phone");
 			// 用户密码
 			String password = req.getParameter("password");
-			password = DESCoderUtil.decrypt(password, phone);
 			logger.info("接收到登陆请求,账号--->" + phone);
 			if (StringUtil.isEmpty(phone) || StringUtil.isEmpty(password)) { // 用户名或密码为空
 				rs.setRES_CODE(Global.USER_PSW_NULL);
@@ -48,9 +46,7 @@ public class Login implements CmHandler {
 				return;
 			}
 			Map<String, Object> userInfo = userList.get(0);
-			if (userInfo.get("password").equals(
-					DESCoderUtil.encrypt(password, userInfo.get("user_id")
-							.toString()))) {
+			if (userInfo.get("password").equals(password)) {
 				Map<String, Object> result = new HashMap<String, Object>();
 				UserVO user = UserVO.assembleUserVO(userInfo);
 				result.put("user", GsonUtil.getInstance().toJson(user, UserVO.class));

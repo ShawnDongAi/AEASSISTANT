@@ -18,8 +18,8 @@ import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.PlatformkEY;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
-import com.zzn.aeassistant.util.DESCoderUtil;
 import com.zzn.aeassistant.util.GsonUtil;
+import com.zzn.aeassistant.util.MD5Utils;
 import com.zzn.aeassistant.util.RegexUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
@@ -30,7 +30,7 @@ public class RegisterActivity extends BaseActivity {
 
 	private EditText mPhoneInput, mPswInput, mSmsInput;
 	private Button mRegisterBtn, mVerifyBtn;
-	
+
 	private RegisterTask registerTask;
 	private Handler mHandler = new Handler();
 
@@ -53,6 +53,35 @@ public class RegisterActivity extends BaseActivity {
 		mVerifyBtn = (Button) findViewById(R.id.register_verify);
 		mRegisterBtn.setOnClickListener(this);
 		mVerifyBtn.setOnClickListener(this);
+		EventHandler eventHandler = new EventHandler() {
+			public void afterEvent(final int event, final int result,
+					Object data) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						AEProgressDialog.dismissLoadingDialog();
+						if (result == SMSSDK.RESULT_COMPLETE) {
+							// 回调完成
+							if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
+								// 获取验证码成功
+								restTime = 60;
+								ToastUtil.show(R.string.login_sms_send);
+								mHandler.post(smsTimerTask);
+								return;
+							} else {
+								ToastUtil.show(R.string.login_sms_send_error);
+							}
+						} else {
+							ToastUtil.show(R.string.login_sms_send_error);
+						}
+						mVerifyBtn.setText(R.string.login_sms_verify);
+						mVerifyBtn.setEnabled(true);
+					}
+				});
+			}
+		};
+		// 注册回调监听接口
+		SMSSDK.registerEventHandler(eventHandler);
 	}
 
 	boolean ready;
@@ -77,34 +106,6 @@ public class RegisterActivity extends BaseActivity {
 				return;
 			}
 			AEProgressDialog.showLoadingDialog(this);
-			SMSSDK.initSDK(this, PlatformkEY.SMS_APP_KEY,
-					PlatformkEY.SMS_APP_SECRET);
-			EventHandler eventHandler = new EventHandler() {
-				public void afterEvent(int event, int result, Object data) {
-					AEProgressDialog.dismissLoadingDialog();
-					if (result == SMSSDK.RESULT_COMPLETE) {
-						// 回调完成
-						if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-							// 获取验证码成功
-							runOnUiThread(new Runnable() {
-								public void run() {
-									ToastUtil.show(R.string.login_sms_send);
-									mHandler.post(smsTimerTask);
-								}
-							});
-							return;
-						} else {
-							ToastUtil.show(R.string.login_sms_send_error);
-						}
-					} else {
-						ToastUtil.show(R.string.login_sms_send_error);
-					}
-					mVerifyBtn.setText(R.string.login_sms_verify);
-					mVerifyBtn.setEnabled(true);
-				}
-			};
-			// 注册回调监听接口
-			SMSSDK.registerEventHandler(eventHandler);
 			ready = true;
 			mVerifyBtn.setEnabled(false);
 			SMSSDK.getVerificationCode(PlatformkEY.ZONE, phone);
@@ -141,7 +142,7 @@ public class RegisterActivity extends BaseActivity {
 			return;
 		}
 		try {
-			password = DESCoderUtil.encrypt(password, phone);
+			password = MD5Utils.getMD5ofStr(password);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;

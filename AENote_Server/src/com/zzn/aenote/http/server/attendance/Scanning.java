@@ -213,15 +213,15 @@ public class Scanning extends CmHandlerFile {
 				if (attendanceService.isScanningToday(project_id)) {
 					logger.info("今天有打卡数据");
 					if (attendanceService.isScanningTodayVaild(project_id)) {
-						result = attendanceService.updateScanning(user_id,
-								project_id, parent_id, root_id,
-								attch.getATTCH_ID(), address, longitude,
-								latitude, "0", imgFile);
-					} else {
 						logger.info("今天已经打过卡了");
 						rs.setRES_CODE(Global.ORACLE_ERROR);
 						rs.setRES_MESSAGE("今天已经打过卡了,明天再来哟");
 						return;
+					} else {
+						result = attendanceService.updateScanning(user_id,
+								project_id, parent_id, root_id,
+								attch.getATTCH_ID(), address, longitude,
+								latitude, "0", imgFile);
 					}
 				} else {
 					if (!project_id.equals(parent_id)) {

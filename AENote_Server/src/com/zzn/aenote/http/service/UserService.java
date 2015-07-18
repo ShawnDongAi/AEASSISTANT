@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.zzn.aenote.http.BaseService;
-import com.zzn.aenote.http.utils.DESCoderUtil;
 import com.zzn.aenote.http.utils.MD5Utils;
 import com.zzn.aenote.http.utils.UtilUniqueKey;
 import com.zzn.aenote.http.vo.UserVO;
@@ -46,7 +45,7 @@ public class UserService extends BaseService {
 			user.setPHONE(phone);
 			data.put("sex", "0");
 			user.setSEX("0");
-			data.put("password", DESCoderUtil.encrypt(password, userID));
+			data.put("password", password);
 			String date = fromat.format(new Date(System.currentTimeMillis()));
 			data.put("create_time", date);
 			user.setCREATE_TIME(date);
@@ -159,7 +158,7 @@ public class UserService extends BaseService {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("user_id", userID);
-			data.put("password", DESCoderUtil.encrypt(password, userID));
+			data.put("password", password);
 			getJdbc().execute(getSql("reset_password", data));
 			return true;
 		} catch (Exception e) {

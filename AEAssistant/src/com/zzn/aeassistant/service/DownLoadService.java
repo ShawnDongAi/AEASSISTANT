@@ -74,7 +74,6 @@ public class DownLoadService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		filePath = this.getFilesDir().getPath()+File.separator;
 		mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mNotification = new NotificationCompat.Builder(this);
 		mNotification.setSmallIcon(R.drawable.ic_launcher);
@@ -161,7 +160,6 @@ public class DownLoadService extends Service {
 				mNotification.setAutoCancel(true);
 				mNotifyManager.notify(NOTIFY_ID, mNotification.build());
 				downLoading = false;
-				DownLoadService.this.stopSelf();
 				break;
 			case DOWNLOAD_FAILED:
 				// 下载失败,点击重新下载
@@ -277,6 +275,7 @@ public class DownLoadService extends Service {
 						e.printStackTrace();
 					}
 				}
+				DownLoadService.this.stopSelf();
 			}
 		});
 	}

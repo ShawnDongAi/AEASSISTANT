@@ -17,19 +17,22 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 
 import com.google.gson.reflect.TypeToken;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
+import com.nineoldandroids.view.ViewHelper;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
-import com.zzn.aeassistant.util.DESCoderUtil;
 import com.zzn.aeassistant.util.GsonUtil;
+import com.zzn.aeassistant.util.MD5Utils;
 import com.zzn.aeassistant.util.PhoneUtil;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
@@ -37,10 +40,13 @@ import com.zzn.aeassistant.vo.UserVO;
 
 public class SplashActivity extends Activity {
 	private View rootView;
-	private Animation anim;
+	private ValueAnimator anim;
 	private AlertDialog mDialog;
 	private boolean animEnd = false;
 	private LoginTask loginTask = null;
+	private float screenW;// 屏幕像素宽度
+	private float screenH;// 屏幕像素高度
+	private DisplayMetrics displayMetrics;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +54,28 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.activity_splash);
 		rootView = findViewById(R.id.splash_layout);
 
+		displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		screenW = displayMetrics.widthPixels;
+		screenH = displayMetrics.heightPixels;
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mReceiver, filter);
 
-		anim = AnimationUtils.loadAnimation(this, R.anim.load_zoom_in);
-		rootView.setAnimation(anim);
-		anim.startNow();
+		anim = ValueAnimator.ofFloat(0f, 1f);
+		anim.setDuration(4000);
+		anim.setInterpolator(new DecelerateInterpolator(1.0f));
+		anim.addUpdateListener(new AnimatorUpdateListener() {
+			@Override
+			public void onAnimationUpdate(ValueAnimator valueAnim) {
+				float value = (Float) valueAnim.getAnimatedValue();
+				ViewHelper.setPivotX(rootView, screenW / 2.0f);
+				ViewHelper.setPivotY(rootView, screenH / 2.0f);
+				ViewHelper.setScaleX(rootView, 1 + value * 0.3f);
+				ViewHelper.setScaleY(rootView, 1 + value * 0.3f);
+			}
+		});
+		anim.start();
 		if (PreConfig.isAutoLogin() && PreConfig.isUserRemember()) {
 			if (PhoneUtil.isNetworkConnected()) {
 				new Handler().postDelayed(new Runnable() {
@@ -73,7 +94,7 @@ public class SplashActivity extends Activity {
 						goToNext();
 					}
 				}
-			}, 3000);
+			}, 4000);
 		}
 	}
 
@@ -130,8 +151,7 @@ public class SplashActivity extends Activity {
 			}
 			try {
 				String phone = PreConfig.getPhone();
-				String password = DESCoderUtil.encrypt(PreConfig.getPsw(),
-						phone);
+				String password = MD5Utils.getMD5ofStr(PreConfig.getPsw());
 				loginTask = new LoginTask();
 				loginTask.execute(new String[] { phone, password });
 				return;

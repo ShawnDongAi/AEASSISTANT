@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import com.zzn.aenote.http.Global;
 import com.zzn.aenote.http.server.CmHandler;
 import com.zzn.aenote.http.service.UserService;
-import com.zzn.aenote.http.utils.DESCoderUtil;
 import com.zzn.aenote.http.utils.StringUtil;
 import com.zzn.aenote.http.vo.BaseRep;
 
@@ -28,7 +27,6 @@ public class ResetPassword implements CmHandler {
 			String phone = req.getParameter("phone");
 			// 用户密码
 			String password = req.getParameter("password");
-			password = DESCoderUtil.decrypt(password, phone);
 			logger.info("接收到注册请求,账号--->" + phone);
 			if (StringUtil.isEmpty(password) || StringUtil.isEmpty(phone)) { // 用户名或密码为空
 				rs.setRES_CODE(Global.USER_PSW_NULL);

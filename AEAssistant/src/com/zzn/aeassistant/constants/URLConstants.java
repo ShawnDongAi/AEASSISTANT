@@ -46,7 +46,7 @@ public class URLConstants {
 	 */
 	public static final String URL_CREATE_PROJECT = URL_HOST + "createProject";
 	/**
-	 * 更新上级项目
+	 * 更新项目名
 	 */
 	public static final String URL_UPDATE_PROJECT_NAME = URL_HOST + "updateProjectName";
 	/**
