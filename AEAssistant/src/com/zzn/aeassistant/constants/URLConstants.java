@@ -105,4 +105,8 @@ public class URLConstants {
 	 * 版本更新
 	 */
 	public static final String URL_VERSION_UPDATE = URL_HOST + "versionUpdate";
+	/**
+	 * 安卓最新版本下载地址
+	 */
+	public static final String URL_APK_DOWNLOAD = URL_BASE + "download?platform=0";
 }

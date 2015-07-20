@@ -36,9 +36,7 @@ public class VersionUpdate implements CmHandler {
 			try {
 				versionMaps = jdbcTemplate
 						.queryForList("select * from t_version where platform='"
-								+ platform
-								+ "' and version_code in (select max(version_code) from t_version where platform='"
-								+ platform + "')");
+								+ platform + "' order by version_code desc");
 			} catch (Exception e) {
 			}
 			if (versionMaps != null && versionMaps.size() > 0) {

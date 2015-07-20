@@ -16,6 +16,7 @@ import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
+import com.zzn.aeassistant.util.PhoneUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.vo.HttpResult;
 
@@ -26,8 +27,8 @@ import com.zzn.aeassistant.vo.HttpResult;
  */
 public class SettingActivity extends BaseActivity {
 	public static final int REQUEST_FEEDBACK = 0;
-	private TextView modifyPsd, versionUpdate, feedBack;
-	private Button logout;
+	private View modifyPsd, versionUpdate, feedBack, share, logout;
+	private TextView version;
 	private VersionUpdateTask versionUpdateTask;
 
 	@Override
@@ -42,14 +43,18 @@ public class SettingActivity extends BaseActivity {
 
 	@Override
 	protected void initView() {
-		modifyPsd = (TextView) findViewById(R.id.setting_modify_password);
-		versionUpdate = (TextView) findViewById(R.id.setting_version_update);
-		feedBack = (TextView) findViewById(R.id.setting_feedback);
-		logout = (Button) findViewById(R.id.logout);
+		modifyPsd = findViewById(R.id.setting_modify_password);
+		versionUpdate = findViewById(R.id.setting_version_update);
+		feedBack = findViewById(R.id.setting_feedback);
+		share = findViewById(R.id.setting_share);
+		version = (TextView) findViewById(R.id.setting_version);
+		logout = findViewById(R.id.logout);
 		modifyPsd.setOnClickListener(this);
 		versionUpdate.setOnClickListener(this);
 		feedBack.setOnClickListener(this);
+		share.setOnClickListener(this);
 		logout.setOnClickListener(this);
+		version.setText(PhoneUtil.getAppVersionName());
 	}
 
 	@Override
@@ -78,6 +83,8 @@ public class SettingActivity extends BaseActivity {
 					getString(R.string.hint_feedback));
 			feedIntent.putExtra(CodeConstants.KEY_SINGLELINE, false);
 			startActivityForResult(feedIntent, REQUEST_FEEDBACK);
+			break;
+		case R.id.setting_share:
 			break;
 		case R.id.logout:
 			AEApp.getInstance().clearTask(this);
