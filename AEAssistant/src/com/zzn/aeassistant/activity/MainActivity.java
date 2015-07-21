@@ -152,8 +152,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 
 	private void initUserHistory() {
 		mUserAdapter = new UserHistoryAdapter(mContext);
-		mUserAdapter.setUsers(UserDBHelper.getUserHistory(AEApp.getCurrentUser(
-				MainActivity.this).getUSER_ID()));
+		mUserAdapter.setUsers(UserDBHelper.getUserHistory(AEApp.getCurrentUser().getUSER_ID()));
 		mHistoryList.setAdapter(mUserAdapter);
 		SwipeMenuCreator creator = new SwipeMenuCreator() {
 			@Override
@@ -177,7 +176,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 				}
 				lastClickTime = System.currentTimeMillis();
 				UserVO user = mUserAdapter.getItem(position);
-				UserDBHelper.delete(AEApp.getCurrentUser(MainActivity.this)
+				UserDBHelper.delete(AEApp.getCurrentUser()
 						.getUSER_ID(), user.getPHONE());
 				mUserAdapter.removeUser(position);
 				mUserAdapter.notifyDataSetChanged();
@@ -227,11 +226,11 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initUserView() {
-		mUserName.setText(AEApp.getCurrentUser(MainActivity.this)
+		mUserName.setText(AEApp.getCurrentUser()
 				.getUSER_NAME());
 		imageLoader.displayImage(
 				String.format(URLConstants.URL_DOWNLOAD,
-						AEApp.getCurrentUser(MainActivity.this).getBIG_HEAD()),
+						AEApp.getCurrentUser().getBIG_HEAD()),
 				mUserHead, options);
 	}
 
@@ -240,7 +239,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.home_scanning:
-			String scanningPhone = AEApp.getCurrentUser(MainActivity.this)
+			String scanningPhone = AEApp.getCurrentUser()
 					.getPHONE();
 			if (!StringUtil.isEmpty(lastComingPhone)) {
 				scanningPhone = lastComingPhone;
@@ -283,7 +282,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			project = null;
 			double currentLatitude = params[0];
 			double currentLongitude = params[1];
-			for (ProjectVO projectVO : AEApp.getCurrentUser(MainActivity.this)
+			for (ProjectVO projectVO : AEApp.getCurrentUser()
 					.getPROJECTS()) {
 				double proLatitude = Double
 						.parseDouble(projectVO.getLATITUDE());
@@ -400,7 +399,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		// 拍照后获取位置并打卡
 		scanningPath = path;
 		String forWho = "0";
-		String scanningPhone = AEApp.getCurrentUser(MainActivity.this)
+		String scanningPhone = AEApp.getCurrentUser()
 				.getPHONE();
 		if (!StringUtil.isEmpty(lastComingPhone)) {
 			scanningPhone = lastComingPhone;
@@ -445,7 +444,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			param.put("latitude", latitude);
 			param.put("for_who", forWho);
 			param.put("address", address);
-			param.put("parent_user", AEApp.getCurrentUser(MainActivity.this)
+			param.put("parent_user", AEApp.getCurrentUser()
 					.getUSER_ID());
 			HttpResult result = AEHttpUtil.doPostWithFile(
 					URLConstants.URL_SCANNING, files, param);
@@ -472,12 +471,11 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 							String user_name = obj.getString("user_name");
 							String user_phone = obj.getString("user_phone");
 							UserDBHelper.insertUser(
-									AEApp.getCurrentUser(MainActivity.this)
+									AEApp.getCurrentUser()
 											.getUSER_ID(), user_phone,
 									user_name);
 							mUserAdapter.setUsers(UserDBHelper
-									.getUserHistory(AEApp.getCurrentUser(
-											MainActivity.this).getUSER_ID()));
+									.getUserHistory(AEApp.getCurrentUser().getUSER_ID()));
 							mUserAdapter.notifyDataSetChanged();
 						}
 					} catch (JSONException e) {

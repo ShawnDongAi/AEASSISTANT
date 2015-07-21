@@ -22,7 +22,12 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.activity.user.LoginActivity;
+import com.zzn.aeassistant.activity.user.RegisterActivity;
+import com.zzn.aeassistant.activity.user.ResetPswActivity;
+import com.zzn.aeassistant.activity.user.VerifyActivity;
 import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.BitmapUtil;
@@ -131,6 +136,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AEApp.getInstance().add(this);
+		checkUser();
 		mContext = this;
 		displayMetrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -161,6 +167,21 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 			option.setScanSpan(120 * 1000);
 			option.setIsNeedAddress(true);
 			mLocClient.setLocOption(option);
+		}
+	}
+	
+	private void checkUser() {
+		String compentName = this.getClass().getName();
+		if (AEApp.getCurrentUser() == null && !compentName.equals(SplashActivity.class.getName())
+				&& !compentName.equals(LoginActivity.class.getName())
+				&& !compentName.equals(RegisterActivity.class.getName())
+				&& !compentName.equals(VerifyActivity.class.getName())
+				&& !compentName.equals(ResetPswActivity.class.getName())) {
+			AEApp.getInstance().clearTask(this);
+			AEApp.setUser(null);
+			PreConfig.setLoginStatus(false);
+			startActivity(new Intent(this, LoginActivity.class));
+			finish();
 		}
 	}
 	

@@ -121,7 +121,7 @@ public class SumByUsersActivity extends BaseActivity {
 			String startDate = params[0];
 			String endDate = params[1];
 			String param = "start_date=" + startDate + "&end_date=" + endDate
-					+ "&user_id=" + AEApp.getCurrentUser(SumByUsersActivity.this).getUSER_ID()
+					+ "&user_id=" + AEApp.getCurrentUser().getUSER_ID()
 					+ "&page=" + page;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_SUM_BY_USERS, param);

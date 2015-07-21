@@ -133,6 +133,10 @@
     <!-- 设置 -->
     <string name="feed_back">意见反馈</string>
     <string name="share_version">分享给好友</string>
+    <string name="share_title">将简正点工分享给好友</string>
+    <string name="share_text">我正在使用简正点工，项目管理快捷方便，猛戳这里下载:%s</string>
+    <string name="share_img">我正在使用简正点工，项目管理快捷方便，扫描二维码或猛戳这里下载:%s</string>
+    <string name="two_code">扫描二维码下载</string>
     <string name="apk_downloading">apk下载中</string>
     <string name="version_update">版本更新</string>
     <string name="apk_download_finish">下载完成,点击安装</string>

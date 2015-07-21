@@ -7,7 +7,6 @@ import java.util.List;
 import net.sqlcipher.database.SQLiteDatabase;
 import android.app.Activity;
 import android.app.Application;
-import android.content.Intent;
 import cn.smssdk.SMSSDK;
 
 import com.baidu.location.BDLocation;
@@ -20,14 +19,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.PlatformkEY;
 import com.zzn.aeassistant.database.AESQLiteHelper;
 import com.zzn.aeassistant.database.UserDBHelper;
 import com.zzn.aeassistant.util.PhoneUtil;
-import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.vo.UserVO;
 
 /**
@@ -72,18 +68,7 @@ public class AEApp extends Application {
 		mUser = user;
 	}
 
-	public static UserVO getCurrentUser(final Activity activity) {
-		if (mUser == null) {
-			activity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					ToastUtil.show(R.string.login_time_out);
-					getInstance().clearTask(activity);
-					activity.startActivity(new Intent(activity, LoginActivity.class));
-					activity.finish();
-				}
-			});
-		}
+	public static UserVO getCurrentUser() {
 		return mUser;
 	}
 

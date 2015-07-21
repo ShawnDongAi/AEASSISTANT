@@ -108,7 +108,7 @@ public class SumByProjectActivity extends BaseActivity implements
 
 		@Override
 		protected HttpResult doInBackground(String... params) {
-			String param = "user_id=" + AEApp.getCurrentUser(SumByProjectActivity.this).getUSER_ID();
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID();
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_PROJECT_MANAGER_LIST, param);
 			return result;
@@ -124,7 +124,7 @@ public class SumByProjectActivity extends BaseActivity implements
 							result.getRES_OBJ().toString(),
 							new TypeToken<List<ProjectVO>>() {
 							}.getType());
-					AEApp.getCurrentUser(SumByProjectActivity.this).setPROJECTS(projects);
+					AEApp.getCurrentUser().setPROJECTS(projects);
 					if (initProjectTask != null) {
 						initProjectTask.cancel(true);
 						initProjectTask = null;
@@ -235,7 +235,7 @@ public class SumByProjectActivity extends BaseActivity implements
 			double currentLatitude = params[0];
 			double currentLongitude = params[1];
 			ProjectVO currentProject = null;
-			for (ProjectVO projectVO : AEApp.getCurrentUser(SumByProjectActivity.this).getPROJECTS()) {
+			for (ProjectVO projectVO : AEApp.getCurrentUser().getPROJECTS()) {
 				double proLatitude = Double
 						.parseDouble(projectVO.getLATITUDE());
 				double proLongitude = Double.parseDouble(projectVO
@@ -266,14 +266,14 @@ public class SumByProjectActivity extends BaseActivity implements
 				adapter.addItem(currentProject);
 			}
 			adapter.addItem(managerSection);
-			for (ProjectVO managerVO : AEApp.getCurrentUser(SumByProjectActivity.this).getPROJECTS()) {
+			for (ProjectVO managerVO : AEApp.getCurrentUser().getPROJECTS()) {
 				ProjectItem managerProject = new ProjectItem(
 						ProjectItem.MANAGER_PROJECT,
 						managerVO.getPROJECT_NAME());
 				managerProject.project = managerVO;
 				adapter.addItem(managerProject);
 			}
-			if (AEApp.getCurrentUser(SumByProjectActivity.this).getPROJECTS().size() <= 0) {
+			if (AEApp.getCurrentUser().getPROJECTS().size() <= 0) {
 				ProjectItem managerProject = new ProjectItem(
 						ProjectItem.MANAGER_PROJECT_NULL,
 						getString(R.string.null_project));

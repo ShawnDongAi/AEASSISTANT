@@ -232,7 +232,7 @@ public class CreateProjectActivity extends BaseActivity implements
 			String address = params[1];
 			String longitude = params[2];
 			String latitude = params[3];
-			String param = "user_id=" + AEApp.getCurrentUser(CreateProjectActivity.this).getUSER_ID()
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
 					+ "&project_name=" + projectName + "&address=" + address
 					+ "&longitude=" + longitude + "&latitude=" + latitude;
 			HttpResult result = AEHttpUtil.doPost(

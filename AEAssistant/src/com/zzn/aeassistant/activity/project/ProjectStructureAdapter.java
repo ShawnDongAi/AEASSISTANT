@@ -2,7 +2,6 @@ package com.zzn.aeassistant.activity.project;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,7 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 		viewHolder.phone.setText(vo.getCREATE_USER_PHONE());
 		viewHolder.myPosition
 				.setVisibility(vo.getCREATE_USER().equals(
-						AEApp.getCurrentUser((Activity) mContext).getUSER_ID()) ? View.VISIBLE
+						AEApp.getCurrentUser().getUSER_ID()) ? View.VISIBLE
 						: View.GONE);
 		return convertView;
 	}

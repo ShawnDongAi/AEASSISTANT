@@ -118,7 +118,7 @@ public class ProjectUsersActivity extends BaseActivity {
 				UserItem item = adapter.getItem(position);
 				if (!adapter.isItemViewTypePinned(item.type)) {
 					if (item.user.getUSER_ID().equals(
-							AEApp.getCurrentUser(ProjectUsersActivity.this)
+							AEApp.getCurrentUser()
 									.getUSER_ID())) {
 						return;
 					}
