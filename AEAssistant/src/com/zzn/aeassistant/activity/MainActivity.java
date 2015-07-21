@@ -248,7 +248,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			}
 			setImgPath(
 					FileCostants.DIR_SCANNING + scanningPhone + "_"
-							+ System.currentTimeMillis() + ".jpg", false);
+							+ System.currentTimeMillis() + ".jpg", true);
 			AttchUtil.capture(this, getImgPath());
 			break;
 		default:
@@ -513,7 +513,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 										FileCostants.DIR_SCANNING
 												+ lastComingPhone + "_"
 												+ System.currentTimeMillis()
-												+ ".jpg", false);
+												+ ".jpg", true);
 								AttchUtil.capture(MainActivity.this,
 										getImgPath());
 							}

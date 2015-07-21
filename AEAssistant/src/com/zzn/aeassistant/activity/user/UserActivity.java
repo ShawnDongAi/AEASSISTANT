@@ -194,7 +194,7 @@ public class UserActivity extends BaseActivity {
 					FileCostants.DIR_HEAD
 							+ AEApp.getCurrentUser(UserActivity.this)
 									.getUSER_ID() + "_"
-							+ System.currentTimeMillis() + ".jpg", false);
+							+ System.currentTimeMillis() + ".jpg", true);
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.menu_album:
