@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/layout_bg" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_body" >
 
-    <include layout="@layout/top_bar" />
+    <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPinnedSwipeMenuListView
+        android:id="@+id/project_listview"
+        style="@style/base_list" />
 
-    <RelativeLayout style="@style/layout_body" >
+    <ImageButton
+        android:id="@+id/project_btn_add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="30dp"
+        android:background="@drawable/btn_circle"
+        android:src="@drawable/ic_add" />
 
-        <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshPinnedSwipeMenuListView
-            android:id="@+id/project_listview"
-            style="@style/base_list" />
-
-        <ImageButton
-            android:id="@+id/project_btn_add"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="30dp"
-            android:background="@drawable/btn_circle"
-            android:src="@drawable/ic_add" />
-    </RelativeLayout>
-
-</LinearLayout>
+</RelativeLayout>

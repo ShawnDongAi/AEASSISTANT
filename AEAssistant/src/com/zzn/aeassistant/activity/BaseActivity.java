@@ -185,7 +185,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		}
 	}
 	
-	protected void setTitle(String titleString) {
+	public void setTitle(String titleString) {
 		if (title != null) {
 			title.setText(titleString);
 		}

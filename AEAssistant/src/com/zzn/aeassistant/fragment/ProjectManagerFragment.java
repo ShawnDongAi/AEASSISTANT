@@ -1,7 +1,8 @@
-package com.zzn.aeassistant.activity.project;
+package com.zzn.aeassistant.fragment;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -15,8 +16,10 @@ import android.widget.ImageButton;
 import com.baidu.location.BDLocation;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.project.CreateProjectActivity;
+import com.zzn.aeassistant.activity.project.ProjectAdapter;
 import com.zzn.aeassistant.activity.project.ProjectAdapter.ProjectItem;
+import com.zzn.aeassistant.activity.project.ProjectDetailActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -37,7 +40,7 @@ import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView.OnMenuItemClickListe
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
-public class ProjectManagerActivity extends BaseActivity implements
+public class ProjectManagerFragment extends BaseFragment implements
 		OnItemClickListener {
 	private PullToRefreshPinnedSwipeMenuListView pullListView;
 	private PinnedSectionSwipeMenuListView listView;
@@ -54,15 +57,10 @@ public class ProjectManagerActivity extends BaseActivity implements
 	}
 
 	@Override
-	protected int titleStringID() {
-		return R.string.title_project_manager;
-	}
-
-	@Override
-	protected void initView() {
-		btnAdd = (ImageButton) findViewById(R.id.project_btn_add);
+	protected void initView(View container) {
+		btnAdd = (ImageButton) container.findViewById(R.id.project_btn_add);
 		btnAdd.setOnClickListener(this);
-		pullListView = (PullToRefreshPinnedSwipeMenuListView) findViewById(R.id.project_listview);
+		pullListView = (PullToRefreshPinnedSwipeMenuListView) container.findViewById(R.id.project_listview);
 		listView = pullListView.getRefreshableView();
 		adapter = new ProjectAdapter(mContext);
 		currentSection = new ProjectItem(ProjectItem.SECTION,
@@ -92,8 +90,7 @@ public class ProjectManagerActivity extends BaseActivity implements
 				switch (menu.getViewType()) {
 				case ProjectItem.CURRENT_PROJECT:
 				case ProjectItem.MANAGER_PROJECT:
-					SwipeMenuItem item = new SwipeMenuItem(
-							getApplicationContext());
+					SwipeMenuItem item = new SwipeMenuItem(mContext);
 					item.setBackground(R.drawable.swipe_menu_item1);
 					item.setWidth(ToolsUtil.dip2px(mContext, 90));
 					item.setTitle(R.string.delete);
@@ -129,7 +126,7 @@ public class ProjectManagerActivity extends BaseActivity implements
 					public void onRefresh(
 							PullToRefreshBase<PinnedSectionSwipeMenuListView> refreshView) {
 						String label = DateUtils.formatDateTime(
-								getApplicationContext(),
+								mContext,
 								System.currentTimeMillis(),
 								DateUtils.FORMAT_SHOW_TIME
 										| DateUtils.FORMAT_SHOW_DATE
@@ -149,7 +146,7 @@ public class ProjectManagerActivity extends BaseActivity implements
 		switch (v.getId()) {
 		case R.id.project_btn_add:
 			startActivityForResult(
-					new Intent(this, CreateProjectActivity.class),
+					new Intent(mContext, CreateProjectActivity.class),
 					CodeConstants.REQUEST_CODE_REFRESH);
 			break;
 		default:
@@ -218,7 +215,7 @@ public class ProjectManagerActivity extends BaseActivity implements
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
+		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case CodeConstants.REQUEST_CODE_REFRESH:
 				if (pullListView != null) {
@@ -246,13 +243,13 @@ public class ProjectManagerActivity extends BaseActivity implements
 		}
 		ProjectVO vo = item.project;
 		if (vo != null) {
-			startActivity(new Intent(this, ProjectDetailActivity.class)
+			startActivity(new Intent(mContext, ProjectDetailActivity.class)
 					.putExtra(CodeConstants.KEY_PROJECT_VO, vo));
 		}
 	}
 
 	@Override
-	protected void onDestroy() {
+	public void onDestroyView() {
 		if (listTask != null) {
 			listTask.cancel(true);
 			listTask = null;
@@ -266,11 +263,6 @@ public class ProjectManagerActivity extends BaseActivity implements
 			deleteProjectTask = null;
 		}
 		super.onDestroy();
-	}
-
-	@Override
-	protected boolean needLocation() {
-		return true;
 	}
 
 	@Override

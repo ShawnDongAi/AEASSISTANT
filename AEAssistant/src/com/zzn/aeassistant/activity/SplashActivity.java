@@ -125,6 +125,7 @@ public class SplashActivity extends Activity {
 
 	@Override
 	protected void onPause() {
+		animEnd = true;
 		super.onPause();
 	}
 
@@ -230,7 +231,7 @@ public class SplashActivity extends Activity {
 						}
 						AEApp.setUser(user);
 						startActivity(new Intent(SplashActivity.this,
-								MainActivity.class));
+								IndexActivity.class));
 						finish();
 						return;
 					}

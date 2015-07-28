@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
-import com.zzn.aeassistant.activity.MainActivity;
+import com.zzn.aeassistant.activity.IndexActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
@@ -166,7 +166,7 @@ public class LoginActivity extends BaseActivity {
 						} else {
 							PreConfig.clearPsw();
 						}
-						startActivity(new Intent(mContext, MainActivity.class));
+						startActivity(new Intent(mContext, IndexActivity.class));
 						finish();
 						return;
 					}

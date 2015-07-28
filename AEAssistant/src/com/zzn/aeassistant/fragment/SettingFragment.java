@@ -1,7 +1,8 @@
-package com.zzn.aeassistant.activity.setting;
+package com.zzn.aeassistant.fragment;
 
 import java.io.File;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -17,8 +18,8 @@ import android.widget.TextView;
 
 import com.google.zxing.WriterException;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.TextEditActivity;
+import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.activity.user.VerifyActivity;
 import com.zzn.aeassistant.app.AEApp;
@@ -37,7 +38,7 @@ import com.zzn.aeassistant.vo.HttpResult;
  * 
  * @author Shawn
  */
-public class SettingActivity extends BaseActivity {
+public class SettingFragment extends BaseFragment {
 	public static final int REQUEST_FEEDBACK = 0;
 	private static final String TWOCODE_FILE = "two_code.png";
 	private View modifyPsd, versionUpdate, feedBack, share, twocode, logout;
@@ -48,23 +49,18 @@ public class SettingActivity extends BaseActivity {
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_setting;
+		return R.layout.fragment_setting;
 	}
 
 	@Override
-	protected int titleStringID() {
-		return R.string.settings;
-	}
-
-	@Override
-	protected void initView() {
-		modifyPsd = findViewById(R.id.setting_modify_password);
-		versionUpdate = findViewById(R.id.setting_version_update);
-		feedBack = findViewById(R.id.setting_feedback);
-		share = findViewById(R.id.setting_share);
-		twocode = findViewById(R.id.setting_twocode);
-		version = (TextView) findViewById(R.id.setting_version);
-		logout = findViewById(R.id.logout);
+	protected void initView(View container) {
+		modifyPsd = container.findViewById(R.id.setting_modify_password);
+		versionUpdate = container.findViewById(R.id.setting_version_update);
+		feedBack = container.findViewById(R.id.setting_feedback);
+		share = container.findViewById(R.id.setting_share);
+		twocode = container.findViewById(R.id.setting_twocode);
+		version = (TextView) container.findViewById(R.id.setting_version);
+		logout = container.findViewById(R.id.logout);
 		modifyPsd.setOnClickListener(this);
 		versionUpdate.setOnClickListener(this);
 		feedBack.setOnClickListener(this);
@@ -80,7 +76,7 @@ public class SettingActivity extends BaseActivity {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.setting_modify_password:
-			Intent modIntent = new Intent(this, VerifyActivity.class);
+			Intent modIntent = new Intent(getActivity(), VerifyActivity.class);
 			modIntent.putExtra(CodeConstants.KEY_USER_PHONE, AEApp
 					.getCurrentUser().getPHONE());
 			modIntent.putExtra(CodeConstants.KEY_USER_PHONE_EDITABLE, false);
@@ -94,7 +90,7 @@ public class SettingActivity extends BaseActivity {
 			versionUpdateTask.execute();
 			break;
 		case R.id.setting_feedback:
-			Intent feedIntent = new Intent(this, TextEditActivity.class);
+			Intent feedIntent = new Intent(getActivity(), TextEditActivity.class);
 			feedIntent.putExtra(CodeConstants.KEY_TITLE,
 					getString(R.string.feed_back));
 			feedIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
@@ -130,19 +126,19 @@ public class SettingActivity extends BaseActivity {
 			}
 			break;
 		case R.id.logout:
-			AEApp.getInstance().clearTask(this);
+			AEApp.getInstance().clearTask(getActivity());
 			AEApp.setUser(null);
 			PreConfig.setLoginStatus(false);
-			startActivity(new Intent(this, LoginActivity.class));
-			finish();
+			startActivity(new Intent(mContext, LoginActivity.class));
+			getActivity().finish();
 			break;
 		}
 	}
 
 	private void initTwoCode() {
-		twocodeImg = new ImageView(this);
+		twocodeImg = new ImageView(mContext);
 		try {
-			Bitmap bitmap = BitmapUtil.cretaeTwoCode(this,
+			Bitmap bitmap = BitmapUtil.cretaeTwoCode(mContext,
 					URLConstants.URL_APK_DOWNLOAD, R.drawable.ic_launcher);
 			twocodeImg.setImageBitmap(bitmap);
 			BitmapUtil.writeToSdcard(bitmap, FileCostants.DIR_BASE,
@@ -171,7 +167,7 @@ public class SettingActivity extends BaseActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == RESULT_OK) {
+		if (resultCode == Activity.RESULT_OK) {
 			switch (requestCode) {
 			case REQUEST_FEEDBACK:
 				ToastUtil.show(R.string.thanks_for_feedback);
@@ -186,26 +182,12 @@ public class SettingActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
-		if (twocodeWindow != null && twocodeWindow.isShowing()) {
-			twocodeWindow.dismiss();
-		} else {
-			super.onBackPressed();
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
+	public void onDestroyView() {
 		if (versionUpdateTask != null) {
 			versionUpdateTask.cancel(true);
 			versionUpdateTask = null;
 		}
-		super.onDestroy();
-	}
-
-	@Override
-	protected boolean needLocation() {
-		return false;
+		super.onDestroyView();
 	}
 
 	private class FeedBackTask extends AsyncTask<String, Integer, HttpResult> {
@@ -219,4 +201,5 @@ public class SettingActivity extends BaseActivity {
 			return result;
 		}
 	}
+
 }

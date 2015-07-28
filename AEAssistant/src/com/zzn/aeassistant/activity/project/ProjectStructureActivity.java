@@ -3,9 +3,14 @@ package com.zzn.aeassistant.activity.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,9 +44,19 @@ public class ProjectStructureActivity extends BaseActivity {
 	private String project_id;
 	private long lastClickTime = 0;
 
+	// 电话监听相关
+	private TelephonyManager telephony;
+	private MyPhoneStateListener myPhoneStateListener;
+	// 接收到来电后的对话框
+	private AlertDialog comingCallDialog;
+	// 上一个来电的号码
+	private String lastComingPhone = "";
+
+	private UpdateParentTask updateParentTask;
+
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_base_list;
+		return R.layout.activity_struct_list;
 	}
 
 	@Override
@@ -51,7 +66,8 @@ public class ProjectStructureActivity extends BaseActivity {
 
 	@Override
 	protected void initView() {
-		findViewById(R.id.header).setVisibility(View.GONE);
+		telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		myPhoneStateListener = new MyPhoneStateListener();
 		pullListView = (PullToRefreshListView) findViewById(R.id.base_list);
 		listView = pullListView.getRefreshableView();
 		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
@@ -74,8 +90,7 @@ public class ProjectStructureActivity extends BaseActivity {
 				ProjectVO project = (ProjectVO) (((Node) listView.getAdapter()
 						.getItem(position)).getData());
 				if (project.getCREATE_USER().equals(
-						AEApp.getCurrentUser()
-								.getUSER_ID())) {
+						AEApp.getCurrentUser().getUSER_ID())) {
 					return;
 				}
 				try {
@@ -107,6 +122,7 @@ public class ProjectStructureActivity extends BaseActivity {
 		});
 		listStruTask = new ListStructureTask();
 		listStruTask.execute(project_id);
+		AEProgressDialog.showLoadingDialog(mContext);
 	}
 
 	@Override
@@ -115,7 +131,27 @@ public class ProjectStructureActivity extends BaseActivity {
 	}
 
 	@Override
+	protected void onPause() {
+		if (telephony != null) {
+			telephony.listen(myPhoneStateListener,
+					PhoneStateListener.LISTEN_NONE);
+		}
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		telephony.listen(myPhoneStateListener,
+				PhoneStateListener.LISTEN_CALL_STATE);
+	}
+
+	@Override
 	protected void onDestroy() {
+		if (updateParentTask != null) {
+			updateParentTask.cancel(true);
+			updateParentTask = null;
+		}
 		if (listStruTask != null) {
 			listStruTask.cancel(true);
 			listStruTask = null;
@@ -125,12 +161,6 @@ public class ProjectStructureActivity extends BaseActivity {
 
 	private class ListStructureTask extends
 			AsyncTask<String, Integer, HttpResult> {
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			AEProgressDialog.showLoadingDialog(mContext);
-		}
 
 		@Override
 		protected HttpResult doInBackground(String... params) {
@@ -145,6 +175,7 @@ public class ProjectStructureActivity extends BaseActivity {
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
+			pullListView.onRefreshComplete();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				if (defaultAdapter != null) {
 					listView.setAdapter(defaultAdapter);
@@ -172,7 +203,82 @@ public class ProjectStructureActivity extends BaseActivity {
 		@Override
 		protected void onCancelled() {
 			AEProgressDialog.dismissLoadingDialog();
+			pullListView.onRefreshComplete();
 			super.onCancelled();
+		}
+	}
+
+	// 来电电话监听器
+	private class MyPhoneStateListener extends PhoneStateListener {
+		@Override
+		public void onCallStateChanged(int state, String incomingNumber) {
+			super.onCallStateChanged(state, incomingNumber);
+			if (state == TelephonyManager.CALL_STATE_RINGING) {
+				if (comingCallDialog != null && comingCallDialog.isShowing()) {
+					return;
+				}
+				lastComingPhone = incomingNumber;
+				comingCallDialog = new AlertDialog.Builder(mContext)
+						.setTitle(R.string.warning)
+						.setMessage(
+								getString(R.string.project_join_current,
+										lastComingPhone))
+						.setPositiveButton(R.string.confirm,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// 迁移
+										if (updateParentTask != null) {
+											updateParentTask.cancel(true);
+											updateParentTask = null;
+										}
+										updateParentTask = new UpdateParentTask();
+										updateParentTask.execute(new String[] {
+												project_id, lastComingPhone });
+									}
+								}).setNegativeButton(R.string.cancel, null)
+						.create();
+				comingCallDialog.setCanceledOnTouchOutside(false);
+				comingCallDialog.show();
+			}
+		}
+	}
+
+	private class UpdateParentTask extends
+			AsyncTask<String, Integer, HttpResult> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String project_id = params[0];
+			String phone = params[1];
+			String param = "parent_project_id=" + project_id
+					+ "&leaf_user_phone=" + phone;
+			HttpResult result = AEHttpUtil.doPost(
+					URLConstants.URL_UPDATE_PARENT, param);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			ToastUtil.show(result.getRES_MESSAGE());
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				pullListView.setRefreshing(true);
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
 		}
 	}
 }

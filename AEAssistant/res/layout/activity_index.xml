@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include
+        android:id="@+id/header"
+        layout="@layout/top_bar" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        style="@style/layout_body"
+        android:layout_below="@+id/header" />
+
+    <com.zzn.aeassistant.view.menudrawer.OverlayDrawer
+        android:id="@+id/menu_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

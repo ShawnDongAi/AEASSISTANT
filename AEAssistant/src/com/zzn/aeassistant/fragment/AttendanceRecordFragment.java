@@ -1,4 +1,4 @@
-package com.zzn.aeassistant.activity.attendance;
+package com.zzn.aeassistant.fragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,11 +12,12 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.attendance.SumByProjectActivity;
+import com.zzn.aeassistant.activity.attendance.SumByUsersActivity;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.util.ToastUtil;
 
-public class AttendanceRecordActivity extends BaseActivity {
+public class AttendanceRecordFragment extends BaseFragment {
 	private Button startDateBtn, endDateBtn, sumByUserBtn, sumByProjectBtn;
 	private DatePickerDialog datePicker;
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -27,16 +28,11 @@ public class AttendanceRecordActivity extends BaseActivity {
 	}
 
 	@Override
-	protected int titleStringID() {
-		return R.string.title_attendance_record;
-	}
-
-	@Override
-	protected void initView() {
-		startDateBtn = (Button) findViewById(R.id.sum_start_date);
-		endDateBtn = (Button) findViewById(R.id.sum_end_date);
-		sumByUserBtn = (Button) findViewById(R.id.sum_by_user);
-		sumByProjectBtn = (Button) findViewById(R.id.sum_by_project);
+	protected void initView(View container) {
+		startDateBtn = (Button) container.findViewById(R.id.sum_start_date);
+		endDateBtn = (Button) container.findViewById(R.id.sum_end_date);
+		sumByUserBtn = (Button) container.findViewById(R.id.sum_by_user);
+		sumByProjectBtn = (Button) container.findViewById(R.id.sum_by_project);
 		Calendar now = Calendar.getInstance();
 		String currentDate = dateFormat.format(now.getTime());
 		startDateBtn.setText(currentDate);
@@ -92,11 +88,6 @@ public class AttendanceRecordActivity extends BaseActivity {
 			ToastUtil.show(R.string.startdate_after_enddate);
 		}
 		return result;
-	}
-
-	@Override
-	protected boolean needLocation() {
-		return false;
 	}
 
 	private void selectDate(final Button button) {

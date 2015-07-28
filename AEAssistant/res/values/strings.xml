@@ -49,17 +49,20 @@
 
     <!-- 主页 -->
     <string name="title_project_manager">项目管理</string>
-    <string name="title_scanning">开工啦</string>
-    <string name="title_attendance_record">考勤记录</string>
+    <string name="title_scanning">每日签到</string>
+    <string name="title_today">今日考勤</string>
+    <string name="title_attendance_record">签到记录</string>
     <string name="title_user_center">个人中心</string>
+    <string name="title_home">主页</string>
     <string name="title_setting">设置</string>
     <string name="out_of_project_location">您当前无任何激活项目</string>
     <string name="current_project">当前激活项目：%s</string>
-    <string name="scanning_for_other">温馨提示：接收到他人未接来电后可为其拍照打卡</string>
+    <string name="scanning_for_other">温馨提示：在此页面，接收来电后可为其签到</string>
     <string name="scanning_null_photo">请确认拍照是否成功</string>
-    <string name="scanning_call_listen">是否为%s打卡?</string>
+    <string name="scanning_call_listen">是否为%s拍照签到?</string>
     <string name="scanning_history">历史工友</string>
     <string name="login_time_out">登录超时,请重新登录</string>
+    <string name="photograph_he">拍他（她）</string>
 
     <!-- 个人信息 -->
     <string name="sex">性别:</string>
@@ -111,24 +114,24 @@
     <string name="project_leaf">组织架构</string>
     <string name="project_user">项目通讯录</string>
     <string name="project_update_parent">项目迁移</string>
-    <string name="project_update_parent_hint">温馨提示:接收到他人未接来电后可设置其为管理员</string>
-    <string name="project_join_current">监听到%s的来电,是否将其项目添加到您管理的项目中</string>
+    <string name="project_update_parent_hint">温馨提示:在此页面，接收来电后可设置其为当前项目下级</string>
+    <string name="project_join_current">监听到%s的来电,是否将其设置为当前项目的下级项目</string>
     
     <!-- 考勤记录-->
     <string name="select_date">选取日期</string>
     <string name="sum_start_date">起始日期:</string>
     <string name="sum_end_date">结束日期:</string>
     <string name="startdate_after_enddate">起始日期不能大于结束日期,请重新选择日期</string>
-    <string name="sum_by_user">个人考勤记录</string>
-    <string name="sum_by_project">项目考勤记录</string>
-    <string name="sum_exception_section">异常考勤记录</string>
+    <string name="sum_by_user">个人签到记录</string>
+    <string name="sum_by_project">项目签到记录</string>
+    <string name="sum_exception_section">异常签到记录</string>
     <string formatted="false" name="sum_normal_section">总用工人数:%d人次</string>
-    <string name="sum_exception_null">无异常考勤记录</string>
-    <string name="sum_normal_null">无任何考勤记录</string>
-    <string name="sum_exception_total">有%d条异常考勤记录</string>
+    <string name="sum_exception_null">无异常签到记录</string>
+    <string name="sum_normal_null">无任何签到记录</string>
+    <string name="sum_exception_total">有%d条异常签到记录</string>
     <string name="sum_normal_total">总用工人数:%d人次</string>
-    <string name="sum_user_total">共有%d次考勤记录</string>
-    <string name="sum_pro_total" formatted="false">共有%d次考勤记录,其中有%d次异常考勤</string>
+    <string name="sum_user_total">共有%d次签到记录</string>
+    <string name="sum_pro_total" formatted="false">共有%d次签到记录,其中有%d次签到考勤</string>
 
     <!-- 设置 -->
     <string name="feed_back">意见反馈</string>

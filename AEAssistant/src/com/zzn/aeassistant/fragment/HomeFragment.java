@@ -1,4 +1,4 @@
-package com.zzn.aeassistant.activity;
+package com.zzn.aeassistant.fragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,9 +33,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
-import com.zzn.aeassistant.activity.project.ProjectManagerActivity;
-import com.zzn.aeassistant.activity.setting.SettingActivity;
+import com.zzn.aeassistant.activity.ModuleAdapter;
+import com.zzn.aeassistant.activity.UserHistoryAdapter;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
@@ -66,13 +64,9 @@ import com.zzn.aeassistant.vo.UserVO;
  * 
  * @author Shawn
  */
-public class MainActivity extends BaseActivity implements OnItemClickListener {
-	public static final String ACTION_USER_INFO_CHANGED = "com.zzn.aeassistant.user_info_changed";
-	private TextView mUserName, mCurrentProject;
-	private CircleImageView mUserHead;
-	private FastenGridView mGridView;
+public class HomeFragment extends BaseFragment {
+	private TextView mCurrentProject;
 	private SwipeMenuListView mHistoryList;
-	private ModuleAdapter adapter;
 	private UserHistoryAdapter mUserAdapter;
 	private Button mScanning;
 	private ProjectVO project;
@@ -89,66 +83,30 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 
 	private InitProjectTask initProjectTask;
 	private ScanningTask scanningTask;
-
-	private ImageLoader imageLoader = ImageLoader.getInstance();
-	private DisplayImageOptions options;
+	
+	private long lastClickTime = 0;
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_main;
+		return R.layout.fragment_home;
 	}
 
 	@Override
-	protected int titleStringID() {
-		return R.string.app_name;
-	}
-
-	@SuppressLint("InlinedApi")
-	@Override
-	protected void initView() {
-		setSwipeBackEnable(false);
-		telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+	protected void initView(View container) {
+		telephony = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		myPhoneStateListener = new MyPhoneStateListener();
 
-		back.setVisibility(View.INVISIBLE);
-		mCurrentProject = (TextView) findViewById(R.id.home_current_project);
-		mHistoryList = (SwipeMenuListView) findViewById(R.id.home_user_history);
+		mCurrentProject = (TextView) container.findViewById(R.id.home_current_project);
+		mHistoryList = (SwipeMenuListView) container.findViewById(R.id.home_user_history);
 
 		View headerView = View.inflate(mContext, R.layout.home_header, null);
-		mUserName = (TextView) headerView.findViewById(R.id.home_name);
-		mUserHead = (CircleImageView) headerView.findViewById(R.id.home_head);
-		mGridView = (FastenGridView) headerView
-				.findViewById(R.id.home_module_gridview);
 		mScanning = (Button) headerView.findViewById(R.id.home_scanning);
 		mHistoryList.addHeaderView(headerView);
 
 		mScanning.setOnClickListener(this);
-		initModuleView();
 		initUserHistory();
-		initImageLoader();
-		initUserView();
-		registerReceiver(userInfoReceiver, new IntentFilter(
-				ACTION_USER_INFO_CHANGED));
 		new VersionUpdateTask(mContext, false).execute();
 	}
-
-	@SuppressWarnings("deprecation")
-	private void initImageLoader() {
-		options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.ic_head) // 设置图片在下载期间显示的图片
-				.showImageForEmptyUri(R.drawable.ic_head)// 设置图片Uri为空或是错误的时候显示的图片
-				.showImageOnFail(R.drawable.ic_head) // 设置图片加载/解码过程中错误时候显示的图片
-				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
-				.cacheOnDisc(true)// 设置下载的图片是否缓存在SD卡中
-				.considerExifParams(true) // 是否考虑JPEG图像EXIF参数（旋转，翻转）
-				.imageScaleType(ImageScaleType.EXACTLY)// 设置图片以如何的编码方式显示
-				.bitmapConfig(Bitmap.Config.RGB_565)// 设置图片的解码类型//
-				.resetViewBeforeLoading(true)// 设置图片在下载前是否重置，复位
-				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
-				.build();// 构建完成
-	}
-
-	private long lastClickTime = 0;
 
 	private void initUserHistory() {
 		mUserAdapter = new UserHistoryAdapter(mContext);
@@ -157,7 +115,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		SwipeMenuCreator creator = new SwipeMenuCreator() {
 			@Override
 			public void create(SwipeMenu menu) {
-				SwipeMenuItem item = new SwipeMenuItem(getApplicationContext());
+				SwipeMenuItem item = new SwipeMenuItem(mContext);
 				item.setBackground(R.drawable.swipe_menu_item1);
 				item.setWidth(ToolsUtil.dip2px(mContext, 90));
 				item.setTitle(R.string.delete);
@@ -202,7 +160,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		if (telephony != null) {
 			telephony.listen(myPhoneStateListener,
 					PhoneStateListener.LISTEN_NONE);
@@ -211,7 +169,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		telephony.listen(myPhoneStateListener,
 				PhoneStateListener.LISTEN_CALL_STATE);
@@ -223,15 +181,6 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 					AEApp.getCurrentLoc().getLatitude(),
 					AEApp.getCurrentLoc().getLongitude() });
 		}
-	}
-
-	private void initUserView() {
-		mUserName.setText(AEApp.getCurrentUser()
-				.getUSER_NAME());
-		imageLoader.displayImage(
-				String.format(URLConstants.URL_DOWNLOAD,
-						AEApp.getCurrentUser().getBIG_HEAD()),
-				mUserHead, options);
 	}
 
 	@Override
@@ -311,64 +260,8 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 		}
 	}
 
-	private void initModuleView() {
-		adapter = new ModuleAdapter(mContext);
-		// 项目管理
-		Intent projectIntent = new Intent(this, ProjectManagerActivity.class);
-		adapter.addItem(new Module(R.drawable.ic_project_manager,
-				R.string.title_project_manager, projectIntent));
-		// 考勤记录
-		Intent attendanceIntent = new Intent(this,
-				AttendanceRecordActivity.class);
-		adapter.addItem(new Module(R.drawable.ic_attendance_record,
-				R.string.title_attendance_record, attendanceIntent));
-		// 个人中心
-		Intent userIntent = new Intent(this, UserActivity.class);
-		adapter.addItem(new Module(R.drawable.ic_user_center,
-				R.string.title_user_center, userIntent));
-		// 设置
-		Intent settingIntent = new Intent(this, SettingActivity.class);
-		adapter.addItem(new Module(R.drawable.ic_setting,
-				R.string.title_setting, settingIntent));
-		mGridView.setAdapter(adapter);
-		mGridView.setOnItemClickListener(this);
-	}
-
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
-		if (System.currentTimeMillis() - lastClickTime < 500) {
-			return;
-		}
-		lastClickTime = System.currentTimeMillis();
-		startActivity(adapter.getItem(position).getIntent());
-	}
-
-	/**
-	 * 2秒内点击两次返回键退出
-	 */
-	private long lastPressTime = 0;
-
-	@Override
-	public void onBackPressed() {
-		long time = System.currentTimeMillis();
-		if (time - lastPressTime > 2000) {
-			lastPressTime = time;
-			ToastUtil.show(R.string.exit_toast);
-		} else {
-			super.onBackPressed();
-			// PreConfig.clearUserVO();
-			AEApp.getInstance().exit();
-		}
-	}
-
-	@Override
-	protected boolean needLocation() {
-		return true;
-	}
-
-	@Override
-	protected void onDestroy() {
+	public void onDestroyView() {
 		if (scanningTask != null) {
 			scanningTask.cancel(true);
 			scanningTask = null;
@@ -377,7 +270,6 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			initProjectTask.cancel(true);
 			initProjectTask = null;
 		}
-		unregisterReceiver(userInfoReceiver);
 		super.onDestroy();
 	}
 
@@ -502,7 +394,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 				.setMessage(
 						getString(R.string.scanning_call_listen,
 								lastComingPhone))
-				.setPositiveButton(R.string.confirm,
+				.setPositiveButton(R.string.photograph_he,
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog,
@@ -512,7 +404,7 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 												+ lastComingPhone + "_"
 												+ System.currentTimeMillis()
 												+ ".jpg", true);
-								AttchUtil.capture(MainActivity.this,
+								AttchUtil.capture(HomeFragment.this,
 										getImgPath());
 							}
 						}).setNegativeButton(R.string.cancel, null).create();
@@ -533,11 +425,4 @@ public class MainActivity extends BaseActivity implements OnItemClickListener {
 			}
 		}
 	}
-
-	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			initUserView();
-		}
-	};
 }

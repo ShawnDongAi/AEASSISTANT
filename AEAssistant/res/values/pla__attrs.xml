@@ -223,7 +223,6 @@
         <!--
              Defines the next view to give focus to when the next focus is
              {@link android.view.View#FOCUS_LEFT}.
-
              If the reference refers to a view that does not exist or is part
              of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
              will result when the reference is accessed.
@@ -233,7 +232,6 @@
         <!--
              Defines the next view to give focus to when the next focus is
              {@link android.view.View#FOCUS_RIGHT}
-
              If the reference refers to a view that does not exist or is part
              of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
              will result when the reference is accessed.
@@ -243,7 +241,6 @@
         <!--
              Defines the next view to give focus to when the next focus is
              {@link android.view.View#FOCUS_UP}
-
              If the reference refers to a view that does not exist or is part
              of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
              will result when the reference is accessed.
@@ -253,7 +250,6 @@
         <!--
              Defines the next view to give focus to when the next focus is
              {@link android.view.View#FOCUS_DOWN}
-
              If the reference refers to a view that does not exist or is part
              of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
              will result when the reference is accessed.
@@ -263,7 +259,6 @@
         <!--
              Defines the next view to give focus to when the next focus is
              {@link android.view.View#FOCUS_FORWARD}
-
              If the reference refers to a view that does not exist or is part
              of a hierarchy that is invisible, a {@link java.lang.RuntimeException}
              will result when the reference is accessed.

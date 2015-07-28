@@ -1,106 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/layout_bg" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_body" >
 
-    <include layout="@layout/top_bar" />
-
-    <ScrollView style="@style/layout_body" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/sum_start_date"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/sum_start_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/input_bg_round"
-                    android:drawableRight="@drawable/ic_date"
-                    android:padding="10dp"
-                    android:text="2015-06-12"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:paddingTop="0dp" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/sum_end_date"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/sum_end_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/input_bg_round"
-                    android:drawableRight="@drawable/ic_date"
-                    android:padding="10dp"
-                    android:text="2015-06-12"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gainsboro" />
-
-            <Button
-                android:id="@+id/sum_by_user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_top"
-                android:padding="10dp"
-                android:text="@string/sum_by_user"
-                android:textColor="@drawable/text_normal"
+                android:layout_marginRight="10dp"
+                android:text="@string/sum_start_date"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gainsboro" />
-
             <Button
-                android:id="@+id/sum_by_project"
+                android:id="@+id/sum_start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/btn_top"
+                android:background="@drawable/input_bg_round"
+                android:drawableRight="@drawable/ic_date"
                 android:padding="10dp"
-                android:text="@string/sum_by_project"
-                android:textColor="@drawable/text_normal"
+                android:text="2015-06-12"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gainsboro" />
         </LinearLayout>
-    </ScrollView>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:paddingTop="0dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="@string/sum_end_date"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/sum_end_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_bg_round"
+                android:drawableRight="@drawable/ic_date"
+                android:padding="10dp"
+                android:text="2015-06-12"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
+
+        <Button
+            android:id="@+id/sum_by_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_top"
+            android:padding="10dp"
+            android:text="@string/sum_by_user"
+            android:textColor="@drawable/text_normal"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
+
+        <Button
+            android:id="@+id/sum_by_project"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_top"
+            android:padding="10dp"
+            android:text="@string/sum_by_project"
+            android:textColor="@drawable/text_normal"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
+    </LinearLayout>
+
+</ScrollView>

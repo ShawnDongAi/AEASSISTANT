@@ -97,7 +97,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- 主页 -->
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.IndexActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme" />
         <!-- 用户详情页面 -->
@@ -110,14 +110,9 @@
             android:name=".activity.TextEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
-        <!-- 设置页面 -->
-        <activity
-            android:name=".activity.setting.SettingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent" />
         <!-- 项目管理页 -->
         <activity
-            android:name="com.zzn.aeassistant.activity.project.ProjectManagerActivity"
+            android:name="com.zzn.aeassistant.fragment.ProjectManagerFragment"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 创建项目页 -->
@@ -148,7 +143,7 @@
 
         <!-- 考勤记录页 -->
         <activity
-            android:name=".activity.attendance.AttendanceRecordActivity"
+            android:name="com.zzn.aeassistant.fragment.AttendanceRecordFragment"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 按项目查询 -->

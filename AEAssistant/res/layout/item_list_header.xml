@@ -8,9 +8,9 @@
         android:id="@+id/lable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/theme_green"
+        android:background="@color/darkgray"
         android:padding="5dp"
-        android:textColor="@color/white"
+        android:textColor="@color/red"
         android:textSize="14sp" />
 
 </LinearLayout>

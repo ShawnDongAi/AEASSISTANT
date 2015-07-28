@@ -1,16 +1,16 @@
 package com.zzn.aeassistant.vo;
 
-import android.content.Intent;
+import com.zzn.aeassistant.fragment.BaseFragment;
 
 public class Module {
 	private int iconID;
 	private int titleID;
-	private Intent intent;
+	private BaseFragment fragment;
 
-	public Module(int iconID, int titleID, Intent intent) {
+	public Module(int iconID, int titleID, BaseFragment fragment) {
 		this.iconID = iconID;
 		this.titleID = titleID;
-		this.intent = intent;
+		this.fragment = fragment;
 	}
 
 	public int getIconID() {
@@ -21,7 +21,7 @@ public class Module {
 		return titleID;
 	}
 
-	public Intent getIntent() {
-		return intent;
+	public BaseFragment getFragment() {
+		return fragment;
 	}
 }
