@@ -266,7 +266,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 	}
 
 	@Override
-	protected void onActivityReceiveLocation(BDLocation location) {
+	public void onActivityReceiveLocation(BDLocation location) {
 		super.onActivityReceiveLocation(location);
 		AEApp.setCurrentLoc(location);
 		if (initProjectTask != null) {

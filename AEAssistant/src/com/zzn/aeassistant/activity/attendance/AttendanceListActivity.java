@@ -59,11 +59,12 @@ public class AttendanceListActivity extends BaseActivity {
 				0);
 		int exceptionCount = getIntent().getIntExtra(
 				CodeConstants.KEY_EXCEPTION_COUNT, 0);
-		headerLable.setText(getString(R.string.sum_pro_total, totalCount,
-				exceptionCount));
 		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
 		startDate = getIntent().getStringExtra(CodeConstants.KEY_START_DATE);
 		endDate = getIntent().getStringExtra(CodeConstants.KEY_END_DATE);
+//		headerLable.setText(getString(R.string.sum_pro_total, totalCount,
+//				exceptionCount));
+		headerLable.setText(getString(R.string.sum_pro_total, totalCount, startDate, endDate));
 		initPullToRefresh();
 	}
 

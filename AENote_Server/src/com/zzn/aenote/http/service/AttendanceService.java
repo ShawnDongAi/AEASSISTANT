@@ -9,10 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.zzn.aenote.http.AEThreadManager;
 import com.zzn.aenote.http.BaseService;
-import com.zzn.aenote.http.utils.StringUtil;
-import com.zzn.aenote.http.youtu.YoutuUtil;
 
 public class AttendanceService extends BaseService {
 	private static final Logger logger = Logger

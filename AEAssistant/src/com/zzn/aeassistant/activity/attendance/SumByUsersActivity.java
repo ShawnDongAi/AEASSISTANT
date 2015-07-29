@@ -157,8 +157,11 @@ public class SumByUsersActivity extends BaseActivity {
 							}
 							int count = object.getInt("count");
 							headerLable.setText(getString(
-									R.string.sum_user_total, count));
+									R.string.sum_user_total, count, startDate, endDate));
 							page++;
+						} else {
+							headerLable.setText(getString(
+									R.string.sum_user_null, startDate, endDate));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();

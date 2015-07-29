@@ -39,10 +39,10 @@ public abstract class BaseFragment extends Fragment implements
 	protected void getImg(String path) {
 	}
 
-	protected void onActivityReceiveLocation(BDLocation location) {
+	public void onActivityReceiveLocation(BDLocation location) {
 	}
 
-	protected void onActivityReceivePoi(BDLocation poiLocation) {
+	public void onActivityReceivePoi(BDLocation poiLocation) {
 	}
 
 	protected void setImgPath(String imgPath, boolean compress) {

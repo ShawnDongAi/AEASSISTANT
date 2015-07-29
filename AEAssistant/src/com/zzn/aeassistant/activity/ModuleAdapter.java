@@ -16,6 +16,7 @@ import com.zzn.aeassistant.vo.Module;
 public class ModuleAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<Module> datas = new ArrayList<Module>();
+	private int mCurrentIndex = 0;
 
 	public ModuleAdapter(Context context) {
 		this.mContext = context;
@@ -28,6 +29,11 @@ public class ModuleAdapter extends BaseAdapter {
 	@Override
 	public int getCount() {
 		return datas.size();
+	}
+	
+	public void setCurrentIndex(int currentIndex) {
+		this.mCurrentIndex = currentIndex;
+		notifyDataSetChanged();
 	}
 
 	@Override
@@ -58,6 +64,11 @@ public class ModuleAdapter extends BaseAdapter {
 		Module item = getItem(position);
 		holder.icon.setImageResource(item.getIconID());
 		holder.title.setText(item.getTitleID());
+		if (position == mCurrentIndex) {
+			convertView.setBackgroundResource(R.color.theme_green_pressed);
+		} else {
+			convertView.setBackgroundResource(R.drawable.btn_top);
+		}
 		return convertView;
 	}
 

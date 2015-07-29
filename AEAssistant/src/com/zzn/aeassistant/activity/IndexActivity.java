@@ -8,12 +8,12 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -35,7 +35,6 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
 	public static final String ACTION_USER_INFO_CHANGED = "com.zzn.aeassistant.user_info_changed";
 	private OverlayDrawer mDrawer;
-	private ViewGroup mContainer;
 	private View userLayout;
 	private TextView mUserName;
 	private CircleImageView mUserHead;
@@ -46,6 +45,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	private DisplayImageOptions options;
 	
 	private FragmentTransaction fragTrans;
+	private int currentIndex = 0;
 	
 	@Override
 	protected int layoutResID() {
@@ -61,10 +61,8 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	protected void initView() {
 		setSwipeBackEnable(false);
-		mContainer = (ViewGroup) findViewById(R.id.fragment_container);
 		mDrawer = (OverlayDrawer) findViewById(R.id.menu_drawer);
 		back.setVisibility(View.INVISIBLE);
-//		mDrawer.setContentView(R.layout.fragment_home);
 		View menuView = View.inflate(mContext, R.layout.menu_drawer, null);
 		userLayout = menuView.findViewById(R.id.index_user);
 		mUserName = (TextView) menuView.findViewById(R.id.index_name);
@@ -163,6 +161,31 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		return true;
 	}
 	
+	@Override
+	protected void onActivityReceiveLocation(BDLocation location) {
+		super.onActivityReceiveLocation(location);
+		if (adapter != null && adapter.getItem(currentIndex).getFragment() !=null) {
+			adapter.getItem(currentIndex).getFragment().onActivityReceiveLocation(location);
+		}
+	}
+
+	@Override
+	protected void onActivityReceivePoi(BDLocation poiLocation) {
+		super.onActivityReceivePoi(poiLocation);
+		if (adapter != null && adapter.getItem(currentIndex).getFragment() !=null) {
+			adapter.getItem(currentIndex).getFragment().onActivityReceivePoi(poiLocation);
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (adapter != null && adapter.getItem(currentIndex).getFragment() !=null) {
+			adapter.getItem(currentIndex).getFragment().onActivityResult(requestCode, resultCode, data);
+		}
+		
+	}
+
 	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -173,10 +196,15 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if(currentIndex == position) {
+			return;
+		}
+		currentIndex = position;
 		fragTrans = getSupportFragmentManager().beginTransaction();
 		fragTrans.replace(R.id.fragment_container, adapter.getItem(position).getFragment());
 		fragTrans.commit();
 		setTitle(getString(adapter.getItem(position).getTitleID()));
 		mDrawer.closeMenu(true);
+		adapter.setCurrentIndex(currentIndex);
 	}
 }

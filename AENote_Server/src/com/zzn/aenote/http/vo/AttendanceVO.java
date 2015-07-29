@@ -3,6 +3,8 @@ package com.zzn.aenote.http.vo;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -26,6 +28,8 @@ public class AttendanceVO implements Serializable {
 	private String status;
 	private int photo_width;
 	private int photo_height;
+	
+	private static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public String getProject_id() {
 		return project_id;
@@ -168,7 +172,12 @@ public class AttendanceVO implements Serializable {
 		vo.setProject_name(projectName);
 		vo.setParent_id(attendance.get("parent_id").toString());
 		vo.setRoot_id(attendance.get("root_id").toString());
-		vo.setDate(attendance.get("time").toString());
+		try {
+			vo.setDate(formater.format(formater.parse(attendance.get("time").toString())));
+		} catch (ParseException e1) {
+			vo.setDate(attendance.get("time").toString());
+			e1.printStackTrace();
+		}
 		vo.setImgURL(attendance.get("photo").toString());
 		int width = 400;
 		int height = 400;
