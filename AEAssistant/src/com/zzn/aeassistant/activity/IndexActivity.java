@@ -62,13 +62,21 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	protected void initView() {
 		setSwipeBackEnable(false);
 		mDrawer = (OverlayDrawer) findViewById(R.id.menu_drawer);
-		back.setVisibility(View.INVISIBLE);
 		View menuView = View.inflate(mContext, R.layout.menu_drawer, null);
 		userLayout = menuView.findViewById(R.id.index_user);
 		mUserName = (TextView) menuView.findViewById(R.id.index_name);
 		mUserHead = (CircleImageView) menuView.findViewById(R.id.index_head);
 		menuList = (ListView) menuView.findViewById(R.id.index_menu_list);
 		mDrawer.setMenuView(menuView);
+		mDrawer.setContentView(R.layout.menu_drawer_content);
+		title = (TextView) findViewById(R.id.title);
+		if (title != null) {
+			title.setText(titleStringID());
+		}
+		back = findViewById(R.id.back);
+		if (back != null) {
+			back.setVisibility(View.INVISIBLE);
+		}
 		userLayout.setOnClickListener(this);
 		initImageLoader();
 		initUserView();

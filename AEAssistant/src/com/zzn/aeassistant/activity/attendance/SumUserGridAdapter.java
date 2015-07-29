@@ -24,14 +24,14 @@ import com.zzn.aeassistant.view.pla.STGVImageView;
 import com.zzn.aeassistant.view.squareprogressbar.SquareProgressView;
 import com.zzn.aeassistant.vo.AttendanceVO;
 
-public class SumUserAdapter extends BaseAdapter {
+public class SumUserGridAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<AttendanceVO> datas = new ArrayList<AttendanceVO>();
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
 
 	@SuppressWarnings("deprecation")
-	public SumUserAdapter(Context context) {
+	public SumUserGridAdapter(Context context) {
 		this.mContext = context;
 		options = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
@@ -90,7 +90,7 @@ public class SumUserAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = View
-					.inflate(mContext, R.layout.item_attendance, null);
+					.inflate(mContext, R.layout.item_grid_attendance, null);
 			holder.address = (TextView) convertView.findViewById(R.id.address);
 			holder.time = (TextView) convertView.findViewById(R.id.date);
 			holder.photo = (STGVImageView) convertView

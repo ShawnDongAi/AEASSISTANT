@@ -1,7 +1,9 @@
 package com.zzn.aeassistant.fragment;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +37,11 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.ModuleAdapter;
 import com.zzn.aeassistant.activity.UserHistoryAdapter;
+import com.zzn.aeassistant.activity.attendance.SumByProjectActivity;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.database.UserDBHelper;
@@ -68,7 +72,7 @@ public class HomeFragment extends BaseFragment {
 	private TextView mCurrentProject;
 	private SwipeMenuListView mHistoryList;
 	private UserHistoryAdapter mUserAdapter;
-	private Button mScanning;
+	private Button mScanning, mAttendance;
 	private ProjectVO project;
 
 	// 打卡拍照的照片路径
@@ -85,6 +89,7 @@ public class HomeFragment extends BaseFragment {
 	private ScanningTask scanningTask;
 	
 	private long lastClickTime = 0;
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Override
 	protected int layoutResID() {
@@ -101,9 +106,11 @@ public class HomeFragment extends BaseFragment {
 
 		View headerView = View.inflate(mContext, R.layout.home_header, null);
 		mScanning = (Button) headerView.findViewById(R.id.home_scanning);
+		mAttendance = (Button) headerView.findViewById(R.id.home_today);
 		mHistoryList.addHeaderView(headerView);
 
 		mScanning.setOnClickListener(this);
+		mAttendance.setOnClickListener(this);
 		initUserHistory();
 		new VersionUpdateTask(mContext, false).execute();
 	}
@@ -199,6 +206,13 @@ public class HomeFragment extends BaseFragment {
 							+ System.currentTimeMillis() + ".jpg", true);
 			AttchUtil.capture(this, getImgPath());
 			break;
+		case R.id.home_today:
+			Intent proIntent = new Intent(mContext, SumByProjectActivity.class);
+			String date = dateFormat
+					.format(new Date(System.currentTimeMillis()));
+			proIntent.putExtra(CodeConstants.KEY_START_DATE, date);
+			proIntent.putExtra(CodeConstants.KEY_END_DATE, date);
+			startActivity(proIntent);
 		default:
 			break;
 		}

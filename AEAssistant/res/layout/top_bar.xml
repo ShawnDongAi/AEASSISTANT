@@ -31,7 +31,7 @@
         android:layout_height="@dimen/title_bar_height"
         android:background="@drawable/btn_top"
         android:textColor="@color/white"
-        android:textSize="15sp"
+        android:textSize="13sp"
         android:visibility="invisible" />
 
 </LinearLayout>

@@ -20,6 +20,8 @@
     <string name="dial_error">电话号码格式有误</string>
     <string name="list_empty">这里什么都没有哦,下拉刷新试试吧~~~</string>
     <string name="null_input">请输入有效字符</string>
+    <string name="list">无图模式</string>
+    <string name="grid">大图模式</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>
@@ -130,10 +132,10 @@
     <string name="sum_normal_null">无任何签到记录</string>
     <string name="sum_exception_total">有%d条异常签到记录</string>
     <string name="sum_normal_total">总用工人数:%d人次</string>
-    <string name="sum_user_total" formatted="false">%s-%s共有%d次签到记录</string>
-    <string name="sum_user_null" formatted="false">%s-%s无任何签到记录</string>
+    <string name="sum_user_total" formatted="false">%s至%s共有%d次签到记录</string>
+    <string name="sum_user_null" formatted="false">%s至%s无任何签到记录</string>
     <!-- <string name="sum_pro_total" formatted="false">共有%d次签到记录,其中有%d次异常签到</string> -->
-    <string name="sum_pro_total" formatted="false">%s-%s共有%d次签到记录</string>
+    <string name="sum_pro_total" formatted="false">%s至%s共有%d次签到记录</string>
     <string name="sum_pro_item">共有%d次签到记录</string>
 
     <!-- 设置 -->

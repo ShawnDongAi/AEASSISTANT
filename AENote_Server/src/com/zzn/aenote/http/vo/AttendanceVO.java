@@ -29,7 +29,7 @@ public class AttendanceVO implements Serializable {
 	private int photo_width;
 	private int photo_height;
 	
-	private static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	public String getProject_id() {
 		return project_id;

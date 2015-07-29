@@ -1,6 +1,8 @@
 package com.zzn.aenote.http.vo;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
 public class ProjectVO implements Serializable {
@@ -20,6 +22,8 @@ public class ProjectVO implements Serializable {
 	private String STATUS;
 	private String CREATE_USER_NAME;
 	private String CREATE_USER_PHONE;
+	
+	private static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	public String getPROJECT_ID() {
 		return PROJECT_ID;
@@ -140,7 +144,12 @@ public class ProjectVO implements Serializable {
 			vo.setPARENT_ID(project.get("parent_id").toString());
 		}
 		vo.setROOT_ID(project.get("root_id").toString());
-		vo.setCREATE_TIME(project.get("create_time").toString());
+		try {
+			vo.setCREATE_TIME(formater.format(formater.parse(project.get("create_time").toString())));
+		} catch (ParseException e1) {
+			vo.setCREATE_TIME(project.get("create_time").toString());
+			e1.printStackTrace();
+		}
 		vo.setCREATE_USER(project.get("create_user").toString());
 		String user_name = "";
 		String user_phone = "";

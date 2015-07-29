@@ -39,14 +39,14 @@ import com.zzn.aeassistant.view.swipeback.SwipeBackActivity;
 public abstract class BaseActivity extends SwipeBackActivity implements
 		OnClickListener {
 	public Context mContext;
-	private TextView title;
+	protected TextView title;
 	protected View back;
 	protected Button save;
 
 	private String imgPath;
 	private boolean compress = false;
-	private float screenW;// 屏幕像素宽度
-	private float screenH;// 屏幕像素高度
+	public float screenW;// 屏幕像素宽度
+	public float screenH;// 屏幕像素高度
 	private DisplayMetrics displayMetrics;
 	private AlertDialog mDialog;
 
