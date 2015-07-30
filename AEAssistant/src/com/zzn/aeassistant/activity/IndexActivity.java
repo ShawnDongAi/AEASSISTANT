@@ -23,6 +23,7 @@ import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.fragment.AttendanceRecordFragment;
+import com.zzn.aeassistant.fragment.ContactFragment;
 import com.zzn.aeassistant.fragment.HomeFragment;
 import com.zzn.aeassistant.fragment.ProjectManagerFragment;
 import com.zzn.aeassistant.fragment.SettingFragment;
@@ -106,6 +107,9 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		// 项目管理
 		adapter.addItem(new Module(R.drawable.ic_project_manager,
 				R.string.title_project_manager, new ProjectManagerFragment()));
+		// 通讯录
+		adapter.addItem(new Module(R.drawable.ic_contact,
+				R.string.title_contact, new ContactFragment()));
 		// 考勤记录
 		adapter.addItem(new Module(R.drawable.ic_attendance_record,
 				R.string.title_attendance_record, new AttendanceRecordFragment()));

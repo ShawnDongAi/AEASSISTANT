@@ -110,11 +110,6 @@
             android:name=".activity.TextEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
-        <!-- 项目管理页 -->
-        <activity
-            android:name="com.zzn.aeassistant.fragment.ProjectManagerFragment"
-            android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent" />
         <!-- 创建项目页 -->
         <activity
             android:name=".activity.project.CreateProjectActivity"
@@ -138,12 +133,6 @@
         <!-- 项目迁移页 -->
         <activity
             android:name=".activity.project.UpdateParentActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent" />
-
-        <!-- 考勤记录页 -->
-        <activity
-            android:name="com.zzn.aeassistant.fragment.AttendanceRecordFragment"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 按项目查询 -->

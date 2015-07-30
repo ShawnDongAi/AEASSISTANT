@@ -32,10 +32,7 @@ public abstract class BaseFragment extends Fragment implements
 	protected abstract int layoutResID();
 
 	protected abstract void initView(View container);
-
-	protected void onSaveClick() {
-	}
-
+	
 	protected void getImg(String path) {
 	}
 

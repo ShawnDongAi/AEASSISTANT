@@ -30,7 +30,6 @@ import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
-import com.zzn.aeassistant.fragment.HomeFragment;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.GsonUtil;

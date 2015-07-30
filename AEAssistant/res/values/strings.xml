@@ -51,6 +51,7 @@
 
     <!-- 主页 -->
     <string name="title_project_manager">项目管理</string>
+    <string name="title_contact">通讯录</string>
     <string name="title_scanning">每日签到</string>
     <string name="title_today">今日考勤</string>
     <string name="title_attendance_record">签到记录</string>
