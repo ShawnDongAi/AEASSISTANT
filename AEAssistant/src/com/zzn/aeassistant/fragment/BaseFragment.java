@@ -35,6 +35,10 @@ public abstract class BaseFragment extends Fragment implements
 	
 	protected void getImg(String path) {
 	}
+	
+	public boolean onBackPressed(){
+		return false;
+	}
 
 	public void onActivityReceiveLocation(BDLocation location) {
 	}

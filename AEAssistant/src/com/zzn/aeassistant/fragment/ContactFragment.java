@@ -152,6 +152,15 @@ public class ContactFragment extends BaseFragment {
 	}
 
 	@Override
+	public boolean onBackPressed() {
+		if (projectMenu != null && projectMenu.isShowing()) {
+			projectMenu.dismiss();
+			return true;
+		}
+		return super.onBackPressed();
+	}
+
+	@Override
 	public void onDestroyView() {
 		if (initProTask != null) {
 			initProTask.cancel(true);

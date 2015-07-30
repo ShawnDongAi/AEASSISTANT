@@ -180,6 +180,15 @@ public class SettingFragment extends BaseFragment {
 			}
 		}
 	}
+	
+	@Override
+	public boolean onBackPressed() {
+		if (twocodeWindow != null && twocodeWindow.isShowing()) {
+			twocodeWindow.dismiss();
+			return true;
+		}
+		return super.onBackPressed();
+	}
 
 	@Override
 	public void onDestroyView() {

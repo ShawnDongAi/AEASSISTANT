@@ -152,6 +152,9 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	public void onBackPressed() {
+		if (adapter.getItem(currentIndex).getFragment().onBackPressed()) {
+			return;
+		}
 		long time = System.currentTimeMillis();
 		if (time - lastPressTime > 2000) {
 			lastPressTime = time;
