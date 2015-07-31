@@ -30,7 +30,7 @@ public class ModuleAdapter extends BaseAdapter {
 	public int getCount() {
 		return datas.size();
 	}
-	
+
 	public void setCurrentIndex(int currentIndex) {
 		this.mCurrentIndex = currentIndex;
 		notifyDataSetChanged();
@@ -66,8 +66,12 @@ public class ModuleAdapter extends BaseAdapter {
 		holder.title.setText(item.getTitleID());
 		if (position == mCurrentIndex) {
 			convertView.setBackgroundResource(R.color.theme_green_pressed);
+			holder.title.setTextColor(mContext.getResources()
+					.getColorStateList(R.color.white));
 		} else {
 			convertView.setBackgroundResource(R.drawable.btn_top);
+			holder.title.setTextColor(mContext.getResources()
+					.getColorStateList(R.drawable.text_normal));
 		}
 		return convertView;
 	}
