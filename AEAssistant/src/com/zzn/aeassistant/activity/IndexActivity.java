@@ -8,8 +8,10 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,7 +30,6 @@ import com.zzn.aeassistant.fragment.ContactFragment;
 import com.zzn.aeassistant.fragment.HomeFragment;
 import com.zzn.aeassistant.fragment.ProjectManagerFragment;
 import com.zzn.aeassistant.fragment.SettingFragment;
-import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.CircleImageView;
 import com.zzn.aeassistant.view.menudrawer.OverlayDrawer;
 import com.zzn.aeassistant.vo.Module;
@@ -42,13 +43,13 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	private CircleImageView mUserHead;
 	private ListView menuList;
 	private ModuleAdapter adapter;
-	
+
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
-	
+
 	private FragmentTransaction fragTrans;
 	private int currentIndex = 0;
-	
+
 	@Override
 	protected int layoutResID() {
 		return R.layout.activity_index;
@@ -75,9 +76,15 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		if (title != null) {
 			title.setText(titleStringID());
 		}
-		back = findViewById(R.id.back);
+		back = (ImageButton) findViewById(R.id.back);
 		if (back != null) {
-			back.setVisibility(View.INVISIBLE);
+			back.setImageResource(R.drawable.title_bar_menu);
+			back.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mDrawer.openMenu();
+				}
+			});
 		}
 		userLayout.setOnClickListener(this);
 		initImageLoader();
@@ -86,18 +93,21 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 				ACTION_USER_INFO_CHANGED));
 		initModuleView();
 		fragTrans = getSupportFragmentManager().beginTransaction();
-		fragTrans.replace(R.id.fragment_container, adapter.getItem(0).getFragment());
+		fragTrans.replace(R.id.fragment_container, adapter.getItem(0)
+				.getFragment());
 		fragTrans.commit();
-		
+
 		new VersionUpdateTask(mContext, false).execute();
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.index_user:
 			startActivity(new Intent(mContext, UserActivity.class));
+			break;
+		default:
 			break;
 		}
 	}
@@ -115,23 +125,21 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 				R.string.title_contact, new ContactFragment()));
 		// 考勤记录
 		adapter.addItem(new Module(R.drawable.ic_attendance_record,
-				R.string.title_attendance_record, new AttendanceRecordFragment()));
+				R.string.title_attendance_record,
+				new AttendanceRecordFragment()));
 		// 设置
 		adapter.addItem(new Module(R.drawable.ic_setting,
 				R.string.title_setting, new SettingFragment()));
 		menuList.setAdapter(adapter);
 		menuList.setOnItemClickListener(this);
 	}
-	
+
 	private void initUserView() {
-		mUserName.setText(AEApp.getCurrentUser()
-				.getUSER_NAME());
-		imageLoader.displayImage(
-				String.format(URLConstants.URL_DOWNLOAD,
-						AEApp.getCurrentUser().getBIG_HEAD()),
-				mUserHead, options);
+		mUserName.setText(AEApp.getCurrentUser().getUSER_NAME());
+		imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, AEApp
+				.getCurrentUser().getBIG_HEAD()), mUserHead, options);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private void initImageLoader() {
 		options = new DisplayImageOptions.Builder()
@@ -147,7 +155,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
 				.build();// 构建完成
 	}
-	
+
 	/**
 	 * 2秒内点击两次返回键退出
 	 */
@@ -158,14 +166,19 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		if (adapter.getItem(currentIndex).getFragment().onBackPressed()) {
 			return;
 		}
-		long time = System.currentTimeMillis();
-		if (time - lastPressTime > 2000) {
-			lastPressTime = time;
-			ToastUtil.show(R.string.exit_toast);
+		if (!mDrawer.isMenuVisible()) {
+			mDrawer.openMenu();
 		} else {
 			super.onBackPressed();
 			AEApp.getInstance().exit();
 		}
+		// long time = System.currentTimeMillis();
+		// if (time - lastPressTime > 2000) {
+		// lastPressTime = time;
+		// ToastUtil.show(R.string.exit_toast);
+		// } else {
+		//
+		// }
 	}
 
 	@Override
@@ -178,30 +191,35 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	protected boolean needLocation() {
 		return true;
 	}
-	
+
 	@Override
 	protected void onActivityReceiveLocation(BDLocation location) {
 		super.onActivityReceiveLocation(location);
-		if (adapter != null && adapter.getItem(currentIndex).getFragment() !=null) {
-			adapter.getItem(currentIndex).getFragment().onActivityReceiveLocation(location);
+		if (adapter != null
+				&& adapter.getItem(currentIndex).getFragment() != null) {
+			adapter.getItem(currentIndex).getFragment()
+					.onActivityReceiveLocation(location);
 		}
 	}
 
 	@Override
 	protected void onActivityReceivePoi(BDLocation poiLocation) {
 		super.onActivityReceivePoi(poiLocation);
-		if (adapter != null && adapter.getItem(currentIndex).getFragment() !=null) {
-			adapter.getItem(currentIndex).getFragment().onActivityReceivePoi(poiLocation);
+		if (adapter != null
+				&& adapter.getItem(currentIndex).getFragment() != null) {
+			adapter.getItem(currentIndex).getFragment()
+					.onActivityReceivePoi(poiLocation);
 		}
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (adapter != null && adapter.getItem(currentIndex).getFragment() !=null) {
-			adapter.getItem(currentIndex).getFragment().onActivityResult(requestCode, resultCode, data);
+		if (adapter != null
+				&& adapter.getItem(currentIndex).getFragment() != null) {
+			adapter.getItem(currentIndex).getFragment()
+					.onActivityResult(requestCode, resultCode, data);
 		}
-		
 	}
 
 	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
@@ -214,12 +232,13 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		if(currentIndex == position) {
+		if (currentIndex == position) {
 			return;
 		}
 		currentIndex = position;
 		fragTrans = getSupportFragmentManager().beginTransaction();
-		fragTrans.replace(R.id.fragment_container, adapter.getItem(position).getFragment());
+		fragTrans.replace(R.id.fragment_container, adapter.getItem(position)
+				.getFragment());
 		fragTrans.commit();
 		setTitle(getString(adapter.getItem(position).getTitleID()));
 		mDrawer.closeMenu(true);

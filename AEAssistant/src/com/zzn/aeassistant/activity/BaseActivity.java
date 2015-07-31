@@ -15,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -41,7 +42,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		OnClickListener {
 	public Context mContext;
 	protected TextView title;
-	protected View back;
+	protected ImageButton back;
 	protected Button save;
 
 	private String imgPath;
@@ -148,7 +149,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		if (title != null) {
 			title.setText(titleStringID());
 		}
-		back = findViewById(R.id.back);
+		back = (ImageButton) findViewById(R.id.back);
 		if (back != null) {
 			back.setOnClickListener(this);
 		}

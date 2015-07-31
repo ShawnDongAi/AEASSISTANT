@@ -30,7 +30,6 @@ import com.baidu.location.BDLocation;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.UserHistoryAdapter;
 import com.zzn.aeassistant.activity.attendance.SumByProjectActivity;
-import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
