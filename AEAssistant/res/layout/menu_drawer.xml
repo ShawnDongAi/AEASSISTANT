@@ -12,12 +12,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/btn_top"
         android:orientation="horizontal"
-        android:padding="5dp" >
+        android:padding="10dp" >
 
         <com.zzn.aeassistant.view.CircleImageView
             android:id="@+id/index_head"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"

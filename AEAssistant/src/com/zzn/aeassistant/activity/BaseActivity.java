@@ -35,6 +35,7 @@ import com.zzn.aeassistant.util.FilePathUtil;
 import com.zzn.aeassistant.util.PhoneUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.swipeback.SwipeBackActivity;
+import com.zzn.aeassistant.vo.UserVO;
 
 public abstract class BaseActivity extends SwipeBackActivity implements
 		OnClickListener {
@@ -293,12 +294,14 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		super.onRestoreInstanceState(savedInstanceState);
 		setImgPath(savedInstanceState.getString("imagePath"),
 				savedInstanceState.getBoolean("compress"));
+		AEApp.setUser((UserVO) savedInstanceState.getSerializable("user"));
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putString("imagePath", getImgPath());
 		outState.putBoolean("compress", compress);
+		outState.putSerializable("user", AEApp.getCurrentUser());
 		super.onSaveInstanceState(outState);
 	}
 

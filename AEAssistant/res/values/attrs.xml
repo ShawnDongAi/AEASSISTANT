@@ -145,7 +145,7 @@
     <style name="Widget.MenuDrawer">
         <item name="mdMenuBackground">@color/white</item>
         <item name="mdContentBackground">@color/transparent</item>
-        <item name="mdMenuSize">180dp</item>
+        <item name="mdMenuSize">240dp</item>
     </style>
 	
 	

@@ -106,7 +106,14 @@ public class SplashActivity extends Activity {
 				mDialog = new AlertDialog.Builder(SplashActivity.this)
 						.setTitle(R.string.warning)
 						.setMessage(R.string.http_null)
-						.setNeutralButton(R.string.cancel, null)
+						.setNeutralButton(R.string.cancel,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										goToNext();
+									}
+								})
 						.setPositiveButton(R.string.settings,
 								new DialogInterface.OnClickListener() {
 									@Override
@@ -180,7 +187,15 @@ public class SplashActivity extends Activity {
 					mDialog = new AlertDialog.Builder(SplashActivity.this)
 							.setTitle(R.string.warning)
 							.setMessage(R.string.http_null)
-							.setNeutralButton(R.string.cancel, null)
+							.setNeutralButton(R.string.cancel,
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											goToNext();
+										}
+									})
 							.setPositiveButton(R.string.settings,
 									new DialogInterface.OnClickListener() {
 										@Override

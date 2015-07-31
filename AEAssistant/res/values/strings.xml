@@ -94,7 +94,7 @@
     <string name="project_exit">退出</string>
     <string name="project_close">关闭</string>
     <string name="project_current">当前激活项目</string>
-    <string name="project_manager">管理的项目</string>
+    <string name="project_manager">所有项目</string>
     <string name="project_create">新建项目</string>
     <string name="project_hint_name">请输入项目名称</string>
     <string name="project_hint_address">请输入项目地址</string>

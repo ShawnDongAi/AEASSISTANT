@@ -20,7 +20,7 @@
             android:gravity="center"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:gravity="center"
             android:text="专注于互联网+建筑工程\n©厦门市简正软件有限公司"
             android:textColor="@color/body_bg"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </RelativeLayout>

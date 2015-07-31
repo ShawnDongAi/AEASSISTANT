@@ -12,12 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.telephony.PhoneStateListener;
@@ -30,16 +27,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.ModuleAdapter;
 import com.zzn.aeassistant.activity.UserHistoryAdapter;
 import com.zzn.aeassistant.activity.attendance.SumByProjectActivity;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
-import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
@@ -51,15 +42,12 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.util.ToolsUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
-import com.zzn.aeassistant.view.CircleImageView;
-import com.zzn.aeassistant.view.FastenGridView;
 import com.zzn.aeassistant.view.swipemenu.SwipeMenu;
 import com.zzn.aeassistant.view.swipemenu.SwipeMenuCreator;
 import com.zzn.aeassistant.view.swipemenu.SwipeMenuItem;
 import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView;
 import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView.OnMenuItemClickListener;
 import com.zzn.aeassistant.vo.HttpResult;
-import com.zzn.aeassistant.vo.Module;
 import com.zzn.aeassistant.vo.ProjectVO;
 import com.zzn.aeassistant.vo.UserVO;
 
@@ -112,7 +100,6 @@ public class HomeFragment extends BaseFragment {
 		mScanning.setOnClickListener(this);
 		mAttendance.setOnClickListener(this);
 		initUserHistory();
-		new VersionUpdateTask(mContext, false).execute();
 	}
 
 	private void initUserHistory() {

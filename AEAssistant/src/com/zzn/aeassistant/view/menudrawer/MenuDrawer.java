@@ -436,7 +436,7 @@ public abstract class MenuDrawer extends ViewGroup {
         final Drawable contentBackground = a.getDrawable(R.styleable.MenuDrawer_mdContentBackground);
         final Drawable menuBackground = a.getDrawable(R.styleable.MenuDrawer_mdMenuBackground);
 
-        mMenuSize = a.getDimensionPixelSize(R.styleable.MenuDrawer_mdMenuSize, dpToPx(180));
+        mMenuSize = a.getDimensionPixelSize(R.styleable.MenuDrawer_mdMenuSize, dpToPx(240));
 
         mDropShadowEnabled = a.getBoolean(R.styleable.MenuDrawer_mdDropShadowEnabled, true);
 

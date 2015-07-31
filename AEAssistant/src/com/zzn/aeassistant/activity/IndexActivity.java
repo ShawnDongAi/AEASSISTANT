@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -87,6 +88,8 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		fragTrans = getSupportFragmentManager().beginTransaction();
 		fragTrans.replace(R.id.fragment_container, adapter.getItem(0).getFragment());
 		fragTrans.commit();
+		
+		new VersionUpdateTask(mContext, false).execute();
 	}
 	
 	@Override
