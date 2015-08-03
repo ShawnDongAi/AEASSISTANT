@@ -103,18 +103,18 @@ public class SettingFragment extends BaseFragment {
 			shareIntent.setAction(Intent.ACTION_SEND);
 			File file = new File(FileCostants.DIR_BASE, TWOCODE_FILE);
 			if (file != null && file.exists()) {
+				shareIntent.setType("image/jpg");
 				shareIntent.putExtra(
-						Intent.EXTRA_SUBJECT,
+						Intent.EXTRA_TEXT,
 						getString(R.string.share_img,
 								URLConstants.URL_APK_DOWNLOAD));
 				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-				shareIntent.setType("image/jpeg");
 			} else {
+				shareIntent.setType("text/plain");
 				shareIntent.putExtra(
 						Intent.EXTRA_TEXT,
 						getString(R.string.share_text,
 								URLConstants.URL_APK_DOWNLOAD));
-				shareIntent.setType("text/plain");
 			}
 			shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(Intent.createChooser(shareIntent,
