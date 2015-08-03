@@ -264,9 +264,12 @@ public class ProjectStructureActivity extends BaseActivity {
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
-			ToastUtil.show(result.getRES_MESSAGE());
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				pullListView.setRefreshing(true);
+				ToastUtil.show(result.getRES_MESSAGE());
+			} else {
+				ToastUtil.showImp(ProjectStructureActivity.this,
+						result.getRES_MESSAGE());
 			}
 		}
 

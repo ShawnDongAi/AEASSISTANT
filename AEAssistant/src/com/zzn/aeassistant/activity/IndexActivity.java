@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,7 +50,6 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
 
-	private FragmentTransaction fragTrans;
 	private int currentIndex = 0;
 
 	@Override
@@ -92,10 +94,13 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		registerReceiver(userInfoReceiver, new IntentFilter(
 				ACTION_USER_INFO_CHANGED));
 		initModuleView();
-		fragTrans = getSupportFragmentManager().beginTransaction();
-		fragTrans.replace(R.id.fragment_container, adapter.getItem(0)
-				.getFragment());
-		fragTrans.commit();
+		
+		FragmentTransaction fragTrans = getSupportFragmentManager()
+				.beginTransaction();
+		fragTrans.add(R.id.fragment_container,
+				adapter.getItem(0).getFragment(), adapter.getItem(0)
+						.getFragment().getClass().getSimpleName());
+		fragTrans.commitAllowingStateLoss();
 
 		new VersionUpdateTask(mContext, false).execute();
 	}
@@ -235,13 +240,66 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		if (currentIndex == position) {
 			return;
 		}
+		turnToFragment(adapter.getItem(currentIndex)
+				.getFragment().getClass(), adapter.getItem(position)
+				.getFragment().getClass(), new Bundle());
 		currentIndex = position;
-		fragTrans = getSupportFragmentManager().beginTransaction();
-		fragTrans.replace(R.id.fragment_container, adapter.getItem(position)
-				.getFragment());
-		fragTrans.commit();
 		setTitle(getString(adapter.getItem(position).getTitleID()));
 		mDrawer.closeMenu(true);
 		adapter.setCurrentIndex(currentIndex);
+	}
+
+	/**
+	 * Fragment跳转
+	 * 
+	 * @param fm
+	 * @param fragmentClass
+	 * @param tag
+	 * @param args
+	 */
+	public void turnToFragment(Class<? extends Fragment> fromFragmentClass,
+			Class<? extends Fragment> toFragmentClass, Bundle args) {
+		FragmentManager fm = getSupportFragmentManager();
+		// 被切换的Fragment标签
+		String fromTag = fromFragmentClass.getSimpleName();
+		// 切换到的Fragment标签
+		String toTag = toFragmentClass.getSimpleName();
+		// 查找切换的Fragment
+		Fragment fromFragment = fm.findFragmentByTag(fromTag);
+		Fragment toFragment = fm.findFragmentByTag(toTag);
+		// 如果要切换到的Fragment不存在，则创建
+		if (toFragment == null) {
+			try {
+				toFragment = toFragmentClass.newInstance();
+				toFragment.setArguments(args);
+			} catch (java.lang.InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		// 如果有参数传递，
+		if (args != null && !args.isEmpty()) {
+			toFragment.getArguments().putAll(args);
+		}
+		// Fragment事务
+		FragmentTransaction ft = fm.beginTransaction();
+		// 设置Fragment切换效果
+		ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out,
+				android.R.anim.fade_in, android.R.anim.fade_out);
+		/**
+		 * 如果要切换到的Fragment没有被Fragment事务添加，则隐藏被切换的Fragment，添加要切换的Fragment
+		 * 否则，则隐藏被切换的Fragment，显示要切换的Fragment
+		 */
+		if (!toFragment.isAdded()) {
+			ft.hide(fromFragment).add(R.id.fragment_container, toFragment,
+					toTag);
+		} else {
+			ft.hide(fromFragment).show(toFragment);
+		}
+		// 添加到返回堆栈
+		// ft.addToBackStack(tag);
+		// 不保留状态提交事务
+		ft.commitAllowingStateLoss();
 	}
 }

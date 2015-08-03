@@ -28,6 +28,7 @@ public abstract class BaseFragment extends Fragment implements
 	private float screenW;// 屏幕像素宽度
 	private float screenH;// 屏幕像素高度
 	private DisplayMetrics displayMetrics;
+	private Bundle savedState;
 
 	protected abstract int layoutResID();
 
@@ -58,6 +59,75 @@ public abstract class BaseFragment extends Fragment implements
 	protected String getImgPath() {
 		return imgPath;
 	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (!restoreStateFromArguments()) {
+            // First Time, Initialize something here
+            onFirstTimeLaunched();
+        }
+	}
+	
+	protected void onFirstTimeLaunched() {
+    }
+  
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save State Here
+        saveStateToArguments();
+    }
+  
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Save State Here
+        saveStateToArguments();
+    }
+  
+    private void saveStateToArguments() {
+        if (getView() != null)
+            savedState = saveState();
+        if (savedState != null) {
+            Bundle b = getArguments();
+            if (b != null) {
+            	b.putBundle("savedState", savedState);
+            }
+        }
+    }
+  
+    private boolean restoreStateFromArguments() {
+        Bundle b = getArguments();
+        if (b != null) {
+        	savedState = b.getBundle("savedState");
+            if (savedState != null) {
+                restoreState();
+                return true;
+            }
+        }
+        return false;
+    }
+  
+    private void restoreState() {
+        if (savedState != null) {
+            onRestoreState(savedState);
+        }
+    }
+  
+    protected void onRestoreState(Bundle savedInstanceState) {
+  
+    }
+  
+    private Bundle saveState() {
+        Bundle state = new Bundle();
+        onSaveState(state);
+        return state;
+    }
+  
+    protected void onSaveState(Bundle outState) {
+  
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

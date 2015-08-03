@@ -8,7 +8,7 @@
 
     <ImageButton
         android:id="@+id/back"
-        android:layout_width="@dimen/title_bar_height"
+        android:layout_width="@dimen/title_bar_btn_width"
         android:layout_height="@dimen/title_bar_height"
         android:background="@drawable/btn_top"
         android:src="@drawable/title_bar_back" />
@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/save"
-        android:layout_width="@dimen/title_bar_height"
+        android:layout_width="@dimen/title_bar_btn_width"
         android:layout_height="@dimen/title_bar_height"
         android:background="@drawable/btn_top"
         android:textColor="@color/white"

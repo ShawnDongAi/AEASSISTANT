@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -184,7 +185,6 @@ public class HomeFragment extends BaseFragment {
 			String scanningPhone = AEApp.getCurrentUser()
 					.getPHONE();
 			if (!StringUtil.isEmpty(lastComingPhone)) {
-				scanningPhone = lastComingPhone;
 				lastComingPhone = "";
 			}
 			setImgPath(
@@ -277,12 +277,12 @@ public class HomeFragment extends BaseFragment {
 	protected void getImg(String path) {
 		super.getImg(path);
 		if (StringUtil.isEmpty(path)) {
-			ToastUtil.show(R.string.scanning_null_photo);
+			ToastUtil.showImp(getActivity(), R.string.scanning_null_photo);
 			return;
 		}
 		File file = new File(path);
 		if (!file.exists()) {
-			ToastUtil.show(R.string.scanning_null_photo);
+			ToastUtil.showImp(getActivity(), R.string.scanning_null_photo);
 			return;
 		}
 		if (AEApp.getCurrentLoc() == null) {
@@ -351,7 +351,6 @@ public class HomeFragment extends BaseFragment {
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
-			ToastUtil.showLong(result.getRES_MESSAGE());
 			if (result != null
 					&& result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				if (result.getRES_OBJ() != null
@@ -374,6 +373,9 @@ public class HomeFragment extends BaseFragment {
 						e.printStackTrace();
 					}
 				}
+				ToastUtil.show(result.getRES_MESSAGE());
+			} else {
+				ToastUtil.showImp(getActivity(), result.getRES_MESSAGE());
 			}
 		}
 
@@ -386,7 +388,8 @@ public class HomeFragment extends BaseFragment {
 
 	private void scanningForOther(String phone) {
 		if (!mScanning.isEnabled()) {
-			ToastUtil.show(R.string.out_of_project_location);
+			ToastUtil.showImp(getActivity(), R.string.out_of_project_location);
+			return;
 		}
 		lastComingPhone = phone;
 		comingCallDialog = new AlertDialog.Builder(mContext)
@@ -424,5 +427,17 @@ public class HomeFragment extends BaseFragment {
 				scanningForOther(incomingNumber);
 			}
 		}
+	}
+
+	@Override
+	protected void onRestoreState(Bundle savedInstanceState) {
+		super.onRestoreState(savedInstanceState);
+		lastComingPhone = savedInstanceState.getString("lastComingPhone");
+	}
+
+	@Override
+	protected void onSaveState(Bundle outState) {
+		super.onSaveState(outState);
+		outState.putString("lastComingPhone", lastComingPhone);
 	}
 }

@@ -1,5 +1,7 @@
 package com.zzn.aeassistant.util;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +18,18 @@ import com.zzn.aeassistant.app.AEApp;
  */
 public class ToastUtil {
 	private static Toast toast = null;
+	
+	public static void showImp(Activity activity, String msg) {
+		new AlertDialog.Builder(activity).setTitle(R.string.warning)
+				.setMessage(msg).setPositiveButton(R.string.confirm, null)
+				.create().show();
+	}
+	
+	public static void showImp(Activity activity, int msg) {
+		new AlertDialog.Builder(activity).setTitle(R.string.warning)
+				.setMessage(msg).setPositiveButton(R.string.confirm, null)
+				.create().show();
+	}
 
 	public static void show(String msg) {
 		cancelToast();

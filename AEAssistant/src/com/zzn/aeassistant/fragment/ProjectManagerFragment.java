@@ -307,6 +307,9 @@ public class ProjectManagerFragment extends BaseFragment implements
 		@Override
 		protected void onPostExecute(ProjectVO result) {
 			super.onPostExecute(result);
+			if (adapter == null) {
+				return;
+			}
 			adapter.clear();
 			adapter.addItem(currentSection);
 			if (result == null) {
