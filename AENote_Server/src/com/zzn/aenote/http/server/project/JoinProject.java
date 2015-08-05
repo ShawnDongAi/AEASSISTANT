@@ -100,6 +100,11 @@ public class JoinProject implements CmHandler {
 							.getLATITUDE());
 					if (ToolsUtil.getDistance(current_longitude,
 							current_latitude, longitude, latitude) < 500) {
+						if (project.getROOT_ID()
+								.equals(project.getPROJECT_ID())) {
+							leafProjectVO = project;
+							break;
+						}
 						logger.info("用户在当前位置已经有项目");
 						rs.setRES_CODE(Global.PROJECT_NULL);
 						rs.setRES_MESSAGE("该用户在当前位置已加入其他项目，请提示对方删除当前所属项目");
@@ -129,6 +134,16 @@ public class JoinProject implements CmHandler {
 				rs.setRES_MESSAGE("该用户为您的上级用户,无法进行项目迁移");
 				return;
 			}
+			if (leafProjectVO.getROOT_ID()
+					.equals(leafProjectVO.getPROJECT_ID())) {
+				if (!projectService.updateRootProject(
+						leafProjectVO.getPROJECT_ID(),
+						parentProjectVO.getROOT_ID())) {
+					rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
+					rs.setRES_MESSAGE("迁移失败");
+					return;
+				}
+			}
 			boolean result = projectService.updateParentProject(
 					leafProjectVO.getPROJECT_ID(), parent_project_id,
 					parentProjectVO.getROOT_ID());
@@ -153,11 +168,14 @@ public class JoinProject implements CmHandler {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
-	private boolean isProjectsParent(ProjectVO projectVO, ProjectVO parentProjectVO) {
+
+	private boolean isProjectsParent(ProjectVO projectVO,
+			ProjectVO parentProjectVO) {
 		boolean result = false;
-		if (!parentProjectVO.getPROJECT_ID().equals(parentProjectVO.getROOT_ID())) {
-			if (parentProjectVO.getPARENT_ID().equals(projectVO.getPROJECT_ID())) {
+		if (!parentProjectVO.getPROJECT_ID().equals(
+				parentProjectVO.getROOT_ID())) {
+			if (parentProjectVO.getPARENT_ID()
+					.equals(projectVO.getPROJECT_ID())) {
 				result = false;
 				return result;
 			}

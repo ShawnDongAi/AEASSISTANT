@@ -20,8 +20,7 @@ import com.zzn.aeassistant.util.BitmapUtil;
 import com.zzn.aeassistant.util.FilePathUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 
-public abstract class BaseFragment extends Fragment implements
-		OnClickListener {
+public abstract class BaseFragment extends Fragment implements OnClickListener {
 	public Context mContext;
 	private String imgPath;
 	private boolean compress = false;
@@ -33,11 +32,11 @@ public abstract class BaseFragment extends Fragment implements
 	protected abstract int layoutResID();
 
 	protected abstract void initView(View container);
-	
+
 	protected void getImg(String path) {
 	}
-	
-	public boolean onBackPressed(){
+
+	public boolean onBackPressed() {
 		return false;
 	}
 
@@ -51,7 +50,7 @@ public abstract class BaseFragment extends Fragment implements
 		this.imgPath = imgPath;
 		this.compress = compress;
 	}
-	
+
 	protected void setCompress(boolean compress) {
 		this.compress = compress;
 	}
@@ -64,77 +63,77 @@ public abstract class BaseFragment extends Fragment implements
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		if (!restoreStateFromArguments()) {
-            // First Time, Initialize something here
-            onFirstTimeLaunched();
-        }
+			// First Time, Initialize something here
+			onFirstTimeLaunched();
+		}
 	}
-	
+
 	protected void onFirstTimeLaunched() {
-    }
-  
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // Save State Here
-        saveStateToArguments();
-    }
-  
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // Save State Here
-        saveStateToArguments();
-    }
-  
-    private void saveStateToArguments() {
-        if (getView() != null)
-            savedState = saveState();
-        if (savedState != null) {
-            Bundle b = getArguments();
-            if (b != null) {
-            	b.putBundle("savedState", savedState);
-            }
-        }
-    }
-  
-    private boolean restoreStateFromArguments() {
-        Bundle b = getArguments();
-        if (b != null) {
-        	savedState = b.getBundle("savedState");
-            if (savedState != null) {
-                restoreState();
-                return true;
-            }
-        }
-        return false;
-    }
-  
-    private void restoreState() {
-        if (savedState != null) {
-            onRestoreState(savedState);
-        }
-    }
-  
-    protected void onRestoreState(Bundle savedInstanceState) {
-  
-    }
-  
-    private Bundle saveState() {
-        Bundle state = new Bundle();
-        onSaveState(state);
-        return state;
-    }
-  
-    protected void onSaveState(Bundle outState) {
-  
-    }
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		// Save State Here
+		saveStateToArguments();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		// Save State Here
+		saveStateToArguments();
+	}
+
+	private void saveStateToArguments() {
+		if (getView() != null)
+			savedState = saveState();
+		if (savedState != null) {
+			Bundle b = getArguments();
+			if (b != null) {
+				b.putBundle("savedState", savedState);
+			}
+		}
+	}
+
+	private boolean restoreStateFromArguments() {
+		Bundle b = getArguments();
+		if (b != null) {
+			savedState = b.getBundle("savedState");
+			if (savedState != null) {
+				restoreState();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private void restoreState() {
+		if (savedState != null) {
+			onRestoreState(savedState);
+		}
+	}
+
+	protected void onRestoreState(Bundle savedInstanceState) {
+	}
+
+	private Bundle saveState() {
+		Bundle state = new Bundle();
+		onSaveState(state);
+		return state;
+	}
+
+	protected void onSaveState(Bundle outState) {
+
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mContext = getActivity();
 		displayMetrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		getActivity().getWindowManager().getDefaultDisplay()
+				.getMetrics(displayMetrics);
 		screenW = displayMetrics.widthPixels;
 		screenH = displayMetrics.heightPixels;
 		View view = inflater.inflate(layoutResID(), null);
@@ -143,6 +142,7 @@ public abstract class BaseFragment extends Fragment implements
 	}
 
 	private long lastClickTime = 0;
+
 	@Override
 	public void onClick(View v) {
 		if (System.currentTimeMillis() - lastClickTime < 500) {

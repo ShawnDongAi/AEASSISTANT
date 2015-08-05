@@ -101,6 +101,7 @@ public class ContactFragment extends BaseFragment {
 		projectMenu.setBackgroundDrawable(getResources().getDrawable(
 				R.color.transparent_lightslategray));
 		projectMenu.setOutsideTouchable(true);
+		projectMenu.setFocusable(true);
 		projectList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -120,7 +121,9 @@ public class ContactFragment extends BaseFragment {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.contact_project:
-			projectMenu.showAsDropDown(projectTitle);
+			if (!projectMenu.isShowing()) {
+				projectMenu.showAsDropDown(projectTitle);
+			}
 			break;
 		default:
 			break;

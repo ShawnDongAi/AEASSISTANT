@@ -110,6 +110,11 @@
 		where 1=1
 		[and project_id='#project_id#']
 	</select>
+	<select id="update_root_project">
+		update t_project set root_id='#new_root_id#'
+		where 1=1
+		[and root_id='#old_root_id#']
+	</select>
 	<select id="delete_project">
 		update t_project set status='1'
 		where 1=1

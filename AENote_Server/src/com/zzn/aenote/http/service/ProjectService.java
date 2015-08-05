@@ -182,6 +182,19 @@ public class ProjectService extends BaseService {
 			return false;
 		}
 	}
+	
+	public boolean updateRootProject(String old_root_id, String new_root_id) {
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("old_root_id", old_root_id);
+			data.put("new_root_id", new_root_id);
+			getJdbc().execute(getSql("update_root_project", data));
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	public boolean deleteProject(String project_id) {
 		try {

@@ -48,6 +48,10 @@
 		<servlet-class>com.zzn.aenote.http.FileServlet</servlet-class>
 	</servlet>
 	<servlet>
+		<servlet-name>ImgServlet</servlet-name>
+		<servlet-class>com.zzn.aenote.http.ImgServlet</servlet-class>
+	</servlet>
+	<servlet>
 		<servlet-name>DownLoad</servlet-name>
 		<servlet-class>com.zzn.aenote.http.DownLoad</servlet-class>
 	</servlet>	
@@ -58,6 +62,10 @@
 	<servlet-mapping>
 		<servlet-name>FileServlet</servlet-name>
 		<url-pattern>/file</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImgServlet</servlet-name>
+		<url-pattern>/img</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>DownLoad</servlet-name>

@@ -29,6 +29,7 @@ import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.fragment.AttendanceRecordFragment;
+import com.zzn.aeassistant.fragment.BaseFragment;
 import com.zzn.aeassistant.fragment.ContactFragment;
 import com.zzn.aeassistant.fragment.HomeFragment;
 import com.zzn.aeassistant.fragment.ProjectManagerFragment;
@@ -265,12 +266,12 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		// 切换到的Fragment标签
 		String toTag = toFragmentClass.getSimpleName();
 		// 查找切换的Fragment
-		Fragment fromFragment = fm.findFragmentByTag(fromTag);
-		Fragment toFragment = fm.findFragmentByTag(toTag);
+		BaseFragment fromFragment = (BaseFragment) fm.findFragmentByTag(fromTag);
+		BaseFragment toFragment = (BaseFragment) fm.findFragmentByTag(toTag);
 		// 如果要切换到的Fragment不存在，则创建
 		if (toFragment == null) {
 			try {
-				toFragment = toFragmentClass.newInstance();
+				toFragment = (BaseFragment) toFragmentClass.newInstance();
 				toFragment.setArguments(args);
 			} catch (java.lang.InstantiationException e) {
 				e.printStackTrace();
@@ -301,5 +302,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		// ft.addToBackStack(tag);
 		// 不保留状态提交事务
 		ft.commitAllowingStateLoss();
+		fromFragment.onPause();
+		toFragment.onResume();
 	}
 }
