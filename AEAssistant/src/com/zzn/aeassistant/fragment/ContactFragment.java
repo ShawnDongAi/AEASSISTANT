@@ -62,7 +62,6 @@ public class ContactFragment extends BaseFragment {
 			defaultAdapter = new ProjectStructureAdapter<ProjectVO>(listView,
 					mContext, new ArrayList<ProjectVO>(), true);
 			listView.setAdapter(defaultAdapter);
-			defaultAdapter.notifyDataSetChanged();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,6 +87,16 @@ public class ContactFragment extends BaseFragment {
 		});
 		initMenuView();
 		initPullToRefresh();
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		AEProgressDialog.showLoadingDialog(mContext);
+		initProTask = new InitProjectTask();
+		initProTask.execute();
+		proListAdapter.setDatas(AEApp.getCurrentUser().getPROJECTS());
+		proListAdapter.notifyDataSetChanged();
 	}
 
 	private void initMenuView() {
@@ -149,9 +158,6 @@ public class ContactFragment extends BaseFragment {
 				listStruTask.execute(project_id);
 			}
 		});
-		AEProgressDialog.showLoadingDialog(mContext);
-		initProTask = new InitProjectTask();
-		initProTask.execute();
 	}
 
 	@Override

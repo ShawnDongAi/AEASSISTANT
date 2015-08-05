@@ -20,6 +20,10 @@ public class ProListAdapter extends BaseAdapter {
 		this.mContext = context;
 		this.datas = data;
 	}
+	
+	public void setDatas(List<ProjectVO> data) {
+		this.datas = data;
+	}
 
 	@Override
 	public int getCount() {
