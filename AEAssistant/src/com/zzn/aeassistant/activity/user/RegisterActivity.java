@@ -12,11 +12,11 @@ import cn.smssdk.SMSSDK;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.IndexActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.PlatformkEY;
 import com.zzn.aeassistant.constants.URLConstants;
-import com.zzn.aeassistant.fragment.HomeFragment;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.MD5Utils;
@@ -180,7 +180,7 @@ public class RegisterActivity extends BaseActivity {
 						result.getRES_OBJ().toString(), UserVO.class);
 				AEApp.setUser(user);
 				PreConfig.saveUserInfo(phone, mPswInput.getText().toString());
-				startActivity(new Intent(mContext, HomeFragment.class));
+				startActivity(new Intent(mContext, IndexActivity.class));
 				finish();
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
