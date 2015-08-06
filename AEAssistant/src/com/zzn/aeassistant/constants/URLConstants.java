@@ -42,6 +42,14 @@ public class URLConstants {
 	 */
 	public static final String URL_UPDATE_REMARK = URL_HOST + "updateRemark";
 	/**
+	 * 修改身份证号
+	 */
+	public static final String URL_UPDATE_IDCARD = URL_HOST + "updateIDCard";
+	/**
+	 * 修改身份证照
+	 */
+	public static final String URL_UPDATE_IDCARD_IMG = URL_HOST + "updateIDCardImg";
+	/**
 	 * 创建项目
 	 */
 	public static final String URL_CREATE_PROJECT = URL_HOST + "createProject";

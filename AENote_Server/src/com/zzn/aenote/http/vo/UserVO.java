@@ -19,6 +19,10 @@ public class UserVO implements Serializable {
 	private String SMALL_HEAD;
 	private String BIG_HEAD;
 	private String CREATE_TIME;
+	private String IDCARD;
+	private String IDCARD_FRONT;
+	private String IDCARD_BACK;
+	private String IDCARD_HAND;
 
 	public String getUSER_ID() {
 		return USER_ID;
@@ -100,6 +104,38 @@ public class UserVO implements Serializable {
 		PASSWORD = pASSWORD;
 	}
 
+	public String getIDCARD() {
+		return IDCARD;
+	}
+
+	public void setIDCARD(String iDCARD) {
+		IDCARD = iDCARD;
+	}
+
+	public String getIDCARD_FRONT() {
+		return IDCARD_FRONT;
+	}
+
+	public void setIDCARD_FRONT(String iDCARD_FRONT) {
+		IDCARD_FRONT = iDCARD_FRONT;
+	}
+
+	public String getIDCARD_BACK() {
+		return IDCARD_BACK;
+	}
+
+	public void setIDCARD_BACK(String iDCARD_BACK) {
+		IDCARD_BACK = iDCARD_BACK;
+	}
+
+	public String getIDCARD_HAND() {
+		return IDCARD_HAND;
+	}
+
+	public void setIDCARD_HAND(String iDCARD_HAND) {
+		IDCARD_HAND = iDCARD_HAND;
+	}
+
 	public static UserVO assembleUserVO(Map<String, Object> userInfo) {
 		UserVO user = new UserVO();
 		if (userInfo.get("user_id") != null) {
@@ -125,6 +161,18 @@ public class UserVO implements Serializable {
 		}
 		if (userInfo.get("create_time") != null) {
 			user.setCREATE_TIME(userInfo.get("create_time").toString());
+		}
+		if (userInfo.get("idcard") != null) {
+			user.setIDCARD(userInfo.get("idcard").toString());
+		}
+		if (userInfo.get("idcard_front") != null) {
+			user.setIDCARD_FRONT(userInfo.get("idcard_front").toString());
+		}
+		if (userInfo.get("idcard_back") != null) {
+			user.setIDCARD_BACK(userInfo.get("idcard_back").toString());
+		}
+		if (userInfo.get("idcard_hand") != null) {
+			user.setIDCARD_HAND(userInfo.get("idcard_hand").toString());
 		}
 		return user;
 	}

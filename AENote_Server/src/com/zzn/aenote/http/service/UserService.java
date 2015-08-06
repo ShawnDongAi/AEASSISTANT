@@ -104,14 +104,16 @@ public class UserService extends BaseService {
 				getSql("query_user_by_phone", data));
 		return userList;
 	}
-	
+
 	/**
 	 * 修改用户头像
+	 * 
 	 * @param small_head
 	 * @param big_head
 	 * @return
 	 */
-	public boolean updateUserHead(String small_head, String big_head, String user_id) {
+	public boolean updateUserHead(String small_head, String big_head,
+			String user_id) {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("small_head", small_head);
@@ -123,7 +125,39 @@ public class UserService extends BaseService {
 			return false;
 		}
 	}
-	
+
+	/**
+	 * 修改身份证照
+	 * 
+	 * @param img
+	 * @param imgType
+	 * @param user_id
+	 * @return
+	 */
+	public boolean updateIDCardImg(String img, int imgType, String user_id) {
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("img", img);
+			data.put("user_id", user_id);
+			switch (imgType) {
+			case 0:
+				getJdbc().execute(getSql("update_idcard_front", data));
+				break;
+			case 1:
+				getJdbc().execute(getSql("update_idcard_back", data));
+				break;
+			case 2:
+				getJdbc().execute(getSql("update_idcard_hand", data));
+				break;
+			default:
+				break;
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public boolean updateUserName(String user_id, String user_name) {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -135,7 +169,7 @@ public class UserService extends BaseService {
 			return false;
 		}
 	}
-	
+
 	public boolean updateUserRemark(String user_id, String remark) {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -147,9 +181,22 @@ public class UserService extends BaseService {
 			return false;
 		}
 	}
-	
+
+	public boolean updateUserIDCard(String user_id, String idcard) {
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("user_id", user_id);
+			data.put("idcard", idcard);
+			getJdbc().execute(getSql("update_user_idcard", data));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	/**
 	 * 重置密码
+	 * 
 	 * @param phone
 	 * @param password
 	 * @return

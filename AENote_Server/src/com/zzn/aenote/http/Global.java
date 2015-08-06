@@ -7,6 +7,8 @@ public class Global {
 	public static final String RESP_NOT_FOUND = "404"; // 找不到服务
 	public static final String RESP_FORBIDDEN = "403"; // 禁止访问
 	public static final String RESP_ERROR = "401"; // 服务器异常
+	public static final String RESP_PARAM_NULL = "405"; // 缺少参数
+	public static final String RESP_PARAM_ERROR = "406"; // 参数错误
 
 	/** 业务响应代码定义* */
 	public static final String USER_ERROR = "901"; // 用户名或密码错误

@@ -190,10 +190,88 @@
                     android:src="@drawable/ic_to" />
             </LinearLayout>
 
-            <!-- <View
+            <!--
+                 <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gainsboro" /> -->
+                android:background="@color/gainsboro" />
+            -->
+
+
+            <!-- 身份证号 -->
+
+            <LinearLayout
+                android:id="@+id/user_layout_idcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_item"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@string/lable_idcard"
+                    android:textColor="@drawable/text_normal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/user_idcard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:singleLine="true"
+                    android:textColor="@drawable/text_light"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
+            
+            <!-- 身份证照 -->
+
+            <LinearLayout
+                android:id="@+id/user_layout_idcard_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_item"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/lable_idcard_img"
+                    android:textColor="@drawable/text_normal"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro" />
 
             <!-- 个人说明 -->
 

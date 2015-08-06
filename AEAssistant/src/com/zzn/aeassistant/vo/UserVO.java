@@ -3,7 +3,6 @@ package com.zzn.aeassistant.vo;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class UserVO implements Serializable {
 
@@ -19,6 +18,10 @@ public class UserVO implements Serializable {
 	private String SMALL_HEAD;
 	private String BIG_HEAD;
 	private String CREATE_TIME;
+	private String IDCARD;
+	private String IDCARD_FRONT;
+	private String IDCARD_BACK;
+	private String IDCARD_HAND;
 
 	public String getUSER_ID() {
 		return USER_ID;
@@ -100,32 +103,35 @@ public class UserVO implements Serializable {
 		PASSWORD = pASSWORD;
 	}
 
-	public static UserVO assembleUserVO(Map<String, Object> userInfo) {
-		UserVO user = new UserVO();
-		if (userInfo.get("user_id") != null) {
-			user.setUSER_ID(userInfo.get("user_id").toString());
-		}
-		if (userInfo.get("user_name") != null) {
-			user.setUSER_NAME(userInfo.get("user_name").toString());
-		}
-		if (userInfo.get("phone") != null) {
-			user.setPHONE(userInfo.get("phone").toString());
-		}
-		if (userInfo.get("remark") != null) {
-			user.setREMARK(userInfo.get("remark").toString());
-		}
-		if (userInfo.get("sex") != null) {
-			user.setSEX(userInfo.get("sex").toString());
-		}
-		if (userInfo.get("small_head") != null) {
-			user.setSMALL_HEAD(userInfo.get("small_head").toString());
-		}
-		if (userInfo.get("big_head") != null) {
-			user.setBIG_HEAD(userInfo.get("big_head").toString());
-		}
-		if (userInfo.get("create_time") != null) {
-			user.setCREATE_TIME(userInfo.get("create_time").toString());
-		}
-		return user;
+	public String getIDCARD() {
+		return IDCARD;
+	}
+
+	public void setIDCARD(String iDCARD) {
+		IDCARD = iDCARD;
+	}
+
+	public String getIDCARD_FRONT() {
+		return IDCARD_FRONT;
+	}
+
+	public void setIDCARD_FRONT(String iDCARD_FRONT) {
+		IDCARD_FRONT = iDCARD_FRONT;
+	}
+
+	public String getIDCARD_BACK() {
+		return IDCARD_BACK;
+	}
+
+	public void setIDCARD_BACK(String iDCARD_BACK) {
+		IDCARD_BACK = iDCARD_BACK;
+	}
+
+	public String getIDCARD_HAND() {
+		return IDCARD_HAND;
+	}
+
+	public void setIDCARD_HAND(String iDCARD_HAND) {
+		IDCARD_HAND = iDCARD_HAND;
 	}
 }

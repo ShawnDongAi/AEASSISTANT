@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <ScrollView style="@style/layout_body" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <!-- 身份证正面照 -->
+
+            <TextView
+                android:id="@+id/idcard_front_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/icon_edit"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/lable_idcard_front"
+                android:textColor="@drawable/text_normal"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/idcard_front"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@drawable/icon_loading" />
+            <!-- 身份证反面照 -->
+
+            <TextView
+                android:id="@+id/idcard_back_eidt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/icon_edit"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/lable_idcard_back"
+                android:textColor="@drawable/text_normal"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/idcard_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@drawable/icon_loading" />
+            <!-- 手持身份证照 -->
+
+            <TextView
+                android:id="@+id/idcard_hand_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/icon_edit"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="@string/lable_idcard_hand"
+                android:textColor="@drawable/text_normal"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/idcard_hand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:src="@drawable/icon_loading" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

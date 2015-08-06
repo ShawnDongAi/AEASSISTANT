@@ -15,6 +15,7 @@ import com.zzn.aenote.http.server.CmHandler;
 import com.zzn.aenote.http.service.ProjectService;
 import com.zzn.aenote.http.service.UserService;
 import com.zzn.aenote.http.utils.GsonUtil;
+import com.zzn.aenote.http.utils.RegexUtil;
 import com.zzn.aenote.http.utils.StringUtil;
 import com.zzn.aenote.http.vo.BaseRep;
 import com.zzn.aenote.http.vo.ProjectVO;
@@ -39,7 +40,13 @@ public class Login implements CmHandler {
 				rs.setRES_MESSAGE("请输入手机号或密码");
 				return;
 			}
-			List<Map<String, Object>> userList = userService.queryUserByPhone(phone);
+			if (!RegexUtil.isPhoneNum(phone)) {
+				rs.setRES_CODE(Global.RESP_PARAM_ERROR);
+				rs.setRES_MESSAGE("请输入有效的手机号码");
+				return;
+			}
+			List<Map<String, Object>> userList = userService
+					.queryUserByPhone(phone);
 			if (userList == null || userList.size() <= 0) {
 				rs.setRES_CODE(Global.USER_NOT_EXIST);
 				rs.setRES_MESSAGE("手机号未注册");
@@ -49,15 +56,18 @@ public class Login implements CmHandler {
 			if (userInfo.get("password").equals(password)) {
 				Map<String, Object> result = new HashMap<String, Object>();
 				UserVO user = UserVO.assembleUserVO(userInfo);
-				result.put("user", GsonUtil.getInstance().toJson(user, UserVO.class));
+				result.put("user",
+						GsonUtil.getInstance().toJson(user, UserVO.class));
 				List<ProjectVO> projectList = new ArrayList<ProjectVO>();
-				List<Map<String, Object>> projects = projectService.queryProjectByCreateUser(user.getUSER_ID());
+				List<Map<String, Object>> projects = projectService
+						.queryProjectByCreateUser(user.getUSER_ID());
 				if (projects != null && projects.size() > 0) {
 					for (Map<String, Object> project : projects) {
 						projectList.add(ProjectVO.assembleProject(project));
 					}
 				}
-				result.put("projects", GsonUtil.getInstance().toJson(projectList));
+				result.put("projects",
+						GsonUtil.getInstance().toJson(projectList));
 				rs.setRES_CODE(Global.RESP_SUCCESS);
 				rs.setRES_OBJ(GsonUtil.getInstance().toJson(result));
 				rs.setRES_MESSAGE("登录成功");
@@ -76,7 +86,7 @@ public class Login implements CmHandler {
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
+
 	public void setProjectService(ProjectService projectService) {
 		this.projectService = projectService;
 	}

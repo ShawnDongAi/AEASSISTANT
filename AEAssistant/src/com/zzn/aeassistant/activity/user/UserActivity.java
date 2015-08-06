@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,9 +47,11 @@ public class UserActivity extends BaseActivity {
 	public static final int REQUEST_ALBUM = 1;
 	public static final int REQUEST_USER_NAME = 2;
 	public static final int REQUEST_USER_REMARK = 3;
+	public static final int REQUESt_USER_IDCARD = 4;
 
-	private View layoutHead, layoutName, layoutPhone, layoutSex, layoutRemark;
-	private TextView name, phone, sex, remark;
+	private View layoutHead, layoutName, layoutPhone, layoutSex, layoutRemark,
+			layoutIDCard, layoutIDCardImg;
+	private TextView name, phone, sex, remark, idcard;
 	private CircleImageView head;
 	private PopupWindow menu;
 	private Button photograph, album, cancel;
@@ -73,33 +76,40 @@ public class UserActivity extends BaseActivity {
 		layoutPhone = findViewById(R.id.user_layout_phone);
 		layoutSex = findViewById(R.id.user_layout_sex);
 		layoutRemark = findViewById(R.id.user_layout_remark);
+		layoutIDCard = findViewById(R.id.user_layout_idcard);
+		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
 		layoutHead.setOnClickListener(this);
 		layoutName.setOnClickListener(this);
 		layoutPhone.setOnClickListener(this);
 		layoutSex.setOnClickListener(this);
 		layoutRemark.setOnClickListener(this);
+		layoutIDCard.setOnClickListener(this);
+		layoutIDCardImg.setOnClickListener(this);
 
 		name = (TextView) findViewById(R.id.user_name);
 		phone = (TextView) findViewById(R.id.user_phone);
 		sex = (TextView) findViewById(R.id.user_sex);
 		remark = (TextView) findViewById(R.id.user_remark);
+		idcard = (TextView) findViewById(R.id.user_idcard);
 		head = (CircleImageView) findViewById(R.id.user_head);
 
 		name.setText(AEApp.getCurrentUser().getUSER_NAME());
 		phone.setText(AEApp.getCurrentUser().getPHONE());
-		sex.setText(!AEApp.getCurrentUser().getSEX().trim()
-				.equals("1") ? R.string.male : R.string.female);
+		sex.setText(!AEApp.getCurrentUser().getSEX().trim().equals("1") ? R.string.male
+				: R.string.female);
 		String mRemark = AEApp.getCurrentUser().getREMARK();
 		if (!StringUtil.isEmpty(mRemark)) {
 			remark.setText(mRemark);
 		}
+		String mIDCard = AEApp.getCurrentUser().getIDCARD();
+		if (!StringUtil.isEmpty(mIDCard)) {
+			idcard.setText(mIDCard);
+		}
 		initImageLoader();
 		initMenu();
-		if (!StringUtil.isEmpty(AEApp.getCurrentUser()
-				.getBIG_HEAD())) {
+		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getBIG_HEAD())) {
 			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					AEApp.getCurrentUser().getBIG_HEAD()),
-					head, options);
+					AEApp.getCurrentUser().getBIG_HEAD()), head, options);
 		}
 	}
 
@@ -186,15 +196,29 @@ public class UserActivity extends BaseActivity {
 			remarkIntent.putExtra(CodeConstants.KEY_SINGLELINE, false);
 			startActivityForResult(remarkIntent, REQUEST_USER_REMARK);
 			break;
+		case R.id.user_layout_idcard:
+			Intent idcardIntent = new Intent(mContext, TextEditActivity.class);
+			idcardIntent.putExtra(CodeConstants.KEY_TITLE,
+					getString(R.string.modify_user_idcard));
+			idcardIntent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, idcard
+					.getText().toString());
+			idcardIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
+					getString(R.string.hint_idcard));
+			idcardIntent.putExtra(CodeConstants.KEY_SINGLELINE, true);
+			idcardIntent.putExtra(CodeConstants.KEY_INPUT_TYPE,
+					InputType.TYPE_NUMBER_FLAG_SIGNED);
+			startActivityForResult(idcardIntent, REQUESt_USER_IDCARD);
+			break;
+		case R.id.user_layout_idcard_img:
+			startActivity(new Intent(this, IDCardActivity.class));
+			break;
 		case R.id.menu_photograph:
 			if (menu != null && menu.isShowing()) {
 				menu.dismiss();
 			}
 			setImgPath(
-					FileCostants.DIR_HEAD
-							+ AEApp.getCurrentUser()
-									.getUSER_ID() + "_"
-							+ System.currentTimeMillis() + ".jpg", true);
+					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
+							+ "_" + System.currentTimeMillis() + ".jpg", true);
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.menu_album:
@@ -235,8 +259,7 @@ public class UserActivity extends BaseActivity {
 					break;
 				}
 				name.setText(nameString);
-				AEApp.getCurrentUser()
-						.setUSER_NAME(nameString);
+				AEApp.getCurrentUser().setUSER_NAME(nameString);
 				sendBroadcast(new Intent(IndexActivity.ACTION_USER_INFO_CHANGED));
 				new UpdateNameTask().execute(nameString);
 				break;
@@ -253,6 +276,16 @@ public class UserActivity extends BaseActivity {
 			case Crop.REQUEST_CROP:
 				new UpdateHeadTask().execute(AttchUtil.getPath(mContext,
 						Crop.getOutput(data)));
+				break;
+			case REQUESt_USER_IDCARD:
+				String idcardString = data
+						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
+				if (remark.getText().toString().trim().equals(idcardString)) {
+					break;
+				}
+				idcard.setText(idcardString);
+				AEApp.getCurrentUser().setIDCARD(idcardString);
+				new UpdateIDCardTask().execute(idcardString);
 				break;
 			default:
 				break;
@@ -285,8 +318,7 @@ public class UserActivity extends BaseActivity {
 		protected HttpResult doInBackground(String... params) {
 			String filePath = params[0];
 			Map<String, String> param = new HashMap<String, String>();
-			param.put("user_id", AEApp.getCurrentUser()
-					.getUSER_ID());
+			param.put("user_id", AEApp.getCurrentUser().getUSER_ID());
 			List<String> files = new ArrayList<String>();
 			files.add(filePath);
 			HttpResult result = AEHttpUtil.doPostWithFile(
@@ -303,13 +335,10 @@ public class UserActivity extends BaseActivity {
 						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
 					AttchVO vo = GsonUtil.getInstance().fromJson(
 							result.getRES_OBJ().toString(), AttchVO.class);
-					AEApp.getCurrentUser().setBIG_HEAD(
-							vo.getATTCH_ID());
-					AEApp.getCurrentUser().setSMALL_HEAD(
-							vo.getATTCH_ID());
+					AEApp.getCurrentUser().setBIG_HEAD(vo.getATTCH_ID());
+					AEApp.getCurrentUser().setSMALL_HEAD(vo.getATTCH_ID());
 					imageLoader.displayImage(String.format(
-							URLConstants.URL_DOWNLOAD,
-							AEApp.getCurrentUser()
+							URLConstants.URL_DOWNLOAD, AEApp.getCurrentUser()
 									.getBIG_HEAD()), head, options);
 					sendBroadcast(new Intent(
 							IndexActivity.ACTION_USER_INFO_CHANGED));
@@ -330,8 +359,7 @@ public class UserActivity extends BaseActivity {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String nameString = params[0];
-			String param = "user_id="
-					+ AEApp.getCurrentUser().getUSER_ID()
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
 					+ "&user_name=" + nameString;
 			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_NAME,
 					param);
@@ -345,11 +373,23 @@ public class UserActivity extends BaseActivity {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String remarkString = params[0];
-			String param = "user_id="
-					+ AEApp.getCurrentUser().getUSER_ID()
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
 					+ "&remark=" + remarkString;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_UPDATE_REMARK, param);
+			return result;
+		}
+	}
+
+	private class UpdateIDCardTask extends
+			AsyncTask<String, Integer, HttpResult> {
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String idcardString = params[0];
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
+					+ "&idcard=" + idcardString;
+			HttpResult result = AEHttpUtil.doPost(
+					URLConstants.URL_UPDATE_IDCARD, param);
 			return result;
 		}
 	}

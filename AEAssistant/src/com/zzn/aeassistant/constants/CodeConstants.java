@@ -25,4 +25,5 @@ public class CodeConstants {
 	public static final String KEY_HINT_TEXT = "hint_text";
 	public static final String KEY_SINGLELINE = "singleline";
 	public static final String KEY_TEXT_RESULT = "text_result";
+	public static final String KEY_INPUT_TYPE = "input_type";
 }

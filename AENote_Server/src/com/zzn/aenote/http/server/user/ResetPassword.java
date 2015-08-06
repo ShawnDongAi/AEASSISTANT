@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import com.zzn.aenote.http.Global;
 import com.zzn.aenote.http.server.CmHandler;
 import com.zzn.aenote.http.service.UserService;
+import com.zzn.aenote.http.utils.RegexUtil;
 import com.zzn.aenote.http.utils.StringUtil;
 import com.zzn.aenote.http.vo.BaseRep;
 
@@ -31,6 +32,11 @@ public class ResetPassword implements CmHandler {
 			if (StringUtil.isEmpty(password) || StringUtil.isEmpty(phone)) { // 用户名或密码为空
 				rs.setRES_CODE(Global.USER_PSW_NULL);
 				rs.setRES_MESSAGE("手机号或密码不完整");
+				return;
+			}
+			if (!RegexUtil.isPhoneNum(phone)) {
+				rs.setRES_CODE(Global.RESP_PARAM_ERROR);
+				rs.setRES_MESSAGE("请输入有效的手机号码");
 				return;
 			}
 			List<Map<String, Object>> userList = userService

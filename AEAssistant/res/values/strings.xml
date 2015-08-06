@@ -77,11 +77,18 @@
     <string name="lable_qrcode">我的二维码</string>
     <string name="lable_sex">性别</string>
     <string name="lable_remark">个人说明</string>
+    <string name="lable_idcard">身份证号</string>
+    <string name="lable_idcard_img">身份证照</string>
     <string name="lable_address">位置</string>
     <string name="modify_user_name">修改姓名</string>
     <string name="modify_user_remark">修改个人说明</string>
+    <string name="modify_user_idcard">修改身份证号</string>
     <string name="hint_user">建议输入真实信息方便沟通</string>
     <string name="hint_remark">用几句话介绍一下自己吧~~~</string>
+    <string name="hint_idcard">请输入您的身份证号</string>
+    <string name="lable_idcard_front">身份证正面照：</string>
+    <string name="lable_idcard_back">身份证反面照：</string>
+    <string name="lable_idcard_hand">手持身份证照：</string>
 
     <!-- 附件 -->
     <string name="photograph">拍照</string>

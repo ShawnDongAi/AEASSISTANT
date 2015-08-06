@@ -1,6 +1,7 @@
 package com.zzn.aeassistant.activity;
 
 import android.content.Intent;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 
@@ -30,9 +31,12 @@ public class TextEditActivity extends BaseActivity {
 		editText = (EditText) findViewById(R.id.edit_text);
 		setTitle(getIntent().getStringExtra(CodeConstants.KEY_TITLE));
 		editText.getText().clear();
-		editText.setText(getIntent().getStringExtra(CodeConstants.KEY_DEFAULT_TEXT));
-		editText.setHint(getIntent().getStringExtra(CodeConstants.KEY_HINT_TEXT));
-		boolean singleLine = getIntent().getBooleanExtra(CodeConstants.KEY_SINGLELINE, true);
+		editText.setText(getIntent().getStringExtra(
+				CodeConstants.KEY_DEFAULT_TEXT));
+		editText.setHint(getIntent()
+				.getStringExtra(CodeConstants.KEY_HINT_TEXT));
+		boolean singleLine = getIntent().getBooleanExtra(
+				CodeConstants.KEY_SINGLELINE, true);
 		if (singleLine) {
 			editText.setSingleLine(true);
 			ToolsUtil.setTextMaxLength(editText, 50);
@@ -40,6 +44,9 @@ public class TextEditActivity extends BaseActivity {
 			editText.setMinLines(8);
 			ToolsUtil.setTextMaxLength(editText, 1000);
 		}
+		int inputType = getIntent().getIntExtra(CodeConstants.KEY_INPUT_TYPE,
+				InputType.TYPE_CLASS_TEXT);
+		editText.setInputType(inputType);
 	}
 
 	@Override
