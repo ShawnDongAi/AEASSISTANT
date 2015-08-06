@@ -91,7 +91,7 @@
     <string name="lable_idcard_front">身份证正面照：</string>
     <string name="lable_idcard_back">身份证反面照：</string>
     <string name="lable_idcard_hand">手持身份证照：</string>
-    <string name="call">拨号</string>
+    <string name="call">拨打电话</string>
 
     <!-- 附件 -->
     <string name="photograph">拍照</string>

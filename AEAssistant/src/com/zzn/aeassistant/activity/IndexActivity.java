@@ -95,7 +95,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		registerReceiver(userInfoReceiver, new IntentFilter(
 				ACTION_USER_INFO_CHANGED));
 		initModuleView();
-		
+
 		FragmentTransaction fragTrans = getSupportFragmentManager()
 				.beginTransaction();
 		fragTrans.add(R.id.fragment_container,
@@ -241,9 +241,9 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		if (currentIndex == position) {
 			return;
 		}
-		turnToFragment(adapter.getItem(currentIndex)
-				.getFragment().getClass(), adapter.getItem(position)
-				.getFragment().getClass(), new Bundle());
+		turnToFragment(adapter.getItem(currentIndex).getFragment().getClass(),
+				adapter.getItem(position).getFragment().getClass(),
+				new Bundle());
 		currentIndex = position;
 		setTitle(getString(adapter.getItem(position).getTitleID()));
 		mDrawer.closeMenu(true);
@@ -266,7 +266,8 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		// 切换到的Fragment标签
 		String toTag = toFragmentClass.getSimpleName();
 		// 查找切换的Fragment
-		BaseFragment fromFragment = (BaseFragment) fm.findFragmentByTag(fromTag);
+		BaseFragment fromFragment = (BaseFragment) fm
+				.findFragmentByTag(fromTag);
 		BaseFragment toFragment = (BaseFragment) fm.findFragmentByTag(toTag);
 		// 如果要切换到的Fragment不存在，则创建
 		if (toFragment == null) {
@@ -297,12 +298,12 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 					toTag);
 		} else {
 			ft.hide(fromFragment).show(toFragment);
+			toFragment.onResume();
 		}
 		// 添加到返回堆栈
 		// ft.addToBackStack(tag);
 		// 不保留状态提交事务
 		ft.commitAllowingStateLoss();
 		fromFragment.onPause();
-		toFragment.onResume();
 	}
 }

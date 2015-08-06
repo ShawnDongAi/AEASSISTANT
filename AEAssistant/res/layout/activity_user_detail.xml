@@ -236,14 +236,6 @@
                     android:src="@drawable/ic_to" />
             </LinearLayout>
 
-            <!--
-                 <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gainsboro" />
-            -->
-
-
             <!-- 身份证号 -->
 
             <LinearLayout

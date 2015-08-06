@@ -47,6 +47,7 @@ public class TextEditActivity extends BaseActivity {
 		int inputType = getIntent().getIntExtra(CodeConstants.KEY_INPUT_TYPE,
 				InputType.TYPE_CLASS_TEXT);
 		editText.setInputType(inputType);
+		editText.setSelection(editText.getText().toString().length());
 	}
 
 	@Override

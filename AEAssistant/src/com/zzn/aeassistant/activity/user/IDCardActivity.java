@@ -59,7 +59,8 @@ public class IDCardActivity extends BaseActivity {
 		imgFront = (ImageView) findViewById(R.id.idcard_front);
 		imgBack = (ImageView) findViewById(R.id.idcard_back);
 		imgHand = (ImageView) findViewById(R.id.idcard_hand);
-		editable = getIntent().getBooleanExtra(CodeConstants.KEY_EDITABLE, false);
+		editable = getIntent().getBooleanExtra(CodeConstants.KEY_EDITABLE,
+				false);
 		if (editable) {
 			editFront.setOnClickListener(this);
 			editBack.setOnClickListener(this);
@@ -227,17 +228,19 @@ public class IDCardActivity extends BaseActivity {
 				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
 				.build();// 构建完成
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_FRONT())) {
-			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					imgFrontID), imgFront,
-					options);
+			imageLoader.displayImage(
+					String.format(URLConstants.URL_DOWNLOAD, imgFrontID),
+					imgFront, options);
 		}
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_BACK())) {
-			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					imgBackID), imgBack, options);
+			imageLoader.displayImage(
+					String.format(URLConstants.URL_DOWNLOAD, imgBackID),
+					imgBack, options);
 		}
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_HAND())) {
-			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					imgHandID), imgHand, options);
+			imageLoader.displayImage(
+					String.format(URLConstants.URL_DOWNLOAD, imgHandID),
+					imgHand, options);
 		}
 	}
 }

@@ -88,14 +88,17 @@ public class ContactFragment extends BaseFragment {
 		});
 		initMenuView();
 		initPullToRefresh();
+		AEProgressDialog.showLoadingDialog(mContext);
+		initProTask = new InitProjectTask();
+		initProTask.execute();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		AEProgressDialog.showLoadingDialog(mContext);
-		initProTask = new InitProjectTask();
-		initProTask.execute();
+		if (project != null) {
+			pullListView.setRefreshing(true);
+		}
 		proListAdapter.setDatas(AEApp.getCurrentUser().getPROJECTS());
 		proListAdapter.notifyDataSetChanged();
 	}
