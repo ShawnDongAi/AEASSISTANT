@@ -113,7 +113,7 @@ public class JoinProject implements CmHandler {
 				}
 			}
 			if (leafProjectVO == null) {
-				leafProjectVO = projectService.createProject(leaf_user_name,
+				leafProjectVO = projectService.createProject(leaf_user_name+"的项目",
 						"", parentProjectVO.getPROJECT_ID(),
 						parentProjectVO.getROOT_ID(), leaf_user_id,
 						parentProjectVO.getADDRESS(),

@@ -176,12 +176,17 @@ public class RegisterActivity extends BaseActivity {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				UserVO user = GsonUtil.getInstance().fromJson(
-						result.getRES_OBJ().toString(), UserVO.class);
-				AEApp.setUser(user);
-				PreConfig.saveUserInfo(phone, mPswInput.getText().toString());
-				startActivity(new Intent(mContext, IndexActivity.class));
-				finish();
+				try {
+					UserVO user = GsonUtil.getInstance().fromJson(
+							result.getRES_OBJ().toString(), UserVO.class);
+					AEApp.setUser(user);
+					PreConfig.saveUserInfo(phone, mPswInput.getText().toString());
+					startActivity(new Intent(mContext, IndexActivity.class));
+					finish();
+				} catch (Exception e) {
+					e.printStackTrace();
+					ToastUtil.show(R.string.http_out);
+				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}

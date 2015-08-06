@@ -98,9 +98,14 @@
             android:name=".activity.IndexActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme" />
-        <!-- 用户详情页面 -->
+        <!-- 个人信息页面 -->
         <activity
             android:name=".activity.user.UserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <!-- 用户详情页面 -->
+        <activity
+            android:name=".activity.user.UserDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 身份证照页面 -->

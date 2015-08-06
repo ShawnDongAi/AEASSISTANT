@@ -61,6 +61,12 @@
 			<ref local="userService" />
 		</property>
 	</bean>
+	<!-- 根据用户ID查询用户 -->
+	<bean id="queryUserByID" class="com.zzn.aenote.http.server.user.QueryUserByID">
+		<property name="userService">
+			<ref local="userService" />
+		</property>
+	</bean>
 	<!-- 修改用户头像 -->
 	<bean id="updateHead" class="com.zzn.aenote.http.server.user.UpdateHead">
 		<property name="userService">

@@ -35,7 +35,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="专注于互联网+建筑工程\n©厦门市简正软件有限公司"
+            android:text="专注于互联网+建筑工程\n©厦门简正软件有限公司"
             android:textColor="@color/body_bg"
             android:textSize="14sp" />
     </RelativeLayout>

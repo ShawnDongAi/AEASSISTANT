@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,6 +19,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
@@ -30,12 +32,14 @@ import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.HttpResult;
 
 public class IDCardActivity extends BaseActivity {
-	private View editFront, editBack, editHand;
+	private TextView editFront, editBack, editHand;
 	private ImageView imgFront, imgBack, imgHand;
 	private int imgType = 0;
 
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
+	private String imgFrontID, imgBackID, imgHandID = "";
+	private boolean editable = false;
 
 	@Override
 	protected int layoutResID() {
@@ -49,15 +53,25 @@ public class IDCardActivity extends BaseActivity {
 
 	@Override
 	protected void initView() {
-		editFront = findViewById(R.id.idcard_front_edit);
-		editBack = findViewById(R.id.idcard_back_eidt);
-		editHand = findViewById(R.id.idcard_hand_edit);
+		editFront = (TextView) findViewById(R.id.idcard_front_edit);
+		editBack = (TextView) findViewById(R.id.idcard_back_eidt);
+		editHand = (TextView) findViewById(R.id.idcard_hand_edit);
 		imgFront = (ImageView) findViewById(R.id.idcard_front);
 		imgBack = (ImageView) findViewById(R.id.idcard_back);
 		imgHand = (ImageView) findViewById(R.id.idcard_hand);
-		editFront.setOnClickListener(this);
-		editBack.setOnClickListener(this);
-		editHand.setOnClickListener(this);
+		editable = getIntent().getBooleanExtra(CodeConstants.KEY_EDITABLE, false);
+		if (editable) {
+			editFront.setOnClickListener(this);
+			editBack.setOnClickListener(this);
+			editHand.setOnClickListener(this);
+		} else {
+			editFront.setCompoundDrawables(null, null, null, null);
+			editBack.setCompoundDrawables(null, null, null, null);
+			editHand.setCompoundDrawables(null, null, null, null);
+		}
+		imgFrontID = getIntent().getStringExtra(CodeConstants.KEY_IDCARD_FRONT);
+		imgBackID = getIntent().getStringExtra(CodeConstants.KEY_IDCARD_BACK);
+		imgHandID = getIntent().getStringExtra(CodeConstants.KEY_IDCARD_HAND);
 		initImageLoader();
 	}
 
@@ -214,16 +228,16 @@ public class IDCardActivity extends BaseActivity {
 				.build();// 构建完成
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_FRONT())) {
 			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					AEApp.getCurrentUser().getIDCARD_FRONT()), imgFront,
+					imgFrontID), imgFront,
 					options);
 		}
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_BACK())) {
 			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					AEApp.getCurrentUser().getIDCARD_BACK()), imgBack, options);
+					imgBackID), imgBack, options);
 		}
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_HAND())) {
 			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
-					AEApp.getCurrentUser().getIDCARD_HAND()), imgHand, options);
+					imgHandID), imgHand, options);
 		}
 	}
 }

@@ -172,7 +172,7 @@ public class Scanning extends CmHandlerFile {
 				}
 				if (StringUtil.isEmpty(current_root_id)) {
 					ProjectVO projectVO = projectService.createProject(
-							user_name, "", parent_id, root_id, user_id,
+							user_name+"的项目", "", parent_id, root_id, user_id,
 							address, longitude, latitude);
 					project_id = projectVO.getPROJECT_ID();
 				} else if (!current_root_id.equals(root_id)) {

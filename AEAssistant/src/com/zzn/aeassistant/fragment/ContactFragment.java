@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -18,7 +17,9 @@ import android.widget.TextView;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.project.ProjectStructureAdapter;
+import com.zzn.aeassistant.activity.user.UserDetailActivity;
 import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.GsonUtil;
@@ -41,7 +42,7 @@ public class ContactFragment extends BaseFragment {
 	private ProjectStructureAdapter<ProjectVO> defaultAdapter;
 	private InitProjectTask initProTask;
 	private ListStructureTask listStruTask;
-	private ProjectVO project = null;;
+	private ProjectVO project = null;
 	private long lastClickTime = 0;
 	private PopupWindow projectMenu;
 	private ListView projectList;
@@ -74,15 +75,15 @@ public class ContactFragment extends BaseFragment {
 					return;
 				}
 				lastClickTime = System.currentTimeMillis();
-				ProjectVO project = (ProjectVO) (((Node) listView.getAdapter()
+				ProjectVO projectVO = (ProjectVO) (((Node) listView.getAdapter()
 						.getItem(position)).getData());
-				try {
-					Intent intent = new Intent(Intent.ACTION_DIAL, Uri
-							.parse("tel:" + project.getCREATE_USER_PHONE()));
-					startActivity(intent);
-				} catch (Exception e) {
-					ToastUtil.show(R.string.dial_error);
+				Intent intent = new Intent(mContext, UserDetailActivity.class);
+				intent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
+				if (projectVO.getPROJECT_ID().equals(project.getPROJECT_ID())
+						|| projectVO.getPARENT_ID().equals(project.getPROJECT_ID())) {
+					intent.putExtra(CodeConstants.KEY_EDITABLE, true);
 				}
+				startActivity(intent);
 			}
 		});
 		initMenuView();

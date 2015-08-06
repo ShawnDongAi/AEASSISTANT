@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -20,6 +19,7 @@ import android.widget.ListView;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.user.UserDetailActivity;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
@@ -88,13 +88,13 @@ public class ProjectStructureActivity extends BaseActivity {
 				lastClickTime = System.currentTimeMillis();
 				ProjectVO project = (ProjectVO) (((Node) listView.getAdapter()
 						.getItem(position)).getData());
-				try {
-					Intent intent = new Intent(Intent.ACTION_DIAL, Uri
-							.parse("tel:" + project.getCREATE_USER_PHONE()));
-					startActivity(intent);
-				} catch (Exception e) {
-					ToastUtil.show(R.string.dial_error);
+				Intent intent = new Intent(mContext, UserDetailActivity.class);
+				intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
+				if (project.getPROJECT_ID().equals(project_id)
+						|| project.getPARENT_ID().equals(project_id)) {
+					intent.putExtra(CodeConstants.KEY_EDITABLE, true);
 				}
+				startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
 			}
 		});
 		initPullToRefresh();
@@ -152,6 +152,22 @@ public class ProjectStructureActivity extends BaseActivity {
 			listStruTask = null;
 		}
 		super.onDestroy();
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case CodeConstants.REQUEST_CODE_REFRESH:
+				listStruTask = new ListStructureTask();
+				listStruTask.execute(project_id);
+				AEProgressDialog.showLoadingDialog(mContext);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	private class ListStructureTask extends

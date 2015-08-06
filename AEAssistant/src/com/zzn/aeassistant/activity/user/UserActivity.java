@@ -47,7 +47,7 @@ public class UserActivity extends BaseActivity {
 	public static final int REQUEST_ALBUM = 1;
 	public static final int REQUEST_USER_NAME = 2;
 	public static final int REQUEST_USER_REMARK = 3;
-	public static final int REQUESt_USER_IDCARD = 4;
+	public static final int REQUEST_USER_IDCARD = 4;
 
 	private View layoutHead, layoutName, layoutPhone, layoutSex, layoutRemark,
 			layoutIDCard, layoutIDCardImg;
@@ -136,7 +136,6 @@ public class UserActivity extends BaseActivity {
 				.build();// 构建完成
 	}
 
-	@SuppressWarnings("deprecation")
 	private void initMenu() {
 		View menuView = View.inflate(mContext, R.layout.menu_user_head, null);
 		photograph = (Button) menuView.findViewById(R.id.menu_photograph);
@@ -207,10 +206,15 @@ public class UserActivity extends BaseActivity {
 			idcardIntent.putExtra(CodeConstants.KEY_SINGLELINE, true);
 			idcardIntent.putExtra(CodeConstants.KEY_INPUT_TYPE,
 					InputType.TYPE_NUMBER_FLAG_SIGNED);
-			startActivityForResult(idcardIntent, REQUESt_USER_IDCARD);
+			startActivityForResult(idcardIntent, REQUEST_USER_IDCARD);
 			break;
 		case R.id.user_layout_idcard_img:
-			startActivity(new Intent(this, IDCardActivity.class));
+			Intent intent = new Intent(this, IDCardActivity.class);
+			intent.putExtra(CodeConstants.KEY_EDITABLE, true);
+			intent.putExtra(CodeConstants.KEY_IDCARD_FRONT, AEApp.getCurrentUser().getIDCARD_FRONT());
+			intent.putExtra(CodeConstants.KEY_IDCARD_BACK, AEApp.getCurrentUser().getIDCARD_BACK());
+			intent.putExtra(CodeConstants.KEY_IDCARD_HAND, AEApp.getCurrentUser().getIDCARD_HAND());
+			startActivity(intent);
 			break;
 		case R.id.menu_photograph:
 			if (menu != null && menu.isShowing()) {
@@ -277,7 +281,7 @@ public class UserActivity extends BaseActivity {
 				new UpdateHeadTask().execute(AttchUtil.getPath(mContext,
 						Crop.getOutput(data)));
 				break;
-			case REQUESt_USER_IDCARD:
+			case REQUEST_USER_IDCARD:
 				String idcardString = data
 						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
 				if (remark.getText().toString().trim().equals(idcardString)) {

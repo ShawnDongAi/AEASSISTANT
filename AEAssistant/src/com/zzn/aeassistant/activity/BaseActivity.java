@@ -64,6 +64,10 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 
 	protected void onSaveClick() {
 	}
+	
+	protected void onBackClick() {
+		finish();
+	}
 
 	protected void getImg(String path) {
 	}
@@ -202,7 +206,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		lastClickTime = System.currentTimeMillis();
 		switch (v.getId()) {
 		case R.id.back:
-			finish();
+			onBackClick();
 			break;
 		case R.id.save:
 			onSaveClick();

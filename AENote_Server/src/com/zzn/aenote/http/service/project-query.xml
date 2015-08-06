@@ -19,7 +19,8 @@
 		|| t.project_name as
 		project_name,t.head,t.parent_id,t.root_id,b.user_id as
 		create_user,b.user_name as create_user_name,b.phone as
-		create_user_phone,t.address,t.longitude,t.latitude,t.status,(to_char(t.create_time,'yyyy-MM-dd
+		create_user_phone,b.small_head as
+		create_user_head,t.address,t.longitude,t.latitude,t.status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time,
 		t.status
@@ -46,7 +47,7 @@
 		parent_id,a.root_id as
 		root_id,b.user_id as
 		create_user,b.user_name as create_user_name,b.phone as
-		create_user_phone,a.address
+		create_user_phone,b.small_head as create_user_head,a.address
 		address,a.longitude as longitude,a.latitude
 		as
 		latitude,a.status as
@@ -80,7 +81,8 @@
 		parent_id,t_project.root_id as
 		root_id,t_user.user_id as
 		create_user,t_user.user_name as create_user_name,t_user.phone as
-		create_user_phone,t_project.address as
+		create_user_phone,t_user.small_head as
+		create_user_head,t_project.address as
 		address,t_project.longitude as
 		longitude,t_project.latitude as
 		latitude,t_project.status as
@@ -139,7 +141,7 @@
 		parent_id,t.root_id as
 		root_id,a.user_id as
 		create_user,a.user_name as create_user_name,a.phone as
-		create_user_phone,t.address as
+		create_user_phone,a.small_head as create_user_head,t.address as
 		address,t.longitude as
 		longitude,t.latitude as
 		latitude,t.status as
@@ -170,7 +172,7 @@
 		where 1=1
 		[and b.root_id='#project_id#']
 	</select>
-	<!-- 修改项目名-->
+	<!-- 修改项目名 -->
 	<select id="update_project_name">
 		update t_project set project_name='#project_name#'
 		where 1=1

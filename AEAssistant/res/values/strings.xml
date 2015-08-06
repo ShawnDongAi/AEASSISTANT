@@ -68,11 +68,13 @@
     <string name="photograph_he">拍他（她）</string>
 
     <!-- 个人信息 -->
+    <string name="lable_user_detail">详细资料</string>
     <string name="sex">性别:</string>
     <string name="male">男</string>
     <string name="female">女</string>
     <string name="lable_head">头像</string>
     <string name="lable_name">姓名</string>
+    <string name="lable_project">项目名</string>
     <string name="lable_phone">电话</string>
     <string name="lable_qrcode">我的二维码</string>
     <string name="lable_sex">性别</string>
@@ -89,6 +91,7 @@
     <string name="lable_idcard_front">身份证正面照：</string>
     <string name="lable_idcard_back">身份证反面照：</string>
     <string name="lable_idcard_hand">手持身份证照：</string>
+    <string name="call">拨号</string>
 
     <!-- 附件 -->
     <string name="photograph">拍照</string>

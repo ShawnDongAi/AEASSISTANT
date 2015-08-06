@@ -30,6 +30,10 @@ public class URLConstants {
 	 */
 	public static final String URL_RESET_PSW = URL_HOST + "resetPassword";
 	/**
+	 * 根据用户ID查询用户资料
+	 */
+	public static final String URL_QUERY_USER_BY_ID = URL_HOST + "queryUserByID";
+	/**
 	 * 修改用户头像
 	 */
 	public static final String URL_UPDATE_HEAD = URL_HOST + "updateHead";

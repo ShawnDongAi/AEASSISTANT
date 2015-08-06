@@ -22,6 +22,7 @@ public class ProjectVO implements Serializable {
 	private String STATUS;
 	private String CREATE_USER_NAME;
 	private String CREATE_USER_PHONE;
+	private String CREATE_USER_HEAD;
 	
 	private static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -128,6 +129,14 @@ public class ProjectVO implements Serializable {
 	public void setCREATE_USER_PHONE(String cREATE_USER_PHONE) {
 		CREATE_USER_PHONE = cREATE_USER_PHONE;
 	}
+	
+	public String getCREATE_USER_HEAD() {
+		return CREATE_USER_HEAD;
+	}
+
+	public void setCREATE_USER_HEAD(String cREATE_USER_HEAD) {
+		CREATE_USER_HEAD = cREATE_USER_HEAD;
+	}
 
 	public static ProjectVO assembleProject(Map<String, Object> project) {
 		ProjectVO vo = new ProjectVO();
@@ -154,14 +163,19 @@ public class ProjectVO implements Serializable {
 		vo.setCREATE_USER(project.get("create_user").toString());
 		String user_name = "";
 		String user_phone = "";
+		String user_head = "";
 		if (project.get("create_user_name") != null) {
 			user_name = project.get("create_user_name").toString();
 		}
 		if (project.get("create_user_phone") != null) {
 			user_phone = project.get("create_user_phone").toString();
 		}
+		if (project.get("create_user_head") != null) {
+			user_head = project.get("create_user_head").toString();
+		}
 		vo.setCREATE_USER_NAME(user_name);
 		vo.setCREATE_USER_PHONE(user_phone);
+		vo.setCREATE_USER_HEAD(user_head);
 		if (project.get("address") != null) {
 			vo.setADDRESS(project.get("address").toString());
 		}

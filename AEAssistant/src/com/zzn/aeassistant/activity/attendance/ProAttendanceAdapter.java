@@ -37,9 +37,6 @@ public class ProAttendanceAdapter<T> extends TreeListViewAdapter<T> {
 					.findViewById(R.id.treenode_label);
 			viewHolder.user = (TextView) convertView
 					.findViewById(R.id.treenode_user);
-			viewHolder.phone = (TextView) convertView
-					.findViewById(R.id.treenode_phone);
-			viewHolder.phone.setVisibility(View.GONE);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -63,6 +60,5 @@ public class ProAttendanceAdapter<T> extends TreeListViewAdapter<T> {
 		ImageView icon;
 		TextView label;
 		TextView user;
-		TextView phone;
 	}
 }

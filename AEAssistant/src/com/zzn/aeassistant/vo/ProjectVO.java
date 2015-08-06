@@ -25,6 +25,7 @@ public class ProjectVO implements Serializable {
 	private String STATUS;
 	private String CREATE_USER_NAME;
 	private String CREATE_USER_PHONE;
+	private String CREATE_USER_HEAD;
 
 	public String getPROJECT_ID() {
 		return PROJECT_ID;
@@ -128,5 +129,13 @@ public class ProjectVO implements Serializable {
 
 	public void setCREATE_USER_PHONE(String cREATE_USER_PHONE) {
 		CREATE_USER_PHONE = cREATE_USER_PHONE;
+	}
+
+	public String getCREATE_USER_HEAD() {
+		return CREATE_USER_HEAD;
+	}
+
+	public void setCREATE_USER_HEAD(String cREATE_USER_HEAD) {
+		CREATE_USER_HEAD = cREATE_USER_HEAD;
 	}
 }
