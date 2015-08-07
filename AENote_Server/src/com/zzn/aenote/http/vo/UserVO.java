@@ -139,40 +139,40 @@ public class UserVO implements Serializable {
 	public static UserVO assembleUserVO(Map<String, Object> userInfo) {
 		UserVO user = new UserVO();
 		if (userInfo.get("user_id") != null) {
-			user.setUSER_ID(userInfo.get("user_id").toString());
+			user.setUSER_ID(userInfo.get("user_id").toString().trim());
 		}
 		if (userInfo.get("user_name") != null) {
-			user.setUSER_NAME(userInfo.get("user_name").toString());
+			user.setUSER_NAME(userInfo.get("user_name").toString().trim());
 		}
 		if (userInfo.get("phone") != null) {
-			user.setPHONE(userInfo.get("phone").toString());
+			user.setPHONE(userInfo.get("phone").toString().trim());
 		}
 		if (userInfo.get("remark") != null) {
-			user.setREMARK(userInfo.get("remark").toString());
+			user.setREMARK(userInfo.get("remark").toString().trim());
 		}
 		if (userInfo.get("sex") != null) {
-			user.setSEX(userInfo.get("sex").toString());
+			user.setSEX(userInfo.get("sex").toString().trim());
 		}
 		if (userInfo.get("small_head") != null) {
-			user.setSMALL_HEAD(userInfo.get("small_head").toString());
+			user.setSMALL_HEAD(userInfo.get("small_head").toString().trim());
 		}
 		if (userInfo.get("big_head") != null) {
-			user.setBIG_HEAD(userInfo.get("big_head").toString());
+			user.setBIG_HEAD(userInfo.get("big_head").toString().trim());
 		}
 		if (userInfo.get("create_time") != null) {
-			user.setCREATE_TIME(userInfo.get("create_time").toString());
+			user.setCREATE_TIME(userInfo.get("create_time").toString().trim());
 		}
 		if (userInfo.get("idcard") != null) {
-			user.setIDCARD(userInfo.get("idcard").toString());
+			user.setIDCARD(userInfo.get("idcard").toString().trim());
 		}
 		if (userInfo.get("idcard_front") != null) {
-			user.setIDCARD_FRONT(userInfo.get("idcard_front").toString());
+			user.setIDCARD_FRONT(userInfo.get("idcard_front").toString().trim());
 		}
 		if (userInfo.get("idcard_back") != null) {
-			user.setIDCARD_BACK(userInfo.get("idcard_back").toString());
+			user.setIDCARD_BACK(userInfo.get("idcard_back").toString().trim());
 		}
 		if (userInfo.get("idcard_hand") != null) {
-			user.setIDCARD_HAND(userInfo.get("idcard_hand").toString());
+			user.setIDCARD_HAND(userInfo.get("idcard_hand").toString().trim());
 		}
 		return user;
 	}

@@ -2,7 +2,6 @@ package com.zzn.aenote.http.vo;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 public class ProjectVO implements Serializable {
@@ -23,7 +22,10 @@ public class ProjectVO implements Serializable {
 	private String CREATE_USER_NAME;
 	private String CREATE_USER_PHONE;
 	private String CREATE_USER_HEAD;
+	private String ROOT_PROJECT_NAME;
 	
+	private static SimpleDateFormat allFormater = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
 	private static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	public String getPROJECT_ID() {
@@ -138,50 +140,60 @@ public class ProjectVO implements Serializable {
 		CREATE_USER_HEAD = cREATE_USER_HEAD;
 	}
 
+	public String getROOT_PROJECT_NAME() {
+		return ROOT_PROJECT_NAME;
+	}
+
+	public void setROOT_PROJECT_NAME(String rOOT_PROJECT_NAME) {
+		ROOT_PROJECT_NAME = rOOT_PROJECT_NAME;
+	}
+
 	public static ProjectVO assembleProject(Map<String, Object> project) {
 		ProjectVO vo = new ProjectVO();
-		vo.setPROJECT_ID(project.get("project_id").toString());
-		String projectName = project.get("project_name").toString();
+		vo.setPROJECT_ID(project.get("project_id").toString().trim());
+		String projectName = project.get("project_name").toString().trim();
 		if (projectName.startsWith("-")) {
 			projectName = projectName.substring(1, projectName.length());
 		}
 		vo.setPROJECT_NAME(projectName);
 		if (project.get("head") != null) {
-			vo.setHEAD(project.get("head").toString());
+			vo.setHEAD(project.get("head").toString().trim());
 		}
 		if (project.get("parent_id") != null) {
-			vo.setPARENT_ID(project.get("parent_id").toString());
+			vo.setPARENT_ID(project.get("parent_id").toString().trim());
 		}
-		vo.setROOT_ID(project.get("root_id").toString());
-		String create_time = project.get("create_time").toString().replaceAll("\t", "").replaceAll("\n", " ");
+		vo.setROOT_ID(project.get("root_id").toString().trim());
+		if (project.get("root_project_name") != null) {
+			vo.setROOT_PROJECT_NAME(project.get("root_project_name").toString().trim());
+		}
+		String create_time = project.get("create_time").toString().trim().replaceAll("\t", "").replaceAll("\n", " ");
 		try {
-			Date date = new Date(create_time);
-			vo.setCREATE_TIME(formater.format(date));
+			vo.setCREATE_TIME(formater.format(allFormater.parse(create_time)));
 		} catch (Exception e) {
 			vo.setCREATE_TIME(create_time);
 		}
-		vo.setCREATE_USER(project.get("create_user").toString());
+		vo.setCREATE_USER(project.get("create_user").toString().trim());
 		String user_name = "";
 		String user_phone = "";
 		String user_head = "";
 		if (project.get("create_user_name") != null) {
-			user_name = project.get("create_user_name").toString();
+			user_name = project.get("create_user_name").toString().trim();
 		}
 		if (project.get("create_user_phone") != null) {
-			user_phone = project.get("create_user_phone").toString();
+			user_phone = project.get("create_user_phone").toString().trim();
 		}
 		if (project.get("create_user_head") != null) {
-			user_head = project.get("create_user_head").toString();
+			user_head = project.get("create_user_head").toString().trim();
 		}
 		vo.setCREATE_USER_NAME(user_name);
 		vo.setCREATE_USER_PHONE(user_phone);
 		vo.setCREATE_USER_HEAD(user_head);
 		if (project.get("address") != null) {
-			vo.setADDRESS(project.get("address").toString());
+			vo.setADDRESS(project.get("address").toString().trim());
 		}
-		vo.setLONGITUDE(project.get("longitude").toString());
-		vo.setLATITUDE(project.get("latitude").toString());
-		vo.setSTATUS(project.get("status").toString());
+		vo.setLONGITUDE(project.get("longitude").toString().trim());
+		vo.setLATITUDE(project.get("latitude").toString().trim());
+		vo.setSTATUS(project.get("status").toString().trim());
 		return vo;
 	}
 }

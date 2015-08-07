@@ -17,8 +17,14 @@
 		||
 		'-'
 		|| t.project_name as
-		project_name,t.head,t.parent_id,t.root_id,b.user_id as
-		create_user,b.user_name as create_user_name,b.phone as
+		project_name,
+		(select
+		project_name from t_project
+		where project_id=t.root_id) as
+		root_project_name,
+		t.head,t.parent_id,t.root_id,b.user_id as
+		create_user,b.user_name as
+		create_user_name,b.phone as
 		create_user_phone,b.small_head as
 		create_user_head,t.address,t.longitude,t.latitude,t.status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
@@ -42,12 +48,22 @@
 		and project_id =
 		a.parent_id)
 		|| '-' ||
-		a.project_name as project_name,a.head as
-		head,a.parent_id as
-		parent_id,a.root_id as
+		a.project_name as project_name,
+		(select
+		project_name from t_project
+		where
+		project_id=a.root_id) as
+		root_project_name,
+		a.head as
+		head,a.parent_id
+		as
+		parent_id,a.root_id
+		as
 		root_id,b.user_id as
-		create_user,b.user_name as create_user_name,b.phone as
-		create_user_phone,b.small_head as create_user_head,a.address
+		create_user,b.user_name as
+		create_user_name,b.phone as
+		create_user_phone,b.small_head as
+		create_user_head,a.address
 		address,a.longitude as longitude,a.latitude
 		as
 		latitude,a.status as
@@ -70,33 +86,44 @@
 	</select>
 	<select id="query_user_current_project">
 		select
-		t_project.project_id as
+		t.project_id as
 		project_id,(select
-		project_name from t_project where 1=1 and a.project_id!=a.parent_id
-		and project_id = a.parent_id)
+		project_name
+		from t_project where 1=1 and t.project_id!=t.parent_id
+		and project_id =
+		t.parent_id)
 		||
-		'-' || a.project_name as
-		project_name,t_project.head as
-		head,t_project.parent_id as
-		parent_id,t_project.root_id as
-		root_id,t_user.user_id as
-		create_user,t_user.user_name as create_user_name,t_user.phone as
-		create_user_phone,t_user.small_head as
-		create_user_head,t_project.address as
-		address,t_project.longitude as
-		longitude,t_project.latitude as
-		latitude,t_project.status as
-		status,(to_char(t_project.create_time,'yyyy-MM-dd
+		'-' || t.project_name as
+		project_name,
+		(select
+		project_name from t_project
+		where
+		project_id=t.root_id) as
+		root_project_name,
+		t.head as
+		head,t.parent_id
+		as
+		parent_id,t.root_id as
+		root_id,a.user_id as
+		create_user,a.user_name as
+		create_user_name,a.phone as
+		create_user_phone,a.small_head as
+		create_user_head,t.address as
+		address,t.longitude as
+		longitude,t.latitude as
+		latitude,t.status as
+		status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time,
-		t_project.status
-		from t_project right join t_user on
-		t_project.create_user=t_user.user_id
+		t.status
+		from t_project t right join t_user a on
+		t.create_user=a.user_id
 		where 1=1
 		[and
-		t_user.user_id='#user_id#' and t_project.status='0']
+		a.user_id='#user_id#' and
+		t.status='0']
 		order by
-		t_project.create_time asc
+		t.create_time asc
 	</select>
 	<select id="query_leaf_count">
 		select count(*) from t_project where 1=1
@@ -136,12 +163,20 @@
 		||
 		'-' ||
 		t.project_name as
-		project_name,t.head as
+		project_name,
+		(select
+		project_name
+		from t_project
+		where project_id =
+		t.root_id) as root_project_name,
+		t.head as
 		head,t.parent_id as
 		parent_id,t.root_id as
 		root_id,a.user_id as
-		create_user,a.user_name as create_user_name,a.phone as
-		create_user_phone,a.small_head as create_user_head,t.address as
+		create_user,a.user_name as
+		create_user_name,a.phone as
+		create_user_phone,a.small_head as
+		create_user_head,t.address as
 		address,t.longitude as
 		longitude,t.latitude as
 		latitude,t.status as

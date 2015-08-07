@@ -21,6 +21,7 @@ public class AttendanceVO implements Parcelable {
 	private String status;
 	private int photo_width;
 	private int photo_height;
+	private String root_project_name;
 
 	public String getProject_id() {
 		return project_id;
@@ -134,6 +135,14 @@ public class AttendanceVO implements Parcelable {
 		this.status = status;
 	}
 	
+	public String getRoot_project_name() {
+		return root_project_name;
+	}
+
+	public void setRoot_project_name(String root_project_name) {
+		this.root_project_name = root_project_name;
+	}
+
 	public int getPhoto_width() {
 		return photo_width;
 	}
@@ -168,6 +177,7 @@ public class AttendanceVO implements Parcelable {
 		out.writeString(status);
 		out.writeInt(photo_width);
 		out.writeInt(photo_height);
+		out.writeString(root_project_name);
 	}
 
 	public static final Parcelable.Creator<AttendanceVO> CREATOR = new Creator<AttendanceVO>() {
@@ -199,6 +209,7 @@ public class AttendanceVO implements Parcelable {
 		status = in.readString();
 		photo_width = in.readInt();
 		photo_height = in.readInt();
+		root_project_name = in.readString();
 	}
 
 	@Override

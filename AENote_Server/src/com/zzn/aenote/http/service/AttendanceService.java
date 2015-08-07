@@ -55,7 +55,7 @@ public class AttendanceService extends BaseService {
 				});
 			}*/
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -97,7 +97,7 @@ public class AttendanceService extends BaseService {
 				});
 			}*/
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -115,7 +115,7 @@ public class AttendanceService extends BaseService {
 				result = true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -133,7 +133,7 @@ public class AttendanceService extends BaseService {
 				result = true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -155,7 +155,7 @@ public class AttendanceService extends BaseService {
 				result.addAll(sumCountByParent(startDate, endDate, projectID));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -176,7 +176,7 @@ public class AttendanceService extends BaseService {
 						attendanceList.get(0).get("project_id").toString()));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -197,7 +197,7 @@ public class AttendanceService extends BaseService {
 				result.addAll(attendanceList);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -214,7 +214,7 @@ public class AttendanceService extends BaseService {
 			data.put("end", (page + 1) * 20 + "");
 			result = getJdbc().queryForList(getSql("sum_list_by_user", data));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}
@@ -231,7 +231,7 @@ public class AttendanceService extends BaseService {
 				result = 0;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info(e);
 		}
 		return result;
 	}

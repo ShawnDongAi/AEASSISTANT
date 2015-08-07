@@ -39,7 +39,7 @@ public class ProjectService extends BaseService {
 	 */
 	public ProjectVO createProject(String project_name, String head,
 			String parent_id, String root_id, String create_user,
-			String address, String longitude, String latitude) {
+			String address, String longitude, String latitude, String root_name) {
 		try {
 			ProjectVO project = new ProjectVO();
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -56,6 +56,7 @@ public class ProjectService extends BaseService {
 			}
 			data.put("root_id", root_id);
 			project.setROOT_ID(root_id);
+			project.setROOT_PROJECT_NAME(root_name);
 			String projectNameHead = "";
 			if (!parent_id.equals(project_id)) {
 				List<Map<String, Object>> parentProject = queryProjectByID(parent_id);

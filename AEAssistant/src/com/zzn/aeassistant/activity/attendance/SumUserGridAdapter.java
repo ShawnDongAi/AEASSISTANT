@@ -102,6 +102,7 @@ public class SumUserGridAdapter extends BaseAdapter {
 			holder.progress.setWidthInDp(2);
 			holder.project = (TextView) convertView.findViewById(R.id.project);
 			holder.normal = (ImageView) convertView.findViewById(R.id.normal);
+			holder.root = (TextView) convertView.findViewById(R.id.root);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -112,6 +113,9 @@ public class SumUserGridAdapter extends BaseAdapter {
 		holder.project.setText(vo.getProject_name());
 		holder.normal.setVisibility(vo.getNormal() != null
 				&& vo.getNormal().equals("1") ? View.VISIBLE : View.GONE);
+		if (vo.getRoot_project_name() != null) {
+			holder.root.setText(vo.getRoot_project_name());
+		}
 		holder.photo.mHeight = vo.getPhoto_height();
 		holder.photo.mWidth = vo.getPhoto_width();
 		imageLoader.displayImage(
@@ -155,5 +159,6 @@ public class SumUserGridAdapter extends BaseAdapter {
 		private SquareProgressView progress;
 		private TextView project;
 		private ImageView normal;
+		private TextView root;
 	}
 }

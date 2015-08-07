@@ -142,6 +142,11 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AEApp.getInstance().add(this);
+		if (savedInstanceState != null
+				&& savedInstanceState.getSerializable("user") != null
+				&& savedInstanceState.getSerializable("user") instanceof UserVO) {
+			AEApp.setUser((UserVO) savedInstanceState.getSerializable("user"));
+		}
 //		checkUser();
 		mContext = this;
 		displayMetrics = new DisplayMetrics();

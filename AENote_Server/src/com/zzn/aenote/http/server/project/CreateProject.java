@@ -69,7 +69,7 @@ public class CreateProject implements CmHandler {
 				}
 			}
 			ProjectVO result = projectService.createProject(project_name, "", "",
-					"", user_id, address, longitude, latitude);
+					"", user_id, address, longitude, latitude, project_name);
 			if (result != null) {
 				rs.setRES_CODE(Global.RESP_SUCCESS);
 				rs.setRES_MESSAGE("创建项目成功");

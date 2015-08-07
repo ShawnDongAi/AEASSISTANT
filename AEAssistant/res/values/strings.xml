@@ -29,6 +29,7 @@
     <string name="login_hint_name">请输入姓名</string>
     <string name="login_hint_phone">请输入手机号码</string>
     <string name="login_hint_password">请输入密码</string>
+    <string name="login_hint_password1">请设置密码</string>
     <string name="login_hint_sms">请输入验证码</string>
     <string name="login_sms_verify">获取短信验证码</string>
     <string name="login_sms_timer">重新发送(%d)</string>

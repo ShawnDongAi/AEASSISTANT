@@ -87,6 +87,7 @@ public class ProjectAdapter extends BaseAdapter implements
 					.findViewById(R.id.project_address);
 			holder.time = (TextView) convertView
 					.findViewById(R.id.project_create_time);
+			holder.root = (TextView) convertView.findViewById(R.id.project_root_name);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -108,6 +109,9 @@ public class ProjectAdapter extends BaseAdapter implements
 				holder.address.setText(project.getADDRESS() != null ? project
 						.getADDRESS() : "");
 				holder.time.setText(project.getCREATE_TIME());
+				if (project.getROOT_PROJECT_NAME() != null) {
+					holder.root.setText(project.getROOT_PROJECT_NAME());
+				}
 			}
 			holder.address
 					.setVisibility(project != null ? View.VISIBLE
@@ -115,6 +119,9 @@ public class ProjectAdapter extends BaseAdapter implements
 			holder.time
 					.setVisibility(project != null ? View.VISIBLE
 							: View.GONE);
+			holder.root
+			.setVisibility(project != null ? View.VISIBLE
+					: View.GONE);
 			convertView.setBackgroundResource(R.color.transparent);
 		}
 		return convertView;
@@ -124,6 +131,7 @@ public class ProjectAdapter extends BaseAdapter implements
 		TextView projectName;
 		TextView address;
 		TextView time;
+		TextView root;
 	}
 
 	@Override

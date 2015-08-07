@@ -118,7 +118,8 @@ public class JoinProject implements CmHandler {
 						parentProjectVO.getROOT_ID(), leaf_user_id,
 						parentProjectVO.getADDRESS(),
 						parentProjectVO.getLONGITUDE(),
-						parentProjectVO.getLATITUDE());
+						parentProjectVO.getLATITUDE(),
+						parentProjectVO.getROOT_PROJECT_NAME());
 				if (leafProjectVO == null) {
 					logger.info("创建子项目失败");
 					rs.setRES_CODE(Global.PROJECT_NULL);

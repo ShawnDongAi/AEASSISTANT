@@ -12,7 +12,8 @@
 	<select id="valid_user_info">
 		select
 		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
-		HH24:mi:ss')) as create_time
+		HH24:mi:ss')) as create_time, idcard, idcard_front, idcard_back,
+		idcard_hand
 		from t_user
 		where 1=1
 		[and phone='#phone#']
@@ -43,13 +44,43 @@
 	<select id="update_user_remark">
 		update t_user set remark='#remark#'
 		where 1=1
-		[and user_id='#user_id#']
+		[and
+		user_id='#user_id#']
+	</select>
+	<!-- 修改身份证号 -->
+	<select id="update_user_idcard">
+		update t_user set idcard='#idcard#'
+		where 1=1
+		[and
+		user_id='#user_id#']
+	</select>
+	<!-- 修改身份证正面照 -->
+	<select id="update_idcard_front">
+		update t_user set idcard_front='#img#'
+		where 1=1
+		[and
+		user_id='#user_id#']
+	</select>
+	<!-- 修改身份证反面照 -->
+	<select id="update_idcard_back">
+		update t_user set idcard_back='#img#'
+		where 1=1
+		[and
+		user_id='#user_id#']
+	</select>
+	<!-- 修改手持身份证照 -->
+	<select id="update_idcard_hand">
+		update t_user set idcard_hand='#img#'
+		where 1=1
+		[and
+		user_id='#user_id#']
 	</select>
 	<!-- 根据用户id查询用户资料 -->
 	<select id="query_user_by_id">
 		select
 		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
-		HH24:mi:ss')) as create_time
+		HH24:mi:ss')) as create_time, idcard, idcard_front, idcard_back,
+		idcard_hand
 		from t_user
 		where 1=1
 		[and
@@ -59,7 +90,8 @@
 	<select id="query_user_by_phone">
 		select
 		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
-		HH24:mi:ss')) as create_time
+		HH24:mi:ss')) as create_time, idcard, idcard_front, idcard_back,
+		idcard_hand
 		from t_user
 		where 1=1
 		[and phone='#phone#']
@@ -68,7 +100,8 @@
 	<select id="query_user_by_name">
 		select
 		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
-		HH24:mi:ss')) as create_time
+		HH24:mi:ss')) as create_time, idcard, idcard_front, idcard_back,
+		idcard_hand
 		from t_user
 		where 1=1
 		[and user_name like

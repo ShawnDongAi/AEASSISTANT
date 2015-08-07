@@ -23,13 +23,13 @@
 	</select>
 	<!-- 更新考勤状态 -->
 	<select id="update_scanning_status">
-	    update t_attendance
+		update t_attendance
 		set normal='#normal#'
 		where 1=1
 		[and user_id='#user_id#']
 		[and project_id='#project_id#']
 		[and
-		to_char(time,'yyyy-mm-dd')='#date#']
+		to_char(time,'yyyy-MM-dd')='#date#']
 	</select>
 	<!-- 查询今天有没有考勤数据 -->
 	<select id="query_project_attendance_for_today">
@@ -37,7 +37,7 @@
 		where 1=1
 		[and
 		project_id='#project_id#']
-		[and to_char(time,'yyyy-mm-dd')='#date#']
+		[and to_char(time,'yyyy-MM-dd')='#date#']
 	</select>
 	<!-- 查询今天有没有有效的考勤数据 -->
 	<select id="query_project_vaild_attendance_for_today">
@@ -49,12 +49,13 @@
 		[and
 		project_id='#project_id#']
 		[and
-		to_char(time,'yyyy-mm-dd')='#date#']
+		to_char(time,'yyyy-MM-dd')='#date#']
 	</select>
 	<!-- 根据项目查询某时间段内的考勤记录数量 -->
 	<select id="sum_count_by_project">
 		select count(case when t.photo!='null'
-		and t.photo!='00000000000000000000000000000000' then '0'
+		and
+		t.photo!='00000000000000000000000000000000' then '0'
 		end) as count,
 		count(case
 		when t.normal =
@@ -76,15 +77,16 @@
 		[and
 		t.time
 		between
-		to_date('#start_date#','yyyy-mm-dd')] [and
-		to_date('#end_date#','yyyy-mm-dd')] group by t.project_id,
+		to_date('#start_date#','yyyy-MM-dd')] [and
+		to_date('#end_date#','yyyy-MM-dd')] group by t.project_id,
 		t.parent_id, t.root_id,
 		b.project_name
 	</select>
 	<!-- 根据父项目查询某时间段内的考勤记录数量 -->
 	<select id="sum_count_by_parent">
 		select count(case when t.photo!='null'
-		and t.photo!='00000000000000000000000000000000' then '0'
+		and
+		t.photo!='00000000000000000000000000000000' then '0'
 		end) as count,
 		count(case
 		when t.normal =
@@ -108,8 +110,8 @@
 		[and
 		t.time
 		between
-		to_date('#start_date#','yyyy-mm-dd')] [and
-		to_date('#end_date#','yyyy-mm-dd')] group by t.project_id,
+		to_date('#start_date#','yyyy-MM-dd')] [and
+		to_date('#end_date#','yyyy-MM-dd')] group by t.project_id,
 		t.parent_id, t.root_id,
 		b.project_name
 	</select>
@@ -119,7 +121,10 @@
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
 		t.user_id,
-		t.time, t.photo,(select url from
+		(to_char(t.time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		time,
+		t.photo,(select url from
 		t_attch where
 		attch_id=t.photo) as
 		photo_path,
@@ -139,7 +144,13 @@
 		project_id =
 		t.parent_id)
 		|| '-' ||
-		b.project_name as project_name
+		b.project_name as project_name,
+		(select
+		project_name
+		from t_project where
+		project_id =
+		t.root_id) as
+		root_project_name
 		from
 		t_attendance t
 		right join t_user a on
@@ -149,13 +160,14 @@
 		t.project_id=b.project_id
 		where 1=1
 		and t.photo!='null'
-		and t.photo!='00000000000000000000000000000000'
+		and
+		t.photo!='00000000000000000000000000000000'
 		[and
 		t.project_id='#project_id#']
 		[and t.time
 		between
-		to_date('#start_date#','yyyy-mm-dd')] [and
-		to_date('#end_date#','yyyy-mm-dd')])
+		to_date('#start_date#','yyyy-MM-dd')] [and
+		to_date('#end_date#','yyyy-MM-dd')])
 		where 1=1 [and rn between
 		'#start#'] [and
 		'#end#']
@@ -165,12 +177,17 @@
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
 		t.user_id,
-		t.time, t.photo,(select url from t_attch
-		where attch_id=t.photo) as photo_path, t.project_id,
+		(to_char(t.time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		time,
+		t.photo,(select url from t_attch
+		where attch_id=t.photo) as
+		photo_path, t.project_id,
 		t.parent_id,
 		t.root_id,
 		t.address,
-		t.longitude, t.latitude, t.normal,
+		t.longitude,
+		t.latitude, t.normal,
 		t.status,
 		a.user_name,
 		a.phone,
@@ -183,7 +200,13 @@
 		project_id =
 		t.parent_id)
 		|| '-' ||
-		b.project_name as project_name
+		b.project_name as project_name,
+		(select
+		project_name
+		from t_project where
+		project_id =
+		t.root_id) as
+		root_project_name
 		from
 		t_attendance t
 		right join t_user a on
@@ -198,8 +221,8 @@
 		[and t.user_id='#user_id#']
 		[and t.time
 		between
-		to_date('#start_date#','yyyy-mm-dd')] [and
-		to_date('#end_date#','yyyy-mm-dd')])
+		to_date('#start_date#','yyyy-MM-dd')] [and
+		to_date('#end_date#','yyyy-MM-dd')])
 		where 1=1 [and rn between
 		'#start#'] [and
 		'#end#']
@@ -210,11 +233,12 @@
 		and photo!='null'
 		and
 		photo!='00000000000000000000000000000000'
-		[and user_id='#user_id#']
+		[and
+		user_id='#user_id#']
 		[and
 		time
 		between
-		to_date('#start_date#','yyyy-mm-dd')] [and
-		to_date('#end_date#','yyyy-mm-dd')]
+		to_date('#start_date#','yyyy-MM-dd')] [and
+		to_date('#end_date#','yyyy-MM-dd')]
 	</select>
 </Scheme>

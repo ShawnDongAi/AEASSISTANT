@@ -59,6 +59,7 @@ public class SumUserListAdapter extends BaseAdapter {
 					.inflate(mContext, R.layout.item_list_attendance, null);
 			holder.time = (TextView) convertView.findViewById(R.id.date);
 			holder.project = (TextView) convertView.findViewById(R.id.project);
+			holder.root = (TextView) convertView.findViewById(R.id.root);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -66,11 +67,15 @@ public class SumUserListAdapter extends BaseAdapter {
 		AttendanceVO vo = getItem(position);
 		holder.time.setText(vo.getDate().replace(" ", "\n"));
 		holder.project.setText(vo.getProject_name());
+		if (vo.getRoot_project_name() != null) {
+			holder.root.setText(vo.getRoot_project_name());
+		}
 		return convertView;
 	}
 
 	private class ViewHolder {
 		private TextView time;
 		private TextView project;
+		private TextView root;
 	}
 }

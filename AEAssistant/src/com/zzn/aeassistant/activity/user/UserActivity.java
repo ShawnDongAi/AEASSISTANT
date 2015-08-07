@@ -287,8 +287,6 @@ public class UserActivity extends BaseActivity {
 				if (remark.getText().toString().trim().equals(idcardString)) {
 					break;
 				}
-				idcard.setText(idcardString);
-				AEApp.getCurrentUser().setIDCARD(idcardString);
 				new UpdateIDCardTask().execute(idcardString);
 				break;
 			default:
@@ -387,6 +385,13 @@ public class UserActivity extends BaseActivity {
 
 	private class UpdateIDCardTask extends
 			AsyncTask<String, Integer, HttpResult> {
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String idcardString = params[0];
@@ -394,7 +399,26 @@ public class UserActivity extends BaseActivity {
 					+ "&idcard=" + idcardString;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_UPDATE_IDCARD, param);
+			result.setRES_OBJ(idcardString);
 			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				idcard.setText(result.getRES_OBJ().toString());
+				AEApp.getCurrentUser().setIDCARD(result.getRES_OBJ().toString());
+			} else {
+				ToastUtil.show(result.getRES_MESSAGE());
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
 		}
 	}
 }

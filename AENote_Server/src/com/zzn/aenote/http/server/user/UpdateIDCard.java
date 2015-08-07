@@ -27,7 +27,7 @@ public class UpdateIDCard implements CmHandler {
 				rs.setRES_MESSAGE("用户帐号或身份证号不能为空");
 				return;
 			}
-			if (!RegexUtil.isPhoneNum(idcard)) {
+			if (!RegexUtil.isIDCard(idcard)) {
 				rs.setRES_CODE(Global.RESP_PARAM_ERROR);
 				rs.setRES_MESSAGE("请输入有效的身份证号");
 				return;

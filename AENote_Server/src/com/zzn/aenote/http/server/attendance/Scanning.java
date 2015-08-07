@@ -112,6 +112,7 @@ public class Scanning extends CmHandlerFile {
 			Map<String, String> datas = new HashMap<String, String>();
 			String parent_id = "";
 			String root_id = "";
+			String root_name = "";
 			// 帮人打卡
 			if (forWho != null && forWho.equals("1")) {
 				project_id = "";
@@ -141,6 +142,7 @@ public class Scanning extends CmHandlerFile {
 							root_id = parentProject.get("root_id").toString();
 							parent_id = parentProject.get("project_id")
 									.toString();
+							root_name = parentProject.get("root_project_name").toString();
 							break;
 						}
 					}
@@ -173,7 +175,7 @@ public class Scanning extends CmHandlerFile {
 				if (StringUtil.isEmpty(current_root_id)) {
 					ProjectVO projectVO = projectService.createProject(
 							user_name+"的项目", "", parent_id, root_id, user_id,
-							address, longitude, latitude);
+							address, longitude, latitude, root_name);
 					project_id = projectVO.getPROJECT_ID();
 				} else if (!current_root_id.equals(root_id)) {
 					rs.setRES_CODE(Global.PROJECT_NULL);

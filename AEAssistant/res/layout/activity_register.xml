@@ -29,7 +29,7 @@
                 style="@style/base_edit_text"
                 android:layout_marginTop="10dp"
                 android:drawableLeft="@drawable/ic_password"
-                android:hint="@string/login_hint_password"
+                android:hint="@string/login_hint_password1"
                 android:inputType="textPassword"
                 android:maxLength="32" />
 

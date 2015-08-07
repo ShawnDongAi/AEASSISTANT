@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -28,7 +27,10 @@ public class AttendanceVO implements Serializable {
 	private String status;
 	private int photo_width;
 	private int photo_height;
+	private String root_project_name;
 
+	private static SimpleDateFormat allFormater = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
 	private static SimpleDateFormat formater = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm");
 
@@ -160,33 +162,41 @@ public class AttendanceVO implements Serializable {
 		this.photo_height = photo_height;
 	}
 
+	public String getRoot_project_name() {
+		return root_project_name;
+	}
+
+	public void setRoot_project_name(String root_project_name) {
+		this.root_project_name = root_project_name;
+	}
+
 	public static AttendanceVO assembleAttendance(Map<String, Object> attendance) {
 		AttendanceVO vo = new AttendanceVO();
-		vo.setUser_id(attendance.get("user_id").toString());
-		vo.setUser_name(attendance.get("user_name").toString());
-		vo.setUser_phone(attendance.get("phone").toString());
-		vo.setProject_id(attendance.get("project_id").toString());
-		String projectName = attendance.get("project_name").toString();
+		vo.setUser_id(attendance.get("user_id").toString().trim());
+		vo.setUser_name(attendance.get("user_name").toString().trim());
+		vo.setUser_phone(attendance.get("phone").toString().trim());
+		vo.setProject_id(attendance.get("project_id").toString().trim());
+		String projectName = attendance.get("project_name").toString().trim();
 		if (projectName.startsWith("-")) {
 			projectName = projectName.substring(1, projectName.length());
 		}
 		vo.setProject_name(projectName);
-		vo.setParent_id(attendance.get("parent_id").toString());
-		vo.setRoot_id(attendance.get("root_id").toString());
-		String time = attendance.get("time").toString().replaceAll("\t", "")
+		vo.setParent_id(attendance.get("parent_id").toString().trim());
+		vo.setRoot_id(attendance.get("root_id").toString().trim());
+		String time = attendance.get("time").toString().trim().replaceAll("\t", "")
 				.replaceAll("\n", " ");
 		try {
-			Date date = new Date(time);
-			vo.setDate(formater.format(date));
+			vo.setDate(formater.format(allFormater.parse(time)));
 		} catch (Exception e) {
+			e.printStackTrace();
 			vo.setDate(time);
 		}
-		vo.setImgURL(attendance.get("photo").toString());
+		vo.setImgURL(attendance.get("photo").toString().trim());
 		int width = 400;
 		int height = 400;
 		if (attendance.get("photo_path") != null) {
 			try {
-				File imgFile = new File(attendance.get("photo_path").toString());
+				File imgFile = new File(attendance.get("photo_path").toString().trim());
 				if (imgFile.exists()) {
 					BufferedImage bufferedImage = ImageIO.read(imgFile);
 					width = bufferedImage.getWidth();
@@ -198,11 +208,14 @@ public class AttendanceVO implements Serializable {
 		}
 		vo.setPhoto_width(width);
 		vo.setPhoto_height(height);
-		vo.setAddress(attendance.get("address").toString());
-		vo.setLongitude(attendance.get("longitude").toString());
-		vo.setLatitude(attendance.get("latitude").toString());
-		vo.setNormal(attendance.get("normal").toString());
-		vo.setStatus(attendance.get("status").toString());
+		vo.setAddress(attendance.get("address").toString().trim());
+		vo.setLongitude(attendance.get("longitude").toString().trim());
+		vo.setLatitude(attendance.get("latitude").toString().trim());
+		vo.setNormal(attendance.get("normal").toString().trim());
+		vo.setStatus(attendance.get("status").toString().trim());
+		if (attendance.get("root_project_name") != null) {
+			vo.setRoot_project_name(attendance.get("root_project_name").toString().trim());
+		}
 		return vo;
 	}
 }
