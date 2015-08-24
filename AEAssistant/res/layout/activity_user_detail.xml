@@ -245,7 +245,8 @@
                 android:background="@drawable/btn_item"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -289,7 +290,8 @@
                 android:background="@drawable/btn_item"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="0dp"

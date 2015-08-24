@@ -183,7 +183,7 @@ public class ProjectService extends BaseService {
 			return false;
 		}
 	}
-	
+
 	public boolean updateRootProject(String old_root_id, String new_root_id) {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -208,27 +208,104 @@ public class ProjectService extends BaseService {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 查询组织架构
+	 * 
 	 * @param project_id
 	 * @return
 	 */
 	public List<Map<String, Object>> queryProjectStructure(String project_id) {
 		List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> rootList = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> parentList = new ArrayList<Map<String, Object>>();
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("project_id", project_id);
-			projectList = getJdbc().queryForList(
-					getSql("query_project_structure", data));
+			rootList = getJdbc().queryForList(
+					getSql("query_root_project", data));
+			parentList = getJdbc().queryForList(
+					getSql("query_parent_project", data));
+			projectList.addAll(rootList);
+			if (rootList != null && rootList.size() > 0) {
+				if (!rootList.get(0).get("root_id").toString()
+						.equals(project_id)) {
+					if (parentList != null && parentList.size() > 0) {
+						Map<String, Object> parent = parentList.get(0);
+						if (!parent
+								.get("project_id")
+								.toString()
+								.equals(rootList.get(0).get("root_id")
+										.toString())) {
+							parent.put("parent_id",
+									rootList.get(0).get("root_id").toString());
+							projectList.add(parent);
+						}
+						if (!parent.get("project_id").toString()
+								.equals(project_id)) {
+							projectList
+									.addAll(queryParentLeafProject(parent
+											.get("project_id").toString()));
+						}
+					}
+				}
+			}
+			projectList.addAll(queryLeafProjects(project_id));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return projectList;
 	}
 
+	public List<Map<String, Object>> queryParentLeafProject(String project_id) {
+		List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("project_id", project_id);
+			projectList = getJdbc().queryForList(
+					getSql("query_leaf_project", data));
+			if (projectList != null && projectList.size() > 0) {
+				for (Map<String, Object> project : projectList) {
+					if (!project.get("project_id").toString()
+							.equals(project_id)) {
+						result.add(project);
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public List<Map<String, Object>> queryLeafProjects(String project_id) {
+		List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("project_id", project_id);
+			projectList = getJdbc().queryForList(
+					getSql("query_leaf_project", data));
+			if (projectList != null && projectList.size() > 0) {
+				for (Map<String, Object> project : projectList) {
+					if (!project.get("project_id").toString()
+							.equals(project_id)) {
+						result.add(project);
+						result.addAll(queryLeafProjects(project.get(
+								"project_id").toString()));
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 	/**
 	 * 查询项目成员
+	 * 
 	 * @param project_id
 	 * @return
 	 */
@@ -244,7 +321,7 @@ public class ProjectService extends BaseService {
 		}
 		return userList;
 	}
-	
+
 	public boolean updateProjectName(String project_id, String project_name) {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
