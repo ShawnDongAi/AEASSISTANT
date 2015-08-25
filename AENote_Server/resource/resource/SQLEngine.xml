@@ -4,4 +4,5 @@
 	<sql-map resource="com/zzn/aenote/http/service/attch-query.xml" />
 	<sql-map resource="com/zzn/aenote/http/service/project-query.xml" />
 	<sql-map resource="com/zzn/aenote/http/service/attendance-query.xml" />
+	<sql-map resource="com/zzn/aenote/http/service/rate-query.xml" />
 </sql-map-config>

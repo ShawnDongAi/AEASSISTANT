@@ -37,6 +37,9 @@
 	<!-- 附件 -->
 	<bean id="attchService" class="com.zzn.aenote.http.service.AttchService">
 	</bean>
+	<!-- 附件 -->
+	<bean id="rateService" class="com.zzn.aenote.http.service.RateService">
+	</bean>
 	<!-- 注册 -->
 	<bean id="register" class="com.zzn.aenote.http.server.user.Register">
 		<property name="userService">

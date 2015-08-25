@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- 附件相关sql -->
+<Scheme>
+	<!-- 插入附件 -->
+	<select id="insert_rate">
+		insert into
+		t_rate(attch_id,type,url,name)
+		values('#attch_id#','#type#','#url#','#name#')
+	</select>
+	<!-- 查询附件 -->
+	<select id="query_attch">
+		select
+		*
+		from t_attch
+		where 1=1
+		[and
+		attch_id='#attch_id#']
+	</select>
+	<!-- 下载最新apk -->
+	<select id="download">
+		select t.url from t_attch t right join t_version a on t.attch_id=a.url
+		where 1=1
+		[and a.platform='#platform#'] order by a.version_code desc
+	</select>
+</Scheme>
