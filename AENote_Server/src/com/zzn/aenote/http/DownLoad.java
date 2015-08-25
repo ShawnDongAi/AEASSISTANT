@@ -49,6 +49,7 @@ public class DownLoad extends HttpServlet {
 						File file = new File(filePath);
 						if (file.exists()) {
 							resp.setContentType("application/x-download");//
+							resp.setContentType("application/vnd.android.package-archive");
 							resp.addHeader("Content-Disposition", "attachment;filename="+file.getName());
 							resp.setContentLength((int) file.length());
 							java.io.FileInputStream fis = new java.io.FileInputStream(filePath);

@@ -66,13 +66,13 @@
         <!--
         	Whether PullToRefreshListView has it's extras enabled. This allows the user to be 
         	able to scroll while refreshing, and behaves better. It acheives this by adding
-        	Header and/or Footer Views to the ListView.
+        	Header and/or Footer Views to the ListView.
         -->
         <attr name="ptrListViewExtrasEnabled" format="reference|boolean" />
 
         <!--
         	Whether the Drawable should be continually rotated as you pull. This only
-        	takes effect when using the 'Rotate' Animation Style.
+        	takes effect when using the 'Rotate' Animation Style.
         -->
         <attr name="ptrRotateDrawableWhilePulling" format="reference|boolean" />
 
@@ -125,7 +125,6 @@
         </attr>
     </declare-styleable>
 
-    
     <!-- ID used when defining the content layout in XML. -->
     <item name="mdContent" type="id"/>
     <!-- ID used when defining the menu layout in XML. -->
@@ -139,18 +138,17 @@
     <!-- Used with View#setTag(int) to specify a position for the active view. -->
     <item name="mdActiveViewPosition" type="id"/>
     <item name="md__translationX" type="id"/>
-    <item name="md__translationY" type="id"/>	
-	
-	<style name="Widget" />
+    <item name="md__translationY" type="id"/>
+
+    <style name="Widget" />
+
     <style name="Widget.MenuDrawer">
         <item name="mdMenuBackground">@color/white</item>
         <item name="mdContentBackground">@color/transparent</item>
         <item name="mdMenuSize">240dp</item>
     </style>
-	
-	
-	
-	<!-- Reference to a style for the menu drawer. -->
+
+    <!-- Reference to a style for the menu drawer. -->
     <attr name="menuDrawerStyle" format="reference" />
 
     <!-- Styleables used for styling the menu drawer. -->
@@ -186,4 +184,5 @@
         <!-- Whether an overlay should be drawn as the drawer is opened and closed -->
         <attr name="mdDrawOverlay" format="boolean" />
     </declare-styleable>
+
 </resources>

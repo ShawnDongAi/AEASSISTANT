@@ -51,7 +51,7 @@ public class ProListAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.title.setText(getItem(position).getPROJECT_NAME());
+		holder.title.setText(getItem(position).getROOT_PROJECT_NAME());
 		return convertView;
 	}
 

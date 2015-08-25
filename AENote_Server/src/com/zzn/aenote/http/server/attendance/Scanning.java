@@ -117,6 +117,7 @@ public class Scanning extends CmHandlerFile {
 			if (forWho != null && forWho.equals("1")) {
 				project_id = "";
 				String current_root_id = "";
+				String project_name = "";
 				List<Map<String, Object>> parentUsers = userService
 						.queryUserByID(parent_user);
 				if (parentUsers == null || parentUsers.size() == 0) {
@@ -166,6 +167,7 @@ public class Scanning extends CmHandlerFile {
 								project_latitude) < 500) {
 							project_id = project.get("project_id").toString();
 							current_root_id = project.get("root_id").toString();
+							project_name = project.get("project_name").toString();
 							logger.info("用户在当前位置已经有项目==>"
 									+ project.get("project_name").toString());
 							break;
@@ -177,12 +179,13 @@ public class Scanning extends CmHandlerFile {
 							user_name+"的项目", "", parent_id, root_id, user_id,
 							address, longitude, latitude, root_name);
 					project_id = projectVO.getPROJECT_ID();
+					project_name = projectVO.getPROJECT_NAME();
 				} else if (!current_root_id.equals(root_id)) {
 					rs.setRES_CODE(Global.PROJECT_NULL);
 					rs.setRES_MESSAGE(user_name + "在当前位置已加入其他项目，请提示他删除当前所属项目");
 					return;
 				}
-				datas.put("user_name", user_name);
+				datas.put("user_name", project_name);
 				datas.put("user_phone", phone);
 			} else {
 				ProjectVO project = null;
