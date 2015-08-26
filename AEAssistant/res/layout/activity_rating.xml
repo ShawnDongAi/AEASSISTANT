@@ -12,7 +12,12 @@
             android:background="@color/white"
             android:padding="5dp"
             android:text="@string/lable_rate_today"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,8 +51,14 @@
             android:layout_margin="5dp"
             android:gravity="left|top"
             android:hint="@string/lable_rate_content"
-            android:minLines="5"
+            android:lines="5"
+            android:maxLength="3000"
             android:singleLine="false" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
 
         <TextView
             android:layout_width="match_parent"
@@ -55,8 +66,13 @@
             android:background="@color/white"
             android:padding="5dp"
             android:text="@string/lable_rate_history"
-            android:textSize="14sp" />
-        
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,10 +84,10 @@
                 android:id="@+id/rate_history"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:isIndicator="true"
                 android:maxHeight="@dimen/rating_bar_height"
                 android:minHeight="@dimen/rating_bar_height"
                 android:numStars="5"
-                android:isIndicator="true"
                 android:progressDrawable="@drawable/rating"
                 android:stepSize="0.1" />
 
@@ -83,6 +99,11 @@
                 android:textColor="@drawable/text_normal"
                 android:textSize="18sp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
 
         <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
             android:id="@+id/base_list"
