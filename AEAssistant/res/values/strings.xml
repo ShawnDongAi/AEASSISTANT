@@ -82,6 +82,11 @@
     <string name="lable_remark">个人说明</string>
     <string name="lable_idcard">身份证号</string>
     <string name="lable_idcard_img">身份证照</string>
+    <string name="lable_rate">每日一评</string>
+    <string name="lable_rate_today">今日评价</string>
+    <string name="lable_rate_history">历史评价</string>
+    <string name="lable_rate_content">请输入您对该用户的评价</string>
+    <string name="lable_score">%s分</string>
     <string name="lable_address">位置</string>
     <string name="modify_user_name">修改姓名</string>
     <string name="modify_user_remark">修改个人说明</string>

@@ -1,25 +1,51 @@
 <?xml version="1.0"?>
-<!-- 附件相关sql -->
+<!-- 评价相关sql -->
 <Scheme>
-	<!-- 插入附件 -->
+	<!-- 评价 -->
 	<select id="insert_rate">
 		insert into
-		t_rate(attch_id,type,url,name)
-		values('#attch_id#','#type#','#url#','#name#')
+		t_rate(user_id,rate_user,rate,content,time,project_id,root_id)
+		values('#user_id#','#rate_user#','#rate#','#content#',[to_date('#time#','yyyy-MM-dd
+		HH24:mi')],'#project_id#','#root_id#')
 	</select>
-	<!-- 查询附件 -->
-	<select id="query_attch">
-		select
-		*
-		from t_attch
+	<!-- 更新评价 -->
+	<select id="update_rate">
+		update t_rate set
+		rate='#rate#',content='#content#',time=to_date('#time#','yyyy-MM-dd
+		HH24:mi'),project_id='#project_id#',root_id='#root_id#'
 		where 1=1
 		[and
-		attch_id='#attch_id#']
+		user_id='#user_id#']
+		[and
+		rate_user='#rate_user#']
+		[and
+		to_char(time,'yyyy-MM-dd')='#date#']
 	</select>
-	<!-- 下载最新apk -->
-	<select id="download">
-		select t.url from t_attch t right join t_version a on t.attch_id=a.url
+	<!-- 今日评价 -->
+	<select id="rate_today">
+		select
+		*,(select user_name from t_user where 1=1
+		[and
+		user_id='#user_id#']) as rate_user_name,
+		(select phone from t_user
 		where 1=1
-		[and a.platform='#platform#'] order by a.version_code desc
+		[and
+		user_id='#user_id#']) as rate_user_phone,
+		(select
+		project_name from t_project where 1=1
+		project_id=t_rate.project_id)
+		as
+		project_name,
+		(select project_name from t_project where 1=1
+		and
+		project_id=t_rate.root_id) as root_project_name
+		from t_rate
+		where 1=1
+		[and
+		user_id='#user_id#']
+		[and
+		rate_user='#rate_user#']
+		[and
+		to_char(time,'yyyy-MM-dd')='#time#']
 	</select>
 </Scheme>

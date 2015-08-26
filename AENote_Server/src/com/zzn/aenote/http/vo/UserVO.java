@@ -23,6 +23,7 @@ public class UserVO implements Serializable {
 	private String IDCARD_FRONT;
 	private String IDCARD_BACK;
 	private String IDCARD_HAND;
+	private float RATE = 0;
 
 	public String getUSER_ID() {
 		return USER_ID;
@@ -136,6 +137,14 @@ public class UserVO implements Serializable {
 		IDCARD_HAND = iDCARD_HAND;
 	}
 
+	public float getRATE() {
+		return RATE;
+	}
+
+	public void setRATE(float rATE) {
+		RATE = rATE;
+	}
+
 	public static UserVO assembleUserVO(Map<String, Object> userInfo) {
 		UserVO user = new UserVO();
 		if (userInfo.get("user_id") != null) {
@@ -173,6 +182,9 @@ public class UserVO implements Serializable {
 		}
 		if (userInfo.get("idcard_hand") != null) {
 			user.setIDCARD_HAND(userInfo.get("idcard_hand").toString().trim());
+		}
+		if (userInfo.get("rate") != null) {
+			user.setRATE(Float.parseFloat(userInfo.get("rate").toString().trim()));
 		}
 		return user;
 	}

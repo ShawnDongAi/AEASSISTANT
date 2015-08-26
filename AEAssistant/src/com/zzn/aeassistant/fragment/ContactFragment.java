@@ -79,10 +79,7 @@ public class ContactFragment extends BaseFragment {
 						.getItem(position)).getData());
 				Intent intent = new Intent(mContext, UserDetailActivity.class);
 				intent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
-				if (projectVO.getPROJECT_ID().equals(project.getPROJECT_ID())
-						|| projectVO.getPARENT_ID().equals(project.getPROJECT_ID())) {
-					intent.putExtra(CodeConstants.KEY_EDITABLE, true);
-				}
+				intent.putExtra(CodeConstants.KEY_PROJECT_ID, project.getPROJECT_ID());
 				startActivity(intent);
 			}
 		});

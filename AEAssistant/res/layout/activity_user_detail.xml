@@ -279,7 +279,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gainsboro" />
+                android:background="@color/gainsboro"
+                android:visibility="gone" />
 
             <!-- 身份证照 -->
 
@@ -303,6 +304,59 @@
                     android:textSize="18sp" />
 
                 <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro"
+                android:visibility="gone" />
+
+            <!-- 评价 -->
+
+            <LinearLayout
+                android:id="@+id/user_layout_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_item"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/lable_rate"
+                    android:textColor="@drawable/text_normal"
+                    android:textSize="18sp" />
+
+                <RatingBar
+                    android:id="@+id/user_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/rating_bar_height"
+                    android:maxHeight="@dimen/rating_bar_height"
+                    android:isIndicator="true"
+                    android:progressDrawable="@drawable/rating"
+                    android:numStars="5"
+                    android:stepSize="0.1" >
+                </RatingBar>
+                
+                <TextView
+                    android:id="@+id/user_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@drawable/text_normal"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/user_rate_ic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"

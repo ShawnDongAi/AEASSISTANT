@@ -40,7 +40,7 @@ public class VersionUpdate implements CmHandler {
 			} catch (Exception e) {
 			}
 			if (versionMaps != null && versionMaps.size() > 0) {
-				VersionVO versionVO = VersionVO.assembleAttendance(versionMaps
+				VersionVO versionVO = VersionVO.assembleVersion(versionMaps
 						.get(0));
 				rs.setRES_OBJ(GsonUtil.getInstance().toJson(versionVO));
 				rs.setRES_CODE(Global.RESP_SUCCESS);

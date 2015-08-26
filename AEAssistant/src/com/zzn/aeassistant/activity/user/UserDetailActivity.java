@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -28,10 +29,11 @@ import com.zzn.aeassistant.vo.UserVO;
 
 public class UserDetailActivity extends BaseActivity {
 	public static final int REQUEST_PROJECT_NAME = 0;
-	private View layoutProject, layoutIDCardImg, btnCall;
-	private TextView project, name, phone, sex, remark, idcard;
+	private View layoutProject, layoutIDCardImg, btnCall, layoutRate, rateIcon;
+	private TextView project, name, phone, sex, remark, idcard, score;
 	private View projectIcon;
 	private CircleImageView head;
+	private RatingBar rate;
 
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
@@ -60,11 +62,23 @@ public class UserDetailActivity extends BaseActivity {
 		layoutProject = findViewById(R.id.user_layout_project);
 		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
 		btnCall = findViewById(R.id.btn_call);
+		layoutRate = findViewById(R.id.user_layout_rate);
+		rateIcon = findViewById(R.id.user_rate_ic);
+		rate = (RatingBar) findViewById(R.id.user_rate);
+		score = (TextView) findViewById(R.id.user_score);
 		projectIcon = findViewById(R.id.user_project_icon);
-		if (getIntent().getBooleanExtra(CodeConstants.KEY_EDITABLE, false)) {
+		String projectID = getIntent().getStringExtra(
+				CodeConstants.KEY_PROJECT_ID);
+		if (projectVO.getPARENT_ID().equals(projectID)) {
 			layoutProject.setOnClickListener(this);
+			layoutRate.setOnClickListener(this);
 		} else {
-			projectIcon.setVisibility(View.INVISIBLE);
+			if (projectVO.getPROJECT_ID().equals(projectID)) {
+				layoutProject.setOnClickListener(this);
+			} else {
+				projectIcon.setVisibility(View.INVISIBLE);
+			}
+			rateIcon.setVisibility(View.INVISIBLE);
 		}
 		layoutIDCardImg.setOnClickListener(this);
 		btnCall.setOnClickListener(this);
@@ -123,6 +137,14 @@ public class UserDetailActivity extends BaseActivity {
 				startActivity(intent);
 			} catch (Exception e) {
 				ToastUtil.show(R.string.dial_error);
+			}
+			break;
+		case R.id.user_layout_rate:
+			if (userVO != null) {
+				Intent intent = new Intent(this, RatingActivity.class);
+				intent.putExtra(CodeConstants.KEY_USER_ID, userVO.getUSER_ID());
+				intent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
+				startActivity(intent);
 			}
 			break;
 		default:
@@ -225,6 +247,9 @@ public class UserDetailActivity extends BaseActivity {
 					if (!StringUtil.isEmpty(mIDCard)) {
 						idcard.setText(mIDCard);
 					}
+					rate.setRating(userVO.getRATE());
+					score.setText(getString(R.string.lable_score,
+							userVO.getRATE() + ""));
 				} catch (Exception e) {
 					e.printStackTrace();
 					ToastUtil.show(R.string.http_out);

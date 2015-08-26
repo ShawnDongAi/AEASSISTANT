@@ -22,6 +22,7 @@ public class UserVO implements Serializable {
 	private String IDCARD_FRONT;
 	private String IDCARD_BACK;
 	private String IDCARD_HAND;
+	private float RATE = 0;
 
 	public String getUSER_ID() {
 		return USER_ID;
@@ -133,5 +134,13 @@ public class UserVO implements Serializable {
 
 	public void setIDCARD_HAND(String iDCARD_HAND) {
 		IDCARD_HAND = iDCARD_HAND;
+	}
+
+	public float getRATE() {
+		return RATE;
+	}
+
+	public void setRATE(float rATE) {
+		RATE = rATE;
 	}
 }

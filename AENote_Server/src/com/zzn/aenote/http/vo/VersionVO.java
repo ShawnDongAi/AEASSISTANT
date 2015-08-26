@@ -53,7 +53,7 @@ public class VersionVO implements Serializable {
 		this.url = url;
 	}
 	
-	public static VersionVO assembleAttendance(Map<String, Object> version) {
+	public static VersionVO assembleVersion(Map<String, Object> version) {
 		VersionVO vo = new VersionVO();
 		vo.setPlatform(version.get("platform").toString());
 		vo.setInstruction(version.get("instruction").toString());

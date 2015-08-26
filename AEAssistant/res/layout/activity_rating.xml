@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <LinearLayout style="@style/layout_body" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="@string/lable_rate_today"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <RatingBar
+                android:id="@+id/rate_today"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/rating_bar_height"
+                android:minHeight="@dimen/rating_bar_height"
+                android:numStars="5"
+                android:progressDrawable="@drawable/rating"
+                android:stepSize="0.5" />
+
+            <TextView
+                android:id="@+id/score_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@drawable/text_normal"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/content"
+            style="@style/base_edit_text"
+            android:layout_margin="5dp"
+            android:gravity="left|top"
+            android:hint="@string/lable_rate_content"
+            android:minLines="5"
+            android:singleLine="false" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:text="@string/lable_rate_history"
+            android:textSize="14sp" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp" >
+
+            <RatingBar
+                android:id="@+id/rate_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="@dimen/rating_bar_height"
+                android:minHeight="@dimen/rating_bar_height"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:progressDrawable="@drawable/rating"
+                android:stepSize="0.1" />
+
+            <TextView
+                android:id="@+id/score_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:textColor="@drawable/text_normal"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
+            android:id="@+id/base_list"
+            style="@style/base_list" />
+    </LinearLayout>
+
+</LinearLayout>

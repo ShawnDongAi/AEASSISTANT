@@ -10,5 +10,6 @@
     <dimen name="title_bar_btn_width">60dp</dimen>
     <dimen name="reside_menu_width">180dp</dimen>
     <dimen name="reside_menu_real_width">250dp</dimen>
+    <dimen name="rating_bar_height">20dp</dimen>
     
 </resources>

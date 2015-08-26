@@ -113,6 +113,11 @@
             android:name=".activity.user.IDCardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <!-- 评价页面 -->
+        <activity
+            android:name=".activity.user.RatingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 文本编辑页面 -->
         <activity
             android:name=".activity.TextEditActivity"

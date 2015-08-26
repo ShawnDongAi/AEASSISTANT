@@ -80,7 +80,10 @@
 		select
 		user_id,user_name,phone,remark,sex,password,small_head,big_head,(to_char(create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as create_time, idcard, idcard_front, idcard_back,
-		idcard_hand
+		idcard_hand,(select avg(rate) from t_rate where 1=1
+		[and
+		user_id='#user_id#']
+		) as rate
 		from t_user
 		where 1=1
 		[and
