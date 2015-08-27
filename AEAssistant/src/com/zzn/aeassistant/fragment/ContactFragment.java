@@ -75,10 +75,10 @@ public class ContactFragment extends BaseFragment {
 					return;
 				}
 				lastClickTime = System.currentTimeMillis();
-				ProjectVO projectVO = (ProjectVO) (((Node) listView.getAdapter()
-						.getItem(position)).getData());
+				Node node = (Node) listView.getAdapter().getItem(position);
+//				ProjectVO projectVO = (ProjectVO) (node.getData());
 				Intent intent = new Intent(mContext, UserDetailActivity.class);
-				intent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
+				intent.putExtra(CodeConstants.KEY_PROJECT_VO, node);
 				intent.putExtra(CodeConstants.KEY_PROJECT_ID, project.getPROJECT_ID());
 				startActivity(intent);
 			}
@@ -93,11 +93,11 @@ public class ContactFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (project != null) {
-			pullListView.setRefreshing(true);
-		}
-		proListAdapter.setDatas(AEApp.getCurrentUser().getPROJECTS());
-		proListAdapter.notifyDataSetChanged();
+//		if (project != null) {
+//			pullListView.setRefreshing(true);
+//		}
+//		proListAdapter.setDatas(AEApp.getCurrentUser().getPROJECTS());
+//		proListAdapter.notifyDataSetChanged();
 	}
 
 	private void initMenuView() {
@@ -198,6 +198,11 @@ public class ContactFragment extends BaseFragment {
 			} else {
 				double currentLatitude = AEApp.getCurrentLoc().getLatitude();
 				double currentLongitude = AEApp.getCurrentLoc().getLongitude();
+				if (AEApp.getCurrentUser().getPROJECTS() != null
+						&& AEApp.getCurrentUser().getPROJECTS().size() > 0) {
+					currentProject = AEApp.getCurrentUser().getPROJECTS()
+							.get(0);
+				}
 				for (ProjectVO projectVO : AEApp.getCurrentUser().getPROJECTS()) {
 					double proLatitude = Double.parseDouble(projectVO
 							.getLATITUDE());

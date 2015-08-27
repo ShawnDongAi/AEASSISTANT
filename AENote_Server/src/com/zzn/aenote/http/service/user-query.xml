@@ -83,7 +83,10 @@
 		idcard_hand,(select avg(rate) from t_rate where 1=1
 		[and
 		user_id='#user_id#']
-		) as rate
+		) as rate,(select count(rate) from t_rate where 1=1
+		[and
+		user_id='#user_id#']
+		) as rate_count
 		from t_user
 		where 1=1
 		[and

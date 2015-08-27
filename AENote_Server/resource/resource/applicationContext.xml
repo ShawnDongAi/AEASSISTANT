@@ -214,4 +214,16 @@
 	<!-- 用户反馈接口 -->
 	<bean id="feedback" class="com.zzn.aenote.http.server.Feedback">
 	</bean>
+	<!-- 评价 -->
+	<bean id="rate" class="com.zzn.aenote.http.server.rate.Rate">
+		<property name="rateService">
+			<ref local="rateService" />
+		</property>
+	</bean>
+	<!-- 评价 -->
+	<bean id="queryRateForToday" class="com.zzn.aenote.http.server.rate.QueryRateForToday">
+		<property name="rateService">
+			<ref local="rateService" />
+		</property>
+	</bean>
 </beans>

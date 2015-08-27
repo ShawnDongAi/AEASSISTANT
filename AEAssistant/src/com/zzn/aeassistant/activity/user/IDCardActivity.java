@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class IDCardActivity extends BaseActivity {
 	private DisplayImageOptions options;
 	private String imgFrontID, imgBackID, imgHandID = "";
 	private boolean editable = false;
+	private String user_id = "";
 
 	@Override
 	protected int layoutResID() {
@@ -73,6 +75,7 @@ public class IDCardActivity extends BaseActivity {
 		imgFrontID = getIntent().getStringExtra(CodeConstants.KEY_IDCARD_FRONT);
 		imgBackID = getIntent().getStringExtra(CodeConstants.KEY_IDCARD_BACK);
 		imgHandID = getIntent().getStringExtra(CodeConstants.KEY_IDCARD_HAND);
+		user_id = getIntent().getStringExtra(CodeConstants.KEY_USER_ID);
 		initImageLoader();
 	}
 
@@ -144,7 +147,7 @@ public class IDCardActivity extends BaseActivity {
 		protected HttpResult doInBackground(String... params) {
 			String filePath = params[0];
 			Map<String, String> param = new HashMap<String, String>();
-			param.put("user_id", AEApp.getCurrentUser().getUSER_ID());
+			param.put("user_id", user_id);
 			param.put("img_type", imgType + "");
 			List<String> files = new ArrayList<String>();
 			files.add(filePath);
@@ -164,26 +167,49 @@ public class IDCardActivity extends BaseActivity {
 							result.getRES_OBJ().toString(), AttchVO.class);
 					switch (imgType) {
 					case 0:
-						AEApp.getCurrentUser()
-								.setIDCARD_FRONT(vo.getATTCH_ID());
-						imageLoader.displayImage(String.format(
-								URLConstants.URL_DOWNLOAD, AEApp
-										.getCurrentUser().getIDCARD_FRONT()),
-								imgFront, options);
+						if (user_id.equals(AEApp.getCurrentUser().getUSER_ID())) {
+							AEApp.getCurrentUser().setIDCARD_FRONT(
+									vo.getATTCH_ID());
+						} else {
+							Intent intent = new Intent(
+									UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
+							intent.putExtra(CodeConstants.KEY_IDCARD_FRONT,
+									vo.getATTCH_ID());
+							sendBroadcast(intent);
+						}
+						imageLoader.displayImage(
+								String.format(URLConstants.URL_DOWNLOAD,
+										vo.getATTCH_ID()), imgFront, options);
 						break;
 					case 1:
-						AEApp.getCurrentUser().setIDCARD_BACK(vo.getATTCH_ID());
-						imageLoader.displayImage(String.format(
-								URLConstants.URL_DOWNLOAD, AEApp
-										.getCurrentUser().getIDCARD_BACK()),
-								imgBack, options);
+						if (user_id.equals(AEApp.getCurrentUser().getUSER_ID())) {
+							AEApp.getCurrentUser().setIDCARD_BACK(
+									vo.getATTCH_ID());
+						} else {
+							Intent intent = new Intent(
+									UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
+							intent.putExtra(CodeConstants.KEY_IDCARD_BACK,
+									vo.getATTCH_ID());
+							sendBroadcast(intent);
+						}
+						imageLoader.displayImage(
+								String.format(URLConstants.URL_DOWNLOAD,
+										vo.getATTCH_ID()), imgBack, options);
 						break;
 					case 2:
-						AEApp.getCurrentUser().setIDCARD_HAND(vo.getATTCH_ID());
-						imageLoader.displayImage(String.format(
-								URLConstants.URL_DOWNLOAD, AEApp
-										.getCurrentUser().getIDCARD_HAND()),
-								imgHand, options);
+						if (user_id.equals(AEApp.getCurrentUser().getUSER_ID())) {
+							AEApp.getCurrentUser().setIDCARD_HAND(
+									vo.getATTCH_ID());
+						} else {
+							Intent intent = new Intent(
+									UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
+							intent.putExtra(CodeConstants.KEY_IDCARD_HAND,
+									vo.getATTCH_ID());
+							sendBroadcast(intent);
+						}
+						imageLoader.displayImage(
+								String.format(URLConstants.URL_DOWNLOAD,
+										vo.getATTCH_ID()), imgHand, options);
 						break;
 					default:
 						break;
@@ -227,17 +253,17 @@ public class IDCardActivity extends BaseActivity {
 				// .displayer(new RoundedBitmapDisplayer(20))// 是否设置为圆角，弧度为多少
 				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
 				.build();// 构建完成
-		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_FRONT())) {
+		if (!StringUtil.isEmpty(imgFrontID)) {
 			imageLoader.displayImage(
 					String.format(URLConstants.URL_DOWNLOAD, imgFrontID),
 					imgFront, options);
 		}
-		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_BACK())) {
+		if (!StringUtil.isEmpty(imgBackID)) {
 			imageLoader.displayImage(
 					String.format(URLConstants.URL_DOWNLOAD, imgBackID),
 					imgBack, options);
 		}
-		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getIDCARD_HAND())) {
+		if (!StringUtil.isEmpty(imgHandID)) {
 			imageLoader.displayImage(
 					String.format(URLConstants.URL_DOWNLOAD, imgHandID),
 					imgHand, options);

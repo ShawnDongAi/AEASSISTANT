@@ -24,7 +24,7 @@
 	<!-- 今日评价 -->
 	<select id="rate_today">
 		select
-		*,(select user_name from t_user where 1=1
+		t.*,(select user_name from t_user where 1=1
 		[and
 		user_id='#user_id#']) as rate_user_name,
 		(select phone from t_user
@@ -33,13 +33,13 @@
 		user_id='#user_id#']) as rate_user_phone,
 		(select
 		project_name from t_project where 1=1
-		project_id=t_rate.project_id)
+		and project_id=t.project_id)
 		as
 		project_name,
 		(select project_name from t_project where 1=1
 		and
-		project_id=t_rate.root_id) as root_project_name
-		from t_rate
+		project_id=t.root_id) as root_project_name
+		from t_rate t
 		where 1=1
 		[and
 		user_id='#user_id#']

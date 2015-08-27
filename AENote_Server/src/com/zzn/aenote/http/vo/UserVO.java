@@ -183,8 +183,14 @@ public class UserVO implements Serializable {
 		if (userInfo.get("idcard_hand") != null) {
 			user.setIDCARD_HAND(userInfo.get("idcard_hand").toString().trim());
 		}
-		if (userInfo.get("rate") != null) {
-			user.setRATE(Float.parseFloat(userInfo.get("rate").toString().trim()));
+		if (userInfo.get("rate") != null && userInfo.get("rate_count") != null) {
+			float rate = Float.parseFloat(userInfo.get("rate").toString()
+					.trim());
+			float rate_count = Integer.parseInt(userInfo.get("rate_count")
+					.toString().trim());
+			user.setRATE((rate_count * rate + 3.0f) / (rate_count + 1.0f));
+		} else {
+			user.setRATE(3.0f);
 		}
 		return user;
 	}

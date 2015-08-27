@@ -121,4 +121,12 @@ public class URLConstants {
 	 * 安卓最新版本下载地址
 	 */
 	public static final String URL_APK_DOWNLOAD = URL_BASE + "download?platform=0";
+	/**
+	 * 评价
+	 */
+	public static final String URL_RATE = URL_HOST + "rate";
+	/**
+	 * 今日评价
+	 */
+	public static final String URL_RATE_TODAY = URL_HOST + "queryRateForToday";
 }

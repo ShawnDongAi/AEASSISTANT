@@ -51,13 +51,14 @@
             android:layout_margin="5dp"
             android:gravity="left|top"
             android:hint="@string/lable_rate_content"
-            android:lines="5"
+            android:lines="8"
             android:maxLength="3000"
             android:singleLine="false" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
+            android:visibility="gone"
             android:background="@color/gainsboro" />
 
         <TextView
@@ -65,12 +66,14 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:padding="5dp"
+            android:visibility="gone"
             android:text="@string/lable_rate_history"
             android:textSize="18sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
+            android:visibility="gone"
             android:background="@color/gainsboro" />
 
         <LinearLayout
@@ -78,6 +81,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:visibility="gone"
             android:padding="5dp" >
 
             <RatingBar
@@ -103,11 +107,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
+            android:visibility="gone"
             android:background="@color/gainsboro" />
 
         <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
             android:id="@+id/base_list"
-            style="@style/base_list" />
+            style="@style/base_list"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

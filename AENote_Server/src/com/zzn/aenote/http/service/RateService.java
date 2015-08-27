@@ -39,6 +39,9 @@ public class RateService extends BaseService {
 			data.put("user_id", user_id);
 			data.put("rate_user", rate_user);
 			data.put("rate", rate);
+			if (content == null) {
+				content = "";
+			}
 			data.put("content", content);
 			Date date = new Date(System.currentTimeMillis());
 			data.put("time", allFormater.format(date));
@@ -68,6 +71,9 @@ public class RateService extends BaseService {
 			data.put("user_id", user_id);
 			data.put("rate_user", rate_user);
 			data.put("rate", rate);
+			if (content == null) {
+				content = "";
+			}
 			data.put("content", content);
 			Date date = new Date(System.currentTimeMillis());
 			data.put("time", allFormater.format(date));

@@ -1,9 +1,13 @@
 package com.zzn.aeassistant.activity.user;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.InputType;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -15,6 +19,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.TextEditActivity;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
@@ -23,13 +28,18 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.CircleImageView;
+import com.zzn.aeassistant.view.tree.Node;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 import com.zzn.aeassistant.vo.UserVO;
 
 public class UserDetailActivity extends BaseActivity {
-	public static final int REQUEST_PROJECT_NAME = 0;
-	private View layoutProject, layoutIDCardImg, btnCall, layoutRate, rateIcon;
+	public static final int REQUEST_USER_IDCARD = 0;
+	public static final int REQUEST_PROJECT_NAME = 1;
+	public static final int REQUEST_RATE = 2;
+	public static final String ACTION_UPDATE_IDCARD_IMG = "com.zzn.aeassistant.update_idcard_img";
+	private View layoutProject, layoutIDCard, layoutIDCardImg, btnCall,
+			layoutRate, rateIcon, diverIDCard, diverIDCardImg, idCardIcon;
 	private TextView project, name, phone, sex, remark, idcard, score;
 	private View projectIcon;
 	private CircleImageView head;
@@ -39,6 +49,7 @@ public class UserDetailActivity extends BaseActivity {
 	private DisplayImageOptions options;
 
 	private ProjectVO projectVO;
+	private String projectID;
 	private UserVO userVO;
 	private boolean changed = false;
 
@@ -54,12 +65,22 @@ public class UserDetailActivity extends BaseActivity {
 
 	@Override
 	protected void initView() {
-		projectVO = (ProjectVO) getIntent().getSerializableExtra(
-				CodeConstants.KEY_PROJECT_VO);
-		if (projectVO == null) {
+		Node node = null;
+		try {
+			node = (Node) getIntent().getSerializableExtra(
+					CodeConstants.KEY_PROJECT_VO);
+		} catch (Exception e) {
 			finish();
 		}
+		if (node == null) {
+			finish();
+		}
+		projectVO = (ProjectVO) (node.getData());
+		diverIDCard = findViewById(R.id.diver_idcard);
+		diverIDCardImg = findViewById(R.id.diver_idcard_img);
+		idCardIcon = findViewById(R.id.user_idcard_ic);
 		layoutProject = findViewById(R.id.user_layout_project);
+		layoutIDCard = findViewById(R.id.user_layout_idcard);
 		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
 		btnCall = findViewById(R.id.btn_call);
 		layoutRate = findViewById(R.id.user_layout_rate);
@@ -67,18 +88,19 @@ public class UserDetailActivity extends BaseActivity {
 		rate = (RatingBar) findViewById(R.id.user_rate);
 		score = (TextView) findViewById(R.id.user_score);
 		projectIcon = findViewById(R.id.user_project_icon);
-		String projectID = getIntent().getStringExtra(
-				CodeConstants.KEY_PROJECT_ID);
-		if (projectVO.getPARENT_ID().equals(projectID)) {
+		projectID = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
+		new CheckRateTask().execute(node);
+		if (projectVO.getPARENT_ID().equals(projectID)
+				|| projectVO.getPROJECT_ID().equals(projectID)) {
 			layoutProject.setOnClickListener(this);
-			layoutRate.setOnClickListener(this);
+			layoutIDCard.setOnClickListener(this);
+			layoutIDCardImg.setOnClickListener(this);
 		} else {
-			if (projectVO.getPROJECT_ID().equals(projectID)) {
-				layoutProject.setOnClickListener(this);
-			} else {
-				projectIcon.setVisibility(View.INVISIBLE);
-			}
-			rateIcon.setVisibility(View.INVISIBLE);
+			projectIcon.setVisibility(View.INVISIBLE);
+			layoutIDCard.setVisibility(View.GONE);
+			diverIDCard.setVisibility(View.GONE);
+			layoutIDCardImg.setVisibility(View.GONE);
+			diverIDCardImg.setVisibility(View.GONE);
 		}
 		layoutIDCardImg.setOnClickListener(this);
 		btnCall.setOnClickListener(this);
@@ -100,6 +122,8 @@ public class UserDetailActivity extends BaseActivity {
 							projectVO.getCREATE_USER_HEAD()), head, options);
 		}
 		new GetUserTask().execute(projectVO.getCREATE_USER());
+		registerReceiver(userInfoReceiver, new IntentFilter(
+				ACTION_UPDATE_IDCARD_IMG));
 	}
 
 	@Override
@@ -117,16 +141,32 @@ public class UserDetailActivity extends BaseActivity {
 			projectintent.putExtra(CodeConstants.KEY_SINGLELINE, true);
 			startActivityForResult(projectintent, REQUEST_PROJECT_NAME);
 			break;
+		case R.id.user_layout_idcard:
+			if (userVO != null) {
+				Intent intent = new Intent(this, TextEditActivity.class);
+				intent.putExtra(CodeConstants.KEY_TITLE,
+						getString(R.string.modify_user_idcard));
+				intent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, idcard
+						.getText().toString());
+				intent.putExtra(CodeConstants.KEY_HINT_TEXT,
+						getString(R.string.hint_idcard));
+				intent.putExtra(CodeConstants.KEY_SINGLELINE, true);
+				intent.putExtra(CodeConstants.KEY_INPUT_TYPE,
+						InputType.TYPE_NUMBER_FLAG_SIGNED);
+				startActivityForResult(intent, REQUEST_USER_IDCARD);
+			}
+			break;
 		case R.id.user_layout_idcard_img:
 			if (userVO != null) {
 				Intent intent = new Intent(this, IDCardActivity.class);
-				intent.putExtra(CodeConstants.KEY_EDITABLE, false);
+				intent.putExtra(CodeConstants.KEY_EDITABLE, true);
 				intent.putExtra(CodeConstants.KEY_IDCARD_FRONT,
 						userVO.getIDCARD_FRONT());
 				intent.putExtra(CodeConstants.KEY_IDCARD_BACK,
 						userVO.getIDCARD_BACK());
 				intent.putExtra(CodeConstants.KEY_IDCARD_HAND,
 						userVO.getIDCARD_HAND());
+				intent.putExtra(CodeConstants.KEY_USER_ID, userVO.getUSER_ID());
 				startActivity(intent);
 			}
 			break;
@@ -144,7 +184,7 @@ public class UserDetailActivity extends BaseActivity {
 				Intent intent = new Intent(this, RatingActivity.class);
 				intent.putExtra(CodeConstants.KEY_USER_ID, userVO.getUSER_ID());
 				intent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
-				startActivity(intent);
+				startActivityForResult(intent, REQUEST_RATE);
 			}
 			break;
 		default:
@@ -157,15 +197,25 @@ public class UserDetailActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
+			case REQUEST_USER_IDCARD:
+				String idcardString = data
+						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
+				if (idcard.getText().toString().trim().equals(idcardString)) {
+					break;
+				}
+				new UpdateIDCardTask().execute(idcardString);
+				break;
 			case REQUEST_PROJECT_NAME:
 				String nameString = data
 						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
 				if (project.getText().toString().trim().equals(nameString)) {
 					break;
 				}
-				project.setText(nameString);
 				new UpdateProjectTask().execute(nameString);
 				changed = true;
+				break;
+			case REQUEST_RATE:
+				new GetUserTask().execute(projectVO.getCREATE_USER());
 				break;
 			default:
 				break;
@@ -191,6 +241,32 @@ public class UserDetailActivity extends BaseActivity {
 		}
 	}
 
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(userInfoReceiver);
+		super.onDestroy();
+	}
+	
+	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (userVO != null) {
+				String idcard_img_front = intent.getStringExtra(CodeConstants.KEY_IDCARD_FRONT);
+				String idcard_img_back = intent.getStringExtra(CodeConstants.KEY_IDCARD_BACK);
+				String idcard_img_hand = intent.getStringExtra(CodeConstants.KEY_IDCARD_HAND);
+				if (!StringUtil.isEmpty(idcard_img_front)) {
+					userVO.setIDCARD_FRONT(idcard_img_front);
+				}
+				if (!StringUtil.isEmpty(idcard_img_back)) {
+					userVO.setIDCARD_BACK(idcard_img_back);
+				}
+				if (!StringUtil.isEmpty(idcard_img_hand)) {
+					userVO.setIDCARD_HAND(idcard_img_hand);
+				}
+			}
+		}
+	};
+
 	@SuppressWarnings("deprecation")
 	private void initImageLoader() {
 		options = new DisplayImageOptions.Builder()
@@ -210,6 +286,36 @@ public class UserDetailActivity extends BaseActivity {
 	@Override
 	protected boolean needLocation() {
 		return false;
+	}
+
+	private class CheckRateTask extends AsyncTask<Node, Integer, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Node... params) {
+			Node node = params[0];
+			boolean canRate = false;
+			while (node != null && node.getId() != null
+					&& node.getParent() != null
+					&& node.getParent().getId() != null
+					&& !node.getParent().getId().equals(node.getId())
+					&& !StringUtil.isEmpty(node.getParent().getId())) {
+				if (node.getParent().getId().equals(projectID)) {
+					canRate = true;
+					break;
+				}
+				node = node.getParent();
+			}
+			return canRate;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				layoutRate.setOnClickListener(UserDetailActivity.this);
+				rateIcon.setVisibility(View.VISIBLE);
+			}
+		}
 	}
 
 	private class GetUserTask extends AsyncTask<String, Integer, HttpResult> {
@@ -246,6 +352,9 @@ public class UserDetailActivity extends BaseActivity {
 					String mIDCard = userVO.getIDCARD();
 					if (!StringUtil.isEmpty(mIDCard)) {
 						idcard.setText(mIDCard);
+						idCardIcon.setVisibility(View.INVISIBLE);
+					} else {
+						idCardIcon.setVisibility(View.VISIBLE);
 					}
 					rate.setRating(userVO.getRATE());
 					score.setText(getString(R.string.lable_score,
@@ -269,13 +378,77 @@ public class UserDetailActivity extends BaseActivity {
 	private class UpdateProjectTask extends
 			AsyncTask<String, Integer, HttpResult> {
 		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
 		protected HttpResult doInBackground(String... params) {
 			String nameString = params[0];
 			String param = "project_id=" + projectVO.getPROJECT_ID()
 					+ "&project_name=" + nameString;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_UPDATE_PROJECT_NAME, param);
+			result.setRES_OBJ(nameString);
 			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				project.setText(result.getRES_OBJ().toString());
+				AEApp.getCurrentUser()
+						.setIDCARD(result.getRES_OBJ().toString());
+			} else {
+				ToastUtil.show(result.getRES_MESSAGE());
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
+		}
+	}
+
+	private class UpdateIDCardTask extends
+			AsyncTask<String, Integer, HttpResult> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String idcardString = params[0];
+			String param = "user_id=" + userVO.getUSER_ID() + "&idcard="
+					+ idcardString;
+			HttpResult result = AEHttpUtil.doPost(
+					URLConstants.URL_UPDATE_IDCARD, param);
+			result.setRES_OBJ(idcardString);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				idcard.setText(result.getRES_OBJ().toString());
+			} else {
+				ToastUtil.show(result.getRES_MESSAGE());
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
 		}
 	}
 }

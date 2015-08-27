@@ -107,7 +107,11 @@ public class RateVO implements Serializable {
 		vo.setUser_id(rate.get("user_id").toString());
 		vo.setRate_user(rate.get("rate_user").toString());
 		vo.setRate(Float.parseFloat(rate.get("rate").toString()));
-		vo.setContent(rate.get("content").toString());
+		String content = "";
+		if (rate.get("content") != null) {
+			content = rate.get("content").toString().trim();
+		}
+		vo.setContent(content);
 		String time = rate.get("time").toString().trim().replaceAll("\t", "")
 				.replaceAll("\n", " ");
 		try {

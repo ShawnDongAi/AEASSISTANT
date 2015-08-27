@@ -211,9 +211,14 @@ public class UserActivity extends BaseActivity {
 		case R.id.user_layout_idcard_img:
 			Intent intent = new Intent(this, IDCardActivity.class);
 			intent.putExtra(CodeConstants.KEY_EDITABLE, true);
-			intent.putExtra(CodeConstants.KEY_IDCARD_FRONT, AEApp.getCurrentUser().getIDCARD_FRONT());
-			intent.putExtra(CodeConstants.KEY_IDCARD_BACK, AEApp.getCurrentUser().getIDCARD_BACK());
-			intent.putExtra(CodeConstants.KEY_IDCARD_HAND, AEApp.getCurrentUser().getIDCARD_HAND());
+			intent.putExtra(CodeConstants.KEY_IDCARD_FRONT, AEApp
+					.getCurrentUser().getIDCARD_FRONT());
+			intent.putExtra(CodeConstants.KEY_IDCARD_BACK, AEApp
+					.getCurrentUser().getIDCARD_BACK());
+			intent.putExtra(CodeConstants.KEY_IDCARD_HAND, AEApp
+					.getCurrentUser().getIDCARD_HAND());
+			intent.putExtra(CodeConstants.KEY_USER_ID, AEApp.getCurrentUser()
+					.getUSER_ID());
 			startActivity(intent);
 			break;
 		case R.id.menu_photograph:
@@ -284,7 +289,7 @@ public class UserActivity extends BaseActivity {
 			case REQUEST_USER_IDCARD:
 				String idcardString = data
 						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
-				if (remark.getText().toString().trim().equals(idcardString)) {
+				if (idcard.getText().toString().trim().equals(idcardString)) {
 					break;
 				}
 				new UpdateIDCardTask().execute(idcardString);
@@ -385,7 +390,7 @@ public class UserActivity extends BaseActivity {
 
 	private class UpdateIDCardTask extends
 			AsyncTask<String, Integer, HttpResult> {
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -402,14 +407,15 @@ public class UserActivity extends BaseActivity {
 			result.setRES_OBJ(idcardString);
 			return result;
 		}
-		
+
 		@Override
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				idcard.setText(result.getRES_OBJ().toString());
-				AEApp.getCurrentUser().setIDCARD(result.getRES_OBJ().toString());
+				AEApp.getCurrentUser()
+						.setIDCARD(result.getRES_OBJ().toString());
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}

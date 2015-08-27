@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!-- 评价相关sql -->
+<Scheme>
+	<!-- 评价 -->
+	<select id="insert_rate">
+		insert into
+		t_rate(user_id,rate_user,rate,content,time,project_id,root_id)
+		values('#user_id#','#rate_user#','#rate#','#content#',[to_date('#time#','yyyy-MM-dd
+		HH24:mi')],'#project_id#','#root_id#')
+	</select>
+	<!-- 更新评价 -->
+	<select id="update_rate">
+		update t_rate set
+		rate='#rate#',content='#content#',time=to_date('#time#','yyyy-MM-dd
+		HH24:mi'),project_id='#project_id#',root_id='#root_id#'
+		where 1=1
+		[and
+		user_id='#user_id#']
+		[and
+		rate_user='#rate_user#']
+		[and
+		to_char(time,'yyyy-MM-dd')='#date#']
+	</select>
+	<!-- 今日评价 -->
+	<select id="rate_today">
+		select
+		t.*,(select user_name from t_user where 1=1
+		[and
+		user_id='#user_id#']) as rate_user_name,
+		(select phone from t_user
+		where 1=1
+		[and
+		user_id='#user_id#']) as rate_user_phone,
+		(select
+		project_name from t_project where 1=1
+		and project_id=t.project_id)
+		as
+		project_name,
+		(select project_name from t_project where 1=1
+		and
+		project_id=t.root_id) as root_project_name
+		from t_rate t
+		where 1=1
+		[and
+		user_id='#user_id#']
+		[and
+		rate_user='#rate_user#']
+		[and
+		to_char(time,'yyyy-MM-dd')='#time#']
+	</select>
+</Scheme>

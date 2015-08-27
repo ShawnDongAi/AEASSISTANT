@@ -245,8 +245,7 @@
                 android:background="@drawable/btn_item"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -269,18 +268,19 @@
                     android:textSize="15sp" />
 
                 <ImageView
+                    android:id="@+id/user_idcard_ic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_to"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    android:src="@drawable/ic_to" />
             </LinearLayout>
 
             <View
+                android:id="@+id/diver_idcard"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gainsboro"
-                android:visibility="gone" />
+                android:background="@color/gainsboro" />
 
             <!-- 身份证照 -->
 
@@ -291,8 +291,7 @@
                 android:background="@drawable/btn_item"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone" >
+                android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="0dp"
@@ -304,6 +303,7 @@
                     android:textSize="18sp" />
 
                 <ImageView
+                    android:id="@+id/user_idcard_img_ic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
@@ -311,10 +311,10 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/diver_idcard_img"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gainsboro"
-                android:visibility="gone" />
+                android:background="@color/gainsboro" />
 
             <!-- 评价 -->
 
@@ -360,10 +360,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
+                    android:visibility="invisible"
                     android:src="@drawable/ic_to" />
             </LinearLayout>
 
             <View
+                android:id="@+id/diver_rate"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="@color/gainsboro" />

@@ -96,6 +96,7 @@
         <!-- 主页 -->
         <activity
             android:name=".activity.IndexActivity"
+            android:alwaysRetainTaskState="true"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme" />
         <!-- 个人信息页面 -->

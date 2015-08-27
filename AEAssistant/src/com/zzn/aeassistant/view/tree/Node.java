@@ -1,10 +1,11 @@
 package com.zzn.aeassistant.view.tree;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
-
+public class Node implements Serializable {
+	private static final long serialVersionUID = 4543936257317326939L;
 	private String id;
 	/**
 	 * 根节点pId为0
