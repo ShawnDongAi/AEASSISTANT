@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">简正点工</string>
+    <string name="app_name">简正劳务</string>
+    <string name="app_label">简正劳务—点工</string>
     <string name="app_error">程序异常退出</string>
     <string name="settings">设置</string>
     <string name="confirm">确定</string>
@@ -55,7 +56,9 @@
     <string name="title_contact">通讯录</string>
     <string name="title_scanning">每日签到</string>
     <string name="title_today">今日考勤</string>
+    <string name="title_work_space">工作圈</string>
     <string name="title_attendance_record">签到记录</string>
+    <string name="title_attendance">签到</string>
     <string name="title_user_center">个人中心</string>
     <string name="title_home">主页</string>
     <string name="title_setting">设置</string>

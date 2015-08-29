@@ -86,15 +86,12 @@ public class ProjectStructureActivity extends BaseActivity {
 					return;
 				}
 				lastClickTime = System.currentTimeMillis();
-				ProjectVO project = (ProjectVO) (((Node) listView.getAdapter()
-						.getItem(position)).getData());
+				Node node = (Node) listView.getAdapter().getItem(position);
+//				ProjectVO projectVO = (ProjectVO) (node.getData());
 				Intent intent = new Intent(mContext, UserDetailActivity.class);
-				intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
-				if (project.getPROJECT_ID().equals(project_id)
-						|| project.getPARENT_ID().equals(project_id)) {
-					intent.putExtra(CodeConstants.KEY_EDITABLE, true);
-				}
-				startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
+				intent.putExtra(CodeConstants.KEY_PROJECT_VO, node);
+				intent.putExtra(CodeConstants.KEY_PROJECT_ID, project_id);
+				startActivity(intent);
 			}
 		});
 		initPullToRefresh();

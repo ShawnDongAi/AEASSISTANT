@@ -169,7 +169,6 @@ public class SplashActivity extends Activity {
 		}
 		startActivity(new Intent(this, LoginActivity.class));
 		finish();
-
 	}
 
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {

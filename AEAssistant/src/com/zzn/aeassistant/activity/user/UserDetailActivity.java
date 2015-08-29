@@ -72,7 +72,8 @@ public class UserDetailActivity extends BaseActivity {
 		} catch (Exception e) {
 			finish();
 		}
-		if (node == null) {
+		if (node == null || node.getData() == null
+				|| !(node.getData() instanceof ProjectVO)) {
 			finish();
 		}
 		projectVO = (ProjectVO) (node.getData());
@@ -246,14 +247,17 @@ public class UserDetailActivity extends BaseActivity {
 		unregisterReceiver(userInfoReceiver);
 		super.onDestroy();
 	}
-	
+
 	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (userVO != null) {
-				String idcard_img_front = intent.getStringExtra(CodeConstants.KEY_IDCARD_FRONT);
-				String idcard_img_back = intent.getStringExtra(CodeConstants.KEY_IDCARD_BACK);
-				String idcard_img_hand = intent.getStringExtra(CodeConstants.KEY_IDCARD_HAND);
+				String idcard_img_front = intent
+						.getStringExtra(CodeConstants.KEY_IDCARD_FRONT);
+				String idcard_img_back = intent
+						.getStringExtra(CodeConstants.KEY_IDCARD_BACK);
+				String idcard_img_hand = intent
+						.getStringExtra(CodeConstants.KEY_IDCARD_HAND);
 				if (!StringUtil.isEmpty(idcard_img_front)) {
 					userVO.setIDCARD_FRONT(idcard_img_front);
 				}

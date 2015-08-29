@@ -107,14 +107,14 @@ public class SettingFragment extends BaseFragment {
 				shareIntent.putExtra(
 						Intent.EXTRA_TEXT,
 						getString(R.string.share_img,
-								URLConstants.URL_APK_DOWNLOAD));
+								URLConstants.URL_BASE));
 				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
 			} else {
 				shareIntent.setType("text/plain");
 				shareIntent.putExtra(
 						Intent.EXTRA_TEXT,
 						getString(R.string.share_text,
-								URLConstants.URL_APK_DOWNLOAD));
+								URLConstants.URL_BASE));
 			}
 			shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(Intent.createChooser(shareIntent,
@@ -139,7 +139,7 @@ public class SettingFragment extends BaseFragment {
 		twocodeImg = new ImageView(mContext);
 		try {
 			Bitmap bitmap = BitmapUtil.cretaeTwoCode(mContext,
-					URLConstants.URL_APK_DOWNLOAD, R.drawable.ic_launcher);
+					URLConstants.URL_BASE, R.drawable.ic_launcher);
 			twocodeImg.setImageBitmap(bitmap);
 			BitmapUtil.writeToSdcard(bitmap, FileCostants.DIR_BASE,
 					TWOCODE_FILE);

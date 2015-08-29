@@ -27,14 +27,14 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/home_today"
+            android:id="@+id/home_attendance_record"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@drawable/btn_circle"
             android:padding="10dp"
-            android:text="@string/title_today"
+            android:text="@string/title_attendance_record"
             android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>

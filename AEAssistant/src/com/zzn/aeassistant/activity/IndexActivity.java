@@ -24,16 +24,17 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.URLConstants;
-import com.zzn.aeassistant.fragment.AttendanceRecordFragment;
 import com.zzn.aeassistant.fragment.BaseFragment;
 import com.zzn.aeassistant.fragment.ContactFragment;
-import com.zzn.aeassistant.fragment.HomeFragment;
+import com.zzn.aeassistant.fragment.AttendanceFragment;
 import com.zzn.aeassistant.fragment.ProjectManagerFragment;
 import com.zzn.aeassistant.fragment.SettingFragment;
+import com.zzn.aeassistant.fragment.WorkSpaceFragment;
 import com.zzn.aeassistant.view.CircleImageView;
 import com.zzn.aeassistant.view.menudrawer.OverlayDrawer;
 import com.zzn.aeassistant.vo.Module;
@@ -120,19 +121,22 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
 	private void initModuleView() {
 		adapter = new ModuleAdapter(mContext);
-		// 主页
-		adapter.addItem(new Module(R.drawable.ic_user_center,
-				R.string.title_home, new HomeFragment()));
+		// // 主页
+		// adapter.addItem(new Module(R.drawable.ic_user_center,
+		// R.string.title_home, new HomeFragment()));
 		// 项目管理
 		adapter.addItem(new Module(R.drawable.ic_project_manager,
 				R.string.title_project_manager, new ProjectManagerFragment()));
 		// 通讯录
 		adapter.addItem(new Module(R.drawable.ic_contact,
 				R.string.title_contact, new ContactFragment()));
-		// 考勤记录
+		// 工作圈
+		adapter.addItem(new Module(R.drawable.ic_user_center,
+				R.string.title_work_space, new WorkSpaceFragment()));
+		// 考勤
 		adapter.addItem(new Module(R.drawable.ic_attendance_record,
-				R.string.title_attendance_record,
-				new AttendanceRecordFragment()));
+				R.string.title_attendance,
+				new AttendanceFragment()));
 		// 设置
 		adapter.addItem(new Module(R.drawable.ic_setting,
 				R.string.title_setting, new SettingFragment()));
