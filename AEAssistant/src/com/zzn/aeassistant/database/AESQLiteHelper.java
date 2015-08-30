@@ -18,7 +18,7 @@ import android.content.Context;
  */
 public class AESQLiteHelper extends SQLiteOpenHelper {
 	private static AESQLiteHelper instance = null;
-	private static String DATABASE_NAME = "AENote.db";// 数据库文件名
+	public static String DATABASE_NAME = "AENote.db";// 数据库文件名
 	private static int DATABASE_VERSION = 1;// 数据库版本
 	public final static String ENCRYPT_KEY = PhoneUtil.getIMEI();
 

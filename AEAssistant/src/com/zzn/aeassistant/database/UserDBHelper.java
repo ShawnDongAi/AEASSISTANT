@@ -30,6 +30,7 @@ public class UserDBHelper {
 		values.put("user_phone", phone);
 		values.put("user_name", name);
 		db.insert(table, null, values);
+		db.close();
 	}
 
 	public static void delete(String userID, String phone) {
