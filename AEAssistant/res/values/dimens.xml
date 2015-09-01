@@ -11,5 +11,6 @@
     <dimen name="reside_menu_width">180dp</dimen>
     <dimen name="reside_menu_real_width">250dp</dimen>
     <dimen name="rating_bar_height">20dp</dimen>
+    <dimen name="rating_bar_big_height">42.5dp</dimen>
     
 </resources>

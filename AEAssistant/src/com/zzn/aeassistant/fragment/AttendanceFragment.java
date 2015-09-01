@@ -3,7 +3,6 @@ package com.zzn.aeassistant.fragment;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +30,7 @@ import com.baidu.location.BDLocation;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.UserHistoryAdapter;
 import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
-import com.zzn.aeassistant.activity.attendance.SumByProjectActivity;
 import com.zzn.aeassistant.app.AEApp;
-import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.database.UserDBHelper;
@@ -53,7 +50,7 @@ import com.zzn.aeassistant.vo.ProjectVO;
 import com.zzn.aeassistant.vo.UserVO;
 
 /**
- * 主Activity
+ * 签到
  * 
  * @author Shawn
  */
@@ -82,7 +79,7 @@ public class AttendanceFragment extends BaseFragment {
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.fragment_home;
+		return R.layout.activity_attendance;
 	}
 
 	@Override

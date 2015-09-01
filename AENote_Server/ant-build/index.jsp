@@ -11,7 +11,7 @@
 	<head>
 		<base href="<%=basePath%>">
 
-		<title>Hello</title>
+		<title>简正劳务app下载</title>
 		<meta http-equiv="pragma" content="no-cache">
 		<meta http-equiv="cache-control" content="no-cache">
 		<meta http-equiv="expires" content="0">
@@ -58,17 +58,24 @@
 //            document.writeln(navigator.userAgent); 
 			if (browser.versions.android) {
 				document.location='http://112.124.16.245:8080/AENote_Server/download?platform=0'
-			} else if (browser.versions.ios) {
+			}
+			else if (browser.versions.ios) {
 				document.location='http://www.baidu.com'
-			} else {
+			}
+			else if (browser.versions.iPhone) {
+				document.location='http://www.baidu.com'
+			}
+			else if (browser.versions.iPad) {
+				document.location='http://www.baidu.com'
+			}
+			else {
 				document.location='http://112.124.16.245:8080/AENote_Server/download?platform=0'
 			}
-			
         </script>
 	</head>
 
 	<body>
-		跳转到简正劳务下载...
+		开始下载简正劳务app...
 		<br>
 	</body>
 </html>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- 评论相关sql -->
+<Scheme>
+	<!-- 新建评论 -->
+	<select id="insert_comment">
+		insert into
+		t_comment(comment_id,post_id,user_id,content,attch_id,project_id,root_id,time)
+		values('#comment_id#','#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#','#time#')
+	</select>
+	<!-- 查询评论 -->
+	<select id="query_comment">
+		select
+		*
+		from t_comment
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+	<!-- 删除评论 -->
+	<select id="delete_comment">
+		delete from
+		t_comment
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+</Scheme>
