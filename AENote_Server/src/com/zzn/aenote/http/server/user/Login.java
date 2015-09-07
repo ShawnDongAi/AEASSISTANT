@@ -58,6 +58,7 @@ public class Login implements CmHandler {
 				UserVO user = UserVO.assembleUserVO(userInfo);
 				result.put("user",
 						GsonUtil.getInstance().toJson(user, UserVO.class));
+				userService.updateLoginTime(user.getUSER_ID());
 				List<ProjectVO> projectList = new ArrayList<ProjectVO>();
 				List<Map<String, Object>> projects = projectService
 						.queryProjectByCreateUser(user.getUSER_ID());

@@ -4,9 +4,9 @@
 	<!-- 注册 -->
 	<select id="insert_user_info">
 		insert into
-		t_user(user_id,user_name,phone,remark,sex,password,small_head,big_head,create_time)
+		t_user(user_id,user_name,phone,remark,sex,password,small_head,big_head,create_time,time)
 		values('#user_id#','#user_name#','#phone#','','#sex#','#password#','','',to_date('#create_time#','yyyy-MM-dd
-		HH24:mi:ss'))
+		HH24:mi:ss'),to_date('#time#','yyyy-MM-dd HH24:mi:ss'))
 	</select>
 	<!-- 登陆验证 -->
 	<select id="valid_user_info">
@@ -19,6 +19,12 @@
 		[and phone='#phone#']
 		[and
 		password='#password#']
+	</select>
+	<!-- 更新最后登录时间 -->
+	<select id="update_login_time">
+		update t_user set time=to_date('#time#','yyyy-MM-dd HH24:mi:ss')
+		where 1=1
+		[and user_id='#user_id#']
 	</select>
 	<!-- 修改密码 -->
 	<select id="reset_password">

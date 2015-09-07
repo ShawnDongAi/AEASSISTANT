@@ -4,8 +4,14 @@
 	<!-- 新建帖子 -->
 	<select id="insert_post">
 		insert into
-		t_post(post_id,user_id,content,attch_id,project_id,root_id,time,send_user_id,send_project_id,private)
-		values('#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#','#time#','#send_user_id#','#send_project_id#','#private#')
+		t_post(post_id,user_id,content,attch_id,project_id,root_id,time,private)
+		values('#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#','#time#','#private#')
+	</select>
+	<!-- 帖子抄送 -->
+	<select id="insert_post_send">
+		insert into
+		t_post_send(post_id,send_user_id,send_project_id)
+		values('#post_id#','#send_user_id#','#send_project_id#')
 	</select>
 	<!-- 查询帖子 -->
 	<select id="query_post">

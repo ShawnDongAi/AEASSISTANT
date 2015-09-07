@@ -152,7 +152,8 @@
 		</property>
 	</bean>
 	<!-- 查询项目组织架构 -->
-	<bean id="queryProjectStructure" class="com.zzn.aenote.http.server.project.QueryProjectStructure">
+	<bean id="queryProjectStructure"
+		class="com.zzn.aenote.http.server.project.QueryProjectStructure">
 		<property name="projectService">
 			<ref local="projectService" />
 		</property>
@@ -171,7 +172,7 @@
 	</bean>
 	<!-- 打卡 -->
 	<bean id="scanning" class="com.zzn.aenote.http.server.attendance.Scanning">
-	    <property name="userService">
+		<property name="userService">
 			<ref local="userService" />
 		</property>
 		<property name="projectService">
@@ -224,6 +225,27 @@
 	<bean id="queryRateForToday" class="com.zzn.aenote.http.server.rate.QueryRateForToday">
 		<property name="rateService">
 			<ref local="rateService" />
+		</property>
+	</bean>
+	<!-- 发帖 -->
+	<bean id="post" class="com.zzn.aenote.http.server.post.Post">
+		<property name="postService">
+			<ref local="postService" />
+		</property>
+	</bean>
+	<!-- 发帖 -->
+	<bean id="postFile" class="com.zzn.aenote.http.server.post.PostFile">
+		<property name="postService">
+			<ref local="postService" />
+		</property>
+		<property name="attchService">
+			<ref local="attchService" />
+		</property>
+		<property name="charset"><!-- 默认编码为UTF-8 -->
+			<value>UTF-8</value>
+		</property>
+		<property name="maxSize"><!-- 默认接收最大文件大小为10M -->
+			<value>104857600</value>
 		</property>
 	</bean>
 </beans>

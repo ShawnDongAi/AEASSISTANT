@@ -48,6 +48,7 @@ public class UserService extends BaseService {
 			data.put("password", password);
 			String date = fromat.format(new Date(System.currentTimeMillis()));
 			data.put("create_time", date);
+			data.put("time", date);
 			user.setCREATE_TIME(date);
 			getJdbc().execute(getSql("insert_user_info", data));
 			return user;
@@ -123,6 +124,17 @@ public class UserService extends BaseService {
 			return true;
 		} catch (Exception e) {
 			return false;
+		}
+	}
+	
+	public void updateLoginTime(String user_id) {
+		try {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("user_id", user_id);
+			String date = fromat.format(new Date(System.currentTimeMillis()));
+			data.put("time", date);
+			getJdbc().execute(getSql("update_login_time", data));
+		} catch (Exception e) {
 		}
 	}
 
