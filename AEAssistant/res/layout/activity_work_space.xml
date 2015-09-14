@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <RelativeLayout style="@style/layout_body" >
+
+        <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
+            android:id="@+id/base_list"
+            style="@style/base_list" />
+    </RelativeLayout>
+
+</LinearLayout>

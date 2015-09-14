@@ -13,6 +13,8 @@
     <string name="http_error">网络不给力,请检查您的网络连接</string>
     <string name="http_null">当前无网络连接,请设置您的网络连接</string>
     <string name="http_out">服务器离家出走了</string>
+    <string name="choose_file">选择文件</string>
+    <string name="null_file_manager">请先安装一个文件管理器</string>
     <string name="sdcard_error">请检查存储卡是否挂载</string>
     <string name="developing">小猿努力coding中，尽请期待</string>
     <string name="exit_toast">再按一次返回键退出</string>
@@ -176,4 +178,9 @@
     <string name="version_has_new">发现新版本:%s</string>
     <string name="update">更新</string>
     <string name="ignore">忽略</string>
+    
+    <!-- 工作圈 -->
+    <string name="send">发送</string>
+    <string name="post">发帖</string>
+    <string name="comment">评论</string>
 </resources>

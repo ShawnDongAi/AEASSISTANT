@@ -110,6 +110,34 @@ public class AttchUtil {
 		}
 	}
 
+	public static void getFile(Activity activity) {
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		intent.setType("*/*");
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		try {
+			activity.startActivityForResult(
+					Intent.createChooser(intent,
+							activity.getString(R.string.choose_file)),
+					CodeConstants.REQUEST_CODE_GETFILE);
+		} catch (android.content.ActivityNotFoundException ex) {
+			ToastUtil.show(R.string.null_file_manager);
+		}
+	}
+
+	public static void getFile(Fragment fragment) {
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		intent.setType("*/*");
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		try {
+			fragment.startActivityForResult(
+					Intent.createChooser(intent,
+							fragment.getString(R.string.choose_file)),
+					CodeConstants.REQUEST_CODE_GETFILE);
+		} catch (android.content.ActivityNotFoundException ex) {
+			ToastUtil.show(R.string.null_file_manager);
+		}
+	}
+
 	@SuppressLint("NewApi")
 	public static String getPath(final Context context, final Uri uri) {
 		final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;

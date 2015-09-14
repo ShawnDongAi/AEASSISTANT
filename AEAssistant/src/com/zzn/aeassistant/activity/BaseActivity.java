@@ -71,6 +71,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 
 	protected void getImg(String path) {
 	}
+	
+	protected void getFile(String path) {
+	}
 
 	protected void onActivityReceiveLocation(BDLocation location) {
 	}
@@ -257,6 +260,20 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 							getImg(imagePath);
 						}
 					}
+				}
+				break;
+			case CodeConstants.REQUEST_CODE_GETFILE:
+				if (data != null && data.getData() != null) {// 从“文件浏览器”或者“Gallery相册”选择的图片
+					String filePath = "";
+					Uri imageUri = data.getData();
+					if (imageUri == null || !(imageUri instanceof Uri)) {
+						return;
+					}
+					filePath = AttchUtil.getPath(mContext, imageUri);
+					if (filePath == null || filePath.equals("")) {
+						return;
+					}
+					getFile(filePath);
 				}
 				break;
 			default:

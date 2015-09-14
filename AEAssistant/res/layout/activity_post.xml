@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <LinearLayout style="@style/layout_body" >
+
+        <EditText
+            android:id="@+id/input_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="top|left"
+            android:hint="输入您想说的话..."
+            android:padding="10dp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/attch_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gainsboro"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/photo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_common_transparent"
+                android:padding="5dp"
+                android:src="@drawable/ic_photo" />
+
+            <ImageButton
+                android:id="@+id/camera"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_common_transparent"
+                android:padding="5dp"
+                android:src="@drawable/icon_camera" />
+
+            <ImageButton
+                android:id="@+id/file"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_common_transparent"
+                android:padding="5dp"
+                android:src="@drawable/icon_file" />
+
+            <Button
+                android:id="@+id/send"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_common_transparent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="\@"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

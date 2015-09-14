@@ -174,7 +174,15 @@
             android:name=".activity.attendance.SumByUsersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
-        <!-- 投降裁剪页面 -->
+        <!-- 工作圈 -->
+        <activity android:name=".activity.post.WorkSpaceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <activity android:name=".activity.post.PostActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent"
+            android:windowSoftInputMode="adjustResize" />
+        <!-- 头像裁剪页面 -->
         <activity
             android:name=".view.cropimage.CropImageActivity"
             android:screenOrientation="portrait"

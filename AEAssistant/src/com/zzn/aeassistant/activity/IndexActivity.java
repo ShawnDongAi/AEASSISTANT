@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,14 +25,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.fragment.AttendanceFragment;
 import com.zzn.aeassistant.fragment.BaseFragment;
 import com.zzn.aeassistant.fragment.ContactFragment;
-import com.zzn.aeassistant.fragment.AttendanceFragment;
 import com.zzn.aeassistant.fragment.ProjectManagerFragment;
 import com.zzn.aeassistant.fragment.SettingFragment;
 import com.zzn.aeassistant.fragment.WorkSpaceFragment;
@@ -79,6 +79,10 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		title = (TextView) findViewById(R.id.title);
 		if (title != null) {
 			title.setText(titleStringID());
+		}
+		save = (Button) findViewById(R.id.save);
+		if (save != null) {
+			save.setOnClickListener(this);
 		}
 		back = (ImageButton) findViewById(R.id.back);
 		if (back != null) {
@@ -135,8 +139,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 				R.string.title_work_space, new WorkSpaceFragment()));
 		// 考勤
 		adapter.addItem(new Module(R.drawable.ic_attendance_record,
-				R.string.title_attendance,
-				new AttendanceFragment()));
+				R.string.title_attendance, new AttendanceFragment()));
 		// 设置
 		adapter.addItem(new Module(R.drawable.ic_setting,
 				R.string.title_setting, new SettingFragment()));
@@ -252,6 +255,30 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		setTitle(getString(adapter.getItem(position).getTitleID()));
 		mDrawer.closeMenu(true);
 		adapter.setCurrentIndex(currentIndex);
+		if (currentIndex == 2) {
+			save.setText(R.string.post);
+			save.setVisibility(View.VISIBLE);
+		} else {
+			save.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	protected void onSaveClick() {
+		super.onSaveClick();
+		if (onSaveClickListener != null) {
+			onSaveClickListener.onSaveClick();
+		}
+	}
+
+	private SaveClickListener onSaveClickListener;
+
+	public void setOnSaveClickListener(SaveClickListener onSaveClickListener) {
+		this.onSaveClickListener = onSaveClickListener;
+	}
+
+	public interface SaveClickListener {
+		void onSaveClick();
 	}
 
 	/**
