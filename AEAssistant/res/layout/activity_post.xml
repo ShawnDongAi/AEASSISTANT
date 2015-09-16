@@ -16,16 +16,10 @@
             android:hint="输入您想说的话..."
             android:padding="10dp" />
 
-        <HorizontalScrollView
+        <com.zzn.aeassistant.view.HorizontalListView
+            android:id="@+id/attch_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-
-            <LinearLayout
-                android:id="@+id/attch_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
+            android:layout_height="80dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,6 +42,14 @@
                 android:background="@drawable/btn_common_transparent"
                 android:padding="5dp"
                 android:src="@drawable/icon_camera" />
+
+            <ImageButton
+                android:id="@+id/voice"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_common_transparent"
+                android:padding="5dp"
+                android:src="@drawable/icon_voice" />
 
             <ImageButton
                 android:id="@+id/file"

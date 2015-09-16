@@ -262,6 +262,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 					}
 				}
 				break;
+			case CodeConstants.REQUEST_CODE_VOICE:
 			case CodeConstants.REQUEST_CODE_GETFILE:
 				if (data != null && data.getData() != null) {// 从“文件浏览器”或者“Gallery相册”选择的图片
 					String filePath = "";

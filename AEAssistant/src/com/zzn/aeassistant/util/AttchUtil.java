@@ -110,6 +110,12 @@ public class AttchUtil {
 		}
 	}
 
+	public static void record(Activity activity) {
+		Intent intent = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+		activity.startActivityForResult(intent,
+				CodeConstants.REQUEST_CODE_VOICE);
+	}
+
 	public static void getFile(Activity activity) {
 		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 		intent.setType("*/*");
