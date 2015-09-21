@@ -10,18 +10,15 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-
-		<title>简正劳务app下载</title>
+		<title>简正劳务</title>
 		<meta http-equiv="pragma" content="no-cache">
 		<meta http-equiv="cache-control" content="no-cache">
 		<meta http-equiv="expires" content="0">
 		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 		<meta http-equiv="description" content="简正劳务app下载">
-		
 		<script type="text/javascript">
             /*
              * 智能机浏览器版本信息:
-             *
              */
             var browser = {
                 versions: function() {
@@ -41,21 +38,19 @@
                 }(),
                 language: (navigator.browserLanguage || navigator.language).toLowerCase()
             }
- 
             if (browser.versions.ios || browser.versions.iPhone || browser.versions.iPad) {
                 window.location="https://itunes.apple.com/cn/app/xxx";
             }
             else if (browser.versions.android) {
                 window.location="http://zhj8.aliapp.com/xxx.apk";
             }
- 
 //			document.writeln("语言版本: " + browser.language);
-//            document.writeln(" 是否为移动终端: " + browser.versions.mobile);
-//            document.writeln(" ios终端: " + browser.versions.ios);
-//            document.writeln(" android终端: " + browser.versions.android);
-//            document.writeln(" 是否为iPhone: " + browser.versions.iPhone);
-//            document.writeln(" 是否iPad: " + browser.versions.iPad);
-//            document.writeln(navigator.userAgent); 
+//          document.writeln(" 是否为移动终端: " + browser.versions.mobile);
+//          document.writeln(" ios终端: " + browser.versions.ios);
+//          document.writeln(" android终端: " + browser.versions.android);
+//          document.writeln(" 是否为iPhone: " + browser.versions.iPhone);
+//          document.writeln(" 是否iPad: " + browser.versions.iPad);
+//          document.writeln(navigator.userAgent); 
 			if (browser.versions.android) {
 				document.location='http://112.124.16.245:8080/AENote_Server/download?platform=0'
 			}

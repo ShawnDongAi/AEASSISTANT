@@ -22,6 +22,8 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.PlatformkEY;
 import com.zzn.aeassistant.database.AESQLiteHelper;
+import com.zzn.aeassistant.database.CommentDBHelper;
+import com.zzn.aeassistant.database.PostDBHelper;
 import com.zzn.aeassistant.database.UserDBHelper;
 import com.zzn.aeassistant.util.PhoneUtil;
 import com.zzn.aeassistant.vo.UserVO;
@@ -103,6 +105,8 @@ public class AEApp extends Application {
 	private void createDatabase() {
 		// GroupDBHelper.createTable();
 		UserDBHelper.createTable();
+		PostDBHelper.createTable();
+		CommentDBHelper.createTable();
 		// AttchDBHelper.createTable();
 	}
 

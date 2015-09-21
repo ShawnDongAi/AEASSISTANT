@@ -5,7 +5,8 @@
 	<select id="insert_post">
 		insert into
 		t_post(post_id,user_id,content,attch_id,project_id,root_id,time,private)
-		values('#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#','#time#','#private#')
+		values('#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#',[to_date('#time#','yyyy-MM-dd
+		HH24:mi:ss')],'#private#')
 	</select>
 	<!-- 帖子抄送 -->
 	<select id="insert_post_send">
@@ -39,6 +40,31 @@
 	<select id="delete_post_send">
 		delete from
 		t_post_send
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+
+	<!-- 新建评论 -->
+	<select id="insert_comment">
+		insert into
+		t_comment(comment_id,post_id,user_id,content,attch_id,project_id,root_id,time)
+		values('#comment_id#','#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#',[to_date('#time#','yyyy-MM-dd
+		HH24:mi:ss')])
+	</select>
+	<!-- 查询评论 -->
+	<select id="query_comment">
+		select
+		*
+		from t_comment
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+	<!-- 删除评论 -->
+	<select id="delete_comment">
+		delete from
+		t_comment
 		where 1=1
 		[and
 		post_id='#post_id#']

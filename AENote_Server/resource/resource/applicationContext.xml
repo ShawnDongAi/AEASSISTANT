@@ -37,8 +37,11 @@
 	<!-- 附件 -->
 	<bean id="attchService" class="com.zzn.aenote.http.service.AttchService">
 	</bean>
-	<!-- 附件 -->
+	<!-- 评价 -->
 	<bean id="rateService" class="com.zzn.aenote.http.service.RateService">
+	</bean>
+	<!-- 工作圈 -->
+	<bean id="postService" class="com.zzn.aenote.http.service.PostService">
 	</bean>
 	<!-- 注册 -->
 	<bean id="register" class="com.zzn.aenote.http.server.user.Register">
@@ -227,17 +230,8 @@
 			<ref local="rateService" />
 		</property>
 	</bean>
-	<!-- 发帖 -->
-	<bean id="post" class="com.zzn.aenote.http.server.post.Post">
-		<property name="postService">
-			<ref local="postService" />
-		</property>
-	</bean>
-	<!-- 发帖 -->
-	<bean id="postFile" class="com.zzn.aenote.http.server.post.PostFile">
-		<property name="postService">
-			<ref local="postService" />
-		</property>
+	<!-- 上传文件 -->
+	<bean id="upLoadFile" class="com.zzn.aenote.http.server.UpLoadFile">
 		<property name="attchService">
 			<ref local="attchService" />
 		</property>
@@ -246,6 +240,18 @@
 		</property>
 		<property name="maxSize"><!-- 默认接收最大文件大小为10M -->
 			<value>104857600</value>
+		</property>
+	</bean>
+	<!-- 发帖 -->
+	<bean id="post" class="com.zzn.aenote.http.server.post.Post">
+		<property name="postService">
+			<ref local="postService" />
+		</property>
+	</bean>
+	<!-- 评论 -->
+	<bean id="comment" class="com.zzn.aenote.http.server.post.Comment">
+		<property name="postService">
+			<ref local="postService" />
 		</property>
 	</bean>
 </beans>

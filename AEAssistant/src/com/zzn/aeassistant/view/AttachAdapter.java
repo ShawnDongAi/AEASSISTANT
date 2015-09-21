@@ -39,8 +39,7 @@ public class AttachAdapter extends BaseAdapter {
 	public AttachAdapter(Context context, boolean editable) {
 		this.mContext = context;
 		this.editable = editable;
-		options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
+		options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.icon_failed)// 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.icon_failed) // 设置图片加载/解码过程中错误时候显示的图片
 				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
@@ -62,6 +61,17 @@ public class AttachAdapter extends BaseAdapter {
 
 	public void addItem(AttchVO vo) {
 		attchList.add(vo);
+	}
+
+	public String getAttachIDs() {
+		StringBuilder ids = new StringBuilder();
+		for (AttchVO vo : attchList) {
+			ids.append(vo.getATTCH_ID() + "&");
+		}
+		if (ids.length() > 0) {
+			ids.deleteCharAt(ids.length() - 1);
+		}
+		return ids.toString();
 	}
 
 	@Override
@@ -94,13 +104,10 @@ public class AttachAdapter extends BaseAdapter {
 		AttchVO item = getItem(position);
 		if (item.getTYPE().equals(AttchVO.TYPE_IMG)) {
 			if (!StringUtil.isEmpty(item.getLOCAL_PATH())) {
-				imageLoader.displayImage(item.getLOCAL_PATH(), holder.image,
-						options, animateFirstListener);
+				imageLoader.displayImage(item.getLOCAL_PATH(), holder.image, options, animateFirstListener);
 			} else if (!StringUtil.isEmpty(item.getURL())) {
-				imageLoader
-						.displayImage(
-								String.format(URLConstants.URL_DOWNLOAD,
-										item.getURL()), holder.image, options);
+				imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, item.getURL()), holder.image,
+						options);
 			}
 		} else if (item.getTYPE().equals(AttchVO.TYPE_AUDIO)) {
 			holder.image.setImageResource(R.drawable.ic_voice);
@@ -114,8 +121,7 @@ public class AttachAdapter extends BaseAdapter {
 			holder.image.setImageResource(R.drawable.ic_file);
 		}
 		if (editable) {
-			holder.delete
-					.setVisibility(isDeleteMode ? View.VISIBLE : View.GONE);
+			holder.delete.setVisibility(isDeleteMode ? View.VISIBLE : View.GONE);
 			holder.delete.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -147,8 +153,7 @@ public class AttachAdapter extends BaseAdapter {
 		String path = item.getLOCAL_PATH();
 		if (StringUtil.isEmpty(path) && StringUtil.isEmpty(item.getURL())) {
 			path = String.valueOf(item.getURL())
-					+ item.getNAME().substring(item.getNAME().lastIndexOf("."),
-							item.getNAME().length());
+					+ item.getNAME().substring(item.getNAME().lastIndexOf("."), item.getNAME().length());
 		}
 		if (FileUtils.exists(path)) {
 			FileUtils.openFile(mContext, new File(path));
@@ -156,14 +161,11 @@ public class AttachAdapter extends BaseAdapter {
 	}
 
 	/** 图片加载监听事件 **/
-	private static class AnimateFirstDisplayListener extends
-			SimpleImageLoadingListener {
-		static final List<String> displayedImages = Collections
-				.synchronizedList(new LinkedList<String>());
+	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
+		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
 
 		@Override
-		public void onLoadingComplete(String imageUri, View view,
-				Bitmap loadedImage) {
+		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 			if (loadedImage != null) {
 				ImageView imageView = (ImageView) view;
 				boolean firstDisplay = !displayedImages.contains(imageUri);

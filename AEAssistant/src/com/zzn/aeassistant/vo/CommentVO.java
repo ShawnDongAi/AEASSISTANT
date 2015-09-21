@@ -10,6 +10,7 @@ public class CommentVO implements Serializable {
 	private String post_id;
 	private String user_id;
 	private String user_name;
+	private String user_head;
 	private String content;
 	private String attch_id;
 	private String project_id;
@@ -17,6 +18,7 @@ public class CommentVO implements Serializable {
 	private String root_id;
 	private String root_project_id;
 	private String time;
+	private String is_new;
 
 	public String getComment_id() {
 		return comment_id;
@@ -104,5 +106,21 @@ public class CommentVO implements Serializable {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+
+	public String getUser_head() {
+		return user_head;
+	}
+
+	public void setUser_head(String user_head) {
+		this.user_head = user_head;
+	}
+
+	public String getIs_new() {
+		return is_new;
+	}
+
+	public void setIs_new(String is_new) {
+		this.is_new = is_new;
 	}
 }

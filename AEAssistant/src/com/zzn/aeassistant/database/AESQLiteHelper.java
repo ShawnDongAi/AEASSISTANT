@@ -19,11 +19,10 @@ import android.content.Context;
 public class AESQLiteHelper extends SQLiteOpenHelper {
 	private static AESQLiteHelper instance = null;
 	public static String DATABASE_NAME = "AENote.db";// 数据库文件名
-	private static int DATABASE_VERSION = 1;// 数据库版本
+	private static int DATABASE_VERSION = 2;// 数据库版本
 	public final static String ENCRYPT_KEY = PhoneUtil.getIMEI();
 
-	public AESQLiteHelper(Context context, String name, CursorFactory factory,
-			int version) {
+	public AESQLiteHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);
 		instance = this;
 	}
@@ -46,6 +45,11 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		if (newVersion == 2) {
+			db.execSQL(PostDBHelper.DB_CREATE);
+			db.execSQL(CommentDBHelper.DB_CREATE);
+			db.setVersion(2);
+		}
 	}
 
 	/**
@@ -57,8 +61,7 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 	public static boolean isTableExist(String tableName) {
 		boolean flag = false;
 		try {
-			SQLiteDatabase db = AEApp.getDbHelper().getReadableDatabase(
-					ENCRYPT_KEY);
+			SQLiteDatabase db = AEApp.getDbHelper().getReadableDatabase(ENCRYPT_KEY);
 			flag = isTableExist(tableName, db);
 			db.close();
 		} catch (Exception e) {
@@ -67,13 +70,11 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 		return flag;
 	}
 
-	private static boolean isTableExist(String tableName,
-			SQLiteDatabase database) {
+	private static boolean isTableExist(String tableName, SQLiteDatabase database) {
 		boolean flag = false;
 		try {
 			SQLiteDatabase db = database;
-			String sql = "select count(*) as c from Sqlite_master where type ='table' and name ='"
-					+ tableName + "' ";
+			String sql = "select count(*) as c from Sqlite_master where type ='table' and name ='" + tableName + "' ";
 			Cursor cursor = db.rawQuery(sql, null);
 			if (cursor.moveToNext()) {
 				if (cursor.getInt(0) > 0)
@@ -96,8 +97,7 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 	 */
 	public static boolean deleteTable(String tableName) {
 		try {
-			SQLiteDatabase db = AEApp.getDbHelper().getReadableDatabase(
-					ENCRYPT_KEY);
+			SQLiteDatabase db = AEApp.getDbHelper().getReadableDatabase(ENCRYPT_KEY);
 			String sql = "DROP TABLE IF EXISTS " + tableName;
 			db.execSQL(sql);
 			db.close();
@@ -118,8 +118,7 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 		boolean flag = isTableExist(tableName);// 判断表是否存在
 		if (!flag) {
 			try {
-				SQLiteDatabase db = AEApp.getDbHelper().getReadableDatabase(
-						ENCRYPT_KEY);
+				SQLiteDatabase db = AEApp.getDbHelper().getReadableDatabase(ENCRYPT_KEY);
 				db.execSQL(sql);
 				db.close();
 			} catch (SQLException e) {

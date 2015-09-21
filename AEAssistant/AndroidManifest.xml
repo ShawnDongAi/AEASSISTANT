@@ -16,9 +16,9 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <!-- 定位相关 -->
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -59,6 +59,7 @@
             android:theme="@style/ae_theme_fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -67,10 +68,13 @@
             android:name=".activity.user.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme" >
-            <!-- <intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+            </intent-filter>
+            -->
         </activity>
         <!-- 注册页 -->
         <activity
@@ -175,10 +179,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 工作圈 -->
-        <activity android:name=".activity.post.WorkSpaceActivity"
+        <activity
+            android:name=".activity.post.WorkSpaceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
-        <activity android:name=".activity.post.PostActivity"
+        <activity
+            android:name=".activity.post.PostActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent"
             android:windowSoftInputMode="adjustResize" />
@@ -188,8 +194,17 @@
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- apk下载服务 -->
-        <service 
+        <service
             android:name=".service.DownLoadService"
+            android:exported="false" />
+
+        <provider
+            android:name="com.zzn.aeassistant.database.PostProvider"
+            android:authorities="com.zzn.aeassistant.providers.post"
+            android:exported="false" />
+        <provider
+            android:name="com.zzn.aeassistant.database.CommentProvider"
+            android:authorities="com.zzn.aeassistant.providers.comment"
             android:exported="false" />
     </application>
 

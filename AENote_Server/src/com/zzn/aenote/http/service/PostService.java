@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import com.zzn.aenote.http.BaseService;
 import com.zzn.aenote.http.utils.UtilUniqueKey;
+import com.zzn.aenote.http.vo.CommentVO;
 import com.zzn.aenote.http.vo.PostVO;
 import com.zzn.aenote.http.vo.ProjectVO;
 
@@ -21,15 +22,14 @@ import com.zzn.aenote.http.vo.ProjectVO;
  */
 public class PostService extends BaseService {
 	private static final Logger logger = Logger.getLogger(PostService.class);
-	private SimpleDateFormat format = new SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss");
+	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-	public PostVO insertPost(String content, String attch_id,
-			ProjectVO project, String is_private, List<ProjectVO> sendProjectVOs) {
+	public PostVO insertPost(String content, String attch_id, ProjectVO project, String is_private,
+			List<ProjectVO> sendProjectVOs) {
 		try {
 			Date date = new Date(System.currentTimeMillis());
 			PostVO post = new PostVO();
-			post.setPost_id(UtilUniqueKey.getKey(System.currentTimeMillis()));
+			post.setPost_id(UtilUniqueKey.getKey("post_id" + System.currentTimeMillis()));
 			post.setUser_id(project.getCREATE_USER());
 			post.setUser_name(project.getCREATE_USER_NAME());
 			post.setUser_head(project.getCREATE_USER_HEAD());
@@ -93,4 +93,34 @@ public class PostService extends BaseService {
 		}
 	}
 
+	public CommentVO insertComment(String post_id, String content, String attch_id, ProjectVO project) {
+		try {
+			Date date = new Date(System.currentTimeMillis());
+			CommentVO comment = new CommentVO();
+			comment.setComment_id(UtilUniqueKey.getKey("comment" + System.currentTimeMillis()));
+			comment.setPost_id(post_id);
+			comment.setUser_id(project.getCREATE_USER());
+			comment.setUser_name(project.getCREATE_USER_NAME());
+			comment.setContent(content);
+			comment.setAttch_id(attch_id);
+			comment.setProject_id(project.getPROJECT_ID());
+			comment.setProject_name(project.getPROJECT_NAME());
+			comment.setRoot_id(project.getROOT_ID());
+			comment.setTime(format.format(date));
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("comment_id", comment.getPost_id());
+			data.put("post_id", post_id);
+			data.put("user_id", project.getCREATE_USER());
+			data.put("content", content);
+			data.put("attch_id", attch_id);
+			data.put("project_id", project.getPROJECT_ID());
+			data.put("root_id", project.getROOT_ID());
+			data.put("time", format.format(date));
+			getJdbc().execute(getSql("insert_comment", data));
+			return comment;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

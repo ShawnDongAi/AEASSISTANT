@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!-- 工作圈相关sql -->
+<Scheme>
+	<!-- 新建帖子 -->
+	<select id="insert_post">
+		insert into
+		t_post(post_id,user_id,content,attch_id,project_id,root_id,time,private)
+		values('#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#',[to_date('#time#','yyyy-MM-dd
+		HH24:mi:ss')],'#private#')
+	</select>
+	<!-- 帖子抄送 -->
+	<select id="insert_post_send">
+		insert into
+		t_post_send(post_id,send_user_id,send_project_id)
+		values('#post_id#','#send_user_id#','#send_project_id#')
+	</select>
+	<!-- 查询帖子 -->
+	<select id="query_post">
+		select
+		*
+		from t_post t right join t_post_send a on
+		t.post_id=a.post_id
+		where 1=1
+		[and
+		t.project_id='#project_id#']
+		[or
+		t.root_id='#project_id#']
+		or instr('#project_ids#', a.send_project_id)
+		> 0
+	</select>
+	<!-- 删除帖子 -->
+	<select id="delete_post">
+		delete from
+		t_post
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+	<!-- 删除抄送信息 -->
+	<select id="delete_post_send">
+		delete from
+		t_post_send
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+
+	<!-- 新建评论 -->
+	<select id="insert_comment">
+		insert into
+		t_comment(comment_id,post_id,user_id,content,attch_id,project_id,root_id,time)
+		values('#comment_id#','#post_id#','#user_id#','#content#','#attch_id#','#project_id#','#root_id#',[to_date('#time#','yyyy-MM-dd
+		HH24:mi:ss')])
+	</select>
+	<!-- 查询评论 -->
+	<select id="query_comment">
+		select
+		*
+		from t_comment
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+	<!-- 删除评论 -->
+	<select id="delete_comment">
+		delete from
+		t_comment
+		where 1=1
+		[and
+		post_id='#post_id#']
+	</select>
+</Scheme>

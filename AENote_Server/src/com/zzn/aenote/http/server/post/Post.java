@@ -22,32 +22,32 @@ public class Post implements CmHandler {
 	private PostService postService;
 
 	@Override
-	public void doHandler(HttpServletRequest req, HttpServletResponse resp,
-			BaseRep rs) throws Exception {
+	public void doHandler(HttpServletRequest req, HttpServletResponse resp, BaseRep rs) throws Exception {
 		try {
 			String content = req.getParameter("content");
 			String projectString = req.getParameter("project");
 			String is_private = req.getParameter("is_private");
 			String sendProjectString = req.getParameter("send_project");
+			String attachIds = req.getParameter("attach_ids");
 			if (StringUtil.isEmpty(is_private)) {
 				is_private = "0";
 			}
 			if (StringUtil.isEmpty(sendProjectString)) {
 				sendProjectString = "";
 			}
-			if (StringUtil.isEmpty(projectString)
-					|| StringUtil.isEmpty(content)) {
+			if (StringUtil.isEmpty(projectString) || StringUtil.isEmpty(content)) {
 				rs.setRES_CODE(Global.RESP_PARAM_NULL);
 				rs.setRES_MESSAGE("信息不完整");
 				return;
 			}
-			ProjectVO project = GsonUtil.getInstance().fromJson(projectString,
-					ProjectVO.class);
-			List<ProjectVO> sendProjectVOs = GsonUtil.getInstance().fromJson(
-					sendProjectString, new TypeToken<List<ProjectVO>>() {
+			if (attachIds == null) {
+				attachIds = "";
+			}
+			ProjectVO project = GsonUtil.getInstance().fromJson(projectString, ProjectVO.class);
+			List<ProjectVO> sendProjectVOs = GsonUtil.getInstance().fromJson(sendProjectString,
+					new TypeToken<List<ProjectVO>>() {
 					}.getType());
-			PostVO post = postService.insertPost(content, "", project,
-					is_private, sendProjectVOs);
+			PostVO post = postService.insertPost(content, attachIds, project, is_private, sendProjectVOs);
 			if (post == null) {
 				rs.setRES_CODE(Global.USER_ERROR);
 				rs.setRES_MESSAGE("发帖失败");
