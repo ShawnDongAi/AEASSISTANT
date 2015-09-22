@@ -1,5 +1,7 @@
 package com.zzn.aeassistant.fragment;
 
+import java.util.List;
+
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.IndexActivity;
 import com.zzn.aeassistant.activity.IndexActivity.SaveClickListener;
@@ -7,16 +9,21 @@ import com.zzn.aeassistant.activity.post.PostActivity;
 import com.zzn.aeassistant.activity.post.PostAdapter;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
+import com.zzn.aeassistant.database.PostDBHelper;
+import com.zzn.aeassistant.database.PostProvider;
 import com.zzn.aeassistant.util.ToolsUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView;
+import com.zzn.aeassistant.vo.PostVO;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -48,6 +55,22 @@ public class WorkSpaceFragment extends BaseFragment {
 		return R.layout.fragment_work_space;
 	}
 
+	private PostObserver observer = new PostObserver(new Handler());
+
+	private class PostObserver extends ContentObserver {
+		public PostObserver(Handler handler) {
+			super(handler);
+		}
+
+		@Override
+		public void onChange(boolean selfChange) {
+			super.onChange(selfChange);
+			List<PostVO> datas = PostDBHelper.queryList(project.getPROJECT_ID());
+			adapter.setPostList(datas);
+			adapter.notifyDataSetChanged();
+		}
+	}
+
 	@Override
 	protected void initView(View container) {
 		projectTitle = (TextView) container.findViewById(R.id.workspace_project);
@@ -69,6 +92,7 @@ public class WorkSpaceFragment extends BaseFragment {
 		initPullToRefresh();
 		initProTask = new InitProjectTask();
 		initProTask.execute();
+		getActivity().getContentResolver().registerContentObserver(PostProvider.CONTENT_URI, true, observer);
 	}
 
 	private void initMenuView() {
@@ -89,6 +113,8 @@ public class WorkSpaceFragment extends BaseFragment {
 				project = proListAdapter.getItem(position);
 				projectTitle.setText(project.getPROJECT_NAME());
 				// mListView.setRefreshing(true);
+				adapter.setPostList(PostDBHelper.queryList(project.getPROJECT_ID()));
+				adapter.notifyDataSetChanged();
 			}
 		});
 	}
@@ -109,6 +135,7 @@ public class WorkSpaceFragment extends BaseFragment {
 
 	@Override
 	public void onDestroyView() {
+		getActivity().getContentResolver().unregisterContentObserver(observer);
 		if (initProTask != null) {
 			initProTask.cancel(true);
 			initProTask = null;
@@ -175,6 +202,8 @@ public class WorkSpaceFragment extends BaseFragment {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			project = result;
+			adapter.setPostList(PostDBHelper.queryList(project.getPROJECT_ID()));
+			adapter.notifyDataSetChanged();
 			if (result != null) {
 				projectTitle.setText(result.getPROJECT_NAME());
 				// listStruTask = new ListStructureTask();

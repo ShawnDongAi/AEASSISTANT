@@ -19,6 +19,7 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.AttachAdapter;
+import com.zzn.aeassistant.view.FastenGridView;
 import com.zzn.aeassistant.view.HorizontalListView;
 import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.HttpResult;
@@ -26,6 +27,7 @@ import com.zzn.aeassistant.vo.PostVO;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,18 +35,22 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class PostActivity extends BaseActivity {
 	private EditText content;
-	private HorizontalListView attachGroup;
+	private FastenGridView attachGroup;
 	private AttachAdapter adapter;
 	private View photo, camera, voice, file, send;
 	private CheckBox privateBox;
 	private PostTask postTask;
 	private ProjectVO project;
 	private List<ProjectVO> sendProjectVOs = new ArrayList<>();
+	private int currentPos = 0;
 
 	@Override
 	protected int layoutResID() {
@@ -62,7 +68,7 @@ public class PostActivity extends BaseActivity {
 		save.setText(R.string.send);
 		save.setVisibility(View.VISIBLE);
 		content = (EditText) findViewById(R.id.input_post);
-		attachGroup = (HorizontalListView) findViewById(R.id.attch_list);
+		attachGroup = (FastenGridView) findViewById(R.id.attch_list);
 		adapter = new AttachAdapter(this, true);
 		attachGroup.setAdapter(adapter);
 		photo = findViewById(R.id.photo);
@@ -87,19 +93,19 @@ public class PostActivity extends BaseActivity {
 
 			@Override
 			public synchronized void afterTextChanged(Editable s) {
-				int position = content.getSelectionStart();
-				if (position >= content.length()) {
-					position = content.length() - 1;
-				}
+				int position = content.getSelectionEnd();
 				if (position < 0) {
 					position = 0;
 				}
-				if (s.toString().charAt(position) == '@') {
+				if (position >= content.length()) {
+					position = content.length() - 1;
+				}
+				if (s.length() > 0 && s.toString().charAt(position) == '@') {
 					// 选择联系人
-					ProjectVO projectVO = new ProjectVO();
-					projectVO.setPROJECT_NAME("test");
-					sendProjectVOs.add(projectVO);
-					content.getEditableText().insert(position + 1, projectVO.getPROJECT_NAME());
+					Intent intent = new Intent(mContext, SendProjectActivity.class);
+					intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
+					startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
+					currentPos = position + 1;
 				}
 			}
 		});
@@ -110,16 +116,17 @@ public class PostActivity extends BaseActivity {
 				if (keyCode == KeyEvent.KEYCODE_DEL && event.getAction() == KeyEvent.ACTION_DOWN) { // 当为删除键并且是按下动作时执行
 					int selectionStart = content.getSelectionStart();
 					int lastPos = 0;
-					for (int i = 0; i < sendProjectVOs.size(); i++) { // 循环遍历整个输入框的所有字符
-						if ((lastPos = content.getText().toString().indexOf(sendProjectVOs.get(i).getPROJECT_NAME(),
-								lastPos)) != -1) {
+					List<ProjectVO> tempList = new ArrayList<>();
+					tempList.addAll(sendProjectVOs);
+					for (int i = 0; i < tempList.size(); i++) { // 循环遍历整个输入框的所有字符
+						if ((lastPos = content.getText().toString()
+								.lastIndexOf(tempList.get(i).getPROJECT_NAME())) > 0) {
 							if (selectionStart != 0 && selectionStart >= lastPos
-									&& selectionStart <= (lastPos + sendProjectVOs.get(i).getPROJECT_NAME().length())) {
-								String sss = content.getText().toString();
-								content.setText(sss.substring(0, lastPos)
-										+ sss.substring(lastPos + sendProjectVOs.get(i).getPROJECT_NAME().length())); // 字符串替换，删掉符合条件的字符串
+									&& selectionStart <= (lastPos + tempList.get(i).getPROJECT_NAME().length())) {
+								content.getText().delete(lastPos - 1,
+										lastPos + tempList.get(i).getPROJECT_NAME().length());// 删除字符
 								sendProjectVOs.remove(i); // 删除对应实体
-								content.setSelection(lastPos); // 设置光标位置
+								content.setSelection(lastPos - 1); // 设置光标位置
 								return true;
 							}
 						} else {
@@ -146,6 +153,19 @@ public class PostActivity extends BaseActivity {
 						lastPos += ("@" + sendProjectVOs.get(i).getPROJECT_NAME()).length();
 					}
 				}
+			}
+		});
+		attachGroup.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				adapter.onItemClick(position);
+			}
+		});
+		attachGroup.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				adapter.onItemLongClick();
+				return false;
 			}
 		});
 	}
@@ -183,7 +203,7 @@ public class PostActivity extends BaseActivity {
 			AttchUtil.getFile(this);
 			break;
 		case R.id.send:
-			int position = content.getSelectionEnd() - 1;
+			int position = content.getSelectionEnd();
 			if (position < 0) {
 				position = 0;
 			}
@@ -218,6 +238,31 @@ public class PostActivity extends BaseActivity {
 	@Override
 	protected boolean needLocation() {
 		return false;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case CodeConstants.REQUEST_CODE_REFRESH:
+				ProjectVO result = (ProjectVO) data.getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
+				boolean isExist = false;
+				for (ProjectVO existPros : sendProjectVOs) {
+					if (result.getPROJECT_ID().equals(existPros.getPROJECT_ID())) {
+						isExist = true;
+						break;
+					}
+				}
+				if (!isExist) {
+					sendProjectVOs.add(result);
+					content.getEditableText().insert(currentPos, result.getPROJECT_NAME());
+				}
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	private class PostTask extends AsyncTask<String, Integer, HttpResult> {

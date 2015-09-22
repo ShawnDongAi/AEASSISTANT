@@ -62,11 +62,15 @@ public class AttachAdapter extends BaseAdapter {
 	public void addItem(AttchVO vo) {
 		attchList.add(vo);
 	}
+	
+	public void clear() {
+		attchList.clear();
+	}
 
 	public String getAttachIDs() {
 		StringBuilder ids = new StringBuilder();
 		for (AttchVO vo : attchList) {
-			ids.append(vo.getATTCH_ID() + "&");
+			ids.append(vo.getATTCH_ID() + "#");
 		}
 		if (ids.length() > 0) {
 			ids.deleteCharAt(ids.length() - 1);
@@ -105,8 +109,8 @@ public class AttachAdapter extends BaseAdapter {
 		if (item.getTYPE().equals(AttchVO.TYPE_IMG)) {
 			if (!StringUtil.isEmpty(item.getLOCAL_PATH())) {
 				imageLoader.displayImage(item.getLOCAL_PATH(), holder.image, options, animateFirstListener);
-			} else if (!StringUtil.isEmpty(item.getURL())) {
-				imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, item.getURL()), holder.image,
+			} else if (!StringUtil.isEmpty(item.getATTCH_ID())) {
+				imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, item.getATTCH_ID()), holder.image,
 						options);
 			}
 		} else if (item.getTYPE().equals(AttchVO.TYPE_AUDIO)) {
@@ -151,8 +155,8 @@ public class AttachAdapter extends BaseAdapter {
 		}
 		AttchVO item = getItem(position);
 		String path = item.getLOCAL_PATH();
-		if (StringUtil.isEmpty(path) && StringUtil.isEmpty(item.getURL())) {
-			path = String.valueOf(item.getURL())
+		if (StringUtil.isEmpty(path) && StringUtil.isEmpty(String.format(URLConstants.URL_DOWNLOAD, item.getATTCH_ID()))) {
+			path = String.valueOf(String.format(URLConstants.URL_DOWNLOAD, item.getATTCH_ID()))
 					+ item.getNAME().substring(item.getNAME().lastIndexOf("."), item.getNAME().length());
 		}
 		if (FileUtils.exists(path)) {

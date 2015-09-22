@@ -188,6 +188,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.post.SendProjectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 头像裁剪页面 -->
         <activity
             android:name=".view.cropimage.CropImageActivity"
