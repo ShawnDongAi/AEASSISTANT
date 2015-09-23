@@ -1,5 +1,6 @@
 package com.zzn.aeassistant.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.zzn.aeassistant.R;
@@ -9,6 +10,8 @@ import com.zzn.aeassistant.activity.post.PostActivity;
 import com.zzn.aeassistant.activity.post.PostAdapter;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
+import com.zzn.aeassistant.database.CommentDBHelper;
+import com.zzn.aeassistant.database.CommentProvider;
 import com.zzn.aeassistant.database.PostDBHelper;
 import com.zzn.aeassistant.database.PostProvider;
 import com.zzn.aeassistant.util.ToolsUtil;
@@ -17,6 +20,7 @@ import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView;
+import com.zzn.aeassistant.vo.CommentVO;
 import com.zzn.aeassistant.vo.PostVO;
 import com.zzn.aeassistant.vo.ProjectVO;
 
@@ -56,6 +60,7 @@ public class WorkSpaceFragment extends BaseFragment {
 	}
 
 	private PostObserver observer = new PostObserver(new Handler());
+	private CommentObserver commentObserver = new CommentObserver(new Handler());
 
 	private class PostObserver extends ContentObserver {
 		public PostObserver(Handler handler) {
@@ -66,7 +71,29 @@ public class WorkSpaceFragment extends BaseFragment {
 		public void onChange(boolean selfChange) {
 			super.onChange(selfChange);
 			List<PostVO> datas = PostDBHelper.queryList(project.getPROJECT_ID());
+			List<List<CommentVO>> comments = new ArrayList<>();
+			for (PostVO post : datas) {
+				comments.add(CommentDBHelper.queryList(post.getPost_id()));
+			}
 			adapter.setPostList(datas);
+			adapter.setCommentList(comments);
+			adapter.notifyDataSetChanged();
+		}
+	}
+
+	private class CommentObserver extends ContentObserver {
+		public CommentObserver(Handler handler) {
+			super(handler);
+		}
+
+		@Override
+		public void onChange(boolean selfChange) {
+			super.onChange(selfChange);
+			List<List<CommentVO>> comments = new ArrayList<>();
+			for (PostVO post : adapter.getPostList()) {
+				comments.add(CommentDBHelper.queryList(post.getPost_id()));
+			}
+			adapter.setCommentList(comments);
 			adapter.notifyDataSetChanged();
 		}
 	}
@@ -93,6 +120,7 @@ public class WorkSpaceFragment extends BaseFragment {
 		initProTask = new InitProjectTask();
 		initProTask.execute();
 		getActivity().getContentResolver().registerContentObserver(PostProvider.CONTENT_URI, true, observer);
+		getActivity().getContentResolver().registerContentObserver(CommentProvider.CONTENT_URI, true, commentObserver);
 	}
 
 	private void initMenuView() {
@@ -136,6 +164,7 @@ public class WorkSpaceFragment extends BaseFragment {
 	@Override
 	public void onDestroyView() {
 		getActivity().getContentResolver().unregisterContentObserver(observer);
+		getActivity().getContentResolver().unregisterContentObserver(commentObserver);
 		if (initProTask != null) {
 			initProTask.cancel(true);
 			initProTask = null;
@@ -202,7 +231,14 @@ public class WorkSpaceFragment extends BaseFragment {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			project = result;
-			adapter.setPostList(PostDBHelper.queryList(project.getPROJECT_ID()));
+			adapter.setProject(project);
+			List<PostVO> datas = PostDBHelper.queryList(project.getPROJECT_ID());
+			List<List<CommentVO>> comments = new ArrayList<>();
+			for (PostVO post : datas) {
+				comments.add(CommentDBHelper.queryList(post.getPost_id()));
+			}
+			adapter.setPostList(datas);
+			adapter.setCommentList(comments);
 			adapter.notifyDataSetChanged();
 			if (result != null) {
 				projectTitle.setText(result.getPROJECT_NAME());

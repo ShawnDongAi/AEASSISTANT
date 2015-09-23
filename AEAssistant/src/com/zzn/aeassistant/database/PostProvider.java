@@ -86,19 +86,19 @@ public class PostProvider extends ContentProvider {
 			break;
 		}
 		case PostDBHelper.ITEM_ID: {
-			String user_id = uri.getPathSegments().get(1);
+			String project_id = uri.getPathSegments().get(1);
 			sqlBuilder.setTables(PostDBHelper.table);
 			sqlBuilder.setProjectionMap(postProjectionMap);
-			sqlBuilder.appendWhere(PostDBHelper.USER_ID + "=" + user_id + " or (" + PostDBHelper.SEND_USER_ID + "like %"
-					+ user_id + "% and" + PostDBHelper.IS_PRIVATE + "='1')");
+			sqlBuilder.appendWhere(PostDBHelper.PROJECT_ID + "='" + project_id + "' or "
+					+ PostDBHelper.SEND_PROJECT_ID + " like '%" + project_id + "%'");
 			break;
 		}
 		case PostDBHelper.ITEM_NEW: {
-			String user_id = uri.getPathSegments().get(1);
+			String project_id = uri.getPathSegments().get(1);
 			sqlBuilder.setTables(PostDBHelper.table);
 			sqlBuilder.setProjectionMap(postProjectionMap);
 			sqlBuilder.appendWhere(
-					PostDBHelper.SEND_USER_ID + "like %" + user_id + "% and " + PostDBHelper.IS_NEW + "='0'");
+					PostDBHelper.SEND_USER_ID + "like '%" + project_id + "%' and " + PostDBHelper.IS_NEW + "='0'");
 			break;
 		}
 		default:

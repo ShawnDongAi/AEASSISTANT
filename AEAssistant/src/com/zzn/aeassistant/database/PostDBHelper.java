@@ -37,7 +37,7 @@ public class PostDBHelper {
 	/**
 	 * 排序依据
 	 */
-	public static final String DEFAULT_SORT_ORDER = "time asc";
+	public static final String DEFAULT_SORT_ORDER = "time desc";
 
 	public static final String METHOD_GET_ITEM_COUNT = "METHOD_GET_ITEM_COUNT";
 	public static final String KEY_ITEM_COUNT = "KEY_ITEM_COUNT";

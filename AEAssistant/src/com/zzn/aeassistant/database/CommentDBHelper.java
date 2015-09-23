@@ -32,7 +32,7 @@ public class CommentDBHelper {
 	/**
 	 * 排序依据
 	 */
-	public static final String DEFAULT_SORT_ORDER = "time asc";
+	public static final String DEFAULT_SORT_ORDER = "time desc";
 	public static final String METHOD_GET_ITEM_COUNT = "METHOD_GET_ITEM_COUNT";
 	public static final String KEY_ITEM_COUNT = "KEY_ITEM_COUNT";
 
@@ -46,14 +46,14 @@ public class CommentDBHelper {
 	public static final int ITEM_INSERT = 3;
 	public static final int ITEM_NEW = 4;
 
-	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.com.zzn.aeassistant.post";
-	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/com.zzn.aeassistant.post";
+	public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.com.zzn.aeassistant.comment";
+	public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/com.zzn.aeassistant.comment";
 
 	/**
 	 * URI
 	 */
-	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/query_post");
-	public static final Uri CONTENT_INSERT_URI = Uri.parse("content://" + AUTHORITY + "/insert_post");
+	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/query_comment");
+	public static final Uri CONTENT_INSERT_URI = Uri.parse("content://" + AUTHORITY + "/insert_comment");
 
 	public static final String table = "ae_comment";
 
@@ -87,10 +87,9 @@ public class CommentDBHelper {
 
 	public static List<CommentVO> queryList(String post_id) {
 		List<CommentVO> result = new ArrayList<>();
-		String user_id = AEApp.getCurrentUser().getUSER_ID();
 		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
-		Cursor cursor = db.query(table, null, CommentDBHelper.POST_ID + "='" + post_id + "')", new String[] {}, null,
-				null, "order by time asc");
+		Cursor cursor = db.query(table, null, CommentDBHelper.POST_ID + "='" + post_id + "'", new String[] {}, null,
+				null, "time desc");
 		while (cursor.moveToNext()) {
 			CommentVO vo = new CommentVO();
 			vo.setComment_id(cursor.getString(cursor.getColumnIndex(COMMENT_ID)));

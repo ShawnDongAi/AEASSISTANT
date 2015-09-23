@@ -20,7 +20,6 @@ import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.AttachAdapter;
 import com.zzn.aeassistant.view.FastenGridView;
-import com.zzn.aeassistant.view.HorizontalListView;
 import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.PostVO;
@@ -51,6 +50,7 @@ public class PostActivity extends BaseActivity {
 	private ProjectVO project;
 	private List<ProjectVO> sendProjectVOs = new ArrayList<>();
 	private int currentPos = 0;
+	private String currentPath = "";
 
 	@Override
 	protected int layoutResID() {
@@ -226,12 +226,14 @@ public class PostActivity extends BaseActivity {
 	@Override
 	protected void getImg(String path) {
 		super.getImg(path);
+		currentPath = path;
 		new UploadFileTask().execute(path);
 	}
 
 	@Override
 	protected void getFile(String path) {
 		super.getFile(path);
+		currentPath = path;
 		new UploadFileTask().execute(path);
 	}
 
@@ -344,12 +346,14 @@ public class PostActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				AttchVO vo = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(), AttchVO.class);
+				vo.setLOCAL_PATH(currentPath);
 				adapter.addItem(vo);
 				adapter.notifyDataSetChanged();
 				attachGroup.setVisibility(View.VISIBLE);
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}
+			currentPath = "";
 		}
 
 		@Override

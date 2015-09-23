@@ -34,4 +34,7 @@ public class CodeConstants {
 	public static final String KEY_IDCARD_FRONT = "idcard_front";
 	public static final String KEY_IDCARD_BACK = "idcard_back";
 	public static final String KEY_IDCARD_HAND = "idcard_hand";
+	
+	public static final String KEY_POST_ID = "post_id";
+	public static final String KEY_POST_VO = "post_vo";
 }

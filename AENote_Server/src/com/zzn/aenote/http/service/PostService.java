@@ -108,7 +108,7 @@ public class PostService extends BaseService {
 			comment.setRoot_id(project.getROOT_ID());
 			comment.setTime(format.format(date));
 			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("comment_id", comment.getPost_id());
+			data.put("comment_id", comment.getComment_id());
 			data.put("post_id", post_id);
 			data.put("user_id", project.getCREATE_USER());
 			data.put("content", content);

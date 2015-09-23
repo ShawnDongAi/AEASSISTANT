@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -62,7 +63,7 @@ public class AttachAdapter extends BaseAdapter {
 	public void addItem(AttchVO vo) {
 		attchList.add(vo);
 	}
-	
+
 	public void clear() {
 		attchList.clear();
 	}
@@ -108,7 +109,8 @@ public class AttachAdapter extends BaseAdapter {
 		AttchVO item = getItem(position);
 		if (item.getTYPE().equals(AttchVO.TYPE_IMG)) {
 			if (!StringUtil.isEmpty(item.getLOCAL_PATH())) {
-				imageLoader.displayImage(item.getLOCAL_PATH(), holder.image, options, animateFirstListener);
+				imageLoader.displayImage(Uri.fromFile(new File(item.getLOCAL_PATH())).toString(), holder.image, options,
+						animateFirstListener);
 			} else if (!StringUtil.isEmpty(item.getATTCH_ID())) {
 				imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, item.getATTCH_ID()), holder.image,
 						options);
@@ -155,7 +157,8 @@ public class AttachAdapter extends BaseAdapter {
 		}
 		AttchVO item = getItem(position);
 		String path = item.getLOCAL_PATH();
-		if (StringUtil.isEmpty(path) && StringUtil.isEmpty(String.format(URLConstants.URL_DOWNLOAD, item.getATTCH_ID()))) {
+		if (StringUtil.isEmpty(path)
+				&& StringUtil.isEmpty(String.format(URLConstants.URL_DOWNLOAD, item.getATTCH_ID()))) {
 			path = String.valueOf(String.format(URLConstants.URL_DOWNLOAD, item.getATTCH_ID()))
 					+ item.getNAME().substring(item.getNAME().lastIndexOf("."), item.getNAME().length());
 		}

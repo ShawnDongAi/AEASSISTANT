@@ -18,6 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical" >
 
@@ -69,7 +70,10 @@
         <com.zzn.aeassistant.view.FastenListView
             android:id="@+id/comment_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="#F0F0F0"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
     </LinearLayout>
 
 </LinearLayout>
