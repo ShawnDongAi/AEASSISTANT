@@ -1,6 +1,14 @@
 package com.zzn.aenote.http.vo;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.zzn.aenote.http.ServiceLocator;
+import com.zzn.aenote.http.sqlmap.SqlMapTemplate;
 
 public class PostVO implements Serializable {
 
@@ -149,5 +157,67 @@ public class PostVO implements Serializable {
 
 	public void setUser_head(String user_head) {
 		this.user_head = user_head;
+	}
+
+	public static PostVO assemblePostVO(Map<String, Object> postInfo) {
+		PostVO post = new PostVO();
+		if (postInfo.get("post_id") != null) {
+			post.setPost_id(postInfo.get("post_id").toString().trim());
+		}
+		if (postInfo.get("user_id") != null) {
+			post.setUser_id(postInfo.get("user_id").toString().trim());
+		}
+		if (postInfo.get("user_name") != null) {
+			post.setUser_name(postInfo.get("user_name").toString().trim());
+		}
+		if (postInfo.get("user_head") != null) {
+			post.setUser_head(postInfo.get("user_head").toString().trim());
+		}
+		if (postInfo.get("content") != null) {
+			post.setContent(postInfo.get("content").toString().trim());
+		}
+		if (postInfo.get("attch_id") != null) {
+			post.setAttch_id(postInfo.get("attch_id").toString().trim());
+		}
+		if (postInfo.get("project_id") != null) {
+			post.setProject_id(postInfo.get("project_id").toString().trim());
+		}
+		if (postInfo.get("project_name") != null) {
+			post.setProject_name(postInfo.get("project_name").toString().trim());
+		}
+		if (postInfo.get("root_id") != null) {
+			post.setRoot_id(postInfo.get("root_id").toString().trim());
+		}
+		if (postInfo.get("root_project_name") != null) {
+			post.setRoot_project_name(postInfo.get("root_project_name").toString().trim());
+		}
+		if (postInfo.get("time") != null) {
+			post.setTime(postInfo.get("time").toString().trim());
+		}
+		if (postInfo.get("private") != null) {
+			post.setIs_private(postInfo.get("private").toString().trim());
+		}
+		JdbcTemplate jdbcTemplate = ServiceLocator.getBean2("jdbcTemplate");
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("post_id", post.getPost_id());
+		String sql = SqlMapTemplate.convertToSQL("query_send_info", data);
+		List<Map<String, Object>> sendList = jdbcTemplate.queryForList(sql);
+		StringBuilder sendUserIds = new StringBuilder();
+		StringBuilder sendUserNames = new StringBuilder();
+		StringBuilder sendProjectIds = new StringBuilder();
+		StringBuilder sendProjectNames = new StringBuilder();
+		if (sendList != null && sendList.size() > 0) {
+			for (Map<String, Object> sendItem : sendList) {
+				sendUserIds.append(sendItem.get("send_user_id") + ",");
+				sendUserNames.append(sendItem.get("user_name") + ",");
+				sendProjectIds.append(sendItem.get("send_project_id") + ",");
+				sendProjectNames.append(sendItem.get("project_name") + ",");
+			}
+		}
+		post.setSend_user_id(sendUserIds.toString());
+		post.setSend_user_name(sendUserNames.toString());
+		post.setSend_project_id(sendProjectIds.toString());
+		post.setSend_project_name(sendProjectNames.toString());
+		return post;
 	}
 }

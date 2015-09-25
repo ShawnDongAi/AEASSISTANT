@@ -93,6 +93,31 @@ public class PostService extends BaseService {
 		}
 	}
 
+	public List<PostVO> queryPost(String project_id) {
+		List<PostVO> result = new ArrayList<>();
+		try {
+			List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("project_id", project_id);
+			projectList = getJdbc().queryForList(getSql("query_leaf_project", data));
+			StringBuilder projectIds = new StringBuilder(project_id);
+			if (projectList != null && projectList.size() > 0) {
+				for (Map<String, Object> project : projectList) {
+					projectIds.append("," + project.get("project_id").toString());
+				}
+			}
+			data.put("project_id", projectIds.toString());
+			List<Map<String, Object>> postList = getJdbc().queryForList(getSql("query_post", data));
+			if (postList != null && postList.size() > 0) {
+				for (Map<String, Object> post : postList) {
+					result.add(PostVO.assemblePostVO(post));
+				}
+			}
+		} catch (Exception e) {
+		}
+		return result;
+	}
+
 	public CommentVO insertComment(String post_id, String content, String attch_id, ProjectVO project) {
 		try {
 			Date date = new Date(System.currentTimeMillis());

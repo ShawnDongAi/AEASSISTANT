@@ -1,6 +1,7 @@
 package com.zzn.aenote.http.vo;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class CommentVO implements Serializable {
 
@@ -104,5 +105,16 @@ public class CommentVO implements Serializable {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+	
+	public static CommentVO assembleCommentVO(Map<String, Object> commentInfo) {
+		CommentVO comment = new CommentVO();
+		if (commentInfo.get("comment_id") != null) {
+			comment.setComment_id(commentInfo.get("comment_id").toString().trim());
+		}
+		if (commentInfo.get("comment_id") != null) {
+			comment.setPost_id(commentInfo.get("comment_id").toString().trim());
+		}
+		return comment;
 	}
 }
