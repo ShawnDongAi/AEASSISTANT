@@ -55,13 +55,13 @@
 				document.location='http://112.124.16.245:8080/AENote_Server/download?platform=0'
 			}
 			else if (browser.versions.ios) {
-				document.location='http://www.baidu.com'
+				document.location='https://itunes.apple.com/cn/app/jian-zheng-lao-wu/id1038900831?l=en&mt=8'
 			}
 			else if (browser.versions.iPhone) {
-				document.location='http://www.baidu.com'
+				document.location='https://itunes.apple.com/cn/app/jian-zheng-lao-wu/id1038900831?l=en&mt=8'
 			}
 			else if (browser.versions.iPad) {
-				document.location='http://www.baidu.com'
+				document.location='https://itunes.apple.com/cn/app/jian-zheng-lao-wu/id1038900831?l=en&mt=8'
 			}
 			else {
 				document.location='http://112.124.16.245:8080/AENote_Server/download?platform=0'

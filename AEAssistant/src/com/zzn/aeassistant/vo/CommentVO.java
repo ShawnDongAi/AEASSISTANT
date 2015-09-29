@@ -16,7 +16,6 @@ public class CommentVO implements Serializable {
 	private String project_id;
 	private String project_name;
 	private String root_id;
-	private String root_project_id;
 	private String time;
 	private String is_new;
 
@@ -91,17 +90,9 @@ public class CommentVO implements Serializable {
 	public void setRoot_id(String root_id) {
 		this.root_id = root_id;
 	}
-
-	public String getRoot_project_id() {
-		return root_project_id;
-	}
-
-	public void setRoot_project_id(String root_project_id) {
-		this.root_project_id = root_project_id;
-	}
-
+	
 	public String getTime() {
-		return time;
+		return time.replaceAll("\n\t", "");
 	}
 
 	public void setTime(String time) {

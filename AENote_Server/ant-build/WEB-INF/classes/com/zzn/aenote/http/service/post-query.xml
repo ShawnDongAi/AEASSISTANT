@@ -14,19 +14,95 @@
 		t_post_send(post_id,send_user_id,send_project_id)
 		values('#post_id#','#send_user_id#','#send_project_id#')
 	</select>
-	<!-- 查询帖子 -->
+	<!-- 查询最新帖子 -->
 	<select id="query_post">
 		select
-		*
-		from t_post t right join t_post_send a on
+		t.post_id,t.user_id,t.content,t.attch_id,t.project_id,t.root_id,t.private,
+		(to_char(t.time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		time,(select user_name from
+		t_user where
+		user_id=t.user_id) as user_name,
+		(select small_head from
+		t_user where
+		user_id=t.user_id) as user_head,
+		(select project_name from
+		t_project
+		where project_id=t.project_id) as project_name,
+		(select
+		project_name
+		from t_project where project_id=t.root_id) as
+		root_project_name
+		from
+		t_post t left join t_post_send a on
 		t.post_id=a.post_id
 		where 1=1
+		and
+		20 >= ROWNUM
+		and
+		(instr('#project_id#',
+		t.project_id) > 0
+		or
+		instr('#project_id#', t.root_id) > 0
+		or
+		instr('#project_id#',
+		a.send_project_id)
+		> 0) order by
+		t.time desc
+	</select>
+	<!-- 查询下一页帖子 -->
+	<select id="query_post_by_end">
+		select
+		t.post_id,t.user_id,t.content,t.attch_id,t.project_id,t.root_id,t.private,
+		(to_char(t.time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		time,(select user_name from
+		t_user where
+		user_id=t.user_id) as user_name,
+		(select small_head from
+		t_user where
+		user_id=t.user_id) as user_head,
+		(select project_name from
+		t_project
+		where project_id=t.project_id) as project_name,
+		(select
+		project_name
+		from t_project where project_id=t.root_id) as
+		root_project_name
+		from
+		t_post t left join t_post_send a on
+		t.post_id=a.post_id
+		where 1=1
+		and
+		20 >= ROWNUM
+		and
+		to_date('#time#','yyyy-MM-dd
+		HH24:mi:ss') > t.time
+		and
+		(instr('#project_id#',
+		t.project_id) > 0
+		or
+		instr('#project_id#',
+		t.root_id) > 0
+		or
+		instr('#project_id#', a.send_project_id)
+		> 0) order by
+		t.time desc
+	</select>
+	<select id="query_send_info">
+		select t.*,(select user_name from
+		t_user where
+		user_id=t.send_user_id) as
+		user_name,
+		(select project_name from
+		t_project
+		where
+		project_id=t.send_project_id) as project_name
+		from
+		t_post_send t where
+		1=1
 		[and
-		t.project_id='#project_id#']
-		[or
-		t.root_id='#project_id#']
-		or instr('#project_ids#', a.send_project_id)
-		> 0
+		post_id='#post_id#']
 	</select>
 	<!-- 删除帖子 -->
 	<select id="delete_post">
@@ -53,13 +129,27 @@
 		HH24:mi:ss')])
 	</select>
 	<!-- 查询评论 -->
+	<!-- <select id="query_comment"> select t.comment_id,t.post_id,t.user_id,t.content,t.attch_id,t.project_id,t.root_id, 
+		(to_char(t.time,'yyyy-MM-dd HH24:mi:ss')) as time,(select user_name from 
+		t_user where user_id=t.user_id) as user_name, (select project_name from t_project 
+		where project_id=t.project_id) as project_name from t_comment t where 1=1 
+		and instr('#post_id#', t.post_id) > 0 </select> -->
+	<!-- 查询评论 -->
 	<select id="query_comment">
 		select
-		*
+		t.comment_id,t.post_id,t.user_id,t.content,t.attch_id,t.project_id,t.root_id,
+		(to_char(t.time,'yyyy-MM-dd
+		HH24:mi:ss')) as
+		time,(select user_name from
+		t_user where
+		user_id=t.user_id) as user_name,
+		(select project_name from
+		t_project
+		where project_id=t.project_id) as project_name
 		from t_comment
-		where 1=1
-		[and
-		post_id='#post_id#']
+		t
+		where
+		instr('#post_id#', t.post_id) > 0
 	</select>
 	<!-- 删除评论 -->
 	<select id="delete_comment">

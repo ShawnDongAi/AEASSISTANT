@@ -183,4 +183,5 @@
     <string name="send">发送</string>
     <string name="post">发帖</string>
     <string name="comment">评论</string>
+    <string name="much_file">最多添加9个文件</string>
 </resources>

@@ -83,7 +83,7 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 		ProjectVO vo = (ProjectVO) node.getData();
 		viewHolder.user.setText(vo.getCREATE_USER_NAME());
 		imageLoader.displayImage(
-				String.format(URLConstants.URL_DOWNLOAD,
+				String.format(URLConstants.URL_IMG,
 						vo.getCREATE_USER_HEAD()), viewHolder.head, options);
 		return convertView;
 	}

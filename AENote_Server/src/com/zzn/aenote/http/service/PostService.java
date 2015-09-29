@@ -94,7 +94,7 @@ public class PostService extends BaseService {
 	}
 
 	public List<PostVO> queryPost(String project_id) {
-		List<PostVO> result = new ArrayList<>();
+		List<PostVO> result = new ArrayList<PostVO>();
 		try {
 			List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -108,6 +108,33 @@ public class PostService extends BaseService {
 			}
 			data.put("project_id", projectIds.toString());
 			List<Map<String, Object>> postList = getJdbc().queryForList(getSql("query_post", data));
+			if (postList != null && postList.size() > 0) {
+				for (Map<String, Object> post : postList) {
+					result.add(PostVO.assemblePostVO(post));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public List<PostVO> queryNextPost(String project_id, String time) {
+		List<PostVO> result = new ArrayList<PostVO>();
+		try {
+			List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("project_id", project_id);
+			projectList = getJdbc().queryForList(getSql("query_leaf_project", data));
+			StringBuilder projectIds = new StringBuilder(project_id);
+			if (projectList != null && projectList.size() > 0) {
+				for (Map<String, Object> project : projectList) {
+					projectIds.append("," + project.get("project_id").toString());
+				}
+			}
+			data.put("project_id", projectIds.toString());
+			data.put("time", time);
+			List<Map<String, Object>> postList = getJdbc().queryForList(getSql("query_post_by_end", data));
 			if (postList != null && postList.size() > 0) {
 				for (Map<String, Object> post : postList) {
 					result.add(PostVO.assemblePostVO(post));
@@ -147,5 +174,22 @@ public class PostService extends BaseService {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public List<CommentVO> queryComment(String postIds) {
+		List<CommentVO> result = new ArrayList<CommentVO>();
+		try {
+			List<Map<String, Object>> commentList = new ArrayList<Map<String, Object>>();
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("post_id", postIds);
+			commentList = getJdbc().queryForList(getSql("query_comment", data));
+			if (commentList != null && commentList.size() > 0) {
+				for (Map<String, Object> comment : commentList) {
+					result.add(CommentVO.assembleCommentVO(comment));
+				}
+			}
+		} catch (Exception e) {
+		}
+		return result;
 	}
 }

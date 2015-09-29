@@ -149,7 +149,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
 	private void initUserView() {
 		mUserName.setText(AEApp.getCurrentUser().getUSER_NAME());
-		imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, AEApp
+		imageLoader.displayImage(String.format(URLConstants.URL_IMG, AEApp
 				.getCurrentUser().getBIG_HEAD()), mUserHead, options);
 	}
 

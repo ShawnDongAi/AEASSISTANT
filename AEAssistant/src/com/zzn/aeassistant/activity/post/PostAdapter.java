@@ -5,6 +5,18 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -24,18 +36,6 @@ import com.zzn.aeassistant.vo.CommentVO;
 import com.zzn.aeassistant.vo.PostVO;
 import com.zzn.aeassistant.vo.ProjectVO;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 public class PostAdapter extends BaseAdapter {
 	private Context mContext;
 	private ProjectVO project;
@@ -47,7 +47,8 @@ public class PostAdapter extends BaseAdapter {
 
 	public PostAdapter(Context context) {
 		this.mContext = context;
-		options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
+		options = new DisplayImageOptions.Builder()
+				.showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.icon_failed)// 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.icon_failed) // 设置图片加载/解码过程中错误时候显示的图片
 				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
@@ -71,16 +72,21 @@ public class PostAdapter extends BaseAdapter {
 		this.project = projectVO;
 	}
 
-	public void setPostList(List<PostVO> data) {
-		this.postList = data;
-	}
-
 	public List<PostVO> getPostList() {
 		return postList;
 	}
 
-	public void setCommentList(List<List<CommentVO>> comments) {
-		this.commentList = comments;
+	public void addPost(List<PostVO> data) {
+		postList.addAll(data);
+	}
+
+	public void addComment(List<List<CommentVO>> data) {
+		commentList.addAll(data);
+	}
+
+	public void clear() {
+		postList.clear();
+		commentList.clear();
 	}
 
 	@Override
@@ -104,19 +110,24 @@ public class PostAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = View.inflate(mContext, R.layout.item_post, null);
-			holder.head = (CircleImageView) convertView.findViewById(R.id.user_head);
+			holder.head = (CircleImageView) convertView
+					.findViewById(R.id.user_head);
 			holder.name = (TextView) convertView.findViewById(R.id.user_name);
 			holder.content = (TextView) convertView.findViewById(R.id.content);
-			holder.attachList = (FastenGridView) convertView.findViewById(R.id.attach_list);
+			holder.attachList = (FastenGridView) convertView
+					.findViewById(R.id.attach_list);
 			holder.time = (TextView) convertView.findViewById(R.id.time);
 			holder.comment = convertView.findViewById(R.id.comment);
-			holder.commentList = (FastenListView) convertView.findViewById(R.id.comment_list);
+			holder.commentList = (FastenListView) convertView
+					.findViewById(R.id.comment_list);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		final PostVO item = getItem(position);
-		imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, item.getUser_head()), holder.head, options);
+		imageLoader.displayImage(
+				String.format(URLConstants.URL_IMG, item.getUser_head()),
+				holder.head, options);
 		holder.name.setText(item.getProject_name());
 		holder.content.setText(item.getContent());
 		holder.time.setText(item.getTime());
@@ -136,20 +147,25 @@ public class PostAdapter extends BaseAdapter {
 			attachAdapter = (AttachAdapter) holder.attachList.getTag();
 			attachAdapter.clear();
 		}
-		for (String id : item.getAttch_id().split("#")) {
-			if (!StringUtil.isEmpty(id)) {
-				AttchVO vo = new AttchVO();
-				vo.setATTCH_ID(id);
-				vo.setTYPE(AttchVO.TYPE_IMG);
-				attachAdapter.addItem(vo);
+		if (item.getAttch_id() != null
+				&& !StringUtil.isEmpty(item.getAttch_id())) {
+			for (String id : item.getAttch_id().split("#")) {
+				if (!StringUtil.isEmpty(id)) {
+					AttchVO vo = new AttchVO();
+					vo.setATTCH_ID(id);
+					vo.setTYPE(AttchVO.TYPE_IMG);
+					attachAdapter.addItem(vo);
+				}
 			}
 		}
 		holder.attachList.setAdapter(attachAdapter);
 		holder.attachList.setTag(attachAdapter);
 		holder.attachList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (parent.getTag() != null && parent.getTag() instanceof AttachAdapter) {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (parent.getTag() != null
+						&& parent.getTag() instanceof AttachAdapter) {
 					((AttachAdapter) parent.getTag()).onItemClick(position);
 				}
 			}
@@ -159,7 +175,6 @@ public class PostAdapter extends BaseAdapter {
 			commentAdapter = new CommentAdapter();
 		} else {
 			commentAdapter = (CommentAdapter) holder.commentList.getTag();
-			commentAdapter.clear();
 		}
 		commentAdapter.setCommentList(commentList.get(position));
 		holder.commentList.setAdapter(commentAdapter);
@@ -178,11 +193,14 @@ public class PostAdapter extends BaseAdapter {
 	}
 
 	/** 图片加载监听事件 **/
-	private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
-		static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
+	private static class AnimateFirstDisplayListener extends
+			SimpleImageLoadingListener {
+		static final List<String> displayedImages = Collections
+				.synchronizedList(new LinkedList<String>());
 
 		@Override
-		public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+		public void onLoadingComplete(String imageUri, View view,
+				Bitmap loadedImage) {
 			if (loadedImage != null) {
 				ImageView imageView = (ImageView) view;
 				boolean firstDisplay = !displayedImages.contains(imageUri);
@@ -198,7 +216,8 @@ public class PostAdapter extends BaseAdapter {
 		private List<CommentVO> data = new ArrayList<>();
 
 		public void setCommentList(List<CommentVO> commentList) {
-			this.data = commentList;
+			clear();
+			this.data.addAll(commentList);
 		}
 
 		public void clear() {
@@ -225,16 +244,20 @@ public class PostAdapter extends BaseAdapter {
 			CommentHolder holder;
 			if (convertView == null) {
 				holder = new CommentHolder();
-				convertView = View.inflate(mContext, R.layout.item_comment, null);
-				holder.content = (TextView) convertView.findViewById(R.id.content);
-				holder.attachList = (FastenGridView) convertView.findViewById(R.id.attach_list);
+				convertView = View.inflate(mContext, R.layout.item_comment,
+						null);
+				holder.content = (TextView) convertView
+						.findViewById(R.id.content);
+				holder.attachList = (FastenGridView) convertView
+						.findViewById(R.id.attach_list);
 				holder.time = (TextView) convertView.findViewById(R.id.time);
 				convertView.setTag(holder);
 			} else {
 				holder = (CommentHolder) convertView.getTag();
 			}
 			CommentVO item = getItem(position);
-			holder.content.setText(item.getProject_name() + "：" + item.getContent().trim());
+			holder.content.setText(item.getProject_name() + "："
+					+ item.getContent().trim());
 			holder.time.setText(item.getTime());
 			AttachAdapter attachAdapter;
 			if (holder.attachList.getTag() == null) {
@@ -243,20 +266,25 @@ public class PostAdapter extends BaseAdapter {
 				attachAdapter = (AttachAdapter) holder.attachList.getTag();
 				attachAdapter.clear();
 			}
-			for (String id : item.getAttch_id().split("#")) {
-				if (!StringUtil.isEmpty(id)) {
-					AttchVO vo = new AttchVO();
-					vo.setATTCH_ID(id);
-					vo.setTYPE(AttchVO.TYPE_IMG);
-					attachAdapter.addItem(vo);
+			if (item.getAttch_id() != null
+					&& !StringUtil.isEmpty(item.getAttch_id())) {
+				for (String id : item.getAttch_id().split("#")) {
+					if (!StringUtil.isEmpty(id)) {
+						AttchVO vo = new AttchVO();
+						vo.setATTCH_ID(id);
+						vo.setTYPE(AttchVO.TYPE_IMG);
+						attachAdapter.addItem(vo);
+					}
 				}
 			}
 			holder.attachList.setAdapter(attachAdapter);
 			holder.attachList.setTag(attachAdapter);
 			holder.attachList.setOnItemClickListener(new OnItemClickListener() {
 				@Override
-				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-					if (parent.getTag() != null && parent.getTag() instanceof AttachAdapter) {
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					if (parent.getTag() != null
+							&& parent.getTag() instanceof AttachAdapter) {
 						((AttachAdapter) parent.getTag()).onItemClick(position);
 					}
 				}

@@ -236,6 +236,41 @@
                     android:src="@drawable/ic_to" />
             </LinearLayout>
 
+            <!-- 工作圈 -->
+
+            <LinearLayout
+                android:id="@+id/user_layout_workspace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_item"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/title_work_space"
+                    android:textColor="@drawable/text_normal"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/ic_to" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/diver_workspace"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/gainsboro"
+                android:visibility="gone" />
+
             <!-- 身份证号 -->
 
             <LinearLayout
@@ -272,8 +307,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:visibility="invisible"
-                    android:src="@drawable/ic_to" />
+                    android:src="@drawable/ic_to"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <View
@@ -340,14 +375,14 @@
                     android:id="@+id/user_rate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/rating_bar_height"
-                    android:maxHeight="@dimen/rating_bar_height"
                     android:isIndicator="true"
-                    android:progressDrawable="@drawable/rating"
+                    android:maxHeight="@dimen/rating_bar_height"
+                    android:minHeight="@dimen/rating_bar_height"
                     android:numStars="5"
+                    android:progressDrawable="@drawable/rating"
                     android:stepSize="0.1" >
                 </RatingBar>
-                
+
                 <TextView
                     android:id="@+id/user_score"
                     android:layout_width="wrap_content"
@@ -360,8 +395,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:visibility="invisible"
-                    android:src="@drawable/ic_to" />
+                    android:src="@drawable/ic_to"
+                    android:visibility="invisible" />
             </LinearLayout>
 
             <View

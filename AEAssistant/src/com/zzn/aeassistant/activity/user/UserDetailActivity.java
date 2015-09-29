@@ -19,6 +19,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.TextEditActivity;
+import com.zzn.aeassistant.activity.post.WorkSpaceActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -39,7 +40,8 @@ public class UserDetailActivity extends BaseActivity {
 	public static final int REQUEST_RATE = 2;
 	public static final String ACTION_UPDATE_IDCARD_IMG = "com.zzn.aeassistant.update_idcard_img";
 	private View layoutProject, layoutIDCard, layoutIDCardImg, btnCall,
-			layoutRate, rateIcon, diverIDCard, diverIDCardImg, idCardIcon;
+			layoutRate, rateIcon, diverIDCard, diverIDCardImg, idCardIcon,
+			layoutWorkSpace, diverWorkSpace;
 	private TextView project, name, phone, sex, remark, idcard, score;
 	private View projectIcon;
 	private CircleImageView head;
@@ -83,6 +85,8 @@ public class UserDetailActivity extends BaseActivity {
 		layoutProject = findViewById(R.id.user_layout_project);
 		layoutIDCard = findViewById(R.id.user_layout_idcard);
 		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
+		layoutWorkSpace = findViewById(R.id.user_layout_workspace);
+		diverWorkSpace = findViewById(R.id.diver_workspace);
 		btnCall = findViewById(R.id.btn_call);
 		layoutRate = findViewById(R.id.user_layout_rate);
 		rateIcon = findViewById(R.id.user_rate_ic);
@@ -104,6 +108,7 @@ public class UserDetailActivity extends BaseActivity {
 			diverIDCardImg.setVisibility(View.GONE);
 		}
 		layoutIDCardImg.setOnClickListener(this);
+		layoutWorkSpace.setOnClickListener(this);
 		btnCall.setOnClickListener(this);
 
 		project = (TextView) findViewById(R.id.user_project);
@@ -119,7 +124,7 @@ public class UserDetailActivity extends BaseActivity {
 		phone.setText(projectVO.getCREATE_USER_PHONE());
 		if (!StringUtil.isEmpty(projectVO.getCREATE_USER_HEAD())) {
 			imageLoader.displayImage(
-					String.format(URLConstants.URL_DOWNLOAD,
+					String.format(URLConstants.URL_IMG,
 							projectVO.getCREATE_USER_HEAD()), head, options);
 		}
 		new GetUserTask().execute(projectVO.getCREATE_USER());
@@ -187,6 +192,17 @@ public class UserDetailActivity extends BaseActivity {
 				intent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
 				startActivityForResult(intent, REQUEST_RATE);
 			}
+			break;
+		case R.id.user_layout_workspace:
+			Intent intent = new Intent(this, WorkSpaceActivity.class);
+			intent.putExtra(CodeConstants.KEY_PROJECT_ID,
+					projectVO.getPROJECT_ID());
+			for (ProjectVO currentPro : AEApp.getCurrentUser().getPROJECTS()) {
+				if (currentPro.getPROJECT_ID().equals(projectID)) {
+					intent.putExtra(CodeConstants.KEY_PROJECT_VO, currentPro);
+				}
+			}
+			startActivity(intent);
 			break;
 		default:
 			break;
@@ -318,6 +334,10 @@ public class UserDetailActivity extends BaseActivity {
 			if (result) {
 				layoutRate.setOnClickListener(UserDetailActivity.this);
 				rateIcon.setVisibility(View.VISIBLE);
+			}
+			if (result || projectVO.getPROJECT_ID().equals(projectID)) {
+				layoutWorkSpace.setVisibility(View.VISIBLE);
+				diverWorkSpace.setVisibility(View.VISIBLE);
 			}
 		}
 	}

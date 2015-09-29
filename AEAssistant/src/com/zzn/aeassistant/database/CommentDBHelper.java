@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.vo.CommentVO;
+import com.zzn.aeassistant.vo.PostVO;
 
 import android.content.ContentValues;
 import android.net.Uri;
@@ -52,44 +53,83 @@ public class CommentDBHelper {
 	/**
 	 * URI
 	 */
-	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/query_comment");
-	public static final Uri CONTENT_INSERT_URI = Uri.parse("content://" + AUTHORITY + "/insert_comment");
+	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
+			+ "/query_comment");
+	public static final Uri CONTENT_INSERT_URI = Uri.parse("content://"
+			+ AUTHORITY + "/insert_comment");
 
 	public static final String table = "ae_comment";
 
-	public static final String DB_CREATE = "create table " + table + " (" + COMMENT_ID + " varchar(32) NOT NULL,"
-			+ POST_ID + " varchar(32) NOT NULL," + USER_ID + " varchar(32) NOT NULL," + USER_NAME
-			+ " varchar(64) NOT NULL," + USER_HEAD + " varchar(32)," + CONTENT + " varchar(3000) NOT NULL," + ATTCH_ID
-			+ " varchar(400)," + PROJECT_ID + " varchar(32) NOT NULL," + PROJECT_NAME + " varchar(64) NOT NULL,"
-			+ ROOT_ID + " varchar(32) NOT NULL," + TIME + " varchar(20) NOT NULL," + IS_NEW + " varchar(1))";
+	public static final String DB_CREATE = "create table " + table + " ("
+			+ COMMENT_ID + " varchar(32) NOT NULL UNIQUE," + POST_ID
+			+ " varchar(32) NOT NULL," + USER_ID + " varchar(32) NOT NULL,"
+			+ USER_NAME + " varchar(64) NOT NULL," + USER_HEAD
+			+ " varchar(32)," + CONTENT + " varchar(3000) NOT NULL," + ATTCH_ID
+			+ " varchar(400)," + PROJECT_ID + " varchar(32) NOT NULL,"
+			+ PROJECT_NAME + " varchar(64) NOT NULL," + ROOT_ID
+			+ " varchar(32) NOT NULL," + TIME + " varchar(20) NOT NULL,"
+			+ IS_NEW + " varchar(1))";
 
 	public static void createTable() {
 		AESQLiteHelper.creatTable(table, DB_CREATE);
 	}
+	
+	public static void insertCommentList(List<CommentVO> commentList) {
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
+				AESQLiteHelper.ENCRYPT_KEY);
+        db.beginTransaction(); // 为了提过效率，批量插入 手动设置开始事务
+        for (CommentVO commentVo : commentList) {
+        	try {
+        		ContentValues values = new ContentValues();
+    			values.put(CommentDBHelper.COMMENT_ID, commentVo.getComment_id());
+    			values.put(CommentDBHelper.POST_ID, commentVo.getPost_id());
+    			values.put(CommentDBHelper.USER_ID, commentVo.getUser_id());
+    			values.put(CommentDBHelper.USER_NAME, commentVo.getUser_name());
+    			values.put(CommentDBHelper.USER_HEAD, commentVo.getUser_head());
+    			values.put(CommentDBHelper.CONTENT, commentVo.getContent());
+    			values.put(CommentDBHelper.ATTCH_ID, commentVo.getAttch_id());
+    			values.put(CommentDBHelper.PROJECT_ID, commentVo.getProject_id());
+    			values.put(CommentDBHelper.PROJECT_NAME, commentVo.getProject_name());
+    			values.put(CommentDBHelper.ROOT_ID, commentVo.getRoot_id());
+    			values.put(CommentDBHelper.TIME, commentVo.getTime());
+    			values.put(CommentDBHelper.IS_NEW, "1");
+    			db.insert(CommentDBHelper.table, CommentDBHelper.USER_ID, values);
+        	} catch (Exception e) {
+        	}
+        }
+        db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
+        db.endTransaction(); // 处理完成
+        db.close();
+	}
 
 	public static void insertComment(CommentVO commentVO) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
-		ContentValues values = new ContentValues();
-		values.put(POST_ID, commentVO.getPost_id());
-		values.put(USER_ID, commentVO.getUser_id());
-		values.put(USER_NAME, commentVO.getUser_name());
-		values.put(USER_HEAD, commentVO.getUser_head());
-		values.put(CONTENT, commentVO.getContent());
-		values.put(ATTCH_ID, commentVO.getAttch_id());
-		values.put(PROJECT_ID, commentVO.getProject_id());
-		values.put(PROJECT_NAME, commentVO.getProject_name());
-		values.put(ROOT_ID, commentVO.getRoot_id());
-		values.put(TIME, commentVO.getTime());
-		values.put(IS_NEW, commentVO.getIs_new());
-		db.insert(CommentDBHelper.table, CommentDBHelper.USER_ID, values);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
+				AESQLiteHelper.ENCRYPT_KEY);
+		try {
+			ContentValues values = new ContentValues();
+			values.put(POST_ID, commentVO.getPost_id());
+			values.put(USER_ID, commentVO.getUser_id());
+			values.put(USER_NAME, commentVO.getUser_name());
+			values.put(USER_HEAD, commentVO.getUser_head());
+			values.put(CONTENT, commentVO.getContent());
+			values.put(ATTCH_ID, commentVO.getAttch_id());
+			values.put(PROJECT_ID, commentVO.getProject_id());
+			values.put(PROJECT_NAME, commentVO.getProject_name());
+			values.put(ROOT_ID, commentVO.getRoot_id());
+			values.put(TIME, commentVO.getTime());
+			values.put(IS_NEW, commentVO.getIs_new());
+			db.insert(CommentDBHelper.table, CommentDBHelper.USER_ID, values);
+		} catch (Exception e) {
+		}
 		db.close();
 	}
 
 	public static List<CommentVO> queryList(String post_id) {
 		List<CommentVO> result = new ArrayList<>();
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
-		Cursor cursor = db.query(table, null, CommentDBHelper.POST_ID + "='" + post_id + "'", new String[] {}, null,
-				null, "time desc");
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
+				AESQLiteHelper.ENCRYPT_KEY);
+		Cursor cursor = db.query(table, null, CommentDBHelper.POST_ID + "='"
+				+ post_id + "'", new String[] {}, null, null, "time desc");
 		while (cursor.moveToNext()) {
 			CommentVO vo = new CommentVO();
 			vo.setComment_id(cursor.getString(cursor.getColumnIndex(COMMENT_ID)));
@@ -100,7 +140,8 @@ public class CommentDBHelper {
 			vo.setContent(cursor.getString(cursor.getColumnIndex(CONTENT)));
 			vo.setAttch_id(cursor.getString(cursor.getColumnIndex(ATTCH_ID)));
 			vo.setProject_id(cursor.getString(cursor.getColumnIndex(PROJECT_ID)));
-			vo.setProject_name(cursor.getString(cursor.getColumnIndex(PROJECT_NAME)));
+			vo.setProject_name(cursor.getString(cursor
+					.getColumnIndex(PROJECT_NAME)));
 			vo.setRoot_id(cursor.getString(cursor.getColumnIndex(ROOT_ID)));
 			vo.setTime(cursor.getString(cursor.getColumnIndex(TIME)));
 			vo.setIs_new(cursor.getString(cursor.getColumnIndex(IS_NEW)));
@@ -109,5 +150,13 @@ public class CommentDBHelper {
 		cursor.close();
 		db.close();
 		return result;
+	}
+
+	public static void delete(String post_id) {
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
+				AESQLiteHelper.ENCRYPT_KEY);
+		String sql = "delete from " + table + " where " + POST_ID + "='"
+				+ post_id + "'";
+		db.execSQL(sql);
 	}
 }

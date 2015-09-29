@@ -16,7 +16,6 @@ public class CommentVO implements Serializable {
 	private String project_id;
 	private String project_name;
 	private String root_id;
-	private String root_project_id;
 	private String time;
 
 	public String getComment_id() {
@@ -91,14 +90,6 @@ public class CommentVO implements Serializable {
 		this.root_id = root_id;
 	}
 
-	public String getRoot_project_id() {
-		return root_project_id;
-	}
-
-	public void setRoot_project_id(String root_project_id) {
-		this.root_project_id = root_project_id;
-	}
-
 	public String getTime() {
 		return time;
 	}
@@ -112,8 +103,32 @@ public class CommentVO implements Serializable {
 		if (commentInfo.get("comment_id") != null) {
 			comment.setComment_id(commentInfo.get("comment_id").toString().trim());
 		}
-		if (commentInfo.get("comment_id") != null) {
-			comment.setPost_id(commentInfo.get("comment_id").toString().trim());
+		if (commentInfo.get("post_id") != null) {
+			comment.setPost_id(commentInfo.get("post_id").toString().trim());
+		}
+		if (commentInfo.get("user_id") != null) {
+			comment.setUser_id(commentInfo.get("user_id").toString().trim());
+		}
+		if (commentInfo.get("user_name") != null) {
+			comment.setUser_name(commentInfo.get("user_name").toString().trim());
+		}
+		if (commentInfo.get("content") != null) {
+			comment.setContent(commentInfo.get("content").toString().trim());
+		}
+		if (commentInfo.get("attch_id") != null) {
+			comment.setAttch_id(commentInfo.get("attch_id").toString().trim());
+		}
+		if (commentInfo.get("project_id") != null) {
+			comment.setProject_id(commentInfo.get("project_id").toString().trim());
+		}
+		if (commentInfo.get("project_name") != null) {
+			comment.setProject_name(commentInfo.get("project_name").toString().trim());
+		}
+		if (commentInfo.get("root_id") != null) {
+			comment.setRoot_id(commentInfo.get("root_id").toString().trim());
+		}
+		if (commentInfo.get("time") != null) {
+			comment.setTime(commentInfo.get("time").toString().trim());
 		}
 		return comment;
 	}

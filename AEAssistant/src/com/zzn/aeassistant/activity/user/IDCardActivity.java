@@ -178,7 +178,7 @@ public class IDCardActivity extends BaseActivity {
 							sendBroadcast(intent);
 						}
 						imageLoader.displayImage(
-								String.format(URLConstants.URL_DOWNLOAD,
+								String.format(URLConstants.URL_IMG,
 										vo.getATTCH_ID()), imgFront, options);
 						break;
 					case 1:

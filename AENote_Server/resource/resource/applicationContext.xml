@@ -254,4 +254,10 @@
 			<ref local="postService" />
 		</property>
 	</bean>
+	<!-- 查询工作圈 -->
+	<bean id="queryPost" class="com.zzn.aenote.http.server.post.QueryPost">
+		<property name="postService">
+			<ref local="postService" />
+		</property>
+	</bean>
 </beans>

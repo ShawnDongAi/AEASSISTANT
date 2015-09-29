@@ -108,7 +108,7 @@ public class UserActivity extends BaseActivity {
 		initImageLoader();
 		initMenu();
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getBIG_HEAD())) {
-			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD,
+			imageLoader.displayImage(String.format(URLConstants.URL_IMG,
 					AEApp.getCurrentUser().getBIG_HEAD()), head, options);
 		}
 	}
@@ -345,7 +345,7 @@ public class UserActivity extends BaseActivity {
 					AEApp.getCurrentUser().setBIG_HEAD(vo.getATTCH_ID());
 					AEApp.getCurrentUser().setSMALL_HEAD(vo.getATTCH_ID());
 					imageLoader.displayImage(String.format(
-							URLConstants.URL_DOWNLOAD, AEApp.getCurrentUser()
+							URLConstants.URL_IMG, AEApp.getCurrentUser()
 									.getBIG_HEAD()), head, options);
 					sendBroadcast(new Intent(
 							IndexActivity.ACTION_USER_INFO_CHANGED));

@@ -188,18 +188,34 @@ public class PostActivity extends BaseActivity {
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.photo:
+			if (adapter.getCount() >= 9) {
+				ToastUtil.show(R.string.much_file);
+				return;
+			}
 			setCompress(true);
 			AttchUtil.getPictureFromGallery(this);
 			break;
 		case R.id.camera:
+			if (adapter.getCount() >= 9) {
+				ToastUtil.show(R.string.much_file);
+				return;
+			}
 			setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
 					+ ".jpg", true);
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.voice:
+			if (adapter.getCount() >= 9) {
+				ToastUtil.show(R.string.much_file);
+				return;
+			}
 			AttchUtil.record(this);
 			break;
 		case R.id.file:
+			if (adapter.getCount() >= 9) {
+				ToastUtil.show(R.string.much_file);
+				return;
+			}
 			AttchUtil.getFile(this);
 			break;
 		case R.id.send:

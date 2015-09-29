@@ -119,7 +119,7 @@ public class SumUserGridAdapter extends BaseAdapter {
 		holder.photo.mHeight = vo.getPhoto_height();
 		holder.photo.mWidth = vo.getPhoto_width();
 		imageLoader.displayImage(
-				String.format(URLConstants.URL_DOWNLOAD, vo.getImgURL()),
+				String.format(URLConstants.URL_IMG, vo.getImgURL()),
 				holder.photo, options, new ImageLoadingListener() {
 					@Override
 					public void onLoadingStarted(String imageUri, View view) {

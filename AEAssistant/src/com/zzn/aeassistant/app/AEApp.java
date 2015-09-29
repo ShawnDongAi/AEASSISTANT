@@ -117,11 +117,11 @@ public class AEApp extends Application {
 				.threadPoolSize(3)
 				.threadPriority(Thread.NORM_PRIORITY - 2)
 				.denyCacheImageMultipleSizesInMemory()
-				.memoryCache(new WeakMemoryCache())
-				.memoryCacheSize(2 * 1024 * 1024)
+				// .memoryCache(new WeakMemoryCache())
+				// .memoryCacheSize(2 * 1024 * 1024)
 				.discCacheFileNameGenerator(new Md5FileNameGenerator())
 				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.discCacheFileCount(30)
+				.discCacheFileCount(100)
 				.discCache(
 						new UnlimitedDiskCache(new File(
 								FileCostants.DIR_SCANNING)))

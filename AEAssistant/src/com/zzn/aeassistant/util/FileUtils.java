@@ -188,8 +188,11 @@ public class FileUtils {
 	 * @return
 	 */
 	public static boolean exists(String path) {
+		if (path == null) {
+			return false;
+		}
 		File file = new File(path);
-		return file.exists();
+		return file != null && file.exists();
 	}
 
 	/**
@@ -223,6 +226,17 @@ public class FileUtils {
 			size = "" + getFileSize(file);
 		}
 		return size;
+	}
+	
+	public static void openImg(Context context, File f) {
+		Intent intent = new Intent();
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setAction(Intent.ACTION_VIEW);
+
+		String type = "image/*";
+		/* 设置intent的file与MimeType */
+		intent.setDataAndType(Uri.fromFile(f), type);
+		context.startActivity(intent);
 	}
 
 	/**
