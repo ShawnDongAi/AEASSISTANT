@@ -25,6 +25,8 @@
     <string name="null_input">请输入有效字符</string>
     <string name="list">无图模式</string>
     <string name="grid">大图模式</string>
+    <string name="code_tip">请将二维码置于扫描框的红线，即可自动扫描</string>
+    <string name="qrcode_scanning">二维码扫描</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>
