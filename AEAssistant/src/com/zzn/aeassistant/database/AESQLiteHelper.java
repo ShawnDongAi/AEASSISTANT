@@ -19,7 +19,7 @@ import android.content.Context;
 public class AESQLiteHelper extends SQLiteOpenHelper {
 	private static AESQLiteHelper instance = null;
 	public static String DATABASE_NAME = "AENote.db";// 数据库文件名
-	private static int DATABASE_VERSION = 2;// 数据库版本
+	private static int DATABASE_VERSION = 3;// 数据库版本
 	public final static String ENCRYPT_KEY = PhoneUtil.getIMEI();
 
 	public AESQLiteHelper(Context context, String name, CursorFactory factory, int version) {
@@ -45,11 +45,17 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (newVersion == 2) {
+		if (oldVersion == 1) {
 			db.execSQL(PostDBHelper.DB_CREATE);
 			db.execSQL(CommentDBHelper.DB_CREATE);
-			db.setVersion(2);
 		}
+		if (oldVersion == 2) {
+			db.execSQL(PostDBHelper.DB_DROP);
+			db.execSQL(CommentDBHelper.DB_DROP);
+			db.execSQL(PostDBHelper.DB_CREATE);
+			db.execSQL(CommentDBHelper.DB_CREATE);
+		}
+		db.setVersion(DATABASE_VERSION);
 	}
 
 	/**

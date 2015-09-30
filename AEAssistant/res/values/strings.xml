@@ -64,7 +64,7 @@
     <string name="title_user_center">个人中心</string>
     <string name="title_home">主页</string>
     <string name="title_setting">设置</string>
-    <string name="out_of_project_location">您当前无任何激活项目</string>
+    <string name="out_of_project_location">您当前位置无激活项目</string>
     <string name="current_project">当前激活项目：%s</string>
     <string name="scanning_for_other">温馨提示：在此页面，接收来电后可为其签到</string>
     <string name="scanning_null_photo">请确认拍照是否成功</string>
@@ -82,7 +82,7 @@
     <string name="lable_name">姓名</string>
     <string name="lable_project">项目名</string>
     <string name="lable_phone">电话</string>
-    <string name="lable_qrcode">我的二维码</string>
+    <string name="lable_qrcode">二维码</string>
     <string name="lable_sex">性别</string>
     <string name="lable_remark">个人说明</string>
     <string name="lable_idcard">身份证号</string>
@@ -124,7 +124,7 @@
     <string name="location_failed">定位失败,请重试</string>
     <string name="null_project_name">请填写项目名</string>
     <string name="null_project_location">缺少项目位置信息</string>
-    <string name="null_project">无任何项目</string>
+    <string name="null_project">您当前未加入任何项目</string>
     <string name="modify_project_name">修改项目名称</string>
 
     <!-- 项目详情 -->
@@ -140,8 +140,8 @@
     <string name="project_update_parent">项目迁移</string>
     <string name="project_update_parent_hint">温馨提示:在此页面，接收来电后可设置其为当前项目下级</string>
     <string name="project_join_current">监听到%s的来电,是否将其设置为当前项目的下级项目</string>
-    
-    <!-- 考勤记录-->
+
+    <!-- 考勤记录 -->
     <string name="select_date">选取日期</string>
     <string name="sum_start_date">起始日期:</string>
     <string name="sum_end_date">结束日期:</string>
@@ -149,7 +149,7 @@
     <string name="sum_by_user">个人签到记录</string>
     <string name="sum_by_project">项目签到记录</string>
     <string name="sum_exception_section">异常签到记录</string>
-    <string formatted="false" name="sum_normal_section">总用工人数:%d人次</string>
+    <string name="sum_normal_section" formatted="false">总用工人数:%d人次</string>
     <string name="sum_exception_null">无异常签到记录</string>
     <string name="sum_normal_null">无任何签到记录</string>
     <string name="sum_exception_total">有%d条异常签到记录</string>
@@ -178,10 +178,11 @@
     <string name="version_has_new">发现新版本:%s</string>
     <string name="update">更新</string>
     <string name="ignore">忽略</string>
-    
+
     <!-- 工作圈 -->
     <string name="send">发送</string>
     <string name="post">发帖</string>
     <string name="comment">评论</string>
     <string name="much_file">最多添加9个文件</string>
+
 </resources>

@@ -56,8 +56,7 @@ public class CommentActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		post_id = getIntent().getStringExtra(CodeConstants.KEY_POST_ID);
-		project = (ProjectVO) getIntent().getSerializableExtra(
-				CodeConstants.KEY_PROJECT_VO);
+		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
 		save.setText(R.string.comment);
 		save.setVisibility(View.VISIBLE);
 		content = (EditText) findViewById(R.id.input_comment);
@@ -74,15 +73,13 @@ public class CommentActivity extends BaseActivity {
 		file.setOnClickListener(this);
 		attachGroup.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				adapter.onItemClick(position);
 			}
 		});
 		attachGroup.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				adapter.onItemLongClick();
 				return false;
 			}
@@ -118,9 +115,8 @@ public class CommentActivity extends BaseActivity {
 				ToastUtil.show(R.string.much_file);
 				return;
 			}
-			setImgPath(
-					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
-							+ "_" + System.currentTimeMillis() + ".jpg", true);
+			setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+					+ ".jpg", true);
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.voice:
@@ -191,8 +187,7 @@ public class CommentActivity extends BaseActivity {
 			param.append("&attach_ids=" + adapter.getAttachIDs());
 			param.append("&content=" + params[0]);
 			param.append("&post_id=" + params[1]);
-			return AEHttpUtil
-					.doPost(URLConstants.URL_COMMENT, param.toString());
+			return AEHttpUtil.doPost(URLConstants.URL_COMMENT, param.toString());
 		}
 
 		@Override
@@ -206,26 +201,22 @@ public class CommentActivity extends BaseActivity {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				CommentVO commentVo = GsonUtil.getInstance().fromJson(
-						result.getRES_OBJ().toString(), CommentVO.class);
+				CommentVO commentVo = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(), CommentVO.class);
 				ContentValues values = new ContentValues();
-				values.put(CommentDBHelper.COMMENT_ID,
-						commentVo.getComment_id());
+				values.put(CommentDBHelper.COMMENT_ID, commentVo.getComment_id());
 				values.put(CommentDBHelper.POST_ID, commentVo.getPost_id());
 				values.put(CommentDBHelper.USER_ID, commentVo.getUser_id());
 				values.put(CommentDBHelper.USER_NAME, commentVo.getUser_name());
 				values.put(CommentDBHelper.USER_HEAD, commentVo.getUser_head());
 				values.put(CommentDBHelper.CONTENT, commentVo.getContent());
 				values.put(CommentDBHelper.ATTCH_ID, commentVo.getAttch_id());
-				values.put(CommentDBHelper.PROJECT_ID,
-						commentVo.getProject_id());
-				values.put(CommentDBHelper.PROJECT_NAME,
-						commentVo.getProject_name());
+				values.put(CommentDBHelper.PROJECT_ID, commentVo.getProject_id());
+				values.put(CommentDBHelper.PROJECT_NAME, commentVo.getProject_name());
 				values.put(CommentDBHelper.ROOT_ID, commentVo.getRoot_id());
 				values.put(CommentDBHelper.TIME, commentVo.getTime());
 				values.put(CommentDBHelper.IS_NEW, "1");
-				getContentResolver()
-						.insert(CommentProvider.CONTENT_URI, values);
+				values.put(CommentDBHelper.CURRENT_PROJECT, project.getPROJECT_ID());
+				getContentResolver().insert(CommentProvider.CONTENT_URI, values);
 				finish();
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
@@ -247,8 +238,7 @@ public class CommentActivity extends BaseActivity {
 			for (String path : params) {
 				files.add(path);
 			}
-			return AEHttpUtil.doPostWithFile(URLConstants.URL_UPLOAD_FILE,
-					files, new HashMap<String, String>());
+			return AEHttpUtil.doPostWithFile(URLConstants.URL_UPLOAD_FILE, files, new HashMap<String, String>());
 		}
 
 		@Override
@@ -256,8 +246,7 @@ public class CommentActivity extends BaseActivity {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				AttchVO vo = GsonUtil.getInstance().fromJson(
-						result.getRES_OBJ().toString(), AttchVO.class);
+				AttchVO vo = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(), AttchVO.class);
 				vo.setLOCAL_PATH(currentPath);
 				adapter.addItem(vo);
 				adapter.notifyDataSetChanged();

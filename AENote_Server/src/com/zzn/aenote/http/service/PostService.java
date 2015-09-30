@@ -96,17 +96,26 @@ public class PostService extends BaseService {
 	public List<PostVO> queryPost(String project_id) {
 		List<PostVO> result = new ArrayList<PostVO>();
 		try {
+			List<Map<String, Object>> allProjectList = new ArrayList<Map<String, Object>>();
 			List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("project_id", project_id);
 			projectList = getJdbc().queryForList(getSql("query_leaf_project", data));
+			allProjectList = getJdbc().queryForList(getSql("query_project_structure", data));
 			StringBuilder projectIds = new StringBuilder(project_id);
+			StringBuilder allProjectIds = new StringBuilder();
 			if (projectList != null && projectList.size() > 0) {
 				for (Map<String, Object> project : projectList) {
 					projectIds.append("," + project.get("project_id").toString());
 				}
 			}
+			if (allProjectList != null && allProjectList.size() > 0) {
+				for (Map<String, Object> project : allProjectList) {
+					allProjectIds.append(project.get("project_id").toString() + ",");
+				}
+			}
 			data.put("project_id", projectIds.toString());
+			data.put("all_project_id", allProjectIds.toString());
 			List<Map<String, Object>> postList = getJdbc().queryForList(getSql("query_post", data));
 			if (postList != null && postList.size() > 0) {
 				for (Map<String, Object> post : postList) {
@@ -118,21 +127,30 @@ public class PostService extends BaseService {
 		}
 		return result;
 	}
-	
+
 	public List<PostVO> queryNextPost(String project_id, String time) {
 		List<PostVO> result = new ArrayList<PostVO>();
 		try {
+			List<Map<String, Object>> allProjectList = new ArrayList<Map<String, Object>>();
 			List<Map<String, Object>> projectList = new ArrayList<Map<String, Object>>();
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("project_id", project_id);
 			projectList = getJdbc().queryForList(getSql("query_leaf_project", data));
+			allProjectList = getJdbc().queryForList(getSql("query_project_structure", data));
 			StringBuilder projectIds = new StringBuilder(project_id);
+			StringBuilder allProjectIds = new StringBuilder();
 			if (projectList != null && projectList.size() > 0) {
 				for (Map<String, Object> project : projectList) {
 					projectIds.append("," + project.get("project_id").toString());
 				}
 			}
+			if (allProjectList != null && allProjectList.size() > 0) {
+				for (Map<String, Object> project : allProjectList) {
+					allProjectIds.append(project.get("project_id").toString() + ",");
+				}
+			}
 			data.put("project_id", projectIds.toString());
+			data.put("all_project_id", allProjectIds.toString());
 			data.put("time", time);
 			List<Map<String, Object>> postList = getJdbc().queryForList(getSql("query_post_by_end", data));
 			if (postList != null && postList.size() > 0) {
@@ -175,7 +193,7 @@ public class PostService extends BaseService {
 			return null;
 		}
 	}
-	
+
 	public List<CommentVO> queryComment(String postIds) {
 		List<CommentVO> result = new ArrayList<CommentVO>();
 		try {

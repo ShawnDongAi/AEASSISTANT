@@ -15,12 +15,12 @@ import com.zzn.aeassistant.vo.ProjectVO;
 public class ProListAdapter extends BaseAdapter {
 	private Context mContext;
 	private List<ProjectVO> datas = new ArrayList<ProjectVO>();
-	
+
 	public ProListAdapter(Context context, List<ProjectVO> data) {
 		this.mContext = context;
 		this.datas = data;
 	}
-	
+
 	public void setDatas(List<ProjectVO> data) {
 		this.datas = data;
 	}
@@ -51,7 +51,8 @@ public class ProListAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.title.setText(getItem(position).getROOT_PROJECT_NAME());
+		ProjectVO item = getItem(position);
+		holder.title.setText(item.getROOT_PROJECT_NAME() + "-" + item.getPROJECT_NAME());
 		return convertView;
 	}
 

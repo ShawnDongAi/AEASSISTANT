@@ -24,6 +24,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.zzn.aeassistant.R;
 
 public class BitmapUtil {
 	// 图片宽度的一般
@@ -41,23 +42,17 @@ public class BitmapUtil {
 		float sy = (float) 2 * h / icon.getHeight();
 		m.setScale(sx, sy);
 		// 重新构造一个2h*2h的图片
-		return Bitmap.createBitmap(icon, 0, 0, icon.getWidth(),
-				icon.getHeight(), m, false);
+		return Bitmap.createBitmap(icon, 0, 0, icon.getWidth(), icon.getHeight(), m, false);
 	}
 
 	public static Bitmap drawable2Bitmap(Drawable drawable) {
 		if (drawable instanceof BitmapDrawable) {
 			return ((BitmapDrawable) drawable).getBitmap();
 		} else if (drawable instanceof NinePatchDrawable) {
-			Bitmap bitmap = Bitmap
-					.createBitmap(
-							drawable.getIntrinsicWidth(),
-							drawable.getIntrinsicHeight(),
-							drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-									: Bitmap.Config.RGB_565);
+			Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+					drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
 			Canvas canvas = new Canvas(bitmap);
-			drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
-					drawable.getIntrinsicHeight());
+			drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 			drawable.draw(canvas);
 			return bitmap;
 		} else {
@@ -116,12 +111,10 @@ public class BitmapUtil {
 			}
 			image.recycle();
 			image = null;
-			ByteArrayInputStream isBm = new ByteArrayInputStream(
-					baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
+			ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());// 把压缩后的数据baos存放到ByteArrayInputStream中
 			isBm.reset();
 			// 把压缩后的数据baos存放到ByteArrayInputStream中
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(
-					baos.toByteArray());
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(baos.toByteArray());
 			try {
 				baos.flush();
 			} catch (IOException e1) {
@@ -158,18 +151,15 @@ public class BitmapUtil {
 		}
 	}
 
-	public static Bitmap cretaeTwoCode(Context context, String str,
-			int drawableID) throws WriterException {
+	public static Bitmap cretaeTwoCode(Context context, String str, int drawableID) throws WriterException {
 		// 缩放一个40*40的图片
-		Bitmap icon = zoomBitmap(
-				context.getResources().getDrawable(drawableID), IMAGE_HALFWIDTH);
+		Bitmap icon = zoomBitmap(context.getResources().getDrawable(drawableID), IMAGE_HALFWIDTH);
 		Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
 		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
 		hints.put(EncodeHintType.MARGIN, 1);
 		// 生成二维矩阵,编码时指定大小,不要生成了图片以后再进行缩放,这样会模糊导致识别失败
-		BitMatrix matrix = new MultiFormatWriter().encode(str,
-				BarcodeFormat.QR_CODE, 300, 300, hints);
+		BitMatrix matrix = new MultiFormatWriter().encode(str, BarcodeFormat.QR_CODE, 300, 300, hints);
 		int width = matrix.getWidth();
 		int height = matrix.getHeight();
 		// 二维矩阵转为一维像素数组,也就是一直横着排了
@@ -178,11 +168,9 @@ public class BitmapUtil {
 		int[] pixels = new int[width * height];
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				if (x > halfW - IMAGE_HALFWIDTH && x < halfW + IMAGE_HALFWIDTH
-						&& y > halfH - IMAGE_HALFWIDTH
+				if (x > halfW - IMAGE_HALFWIDTH && x < halfW + IMAGE_HALFWIDTH && y > halfH - IMAGE_HALFWIDTH
 						&& y < halfH + IMAGE_HALFWIDTH) {
-					pixels[y * width + x] = icon.getPixel(x - halfW
-							+ IMAGE_HALFWIDTH, y - halfH + IMAGE_HALFWIDTH);
+					pixels[y * width + x] = icon.getPixel(x - halfW + IMAGE_HALFWIDTH, y - halfH + IMAGE_HALFWIDTH);
 				} else {
 					if (matrix.get(x, y)) {
 						pixels[y * width + x] = FOREGROUND_COLOR;
@@ -193,15 +181,52 @@ public class BitmapUtil {
 
 			}
 		}
-		Bitmap bitmap = Bitmap.createBitmap(width, height,
-				Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		// 通过像素数组生成bitmap
 		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 		return bitmap;
 	}
 
-	public static boolean writeToSdcard(Bitmap bitmap, String path,
-			String fileName) {
+	public static Bitmap cretaeTwoCode(Context context, String str, Drawable drawable) throws WriterException {
+		// 缩放一个40*40的图片
+		if (drawable == null) {
+			drawable = context.getResources().getDrawable(R.drawable.ic_head);
+		}
+		Bitmap icon = zoomBitmap(drawable, IMAGE_HALFWIDTH);
+		Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+		hints.put(EncodeHintType.MARGIN, 1);
+		// 生成二维矩阵,编码时指定大小,不要生成了图片以后再进行缩放,这样会模糊导致识别失败
+		BitMatrix matrix = new MultiFormatWriter().encode(str, BarcodeFormat.QR_CODE, 300, 300, hints);
+		int width = matrix.getWidth();
+		int height = matrix.getHeight();
+		// 二维矩阵转为一维像素数组,也就是一直横着排了
+		int halfW = width / 2;
+		int halfH = height / 2;
+		int[] pixels = new int[width * height];
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (x > halfW - IMAGE_HALFWIDTH && x < halfW + IMAGE_HALFWIDTH && y > halfH - IMAGE_HALFWIDTH
+						&& y < halfH + IMAGE_HALFWIDTH) {
+					pixels[y * width + x] = icon.getPixel(x - halfW + IMAGE_HALFWIDTH, y - halfH + IMAGE_HALFWIDTH);
+				} else {
+					if (matrix.get(x, y)) {
+						pixels[y * width + x] = FOREGROUND_COLOR;
+					} else { // 无信息设置像素点为白色
+						pixels[y * width + x] = BACKGROUND_COLOR;
+					}
+				}
+
+			}
+		}
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		// 通过像素数组生成bitmap
+		bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+		return bitmap;
+	}
+
+	public static boolean writeToSdcard(Bitmap bitmap, String path, String fileName) {
 		ByteArrayOutputStream by = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, by);
 		byte[] data = by.toByteArray();

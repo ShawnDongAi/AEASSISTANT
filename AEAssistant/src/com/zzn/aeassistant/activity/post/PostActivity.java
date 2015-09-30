@@ -331,6 +331,7 @@ public class PostActivity extends BaseActivity {
 				values.put(PostDBHelper.SEND_PROJECT_NAME, postVo.getSend_project_name());
 				values.put(PostDBHelper.IS_PRIVATE, postVo.getIs_private());
 				values.put(PostDBHelper.IS_NEW, "1");
+				values.put(PostDBHelper.CURRENT_PROJECT, project.getPROJECT_ID());
 				getContentResolver().insert(PostProvider.CONTENT_URI, values);
 				finish();
 			} else {

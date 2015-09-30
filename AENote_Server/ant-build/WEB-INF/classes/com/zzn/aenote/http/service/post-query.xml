@@ -47,7 +47,11 @@
 		or
 		instr('#project_id#',
 		a.send_project_id)
-		> 0) order by
+		> 0
+		or
+		(instr('#all_project_id#',
+		t.project_id)
+		>0 and private='0')) order by
 		t.time desc
 	</select>
 	<!-- 查询下一页帖子 -->
@@ -86,7 +90,11 @@
 		t.root_id) > 0
 		or
 		instr('#project_id#', a.send_project_id)
-		> 0) order by
+		> 0
+		or
+		(instr('#all_project_id#',
+		t.project_id)
+		>0 and private='0')) order by
 		t.time desc
 	</select>
 	<select id="query_send_info">
