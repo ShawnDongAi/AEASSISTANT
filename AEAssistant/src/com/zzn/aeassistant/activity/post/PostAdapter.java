@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,10 +13,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -30,13 +29,12 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.view.AttachAdapter;
 import com.zzn.aeassistant.view.CircleImageView;
 import com.zzn.aeassistant.view.FastenGridView;
-import com.zzn.aeassistant.view.FastenListView;
 import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.CommentVO;
 import com.zzn.aeassistant.vo.PostVO;
 import com.zzn.aeassistant.vo.ProjectVO;
 
-public class PostAdapter extends BaseAdapter {
+public class PostAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private ProjectVO project;
 	private List<PostVO> postList = new ArrayList<PostVO>();
@@ -89,23 +87,81 @@ public class PostAdapter extends BaseAdapter {
 		commentList.clear();
 	}
 
+	private class ViewHolder {
+		CircleImageView head;
+		TextView name;
+		TextView content;
+		FastenGridView attachList;
+		TextView time;
+		View comment;
+		View arrow;
+	}
+
+	/** 图片加载监听事件 **/
+	private static class AnimateFirstDisplayListener extends
+			SimpleImageLoadingListener {
+		static final List<String> displayedImages = Collections
+				.synchronizedList(new LinkedList<String>());
+
+		@Override
+		public void onLoadingComplete(String imageUri, View view,
+				Bitmap loadedImage) {
+			if (loadedImage != null) {
+				ImageView imageView = (ImageView) view;
+				boolean firstDisplay = !displayedImages.contains(imageUri);
+				if (firstDisplay) {
+					FadeInBitmapDisplayer.animate(imageView, 500); // 设置image隐藏动画500ms
+					displayedImages.add(imageUri); // 将图片uri添加到集合中
+				}
+			}
+		}
+	}
+
+	private class CommentHolder {
+		TextView content;
+		FastenGridView attachList;
+		TextView time;
+	}
+
 	@Override
-	public int getCount() {
+	public int getGroupCount() {
 		return postList.size();
 	}
 
 	@Override
-	public PostVO getItem(int position) {
-		return postList.get(position);
+	public int getChildrenCount(int groupPosition) {
+		return commentList.get(groupPosition).size();
 	}
 
 	@Override
-	public long getItemId(int position) {
-		return position;
+	public PostVO getGroup(int groupPosition) {
+		return postList.get(groupPosition);
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public CommentVO getChild(int groupPosition, int childPosition) {
+		return commentList.get(groupPosition).get(childPosition);
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return false;
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
@@ -118,13 +174,12 @@ public class PostAdapter extends BaseAdapter {
 					.findViewById(R.id.attach_list);
 			holder.time = (TextView) convertView.findViewById(R.id.time);
 			holder.comment = convertView.findViewById(R.id.comment);
-			holder.commentList = (FastenListView) convertView
-					.findViewById(R.id.comment_list);
+			holder.arrow = convertView.findViewById(R.id.arrow);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		final PostVO item = getItem(position);
+		final PostVO item = getGroup(groupPosition);
 		imageLoader.displayImage(
 				String.format(URLConstants.URL_IMG, item.getUser_head()),
 				holder.head, options);
@@ -170,132 +225,67 @@ public class PostAdapter extends BaseAdapter {
 				}
 			}
 		});
-		CommentAdapter commentAdapter;
-		if (holder.commentList.getTag() == null) {
-			commentAdapter = new CommentAdapter();
-		} else {
-			commentAdapter = (CommentAdapter) holder.commentList.getTag();
-		}
-		commentAdapter.setCommentList(commentList.get(position));
-		holder.commentList.setAdapter(commentAdapter);
-		holder.commentList.setTag(commentAdapter);
+		holder.arrow.setRotation(isExpanded ? 180 : 0);
+		holder.arrow
+				.setVisibility(getChildrenCount(groupPosition) > 0 ? View.VISIBLE
+						: View.INVISIBLE);
 		return convertView;
 	}
 
-	private class ViewHolder {
-		CircleImageView head;
-		TextView name;
-		TextView content;
-		FastenGridView attachList;
-		TextView time;
-		View comment;
-		FastenListView commentList;
+	@Override
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
+		CommentHolder holder;
+		if (convertView == null) {
+			holder = new CommentHolder();
+			convertView = View.inflate(mContext, R.layout.item_comment, null);
+			holder.content = (TextView) convertView.findViewById(R.id.content);
+			holder.attachList = (FastenGridView) convertView
+					.findViewById(R.id.attach_list);
+			holder.time = (TextView) convertView.findViewById(R.id.time);
+			convertView.setTag(holder);
+		} else {
+			holder = (CommentHolder) convertView.getTag();
+		}
+		CommentVO item = getChild(groupPosition, childPosition);
+		holder.content.setText(item.getProject_name() + "："
+				+ item.getContent().trim());
+		holder.time.setText(item.getTime());
+		AttachAdapter attachAdapter;
+		if (holder.attachList.getTag() == null) {
+			attachAdapter = new AttachAdapter(mContext, false);
+		} else {
+			attachAdapter = (AttachAdapter) holder.attachList.getTag();
+			attachAdapter.clear();
+		}
+		if (item.getAttch_id() != null
+				&& !StringUtil.isEmpty(item.getAttch_id())) {
+			for (String id : item.getAttch_id().split("#")) {
+				if (!StringUtil.isEmpty(id)) {
+					AttchVO vo = new AttchVO();
+					vo.setATTCH_ID(id);
+					vo.setTYPE(AttchVO.TYPE_IMG);
+					attachAdapter.addItem(vo);
+				}
+			}
+		}
+		holder.attachList.setAdapter(attachAdapter);
+		holder.attachList.setTag(attachAdapter);
+		holder.attachList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				if (parent.getTag() != null
+						&& parent.getTag() instanceof AttachAdapter) {
+					((AttachAdapter) parent.getTag()).onItemClick(position);
+				}
+			}
+		});
+		return convertView;
 	}
 
-	/** 图片加载监听事件 **/
-	private static class AnimateFirstDisplayListener extends
-			SimpleImageLoadingListener {
-		static final List<String> displayedImages = Collections
-				.synchronizedList(new LinkedList<String>());
-
-		@Override
-		public void onLoadingComplete(String imageUri, View view,
-				Bitmap loadedImage) {
-			if (loadedImage != null) {
-				ImageView imageView = (ImageView) view;
-				boolean firstDisplay = !displayedImages.contains(imageUri);
-				if (firstDisplay) {
-					FadeInBitmapDisplayer.animate(imageView, 500); // 设置image隐藏动画500ms
-					displayedImages.add(imageUri); // 将图片uri添加到集合中
-				}
-			}
-		}
-	}
-
-	private class CommentAdapter extends BaseAdapter {
-		private List<CommentVO> data = new ArrayList<>();
-
-		public void setCommentList(List<CommentVO> commentList) {
-			clear();
-			this.data.addAll(commentList);
-		}
-
-		public void clear() {
-			data.clear();
-		}
-
-		@Override
-		public int getCount() {
-			return data.size();
-		}
-
-		@Override
-		public CommentVO getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			CommentHolder holder;
-			if (convertView == null) {
-				holder = new CommentHolder();
-				convertView = View.inflate(mContext, R.layout.item_comment,
-						null);
-				holder.content = (TextView) convertView
-						.findViewById(R.id.content);
-				holder.attachList = (FastenGridView) convertView
-						.findViewById(R.id.attach_list);
-				holder.time = (TextView) convertView.findViewById(R.id.time);
-				convertView.setTag(holder);
-			} else {
-				holder = (CommentHolder) convertView.getTag();
-			}
-			CommentVO item = getItem(position);
-			holder.content.setText(item.getProject_name() + "："
-					+ item.getContent().trim());
-			holder.time.setText(item.getTime());
-			AttachAdapter attachAdapter;
-			if (holder.attachList.getTag() == null) {
-				attachAdapter = new AttachAdapter(mContext, false);
-			} else {
-				attachAdapter = (AttachAdapter) holder.attachList.getTag();
-				attachAdapter.clear();
-			}
-			if (item.getAttch_id() != null
-					&& !StringUtil.isEmpty(item.getAttch_id())) {
-				for (String id : item.getAttch_id().split("#")) {
-					if (!StringUtil.isEmpty(id)) {
-						AttchVO vo = new AttchVO();
-						vo.setATTCH_ID(id);
-						vo.setTYPE(AttchVO.TYPE_IMG);
-						attachAdapter.addItem(vo);
-					}
-				}
-			}
-			holder.attachList.setAdapter(attachAdapter);
-			holder.attachList.setTag(attachAdapter);
-			holder.attachList.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					if (parent.getTag() != null
-							&& parent.getTag() instanceof AttachAdapter) {
-						((AttachAdapter) parent.getTag()).onItemClick(position);
-					}
-				}
-			});
-			return convertView;
-		}
-
-		private class CommentHolder {
-			TextView content;
-			FastenGridView attachList;
-			TextView time;
-		}
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return false;
 	}
 }

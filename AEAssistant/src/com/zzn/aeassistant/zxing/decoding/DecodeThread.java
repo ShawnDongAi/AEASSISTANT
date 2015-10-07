@@ -23,7 +23,7 @@ import java.util.concurrent.CountDownLatch;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
-import com.zzn.aeassistant.zxing.QRScanningActivity;
+import com.zzn.aeassistant.activity.QRScanningActivity;
 
 import android.os.Handler;
 import android.os.Looper;

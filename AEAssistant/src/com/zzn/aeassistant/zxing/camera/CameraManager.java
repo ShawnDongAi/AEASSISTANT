@@ -257,8 +257,8 @@ public final class CameraManager {
 			}
 			// int width = screenResolution.x;
 			// int leftOffset = 0;
-			int width = screenResolution.y * 3 / 5 - 100;
-			int height = screenResolution.x * 3 / 5;
+			int width = screenResolution.x / 2;
+			int height = screenResolution.x / 2;
 			int leftOffset = (screenResolution.x - width) / 2;
 			int topOffset = (screenResolution.y - height) / 2;
 			framingRect = new Rect(leftOffset + framingOffsetRect.left, topOffset + framingOffsetRect.top,

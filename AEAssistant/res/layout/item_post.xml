@@ -8,8 +8,8 @@
 
     <com.zzn.aeassistant.view.CircleImageView
         android:id="@+id/user_head"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_margin="10dp"
         android:src="@drawable/ic_head"
         app:border_color="@color/theme_green"
@@ -41,6 +41,7 @@
             android:id="@+id/attach_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
             android:columnWidth="80dp"
             android:horizontalSpacing="5dp"
             android:numColumns="auto_fit"
@@ -64,16 +65,16 @@
                 android:id="@+id/comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
                 android:src="@drawable/ic_comment" />
+            
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/ic_down" />
         </LinearLayout>
-
-        <com.zzn.aeassistant.view.FastenListView
-            android:id="@+id/comment_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#F0F0F0"
-            android:divider="@null"
-            android:dividerHeight="0dp" />
     </LinearLayout>
 
 </LinearLayout>

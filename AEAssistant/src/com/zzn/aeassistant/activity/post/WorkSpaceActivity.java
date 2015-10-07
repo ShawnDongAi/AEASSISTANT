@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
@@ -24,6 +25,7 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshExpandableListView;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView;
@@ -33,7 +35,7 @@ import com.zzn.aeassistant.vo.PostVO;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 public class WorkSpaceActivity extends BaseActivity {
-	private PullToRefreshListView mListView;
+	private PullToRefreshExpandableListView mListView;
 	private PostAdapter adapter;
 	private boolean hasMore = true;
 	private RefreshPostTask postTask;
@@ -55,7 +57,7 @@ public class WorkSpaceActivity extends BaseActivity {
 		projectVO = (ProjectVO) getIntent().getSerializableExtra(
 				CodeConstants.KEY_PROJECT_VO);
 		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
-		mListView = (PullToRefreshListView) findViewById(R.id.base_list);
+		mListView = (PullToRefreshExpandableListView) findViewById(R.id.base_list);
 		mListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view,
 				null));
 		adapter = new PostAdapter(mContext);
@@ -65,40 +67,46 @@ public class WorkSpaceActivity extends BaseActivity {
 
 	private void initPullToRefresh() {
 		mListView.setMode(Mode.BOTH);
-		mListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
-			@Override
-			public void onPullDownToRefresh(
-					final PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(AEApp.getInstance(),
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
-								| DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy(true, false)
-						.setLastUpdatedLabel(label);
-				if (postTask != null) {
-					postTask.cancel(true);
-				}
-				postTask = new RefreshPostTask(true);
-				postTask.execute(project_id, "");
-				hasMore = true;
-			}
-
-			@Override
-			public void onPullUpToRefresh(
-					final PullToRefreshBase<ListView> refreshView) {
-				if (hasMore) {
-					if (postTask != null) {
-						postTask.cancel(true);
+		mListView
+				.setOnRefreshListener(new OnRefreshListener2<ExpandableListView>() {
+					@Override
+					public void onPullDownToRefresh(
+							final PullToRefreshBase<ExpandableListView> refreshView) {
+						String label = DateUtils.formatDateTime(
+								AEApp.getInstance(),
+								System.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						// Update the LastUpdatedLabel
+						refreshView.getLoadingLayoutProxy(true, false)
+								.setLastUpdatedLabel(label);
+						if (postTask != null) {
+							postTask.cancel(true);
+						}
+						postTask = new RefreshPostTask(true);
+						postTask.execute(project_id, "");
+						hasMore = true;
 					}
-					postTask = new RefreshPostTask(false);
-					postTask.execute(project_id,
-							adapter.getItem(adapter.getCount() - 1).getTime());
-				} else {
-					refreshView.onRefreshComplete();
-				}
-			}
-		});
+
+					@Override
+					public void onPullUpToRefresh(
+							final PullToRefreshBase<ExpandableListView> refreshView) {
+						if (hasMore) {
+							if (postTask != null) {
+								postTask.cancel(true);
+							}
+							postTask = new RefreshPostTask(false);
+							postTask.execute(
+									project_id,
+									adapter.getGroup(
+											adapter.getGroupCount() - 1)
+											.getTime());
+						} else {
+							refreshView.onRefreshComplete();
+						}
+					}
+				});
 		AEProgressDialog.showLoadingDialog(this);
 		postTask = new RefreshPostTask(true);
 		postTask.execute(project_id, "");

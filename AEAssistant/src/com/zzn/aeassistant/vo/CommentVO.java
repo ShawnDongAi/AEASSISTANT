@@ -92,7 +92,7 @@ public class CommentVO implements Serializable {
 	}
 	
 	public String getTime() {
-		return time.replaceAll("\n\t", "");
+		return time.replaceAll("\n", "");
 	}
 
 	public void setTime(String time) {

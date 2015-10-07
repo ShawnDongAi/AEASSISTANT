@@ -2,5 +2,6 @@
 <resources>
     <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 </resources>

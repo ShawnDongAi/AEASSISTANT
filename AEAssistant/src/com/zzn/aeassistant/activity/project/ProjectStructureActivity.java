@@ -1,6 +1,7 @@
 package com.zzn.aeassistant.activity.project;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -19,6 +20,7 @@ import android.widget.ListView;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.QRScanningActivity;
 import com.zzn.aeassistant.activity.user.UserDetailActivity;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -87,7 +89,7 @@ public class ProjectStructureActivity extends BaseActivity {
 				}
 				lastClickTime = System.currentTimeMillis();
 				Node node = (Node) listView.getAdapter().getItem(position);
-//				ProjectVO projectVO = (ProjectVO) (node.getData());
+				// ProjectVO projectVO = (ProjectVO) (node.getData());
 				Intent intent = new Intent(mContext, UserDetailActivity.class);
 				intent.putExtra(CodeConstants.KEY_PROJECT_VO, node);
 				intent.putExtra(CodeConstants.KEY_PROJECT_ID, project_id);
@@ -95,6 +97,8 @@ public class ProjectStructureActivity extends BaseActivity {
 			}
 		});
 		initPullToRefresh();
+		save.setText(R.string.lable_qrcode_scanning);
+		save.setVisibility(View.VISIBLE);
 	}
 
 	private void initPullToRefresh() {
@@ -139,6 +143,13 @@ public class ProjectStructureActivity extends BaseActivity {
 	}
 
 	@Override
+	protected void onSaveClick() {
+		super.onSaveClick();
+		startActivityForResult(new Intent(mContext, QRScanningActivity.class),
+				CodeConstants.REQUEST_CODE_QRCODE);
+	}
+
+	@Override
 	protected void onDestroy() {
 		if (updateParentTask != null) {
 			updateParentTask.cancel(true);
@@ -150,7 +161,7 @@ public class ProjectStructureActivity extends BaseActivity {
 		}
 		super.onDestroy();
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -160,6 +171,47 @@ public class ProjectStructureActivity extends BaseActivity {
 				listStruTask = new ListStructureTask();
 				listStruTask.execute(project_id);
 				AEProgressDialog.showLoadingDialog(mContext);
+				break;
+			case CodeConstants.REQUEST_CODE_QRCODE:
+				if (comingCallDialog != null && comingCallDialog.isShowing()) {
+					return;
+				}
+				String result = data.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
+				try {
+					String phone = GsonUtil.getInstance()
+							.fromJson(result, HashMap.class).get("user_phone")
+							.toString();
+					lastComingPhone = phone;
+					comingCallDialog = new AlertDialog.Builder(mContext)
+							.setTitle(R.string.warning)
+							.setMessage(
+									getString(R.string.project_join_current,
+											lastComingPhone))
+							.setPositiveButton(R.string.confirm,
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// 迁移
+											if (updateParentTask != null) {
+												updateParentTask.cancel(true);
+												updateParentTask = null;
+											}
+											updateParentTask = new UpdateParentTask();
+											updateParentTask
+													.execute(new String[] {
+															project_id,
+															lastComingPhone });
+										}
+									}).setNegativeButton(R.string.cancel, null)
+							.create();
+					comingCallDialog.setCanceledOnTouchOutside(false);
+					comingCallDialog.show();
+				} catch (Exception e) {
+					e.printStackTrace();
+					ToastUtil.show(R.string.error_qrcode);
+				}
 				break;
 			default:
 				break;

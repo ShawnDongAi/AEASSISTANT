@@ -1,7 +1,11 @@
 <resources>
 
     <!-- Application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar"></style>
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+    </style>
 
-    <style name="AppTheme_Fullscreen" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar.Fullscreen"></style>
+    <style name="AppTheme_Fullscreen" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar.Fullscreen">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+    </style>
 </resources>

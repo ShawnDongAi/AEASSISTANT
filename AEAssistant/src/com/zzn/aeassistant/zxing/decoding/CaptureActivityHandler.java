@@ -21,7 +21,7 @@ import java.util.Vector;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.zxing.QRScanningActivity;
+import com.zzn.aeassistant.activity.QRScanningActivity;
 import com.zzn.aeassistant.zxing.camera.CameraManager;
 import com.zzn.aeassistant.zxing.view.ViewfinderResultPointCallback;
 

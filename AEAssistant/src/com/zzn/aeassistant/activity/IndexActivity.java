@@ -245,6 +245,9 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		if (currentIndex == 2) {
 			save.setText(R.string.post);
 			save.setVisibility(View.VISIBLE);
+		} else if (currentIndex == 3) {
+			save.setText(R.string.lable_qrcode_scanning);
+			save.setVisibility(View.VISIBLE);
 		} else {
 			save.setVisibility(View.INVISIBLE);
 		}

@@ -58,7 +58,7 @@ public class CommentDBHelper {
 
 	public static final String table = "ae_comment";
 
-	public static final String DB_CREATE = "create table " + table + " (" + COMMENT_ID + " varchar(32) NOT NULL UNIQUE,"
+	public static final String DB_CREATE = "create table " + table + " (" + COMMENT_ID + " varchar(32) NOT NULL,"
 			+ POST_ID + " varchar(32) NOT NULL," + USER_ID + " varchar(32) NOT NULL," + USER_NAME
 			+ " varchar(64) NOT NULL," + USER_HEAD + " varchar(32)," + CONTENT + " varchar(3000) NOT NULL," + ATTCH_ID
 			+ " varchar(400)," + PROJECT_ID + " varchar(32) NOT NULL," + PROJECT_NAME + " varchar(64) NOT NULL,"

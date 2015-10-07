@@ -1,19 +1,33 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="AnimationActivity" mce_bogus="1" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/out_to_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/out_to_right</item>
+    </style>
+    
     <!-- Application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar"></style>
+    <style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+    </style>
 
-    <style name="AppTheme_Fullscreen" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen"></style>
+    <style name="AppTheme_Fullscreen" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
+    </style>
 
     <style name="ae_theme_translucent" parent="@style/AppTheme">
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 
     <style name="ae_theme" parent="@style/AppTheme">
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 
     <style name="ae_theme_fullscreen" parent="@style/AppTheme_Fullscreen">
         <item name="android:windowBackground">@drawable/splash</item>
+        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 
     <style name="layout_bg" parent="@android:style/TextAppearance.Widget">

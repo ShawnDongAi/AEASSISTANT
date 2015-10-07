@@ -15,8 +15,10 @@
         android:textColor="@color/theme_green"
         android:textSize="15sp" />
 
-    <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
+    <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshExpandableListView
         android:id="@+id/base_list"
-        style="@style/base_list" />
+        style="@style/base_list"
+        android:groupIndicator="@null"
+        android:childDivider="@color/transparent" />
 
 </LinearLayout>

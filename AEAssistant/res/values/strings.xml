@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">简正劳务</string>
-    <string name="app_label">简正劳务—点工</string>
+    <string name="app_name">工事</string>
+    <string name="app_label">工事</string>
     <string name="app_error">程序异常退出</string>
     <string name="settings">设置</string>
     <string name="confirm">确定</string>
@@ -27,6 +27,7 @@
     <string name="grid">大图模式</string>
     <string name="code_tip">请将二维码置于扫描框的红线，即可自动扫描</string>
     <string name="qrcode_scanning">二维码扫描</string>
+    <string name="error_qrcode">不支持此二维码格式</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>
@@ -85,6 +86,7 @@
     <string name="lable_project">项目名</string>
     <string name="lable_phone">电话</string>
     <string name="lable_qrcode">二维码</string>
+    <string name="lable_qrcode_scanning">扫一扫</string>
     <string name="lable_sex">性别</string>
     <string name="lable_remark">个人说明</string>
     <string name="lable_idcard">身份证号</string>
@@ -141,7 +143,7 @@
     <string name="project_user">项目通讯录</string>
     <string name="project_update_parent">项目迁移</string>
     <string name="project_update_parent_hint">温馨提示:在此页面，接收来电后可设置其为当前项目下级</string>
-    <string name="project_join_current">监听到%s的来电,是否将其设置为当前项目的下级项目</string>
+    <string name="project_join_current">是否将%s设置为当前项目的下级项目</string>
 
     <!-- 考勤记录 -->
     <string name="select_date">选取日期</string>
@@ -165,9 +167,9 @@
     <!-- 设置 -->
     <string name="feed_back">意见反馈</string>
     <string name="share_version">分享给好友</string>
-    <string name="share_title">将简正点工分享给好友</string>
-    <string name="share_text">我正在使用简正点工，项目管理快捷方便，猛戳这里下载:%s</string>
-    <string name="share_img">我正在使用简正点工，项目管理快捷方便，扫描二维码或猛戳这里下载:%s</string>
+    <string name="share_title">将工事分享给好友</string>
+    <string name="share_text">我正在使用工事，项目管理快捷方便，猛戳这里下载:%s</string>
+    <string name="share_img">我正在使用工事，项目管理快捷方便，扫描二维码或猛戳这里下载:%s</string>
     <string name="two_code">扫描二维码下载</string>
     <string name="apk_downloading">apk下载中</string>
     <string name="version_update">版本更新</string>
