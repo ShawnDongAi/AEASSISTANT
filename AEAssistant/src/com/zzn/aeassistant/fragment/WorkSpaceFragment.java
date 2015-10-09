@@ -113,7 +113,6 @@ public class WorkSpaceFragment extends BaseFragment {
 		mListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
 		adapter = new PostAdapter(mContext);
 		mListView.setAdapter(adapter);
-<<<<<<< HEAD
 		adapter.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public void onGroupClick(int groupPos) {
@@ -124,8 +123,6 @@ public class WorkSpaceFragment extends BaseFragment {
 				}
 			}
 		});
-=======
->>>>>>> 04a03211abf82fc70d64076b85a39d6897a44f17
 		initMenuView();
 		initPullToRefresh();
 		getActivity().getContentResolver().registerContentObserver(PostProvider.CONTENT_URI, true, observer);
@@ -139,7 +136,6 @@ public class WorkSpaceFragment extends BaseFragment {
 			initProTask = new InitProjectTask();
 			initProTask.execute();
 		}
-<<<<<<< HEAD
 		((IndexActivity) getActivity())
 				.setOnSaveClickListener(new SaveClickListener() {
 					@Override
@@ -153,18 +149,6 @@ public class WorkSpaceFragment extends BaseFragment {
 						}
 					}
 				});
-=======
-		((IndexActivity) getActivity()).setOnSaveClickListener(new SaveClickListener() {
-			@Override
-			public void onSaveClick() {
-				if (project != null) {
-					Intent intent = new Intent(mContext, PostActivity.class);
-					intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
-					startActivity(intent);
-				}
-			}
-		});
->>>>>>> 04a03211abf82fc70d64076b85a39d6897a44f17
 	}
 
 	private void initMenuView() {
