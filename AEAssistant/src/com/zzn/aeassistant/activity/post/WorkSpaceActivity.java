@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.post.PostAdapter.OnGroupClickListener;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -62,6 +63,16 @@ public class WorkSpaceActivity extends BaseActivity {
 				null));
 		adapter = new PostAdapter(mContext);
 		mListView.setAdapter(adapter);
+		adapter.setOnGroupClickListener(new OnGroupClickListener() {
+			@Override
+			public void onGroupClick(int groupPos) {
+				if (mListView.getRefreshableView().isGroupExpanded(groupPos)) {
+					mListView.getRefreshableView().collapseGroup(groupPos);
+				} else {
+					mListView.getRefreshableView().expandGroup(groupPos);
+				}
+			}
+		});
 		initPullToRefresh();
 	}
 

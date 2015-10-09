@@ -29,9 +29,6 @@ import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.IndexActivity;
-import com.zzn.aeassistant.activity.QRScanningActivity;
-import com.zzn.aeassistant.activity.IndexActivity.SaveClickListener;
 import com.zzn.aeassistant.activity.UserHistoryAdapter;
 import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
 import com.zzn.aeassistant.app.AEApp;
@@ -108,16 +105,6 @@ public class AttendanceFragment extends BaseFragment {
 		mScanning.setOnClickListener(this);
 		mAttendance.setOnClickListener(this);
 		initUserHistory();
-
-		((IndexActivity) getActivity())
-				.setOnSaveClickListener(new SaveClickListener() {
-					@Override
-					public void onSaveClick() {
-						startActivityForResult(new Intent(mContext,
-								QRScanningActivity.class),
-								CodeConstants.REQUEST_CODE_QRCODE);
-					}
-				});
 	}
 
 	private void initUserHistory() {
@@ -194,6 +181,15 @@ public class AttendanceFragment extends BaseFragment {
 					AEApp.getCurrentLoc().getLatitude(),
 					AEApp.getCurrentLoc().getLongitude() });
 		}
+		/*((IndexActivity) getActivity())
+				.setOnSaveClickListener(new SaveClickListener() {
+					@Override
+					public void onSaveClick() {
+						startActivityForResult(new Intent(mContext,
+								QRScanningActivity.class),
+								CodeConstants.REQUEST_CODE_QRCODE);
+					}
+				});*/
 	}
 
 	@Override
@@ -456,7 +452,8 @@ public class AttendanceFragment extends BaseFragment {
 				if (comingCallDialog != null && comingCallDialog.isShowing()) {
 					return;
 				}
-				String result = data.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
+				String result = data
+						.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
 				try {
 					String phone = GsonUtil.getInstance()
 							.fromJson(result, HashMap.class).get("user_phone")

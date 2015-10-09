@@ -170,7 +170,6 @@ public class UserActivity extends BaseActivity {
 		twocodeImg = new ImageView(mContext);
 		try {
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("user_id", AEApp.getCurrentUser().getUSER_ID());
 			map.put("user_phone", AEApp.getCurrentUser().getPHONE());
 			Bitmap bitmap = BitmapUtil.cretaeTwoCode(mContext, GsonUtil.getInstance().toJson(map), head.getDrawable());
 			twocodeImg.setImageBitmap(bitmap);

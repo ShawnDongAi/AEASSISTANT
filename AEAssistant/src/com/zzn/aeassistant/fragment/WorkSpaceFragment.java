@@ -27,6 +27,7 @@ import com.zzn.aeassistant.activity.IndexActivity;
 import com.zzn.aeassistant.activity.IndexActivity.SaveClickListener;
 import com.zzn.aeassistant.activity.post.PostActivity;
 import com.zzn.aeassistant.activity.post.PostAdapter;
+import com.zzn.aeassistant.activity.post.PostAdapter.OnGroupClickListener;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -115,19 +116,16 @@ public class WorkSpaceFragment extends BaseFragment {
 				null));
 		adapter = new PostAdapter(mContext);
 		mListView.setAdapter(adapter);
-		((IndexActivity) getActivity())
-				.setOnSaveClickListener(new SaveClickListener() {
-					@Override
-					public void onSaveClick() {
-						if (project != null) {
-							Intent intent = new Intent(mContext,
-									PostActivity.class);
-							intent.putExtra(CodeConstants.KEY_PROJECT_VO,
-									project);
-							startActivity(intent);
-						}
-					}
-				});
+		adapter.setOnGroupClickListener(new OnGroupClickListener() {
+			@Override
+			public void onGroupClick(int groupPos) {
+				if (mListView.getRefreshableView().isGroupExpanded(groupPos)) {
+					mListView.getRefreshableView().collapseGroup(groupPos);
+				} else {
+					mListView.getRefreshableView().expandGroup(groupPos);
+				}
+			}
+		});
 		initMenuView();
 		initPullToRefresh();
 		getActivity().getContentResolver().registerContentObserver(
@@ -143,6 +141,19 @@ public class WorkSpaceFragment extends BaseFragment {
 			initProTask = new InitProjectTask();
 			initProTask.execute();
 		}
+		((IndexActivity) getActivity())
+				.setOnSaveClickListener(new SaveClickListener() {
+					@Override
+					public void onSaveClick() {
+						if (project != null) {
+							Intent intent = new Intent(mContext,
+									PostActivity.class);
+							intent.putExtra(CodeConstants.KEY_PROJECT_VO,
+									project);
+							startActivity(intent);
+						}
+					}
+				});
 	}
 
 	private void initMenuView() {

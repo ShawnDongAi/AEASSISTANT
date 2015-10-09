@@ -42,6 +42,7 @@ public class PostAdapter extends BaseExpandableListAdapter {
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
+	private OnGroupClickListener onGroupClickListener;
 
 	public PostAdapter(Context context) {
 		this.mContext = context;
@@ -64,6 +65,15 @@ public class PostAdapter extends BaseExpandableListAdapter {
 				// .displayer(new RoundedBitmapDisplayer(20))// 是否设置为圆角，弧度为多少
 				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
 				.build();// 构建完成
+	}
+
+	public void setOnGroupClickListener(
+			OnGroupClickListener onGroupClickListener) {
+		this.onGroupClickListener = onGroupClickListener;
+	}
+
+	public interface OnGroupClickListener {
+		void onGroupClick(int groupPos);
 	}
 
 	public void setProject(ProjectVO projectVO) {
@@ -160,7 +170,7 @@ public class PostAdapter extends BaseExpandableListAdapter {
 
 	@SuppressLint("NewApi")
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded,
+	public View getGroupView(final int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
@@ -229,6 +239,14 @@ public class PostAdapter extends BaseExpandableListAdapter {
 		holder.arrow
 				.setVisibility(getChildrenCount(groupPosition) > 0 ? View.VISIBLE
 						: View.INVISIBLE);
+		convertView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (onGroupClickListener != null) {
+					onGroupClickListener.onGroupClick(groupPosition);
+				}
+			}
+		});
 		return convertView;
 	}
 
