@@ -90,40 +90,25 @@ public class AttendanceFragment extends BaseFragment {
 
 	@Override
 	protected void initView(View container) {
-		telephony = (TelephonyManager) mContext
-				.getSystemService(Context.TELEPHONY_SERVICE);
+		telephony = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		myPhoneStateListener = new MyPhoneStateListener();
 
-		mCurrentProject = (TextView) container
-				.findViewById(R.id.home_current_project);
-		mHistoryList = (SwipeMenuListView) container
-				.findViewById(R.id.home_user_history);
+		mCurrentProject = (TextView) container.findViewById(R.id.home_current_project);
+		mHistoryList = (SwipeMenuListView) container.findViewById(R.id.home_user_history);
 
 		View headerView = View.inflate(mContext, R.layout.home_header, null);
 		mScanning = (Button) headerView.findViewById(R.id.home_scanning);
-		mAttendance = (Button) headerView
-				.findViewById(R.id.home_attendance_record);
+		mAttendance = (Button) headerView.findViewById(R.id.home_attendance_record);
 		mHistoryList.addHeaderView(headerView);
 
 		mScanning.setOnClickListener(this);
 		mAttendance.setOnClickListener(this);
 		initUserHistory();
-
-		((IndexActivity) getActivity())
-				.setOnSaveClickListener(new SaveClickListener() {
-					@Override
-					public void onSaveClick() {
-						startActivityForResult(new Intent(mContext,
-								QRScanningActivity.class),
-								CodeConstants.REQUEST_CODE_QRCODE);
-					}
-				});
 	}
 
 	private void initUserHistory() {
 		mUserAdapter = new UserHistoryAdapter(mContext);
-		mUserAdapter.setUsers(UserDBHelper.getUserHistory(AEApp
-				.getCurrentUser().getUSER_ID()));
+		mUserAdapter.setUsers(UserDBHelper.getUserHistory(AEApp.getCurrentUser().getUSER_ID()));
 		mHistoryList.setAdapter(mUserAdapter);
 		SwipeMenuCreator creator = new SwipeMenuCreator() {
 			@Override
@@ -140,15 +125,13 @@ public class AttendanceFragment extends BaseFragment {
 		mHistoryList.setMenuCreator(creator);
 		mHistoryList.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
-			public boolean onMenuItemClick(int position, SwipeMenu menu,
-					int index) {
+			public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 				if (System.currentTimeMillis() - lastClickTime < 500) {
 					return false;
 				}
 				lastClickTime = System.currentTimeMillis();
 				UserVO user = mUserAdapter.getItem(position);
-				UserDBHelper.delete(AEApp.getCurrentUser().getUSER_ID(),
-						user.getPHONE());
+				UserDBHelper.delete(AEApp.getCurrentUser().getUSER_ID(), user.getPHONE());
 				mUserAdapter.removeUser(position);
 				mUserAdapter.notifyDataSetChanged();
 				return false;
@@ -158,8 +141,7 @@ public class AttendanceFragment extends BaseFragment {
 		mHistoryList.setCloseInterpolator(new DecelerateInterpolator(1.0f));
 		mHistoryList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (position < 1) {
 					return;
 				}
@@ -175,8 +157,7 @@ public class AttendanceFragment extends BaseFragment {
 	@Override
 	public void onPause() {
 		if (telephony != null) {
-			telephony.listen(myPhoneStateListener,
-					PhoneStateListener.LISTEN_NONE);
+			telephony.listen(myPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 		}
 		super.onPause();
 	}
@@ -184,16 +165,21 @@ public class AttendanceFragment extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		telephony.listen(myPhoneStateListener,
-				PhoneStateListener.LISTEN_CALL_STATE);
+		telephony.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 		initProjectTask = new InitProjectTask();
 		if (AEApp.getCurrentLoc() == null) {
 			initProjectTask.execute(new Double[] { 0.0, 0.0 });
 		} else {
-			initProjectTask.execute(new Double[] {
-					AEApp.getCurrentLoc().getLatitude(),
-					AEApp.getCurrentLoc().getLongitude() });
+			initProjectTask.execute(
+					new Double[] { AEApp.getCurrentLoc().getLatitude(), AEApp.getCurrentLoc().getLongitude() });
 		}
+		((IndexActivity) getActivity()).setOnSaveClickListener(new SaveClickListener() {
+			@Override
+			public void onSaveClick() {
+				startActivityForResult(new Intent(mContext, QRScanningActivity.class),
+						CodeConstants.REQUEST_CODE_QRCODE);
+			}
+		});
 	}
 
 	@Override
@@ -205,14 +191,11 @@ public class AttendanceFragment extends BaseFragment {
 			if (!StringUtil.isEmpty(lastComingPhone)) {
 				lastComingPhone = "";
 			}
-			setImgPath(
-					FileCostants.DIR_SCANNING + scanningPhone + "_"
-							+ System.currentTimeMillis() + ".jpg", true);
+			setImgPath(FileCostants.DIR_SCANNING + scanningPhone + "_" + System.currentTimeMillis() + ".jpg", true);
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.home_attendance_record:
-			Intent proIntent = new Intent(mContext,
-					AttendanceRecordActivity.class);
+			Intent proIntent = new Intent(mContext, AttendanceRecordActivity.class);
 			// String date = dateFormat
 			// .format(new Date(System.currentTimeMillis()));
 			// proIntent.putExtra(CodeConstants.KEY_START_DATE, date);
@@ -239,8 +222,7 @@ public class AttendanceFragment extends BaseFragment {
 			initProjectTask = null;
 		}
 		initProjectTask = new InitProjectTask();
-		initProjectTask.execute(new Double[] { location.getLatitude(),
-				location.getLongitude() });
+		initProjectTask.execute(new Double[] { location.getLatitude(), location.getLongitude() });
 	}
 
 	private class InitProjectTask extends AsyncTask<Double, Integer, ProjectVO> {
@@ -251,12 +233,9 @@ public class AttendanceFragment extends BaseFragment {
 			double currentLatitude = params[0];
 			double currentLongitude = params[1];
 			for (ProjectVO projectVO : AEApp.getCurrentUser().getPROJECTS()) {
-				double proLatitude = Double
-						.parseDouble(projectVO.getLATITUDE());
-				double proLongitude = Double.parseDouble(projectVO
-						.getLONGITUDE());
-				if (ToolsUtil.getDistance(currentLongitude, currentLatitude,
-						proLongitude, proLatitude) < 500) {
+				double proLatitude = Double.parseDouble(projectVO.getLATITUDE());
+				double proLongitude = Double.parseDouble(projectVO.getLONGITUDE());
+				if (ToolsUtil.getDistance(currentLongitude, currentLatitude, proLongitude, proLatitude) < 500) {
 					project = projectVO;
 					break;
 				}
@@ -274,8 +253,7 @@ public class AttendanceFragment extends BaseFragment {
 				mCurrentProject.setText(R.string.out_of_project_location);
 				mScanning.setEnabled(false);
 			} else {
-				mCurrentProject.setText(getString(R.string.current_project,
-						result.getROOT_PROJECT_NAME()));
+				mCurrentProject.setText(getString(R.string.current_project, result.getROOT_PROJECT_NAME()));
 				mScanning.setEnabled(true);
 			}
 		}
@@ -318,10 +296,8 @@ public class AttendanceFragment extends BaseFragment {
 			forWho = "1";
 		}
 		scanningTask = new ScanningTask();
-		scanningTask.execute(new String[] { scanningPhone, scanningPath,
-				AEApp.getCurrentLoc().getLongitude() + "",
-				AEApp.getCurrentLoc().getLatitude() + "", forWho,
-				AEApp.getCurrentLoc().getAddrStr() });
+		scanningTask.execute(new String[] { scanningPhone, scanningPath, AEApp.getCurrentLoc().getLongitude() + "",
+				AEApp.getCurrentLoc().getLatitude() + "", forWho, AEApp.getCurrentLoc().getAddrStr() });
 	}
 
 	/**
@@ -357,8 +333,7 @@ public class AttendanceFragment extends BaseFragment {
 			param.put("for_who", forWho);
 			param.put("address", address);
 			param.put("parent_user", AEApp.getCurrentUser().getUSER_ID());
-			HttpResult result = AEHttpUtil.doPostWithFile(
-					URLConstants.URL_SCANNING, files, param);
+			HttpResult result = AEHttpUtil.doPostWithFile(URLConstants.URL_SCANNING, files, param);
 			File file = new File(imgPath);
 			if (file.exists()) {
 				file.delete();
@@ -370,21 +345,16 @@ public class AttendanceFragment extends BaseFragment {
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
-			if (result != null
-					&& result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				if (result.getRES_OBJ() != null
-						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
+			if (result != null && result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				if (result.getRES_OBJ() != null && !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
 					JSONObject obj;
 					try {
 						obj = new JSONObject(result.getRES_OBJ().toString());
 						if (obj.has("user_name") && obj.has("user_phone")) {
 							String user_name = obj.getString("user_name");
 							String user_phone = obj.getString("user_phone");
-							UserDBHelper.insertUser(AEApp.getCurrentUser()
-									.getUSER_ID(), user_phone, user_name);
-							mUserAdapter.setUsers(UserDBHelper
-									.getUserHistory(AEApp.getCurrentUser()
-											.getUSER_ID()));
+							UserDBHelper.insertUser(AEApp.getCurrentUser().getUSER_ID(), user_phone, user_name);
+							mUserAdapter.setUsers(UserDBHelper.getUserHistory(AEApp.getCurrentUser().getUSER_ID()));
 							mUserAdapter.notifyDataSetChanged();
 						}
 					} catch (JSONException e) {
@@ -410,25 +380,17 @@ public class AttendanceFragment extends BaseFragment {
 			return;
 		}
 		lastComingPhone = phone;
-		comingCallDialog = new AlertDialog.Builder(mContext)
-				.setTitle(R.string.warning)
-				.setMessage(
-						getString(R.string.scanning_call_listen,
-								lastComingPhone))
-				.setPositiveButton(R.string.photograph_he,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								setImgPath(
-										FileCostants.DIR_SCANNING
-												+ lastComingPhone + "_"
-												+ System.currentTimeMillis()
-												+ ".jpg", true);
-								AttchUtil.capture(AttendanceFragment.this,
-										getImgPath());
-							}
-						}).setNegativeButton(R.string.cancel, null).create();
+		comingCallDialog = new AlertDialog.Builder(mContext).setTitle(R.string.warning)
+				.setMessage(getString(R.string.scanning_call_listen, lastComingPhone))
+				.setPositiveButton(R.string.photograph_he, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						setImgPath(
+								FileCostants.DIR_SCANNING + lastComingPhone + "_" + System.currentTimeMillis() + ".jpg",
+								true);
+						AttchUtil.capture(AttendanceFragment.this, getImgPath());
+					}
+				}).setNegativeButton(R.string.cancel, null).create();
 		comingCallDialog.setCanceledOnTouchOutside(false);
 		comingCallDialog.show();
 	}
@@ -458,11 +420,8 @@ public class AttendanceFragment extends BaseFragment {
 				}
 				String result = data.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
 				try {
-					String phone = GsonUtil.getInstance()
-							.fromJson(result, HashMap.class).get("user_phone")
-							.toString();
-					if (comingCallDialog != null
-							&& comingCallDialog.isShowing()) {
+					String phone = GsonUtil.getInstance().fromJson(result, HashMap.class).get("user_phone").toString();
+					if (comingCallDialog != null && comingCallDialog.isShowing()) {
 						return;
 					}
 					scanningForOther(phone);
