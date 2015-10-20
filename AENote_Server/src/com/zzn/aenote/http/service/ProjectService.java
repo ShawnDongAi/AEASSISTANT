@@ -202,10 +202,40 @@ public class ProjectService extends BaseService {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("project_id", project_id);
 			getJdbc().execute(getSql("delete_project", data));
+			List<Map<String, Object>> leafProject = getJdbc().queryForList(
+					getSql("query_leaf_project", data));
+			if (leafProject != null && leafProject.size() > 0) {
+				for (Map<String, Object> project : leafProject) {
+					data.clear();
+					String leafProjectId = project.get("project_id").toString();
+					data.put("project_id", leafProjectId);
+					data.put("parent_id", leafProjectId);
+					data.put("root_id", leafProjectId);
+					getJdbc().execute(getSql("update_parent_project", data));
+					updateLeafsProject(leafProjectId, leafProjectId);
+				}
+			}
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+	
+	private void updateLeafsProject(String parent_id, String root_id) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("project_id", parent_id);
+		data.put("root_id", root_id);
+		data.put("parent_id", parent_id);
+		List<Map<String, Object>> leafProject = getJdbc().queryForList(
+				getSql("query_leaf_project", data));
+		if (leafProject != null && leafProject.size() > 0) {
+			for (Map<String, Object> leaf : leafProject) {
+				String leafId = leaf.get("project_id").toString();
+				data.put("project_id", leafId);
+				getJdbc().execute(getSql("update_parent_project", data));
+				updateLeafsProject(leafId, root_id);
+			}
 		}
 	}
 

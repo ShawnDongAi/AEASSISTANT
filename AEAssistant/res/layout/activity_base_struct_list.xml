@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <RelativeLayout style="@style/layout_body" >
+
+        <TextView
+            android:id="@+id/lable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkgray"
+            android:padding="5dp"
+            android:text="@string/project_update_parent_hint"
+            android:textColor="@color/red"
+            android:textSize="14sp" />
+
+        <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
+            android:id="@+id/base_list"
+            style="@style/base_list"
+            android:layout_below="@+id/lable" />
+    </RelativeLayout>
+
+</LinearLayout>

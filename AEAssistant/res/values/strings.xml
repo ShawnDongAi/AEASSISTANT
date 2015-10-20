@@ -63,6 +63,7 @@
     <string name="title_today">今日考勤</string>
     <string name="title_work_space">工作圈</string>
     <string name="title_attendance_record">签到记录</string>
+    <string name="title_scanning_out">外勤签到</string>
     <string name="title_attendance">签到</string>
     <string name="title_user_center">个人中心</string>
     <string name="title_home">主页</string>
@@ -85,10 +86,11 @@
     <string name="lable_name">姓名</string>
     <string name="lable_project">项目名</string>
     <string name="lable_phone">电话</string>
-    <string name="lable_qrcode">二维码</string>
+    <string name="lable_qrcode">我的二维码</string>
     <string name="lable_qrcode_scanning">扫一扫</string>
     <string name="lable_sex">性别</string>
     <string name="lable_remark">个人说明</string>
+    <string name="lable_certification">资质认证</string>
     <string name="lable_idcard">身份证号</string>
     <string name="lable_idcard_img">身份证照</string>
     <string name="lable_rate">每日一评</string>
@@ -161,8 +163,8 @@
     <string name="sum_user_total" formatted="false">%s至%s共有%d次签到记录</string>
     <string name="sum_user_null" formatted="false">%s至%s无任何签到记录</string>
     <!-- <string name="sum_pro_total" formatted="false">共有%d次签到记录,其中有%d次异常签到</string> -->
-    <string name="sum_pro_total" formatted="false">%s至%s共有%d次签到记录</string>
-    <string name="sum_pro_item">共有%d次签到记录</string>
+    <string name="sum_pro_total" formatted="false">%s至%s共有%d次签到记录,其中外勤签到记录%d次</string>
+    <string name="sum_pro_item" formatted="false">共有%d次签到记录,其中外勤签到记录%d次</string>
 
     <!-- 设置 -->
     <string name="feed_back">意见反馈</string>

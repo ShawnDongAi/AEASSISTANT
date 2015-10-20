@@ -7,6 +7,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zzn.aeassistant.R;
@@ -55,11 +56,12 @@ public class SumUserListAdapter extends BaseAdapter {
 		final ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = View
-					.inflate(mContext, R.layout.item_list_attendance, null);
+			convertView = View.inflate(mContext, R.layout.item_list_attendance,
+					null);
 			holder.time = (TextView) convertView.findViewById(R.id.date);
 			holder.project = (TextView) convertView.findViewById(R.id.project);
 			holder.root = (TextView) convertView.findViewById(R.id.root);
+			holder.out = (ImageView) convertView.findViewById(R.id.normal);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -67,6 +69,8 @@ public class SumUserListAdapter extends BaseAdapter {
 		AttendanceVO vo = getItem(position);
 		holder.time.setText(vo.getDate().replace(" ", "\n"));
 		holder.project.setText(vo.getProject_name());
+		holder.out.setVisibility(vo.getNormal() != null
+				&& vo.getNormal().equals("1") ? View.VISIBLE : View.INVISIBLE);
 		if (vo.getRoot_project_name() != null) {
 			holder.root.setText(vo.getRoot_project_name());
 		}
@@ -77,5 +81,6 @@ public class SumUserListAdapter extends BaseAdapter {
 		private TextView time;
 		private TextView project;
 		private TextView root;
+		private ImageView out;
 	}
 }

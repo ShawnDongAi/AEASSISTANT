@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/project_address"
-        android:padding="3dp"
+        android:paddingRight="3dp"
         android:textColor="@drawable/text_light"
         android:textSize="14sp"
         android:visibility="gone" />
@@ -44,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/project_root_name"
-        android:padding="3dp"
+        android:paddingRight="3dp"
         android:textColor="@drawable/text_light"
         android:textSize="14sp"
         android:visibility="gone" />

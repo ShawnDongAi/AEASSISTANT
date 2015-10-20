@@ -44,9 +44,13 @@ public class TextEditActivity extends BaseActivity {
 			editText.setMinLines(8);
 			ToolsUtil.setTextMaxLength(editText, 1000);
 		}
-		int inputType = getIntent().getIntExtra(CodeConstants.KEY_INPUT_TYPE,
-				InputType.TYPE_CLASS_TEXT);
-		editText.setInputType(inputType);
+		if (getIntent().hasExtra(CodeConstants.KEY_INPUT_TYPE)) {
+			int inputType = getIntent().getIntExtra(
+					CodeConstants.KEY_INPUT_TYPE,
+					InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+							| InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+			editText.setInputType(inputType);
+		}
 		editText.setSelection(editText.getText().toString().length());
 	}
 

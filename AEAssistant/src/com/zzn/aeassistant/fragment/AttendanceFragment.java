@@ -31,6 +31,7 @@ import com.baidu.location.BDLocation;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.UserHistoryAdapter;
 import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
+import com.zzn.aeassistant.activity.attendance.OutScanningActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
@@ -61,7 +62,7 @@ public class AttendanceFragment extends BaseFragment {
 	private TextView mCurrentProject;
 	private SwipeMenuListView mHistoryList;
 	private UserHistoryAdapter mUserAdapter;
-	private Button mScanning, mAttendance;
+	private Button mScanning, mAttendance, mOutScanning;
 	private ProjectVO project;
 
 	// 打卡拍照的照片路径
@@ -100,10 +101,12 @@ public class AttendanceFragment extends BaseFragment {
 		mScanning = (Button) headerView.findViewById(R.id.home_scanning);
 		mAttendance = (Button) headerView
 				.findViewById(R.id.home_attendance_record);
+		mOutScanning = (Button) headerView.findViewById(R.id.home_scanning_out);
 		mHistoryList.addHeaderView(headerView);
 
 		mScanning.setOnClickListener(this);
 		mAttendance.setOnClickListener(this);
+		mOutScanning.setOnClickListener(this);
 		initUserHistory();
 	}
 
@@ -206,13 +209,11 @@ public class AttendanceFragment extends BaseFragment {
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.home_attendance_record:
-			Intent proIntent = new Intent(mContext,
-					AttendanceRecordActivity.class);
-			// String date = dateFormat
-			// .format(new Date(System.currentTimeMillis()));
-			// proIntent.putExtra(CodeConstants.KEY_START_DATE, date);
-			// proIntent.putExtra(CodeConstants.KEY_END_DATE, date);
-			startActivity(proIntent);
+			startActivity(new Intent(mContext, AttendanceRecordActivity.class));
+			break;
+		case R.id.home_scanning_out:
+			startActivity(new Intent(mContext, OutScanningActivity.class));
+			break;
 		default:
 			break;
 		}
@@ -302,6 +303,7 @@ public class AttendanceFragment extends BaseFragment {
 			return;
 		}
 		if (AEApp.getCurrentLoc() == null) {
+			ToastUtil.showImp(getActivity(), R.string.location_failed);
 			return;
 		}
 		// 拍照后获取位置并打卡
@@ -481,7 +483,7 @@ public class AttendanceFragment extends BaseFragment {
 
 	@Override
 	protected void onSaveState(Bundle outState) {
-		super.onSaveState(outState);
 		outState.putString("lastComingPhone", lastComingPhone);
+		super.onSaveState(outState);
 	}
 }

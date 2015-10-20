@@ -150,7 +150,7 @@ public class SumByProListActivity extends BaseActivity implements
 //					headerLable.setText(getString(R.string.sum_pro_total,
 //							totalCount, exceptionCount));
 					headerLable.setText(getString(R.string.sum_pro_total,
-							startDate, endDate, totalCount));
+							startDate, endDate, totalCount, exceptionCount));
 					try {
 						ProAttendanceAdapter<ProAttendanceVO> adapter = new ProAttendanceAdapter<ProAttendanceVO>(
 								listView, mContext, projectList, true);

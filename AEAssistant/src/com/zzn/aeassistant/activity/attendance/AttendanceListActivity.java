@@ -82,11 +82,9 @@ public class AttendanceListActivity extends BaseActivity {
 		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
 		startDate = getIntent().getStringExtra(CodeConstants.KEY_START_DATE);
 		endDate = getIntent().getStringExtra(CodeConstants.KEY_END_DATE);
-		// headerLable.setText(getString(R.string.sum_pro_total, totalCount,
-		// exceptionCount));
 		if (totalCount > 0) {
 			headerLable.setText(getString(R.string.sum_pro_total, startDate,
-					endDate, totalCount));
+					endDate, totalCount, exceptionCount));
 		} else {
 			headerLable.setText(getString(R.string.sum_user_null, startDate,
 					endDate));

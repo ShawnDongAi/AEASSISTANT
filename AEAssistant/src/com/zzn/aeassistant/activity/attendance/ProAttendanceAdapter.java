@@ -49,10 +49,10 @@ public class ProAttendanceAdapter<T> extends TreeListViewAdapter<T> {
 		}
 		viewHolder.label.setText(node.getName());
 		ProAttendanceVO vo = (ProAttendanceVO) node.getData();
-//		viewHolder.user.setText(mContext.getString(R.string.sum_pro_item,
-//				vo.getCount(), vo.getException_count()));
 		viewHolder.user.setText(mContext.getString(R.string.sum_pro_item,
-				vo.getCount()));
+				vo.getCount(), vo.getException_count()));
+//		viewHolder.user.setText(mContext.getString(R.string.sum_pro_item,
+//				vo.getCount()));
 		return convertView;
 	}
 

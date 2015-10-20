@@ -27,15 +27,26 @@
             android:layout_alignRight="@+id/thumbnail"
             android:layout_alignTop="@+id/thumbnail" />
 
+        <ImageView
+            android:id="@+id/normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/project"
+            android:layout_alignTop="@+id/project"
+            android:layout_below="@+id/thumbnail"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/ic_warning" />
+
         <TextView
             android:id="@+id/project"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/thumbnail"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/normal"
             android:textSize="15sp" />
-        
+
         <TextView
             android:id="@+id/address"
             android:layout_width="match_parent"
@@ -44,17 +55,17 @@
             android:drawableLeft="@drawable/ic_location_small"
             android:gravity="center_vertical"
             android:textSize="15sp" />
-        
+
         <TextView
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/address"
             android:layout_alignParentRight="true"
+            android:layout_below="@+id/address"
             android:layout_marginLeft="8dp"
             android:gravity="center_vertical|right"
             android:textSize="13sp" />
-        
+
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
@@ -63,17 +74,6 @@
             android:layout_below="@+id/root"
             android:gravity="right"
             android:textSize="13sp" />
-
-        <ImageView
-            android:id="@+id/normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_warning_big"
-            android:layout_alignBottom="@+id/thumbnail"
-            android:layout_alignLeft="@+id/thumbnail"
-            android:layout_alignRight="@+id/thumbnail"
-            android:layout_alignTop="@+id/thumbnail" />
     </RelativeLayout>
 
 </LinearLayout>

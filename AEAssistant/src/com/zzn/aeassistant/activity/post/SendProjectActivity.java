@@ -1,7 +1,14 @@
 package com.zzn.aeassistant.activity.post;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.text.format.DateUtils;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
@@ -22,26 +29,17 @@ import com.zzn.aeassistant.view.tree.Node;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.text.format.DateUtils;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-
 public class SendProjectActivity extends BaseActivity {
 
 	private PullToRefreshListView pullListView;
 	private ListView listView;
-	private ProjectStructureAdapter<ProjectVO> defaultAdapter;
 	private ListStructureTask listStruTask;
 	private ProjectVO project;
 	private long lastClickTime = 0;
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.activity_struct_list;
+		return R.layout.activity_base_struct_list;
 	}
 
 	@Override
@@ -55,14 +53,6 @@ public class SendProjectActivity extends BaseActivity {
 		pullListView = (PullToRefreshListView) findViewById(R.id.base_list);
 		listView = pullListView.getRefreshableView();
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
-		try {
-			defaultAdapter = new ProjectStructureAdapter<ProjectVO>(listView, mContext, new ArrayList<ProjectVO>(),
-					true);
-			listView.setAdapter(defaultAdapter);
-			defaultAdapter.notifyDataSetChanged();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -142,17 +132,13 @@ public class SendProjectActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			pullListView.onRefreshComplete();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				if (defaultAdapter != null) {
-					listView.setAdapter(defaultAdapter);
-					defaultAdapter.notifyDataSetChanged();
-				}
 				if (result.getRES_OBJ() != null && !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
 					List<ProjectVO> projectList = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(),
 							new TypeToken<List<ProjectVO>>() {
 							}.getType());
 					try {
 						ProjectStructureAdapter<ProjectVO> adapter = new ProjectStructureAdapter<ProjectVO>(listView,
-								mContext, projectList, true);
+								mContext, projectList, true, "");
 						listView.setAdapter(adapter);
 					} catch (Exception e) {
 						e.printStackTrace();

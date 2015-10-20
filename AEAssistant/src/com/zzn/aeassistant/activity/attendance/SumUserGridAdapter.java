@@ -112,7 +112,7 @@ public class SumUserGridAdapter extends BaseAdapter {
 		holder.time.setText(vo.getDate());
 		holder.project.setText(vo.getProject_name());
 		holder.normal.setVisibility(vo.getNormal() != null
-				&& vo.getNormal().equals("1") ? View.VISIBLE : View.GONE);
+				&& vo.getNormal().equals("1") ? View.VISIBLE : View.INVISIBLE);
 		if (vo.getRoot_project_name() != null) {
 			holder.root.setText(vo.getRoot_project_name());
 		}

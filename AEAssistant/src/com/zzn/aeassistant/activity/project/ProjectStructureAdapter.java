@@ -23,14 +23,16 @@ import com.zzn.aeassistant.vo.ProjectVO;
 
 public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 	private Context mContext;
+	private String project_id;
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
 
 	public ProjectStructureAdapter(ListView mTree, Context context,
-			List<T> datas, boolean expand) throws IllegalArgumentException,
-			IllegalAccessException {
+			List<T> datas, boolean expand, String project_id)
+			throws IllegalArgumentException, IllegalAccessException {
 		super(mTree, context, datas, expand);
 		this.mContext = context;
+		this.project_id = project_id;
 		options = new DisplayImageOptions.Builder()
 				.showImageOnLoading(R.drawable.ic_head) // 设置图片在下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.ic_head)// 设置图片Uri为空或是错误的时候显示的图片
@@ -83,9 +85,16 @@ public class ProjectStructureAdapter<T> extends TreeListViewAdapter<T> {
 		ProjectVO vo = (ProjectVO) node.getData();
 		viewHolder.user.setText(vo.getCREATE_USER_NAME());
 		imageLoader.displayImage(
-				String.format(URLConstants.URL_IMG,
-						vo.getCREATE_USER_HEAD()), viewHolder.head, options);
+				String.format(URLConstants.URL_IMG, vo.getCREATE_USER_HEAD()),
+				viewHolder.head, options);
 		return convertView;
+	}
+
+	@Override
+	public int getItemViewType(int position) {
+		ProjectVO vo = (ProjectVO) getItem(position).getData();
+		return vo.getPARENT_ID().equals(project_id)
+				&& !vo.getPROJECT_ID().equals(project_id) ? 0 : 1;
 	}
 
 	private final class ViewHolder {

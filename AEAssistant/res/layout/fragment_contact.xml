@@ -15,7 +15,7 @@
         android:textColor="@color/theme_green"
         android:textSize="15sp" />
 
-    <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
+    <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshSwipeMenuListView
         android:id="@+id/base_list"
         style="@style/base_list" />
 

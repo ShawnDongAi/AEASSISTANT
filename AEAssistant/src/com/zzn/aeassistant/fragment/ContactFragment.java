@@ -1,6 +1,5 @@
 package com.zzn.aeassistant.fragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,10 +7,12 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -37,16 +38,21 @@ import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshSwipeMenuListView;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenu;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuCreator;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuItem;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView.OnMenuItemClickListener;
 import com.zzn.aeassistant.view.tree.Node;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 public class ContactFragment extends BaseFragment {
 	private TextView projectTitle;
-	private PullToRefreshListView pullListView;
-	private ListView listView;
-	private ProjectStructureAdapter<ProjectVO> defaultAdapter;
+	private PullToRefreshSwipeMenuListView pullListView;
+	private SwipeMenuListView listView;
+	private ProjectStructureAdapter<ProjectVO> adapter;
 	private InitProjectTask initProTask;
 	private ListStructureTask listStruTask;
 	private ProjectVO project = null;
@@ -60,6 +66,7 @@ public class ContactFragment extends BaseFragment {
 	private String lastComingPhone = "";
 
 	private UpdateParentTask updateParentTask;
+	private DeleteProjectTask deleteProjectTask;
 
 	@Override
 	protected int layoutResID() {
@@ -69,16 +76,9 @@ public class ContactFragment extends BaseFragment {
 	@Override
 	protected void initView(View container) {
 		projectTitle = (TextView) container.findViewById(R.id.contact_project);
-		pullListView = (PullToRefreshListView) container
+		pullListView = (PullToRefreshSwipeMenuListView) container
 				.findViewById(R.id.base_list);
 		listView = pullListView.getRefreshableView();
-		try {
-			defaultAdapter = new ProjectStructureAdapter<ProjectVO>(listView,
-					mContext, new ArrayList<ProjectVO>(), true);
-			listView.setAdapter(defaultAdapter);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		projectTitle.setOnClickListener(this);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -172,23 +172,61 @@ public class ContactFragment extends BaseFragment {
 
 	private void initPullToRefresh() {
 		pullListView.setMode(Mode.PULL_FROM_START);
-		pullListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
+		pullListView
+				.setOnRefreshListener(new OnRefreshListener<SwipeMenuListView>() {
+					@Override
+					public void onRefresh(
+							PullToRefreshBase<SwipeMenuListView> refreshView) {
+						String label = DateUtils.formatDateTime(mContext,
+								System.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						// Update the LastUpdatedLabel
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						listStruTask = new ListStructureTask();
+						if (project != null) {
+							listStruTask.execute(project.getPROJECT_ID());
+						}
+					}
+				});
+		initSwipeMenu();
+	}
+
+	private void initSwipeMenu() {
+		SwipeMenuCreator creator = new SwipeMenuCreator() {
 			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(mContext,
-						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
-								| DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				listStruTask = new ListStructureTask();
-				String project_id = "";
-				if (project != null) {
-					project_id = project.getPROJECT_ID();
+			public void create(SwipeMenu menu) {
+				switch (menu.getViewType()) {
+				case 0:
+					SwipeMenuItem item = new SwipeMenuItem(mContext);
+					item.setBackground(R.drawable.swipe_menu_item1);
+					item.setWidth(ToolsUtil.dip2px(mContext, 90));
+					item.setTitle(R.string.delete);
+					item.setTitleSize(18);
+					item.setTitleColor(Color.WHITE);
+					menu.addMenuItem(item);
+					break;
+				default:
+					break;
 				}
-				listStruTask.execute(project_id);
+			}
+		};
+		listView.setMenuCreator(creator);
+		listView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(int position, SwipeMenu menu,
+					int index) {
+				Node node = adapter.getItem(position);
+				ProjectVO item = (ProjectVO) (node.getData());
+				deleteProjectTask = new DeleteProjectTask();
+				deleteProjectTask.execute(item.getPROJECT_ID());
+				return false;
 			}
 		});
+		listView.setOpenInterpolator(new DecelerateInterpolator(1.0f));
+		listView.setCloseInterpolator(new DecelerateInterpolator(1.0f));
 	}
 
 	@Override
@@ -209,6 +247,10 @@ public class ContactFragment extends BaseFragment {
 		if (listStruTask != null) {
 			listStruTask.cancel(true);
 			listStruTask = null;
+		}
+		if (deleteProjectTask != null) {
+			deleteProjectTask.cancel(true);
+			deleteProjectTask = null;
 		}
 		super.onDestroyView();
 	}
@@ -261,7 +303,7 @@ public class ContactFragment extends BaseFragment {
 				AEProgressDialog.showLoadingDialog(mContext);
 			} else {
 				projectTitle.setText(R.string.null_project);
-				pullListView.setMode(Mode.DISABLED);
+				pullListView.setMode(Mode.PULL_FROM_START);
 				return;
 			}
 		}
@@ -294,17 +336,9 @@ public class ContactFragment extends BaseFragment {
 			AEProgressDialog.dismissLoadingDialog();
 			pullListView.onRefreshComplete();
 			if (result == null) {
-				if (defaultAdapter != null) {
-					listView.setAdapter(defaultAdapter);
-					defaultAdapter.notifyDataSetChanged();
-				}
 				return;
 			}
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				if (defaultAdapter != null) {
-					listView.setAdapter(defaultAdapter);
-					defaultAdapter.notifyDataSetChanged();
-				}
 				if (result.getRES_OBJ() != null
 						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
 					List<ProjectVO> projectList = GsonUtil.getInstance()
@@ -312,8 +346,9 @@ public class ContactFragment extends BaseFragment {
 									new TypeToken<List<ProjectVO>>() {
 									}.getType());
 					try {
-						ProjectStructureAdapter<ProjectVO> adapter = new ProjectStructureAdapter<ProjectVO>(
-								listView, mContext, projectList, true);
+						adapter = new ProjectStructureAdapter<ProjectVO>(
+								listView, mContext, projectList, true,
+								project.getPROJECT_ID());
 						listView.setAdapter(adapter);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -331,7 +366,7 @@ public class ContactFragment extends BaseFragment {
 			super.onCancelled();
 		}
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -365,10 +400,9 @@ public class ContactFragment extends BaseFragment {
 												updateParentTask = null;
 											}
 											updateParentTask = new UpdateParentTask();
-											updateParentTask
-													.execute(new String[] {
-															project.getPROJECT_ID(),
-															lastComingPhone });
+											updateParentTask.execute(new String[] {
+													project.getPROJECT_ID(),
+													lastComingPhone });
 										}
 									}).setNegativeButton(R.string.cancel, null)
 							.create();
@@ -414,6 +448,46 @@ public class ContactFragment extends BaseFragment {
 				ToastUtil.show(result.getRES_MESSAGE());
 			} else {
 				ToastUtil.showImp(getActivity(), result.getRES_MESSAGE());
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
+		}
+	}
+
+	private class DeleteProjectTask extends
+			AsyncTask<String, Integer, HttpResult> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String project_id = params[0];
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
+					+ "&project_id=" + project_id;
+			HttpResult result = AEHttpUtil.doPost(
+					URLConstants.URL_DELETE_PRJECT, param);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				try {
+					pullListView.setRefreshing(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+					ToastUtil.show(R.string.http_error);
+				}
 			}
 		}
 

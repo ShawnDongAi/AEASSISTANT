@@ -18,17 +18,27 @@
         android:layout_height="match_parent"
         android:background="@color/gainsboro" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:orientation="vertical" >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp" >
+
+        <ImageView
+            android:id="@+id/normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/project"
+            android:layout_alignParentTop="true"
+            android:layout_alignTop="@+id/project"
+            android:layout_below="@+id/thumbnail"
+            android:src="@drawable/ic_warning" />
 
         <TextView
             android:id="@+id/project"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/normal"
+            android:layout_marginLeft="5dp"
             android:textColor="@drawable/text_normal"
             android:textSize="15sp" />
 
@@ -36,9 +46,11 @@
             android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:gravity="right"
             android:textColor="@drawable/text_normal"
             android:textSize="13sp" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

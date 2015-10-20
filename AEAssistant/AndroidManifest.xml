@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zzn.aeassistant"
-    android:versionCode="0104027"
-    android:versionName="1.4.27" >
+    android:versionCode="0104034"
+    android:versionName="1.4.34" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -13,6 +13,7 @@
         android:required="true" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -165,6 +166,11 @@
         <!-- 考勤信息页 -->
         <activity
             android:name=".activity.attendance.AttendanceRecordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <!-- 外出考勤页 -->
+        <activity
+            android:name=".activity.attendance.OutScanningActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 按项目查询 -->

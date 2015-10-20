@@ -80,11 +80,11 @@ public class VerifyActivity extends BaseActivity {
 				});
 			}
 		};
+		SMSSDK.initSDK(this, PlatformkEY.SMS_APP_KEY,
+				PlatformkEY.SMS_APP_SECRET);
 		// 注册回调监听接口
 		SMSSDK.registerEventHandler(eventHandler);
 	}
-
-	boolean ready;
 
 	@Override
 	public void onClick(View v) {
@@ -106,7 +106,6 @@ public class VerifyActivity extends BaseActivity {
 				return;
 			}
 			AEProgressDialog.showLoadingDialog(this);
-			ready = true;
 			mVerifyBtn.setEnabled(false);
 			SMSSDK.getVerificationCode(PlatformkEY.ZONE, phone);
 			break;
@@ -199,10 +198,8 @@ public class VerifyActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		mHandler.removeCallbacksAndMessages(null);
-		if (ready) {
-			// 销毁回调监听接口
-			SMSSDK.unregisterAllEventHandler();
-		}
+		// 销毁回调监听接口
+		SMSSDK.unregisterAllEventHandler();
 		if (verifyTask != null) {
 			verifyTask.cancel(true);
 			verifyTask = null;

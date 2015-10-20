@@ -102,11 +102,18 @@ public class AEHttpUtil {
 		} catch (EOFException e) {
 			e.printStackTrace();
 			LogUtil.i("EOFException 合法异常");
-		} catch (IOException e) {
-			LogUtil.i("目标没有找到");
+		} catch (Exception e) {
 			e.printStackTrace();
 			result.setRES_MESSAGE(AEApp.getInstance().getString(
 					R.string.http_out));
+		}
+		if (result == null) {
+			result = new HttpResult();
+		}
+		if (result.getRES_CODE() == null) {
+			result.setRES_CODE(HttpResult.CODE_FAILED);
+			result.setRES_MESSAGE(AEApp.getInstance()
+					.getString(R.string.http_out));
 		}
 		return result;
 	}
@@ -158,11 +165,18 @@ public class AEHttpUtil {
 		} catch (EOFException e) {
 			e.printStackTrace();
 			LogUtil.i("EOFException 合法异常");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			LogUtil.i("目标没有找到");
 			result.setRES_MESSAGE(AEApp.getInstance().getString(
 					R.string.http_out));
+		}
+		if (result == null) {
+			result = new HttpResult();
+		}
+		if (result.getRES_CODE() == null) {
+			result.setRES_CODE(HttpResult.CODE_FAILED);
+			result.setRES_MESSAGE(AEApp.getInstance()
+					.getString(R.string.http_out));
 		}
 		return result;
 	}
@@ -203,6 +217,16 @@ public class AEHttpUtil {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (result == null) {
+			result = new HttpResult();
+		}
+		if (result.getRES_CODE() == null) {
+			result.setRES_CODE(HttpResult.CODE_FAILED);
+			result.setRES_MESSAGE(AEApp.getInstance().getString(
+					R.string.http_out));
 		}
 		return result;
 	}

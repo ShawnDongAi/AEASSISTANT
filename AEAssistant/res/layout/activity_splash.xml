@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/splash" >
 
-    <RelativeLayout
+    <!-- <RelativeLayout
         android:id="@+id/splash_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,5 +39,5 @@
             android:textColor="@color/body_bg"
             android:textSize="14sp" />
     </RelativeLayout>
-
+ -->
 </RelativeLayout>

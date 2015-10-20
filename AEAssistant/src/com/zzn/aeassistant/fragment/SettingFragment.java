@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -77,7 +78,8 @@ public class SettingFragment extends BaseFragment {
 		switch (v.getId()) {
 		case R.id.setting_modify_password:
 			Intent modIntent = new Intent(getActivity(), VerifyActivity.class);
-			modIntent.putExtra(CodeConstants.KEY_USER_PHONE, AEApp.getCurrentUser().getPHONE());
+			modIntent.putExtra(CodeConstants.KEY_USER_PHONE, AEApp
+					.getCurrentUser().getPHONE());
 			modIntent.putExtra(CodeConstants.KEY_USER_PHONE_EDITABLE, false);
 			startActivity(modIntent);
 			break;
@@ -89,9 +91,12 @@ public class SettingFragment extends BaseFragment {
 			versionUpdateTask.execute();
 			break;
 		case R.id.setting_feedback:
-			Intent feedIntent = new Intent(getActivity(), TextEditActivity.class);
-			feedIntent.putExtra(CodeConstants.KEY_TITLE, getString(R.string.feed_back));
-			feedIntent.putExtra(CodeConstants.KEY_HINT_TEXT, getString(R.string.hint_feedback));
+			Intent feedIntent = new Intent(getActivity(),
+					TextEditActivity.class);
+			feedIntent.putExtra(CodeConstants.KEY_TITLE,
+					getString(R.string.feed_back));
+			feedIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
+					getString(R.string.hint_feedback));
 			feedIntent.putExtra(CodeConstants.KEY_SINGLELINE, false);
 			startActivityForResult(feedIntent, REQUEST_FEEDBACK);
 			break;
@@ -101,14 +106,17 @@ public class SettingFragment extends BaseFragment {
 			File file = new File(FileCostants.DIR_BASE, TWOCODE_FILE);
 			if (file != null && file.exists()) {
 				shareIntent.setType("image/jpg");
-				shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_img, URLConstants.URL_BASE));
+				shareIntent.putExtra(Intent.EXTRA_TEXT,
+						getString(R.string.share_img, URLConstants.URL_BASE));
 				shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
 			} else {
 				shareIntent.setType("text/plain");
-				shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text, URLConstants.URL_BASE));
+				shareIntent.putExtra(Intent.EXTRA_TEXT,
+						getString(R.string.share_text, URLConstants.URL_BASE));
 			}
 			shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
+			startActivity(Intent.createChooser(shareIntent,
+					getString(R.string.share_title)));
 			break;
 		case R.id.setting_twocode:
 			if (twocodeWindow != null && !twocodeWindow.isShowing()) {
@@ -128,9 +136,11 @@ public class SettingFragment extends BaseFragment {
 	private void initTwoCode() {
 		twocodeImg = new ImageView(mContext);
 		try {
-			Bitmap bitmap = BitmapUtil.cretaeTwoCode(mContext, URLConstants.URL_BASE, R.drawable.ic_launcher);
+			Bitmap bitmap = BitmapUtil.cretaeTwoCode(mContext,
+					URLConstants.URL_BASE, R.drawable.ic_launcher);
 			twocodeImg.setImageBitmap(bitmap);
-			BitmapUtil.writeToSdcard(bitmap, FileCostants.DIR_BASE, TWOCODE_FILE);
+			BitmapUtil.writeToSdcard(bitmap, FileCostants.DIR_BASE,
+					TWOCODE_FILE);
 		} catch (WriterException e) {
 			e.printStackTrace();
 		}
@@ -145,8 +155,10 @@ public class SettingFragment extends BaseFragment {
 				return false;
 			}
 		});
-		twocodeWindow = new PopupWindow(twocodeImg, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		twocodeWindow.setBackgroundDrawable(getResources().getDrawable(R.color.transparent_lightslategray));
+		twocodeWindow = new PopupWindow(twocodeImg, LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
+		twocodeWindow.setBackgroundDrawable(getResources().getDrawable(
+				R.color.transparent_lightslategray));
 		twocodeWindow.setAnimationStyle(R.style.bottommenu_anim_style);
 	}
 
@@ -157,7 +169,8 @@ public class SettingFragment extends BaseFragment {
 			switch (requestCode) {
 			case REQUEST_FEEDBACK:
 				ToastUtil.show(R.string.thanks_for_feedback);
-				String content = data.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
+				String content = data
+						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
 				new FeedBackTask().execute(content);
 				break;
 			default:
@@ -188,8 +201,10 @@ public class SettingFragment extends BaseFragment {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String content = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID() + "&content=" + content;
-			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_FEEDBACK, param);
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
+					+ "&content=" + content;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_FEEDBACK,
+					param);
 			return result;
 		}
 	}

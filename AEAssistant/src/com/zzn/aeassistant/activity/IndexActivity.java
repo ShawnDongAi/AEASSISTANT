@@ -290,8 +290,8 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		// Fragment事务
 		FragmentTransaction ft = fm.beginTransaction();
 		// 设置Fragment切换效果
-		ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in,
-				android.R.anim.fade_out);
+//		ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in,
+//				android.R.anim.fade_out);
 		/**
 		 * 如果要切换到的Fragment没有被Fragment事务添加，则隐藏被切换的Fragment，添加要切换的Fragment
 		 * 否则，则隐藏被切换的Fragment，显示要切换的Fragment

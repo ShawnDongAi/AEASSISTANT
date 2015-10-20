@@ -147,8 +147,7 @@
 	<select id="delete_project">
 		update t_project set status='1'
 		where 1=1
-		[and
-		root_id='#project_id#' or project_id='#project_id#']
+		[and project_id='#project_id#']
 	</select>
 	<!-- 查询组织架构 -->
 	<select id="query_project_structure">

@@ -3,40 +3,40 @@
 
     <!-- normal -->
     <item android:state_enabled="true" android:state_focused="false" android:state_pressed="false"><layer-list>
-            <item><shape android:shape="oval">
+            <item><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/gainsboro" />
                 </shape></item>
-            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval">
+            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/theme_green" />
                 </shape></item>
         </layer-list></item>
 
     <!-- pressed -->
     <item android:state_enabled="true" android:state_pressed="true"><layer-list>
-            <item><shape android:shape="oval">
+            <item><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/gainsboro" />
                 </shape></item>
-            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval">
+            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/theme_green_pressed" />
                 </shape></item>
         </layer-list></item>
 
     <!-- selected -->
     <item android:state_enabled="true" android:state_focused="true" android:state_pressed="false"><layer-list>
-            <item><shape android:shape="oval">
+            <item><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/gainsboro" />
                 </shape></item>
-            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval">
+            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/theme_green_pressed" />
                 </shape></item>
         </layer-list></item>
 
     <!-- selected -->
     <item android:state_enabled="false"><layer-list>
-            <item><shape android:shape="oval">
+            <item><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/gainsboro" />
                 </shape></item>
-            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval">
+            <item android:bottom="1dp" android:left="1dp" android:right="1dp" android:top="1dp"><shape android:shape="oval" android:useLevel="false">
                     <solid android:color="@color/gainsboro" />
                 </shape></item>
         </layer-list></item>

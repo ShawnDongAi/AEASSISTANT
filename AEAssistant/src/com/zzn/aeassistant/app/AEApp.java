@@ -54,8 +54,6 @@ public class AEApp extends Application {
 		createDatabase();
 		SDKInitializer.initialize(this);
 		initImageLoader();
-		SMSSDK.initSDK(this, PlatformkEY.SMS_APP_KEY,
-				PlatformkEY.SMS_APP_SECRET);
 	}
 
 	public static AEApp getInstance() {

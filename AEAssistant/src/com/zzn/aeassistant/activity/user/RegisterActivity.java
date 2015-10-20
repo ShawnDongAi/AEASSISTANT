@@ -53,6 +53,8 @@ public class RegisterActivity extends BaseActivity {
 		mVerifyBtn = (Button) findViewById(R.id.register_verify);
 		mRegisterBtn.setOnClickListener(this);
 		mVerifyBtn.setOnClickListener(this);
+		SMSSDK.initSDK(this, PlatformkEY.SMS_APP_KEY,
+				PlatformkEY.SMS_APP_SECRET);
 		EventHandler eventHandler = new EventHandler() {
 			public void afterEvent(final int event, final int result,
 					Object data) {
@@ -84,8 +86,6 @@ public class RegisterActivity extends BaseActivity {
 		SMSSDK.registerEventHandler(eventHandler);
 	}
 
-	boolean ready;
-
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
@@ -106,7 +106,6 @@ public class RegisterActivity extends BaseActivity {
 				return;
 			}
 			AEProgressDialog.showLoadingDialog(this);
-			ready = true;
 			mVerifyBtn.setEnabled(false);
 			SMSSDK.getVerificationCode(PlatformkEY.ZONE, phone);
 			break;
@@ -180,7 +179,8 @@ public class RegisterActivity extends BaseActivity {
 					UserVO user = GsonUtil.getInstance().fromJson(
 							result.getRES_OBJ().toString(), UserVO.class);
 					AEApp.setUser(user);
-					PreConfig.saveUserInfo(phone, mPswInput.getText().toString());
+					PreConfig.saveUserInfo(phone, mPswInput.getText()
+							.toString());
 					startActivity(new Intent(mContext, IndexActivity.class));
 					finish();
 				} catch (Exception e) {
@@ -220,10 +220,8 @@ public class RegisterActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		mHandler.removeCallbacksAndMessages(null);
-		if (ready) {
-			// 销毁回调监听接口
-			SMSSDK.unregisterAllEventHandler();
-		}
+		// 销毁回调监听接口
+		SMSSDK.unregisterAllEventHandler();
 		if (registerTask != null) {
 			registerTask.cancel(true);
 			registerTask = null;

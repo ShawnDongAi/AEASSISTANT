@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/input_bg"
             android:gravity="top|left"
-            android:inputType="textPostalAddress"
+            android:inputType="textPostalAddress|textMultiLine"
             android:padding="10dp"
             android:textColor="@color/text_normal"
             android:textSize="18sp" />

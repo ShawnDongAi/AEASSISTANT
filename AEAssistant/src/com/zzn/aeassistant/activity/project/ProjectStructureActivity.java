@@ -1,6 +1,5 @@
 package com.zzn.aeassistant.activity.project;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,39 +7,47 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.QRScanningActivity;
 import com.zzn.aeassistant.activity.user.UserDetailActivity;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
+import com.zzn.aeassistant.util.ToolsUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshSwipeMenuListView;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenu;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuCreator;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuItem;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView;
+import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView.OnMenuItemClickListener;
 import com.zzn.aeassistant.view.tree.Node;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 public class ProjectStructureActivity extends BaseActivity {
-	private PullToRefreshListView pullListView;
-	private ListView listView;
-	private ProjectStructureAdapter<ProjectVO> defaultAdapter;
+	private PullToRefreshSwipeMenuListView pullListView;
+	private ProjectStructureAdapter<ProjectVO> adapter;
+	private SwipeMenuListView listView;
 	private ListStructureTask listStruTask;
 	private String project_id;
 	private long lastClickTime = 0;
@@ -54,6 +61,7 @@ public class ProjectStructureActivity extends BaseActivity {
 	private String lastComingPhone = "";
 
 	private UpdateParentTask updateParentTask;
+	private DeleteProjectTask deleteProjectTask;
 
 	@Override
 	protected int layoutResID() {
@@ -69,17 +77,9 @@ public class ProjectStructureActivity extends BaseActivity {
 	protected void initView() {
 		telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		myPhoneStateListener = new MyPhoneStateListener();
-		pullListView = (PullToRefreshListView) findViewById(R.id.base_list);
+		pullListView = (PullToRefreshSwipeMenuListView) findViewById(R.id.base_list);
 		listView = pullListView.getRefreshableView();
 		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
-		try {
-			defaultAdapter = new ProjectStructureAdapter<ProjectVO>(listView,
-					mContext, new ArrayList<ProjectVO>(), true);
-			listView.setAdapter(defaultAdapter);
-			defaultAdapter.notifyDataSetChanged();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -102,23 +102,64 @@ public class ProjectStructureActivity extends BaseActivity {
 	}
 
 	private void initPullToRefresh() {
+		initSwipeMenu();
 		pullListView.setMode(Mode.PULL_FROM_START);
-		pullListView.setOnRefreshListener(new OnRefreshListener<ListView>() {
-			@Override
-			public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-				String label = DateUtils.formatDateTime(
-						getApplicationContext(), System.currentTimeMillis(),
-						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE
-								| DateUtils.FORMAT_ABBREV_ALL);
-				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
-				listStruTask = new ListStructureTask();
-				listStruTask.execute(project_id);
-			}
-		});
+		pullListView
+				.setOnRefreshListener(new OnRefreshListener<SwipeMenuListView>() {
+					@Override
+					public void onRefresh(
+							PullToRefreshBase<SwipeMenuListView> refreshView) {
+						String label = DateUtils.formatDateTime(
+								getApplicationContext(),
+								System.currentTimeMillis(),
+								DateUtils.FORMAT_SHOW_TIME
+										| DateUtils.FORMAT_SHOW_DATE
+										| DateUtils.FORMAT_ABBREV_ALL);
+						// Update the LastUpdatedLabel
+						refreshView.getLoadingLayoutProxy()
+								.setLastUpdatedLabel(label);
+						listStruTask = new ListStructureTask();
+						listStruTask.execute(project_id);
+					}
+				});
 		listStruTask = new ListStructureTask();
 		listStruTask.execute(project_id);
 		AEProgressDialog.showLoadingDialog(mContext);
+	}
+
+	private void initSwipeMenu() {
+		SwipeMenuCreator creator = new SwipeMenuCreator() {
+			@Override
+			public void create(SwipeMenu menu) {
+				switch (menu.getViewType()) {
+				case 0:
+					SwipeMenuItem item = new SwipeMenuItem(mContext);
+					item.setBackground(R.drawable.swipe_menu_item1);
+					item.setWidth(ToolsUtil.dip2px(mContext, 90));
+					item.setTitle(R.string.delete);
+					item.setTitleSize(18);
+					item.setTitleColor(Color.WHITE);
+					menu.addMenuItem(item);
+					break;
+				default:
+					break;
+				}
+			}
+		};
+		listView.setMenuCreator(creator);
+		listView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(int position, SwipeMenu menu,
+					int index) {
+				Node node = adapter.getItem(position);
+				ProjectVO item = (ProjectVO) (node.getData());
+				deleteProjectTask = new DeleteProjectTask();
+				deleteProjectTask.execute(item.getPROJECT_ID());
+				return false;
+			}
+		});
+		listView.setOpenInterpolator(new DecelerateInterpolator(1.0f));
+		listView.setCloseInterpolator(new DecelerateInterpolator(1.0f));
 	}
 
 	@Override
@@ -159,6 +200,10 @@ public class ProjectStructureActivity extends BaseActivity {
 			listStruTask.cancel(true);
 			listStruTask = null;
 		}
+		if (deleteProjectTask != null) {
+			deleteProjectTask.cancel(true);
+			deleteProjectTask = null;
+		}
 		super.onDestroy();
 	}
 
@@ -176,7 +221,8 @@ public class ProjectStructureActivity extends BaseActivity {
 				if (comingCallDialog != null && comingCallDialog.isShowing()) {
 					return;
 				}
-				String result = data.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
+				String result = data
+						.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
 				try {
 					String phone = GsonUtil.getInstance()
 							.fromJson(result, HashMap.class).get("user_phone")
@@ -237,10 +283,6 @@ public class ProjectStructureActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			pullListView.onRefreshComplete();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				if (defaultAdapter != null) {
-					listView.setAdapter(defaultAdapter);
-					defaultAdapter.notifyDataSetChanged();
-				}
 				if (result.getRES_OBJ() != null
 						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
 					List<ProjectVO> projectList = GsonUtil.getInstance()
@@ -248,8 +290,9 @@ public class ProjectStructureActivity extends BaseActivity {
 									new TypeToken<List<ProjectVO>>() {
 									}.getType());
 					try {
-						ProjectStructureAdapter<ProjectVO> adapter = new ProjectStructureAdapter<ProjectVO>(
-								listView, mContext, projectList, true);
+						adapter = new ProjectStructureAdapter<ProjectVO>(
+								listView, mContext, projectList, true,
+								project_id);
 						listView.setAdapter(adapter);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -335,6 +378,46 @@ public class ProjectStructureActivity extends BaseActivity {
 			} else {
 				ToastUtil.showImp(ProjectStructureActivity.this,
 						result.getRES_MESSAGE());
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
+		}
+	}
+
+	private class DeleteProjectTask extends
+			AsyncTask<String, Integer, HttpResult> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String project_id = params[0];
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
+					+ "&project_id=" + project_id;
+			HttpResult result = AEHttpUtil.doPost(
+					URLConstants.URL_DELETE_PRJECT, param);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				try {
+					pullListView.setRefreshing(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+					ToastUtil.show(R.string.http_error);
+				}
 			}
 		}
 

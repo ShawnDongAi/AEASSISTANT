@@ -17,14 +17,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 
 import com.google.gson.reflect.TypeToken;
-import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
-import com.nineoldandroids.view.ViewHelper;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.app.AEApp;
@@ -39,57 +33,24 @@ import com.zzn.aeassistant.vo.ProjectVO;
 import com.zzn.aeassistant.vo.UserVO;
 
 public class SplashActivity extends Activity {
-	private View rootView;
-	private ValueAnimator anim;
 	private AlertDialog mDialog;
-	private boolean animEnd = false;
 	private LoginTask loginTask = null;
-	private float screenW;// 屏幕像素宽度
-	private float screenH;// 屏幕像素高度
-	private DisplayMetrics displayMetrics;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		rootView = findViewById(R.id.splash_layout);
-
-		displayMetrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		screenW = displayMetrics.widthPixels;
-		screenH = displayMetrics.heightPixels;
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(mReceiver, filter);
-
-		anim = ValueAnimator.ofFloat(0f, 1f);
-		anim.setDuration(4000);
-		anim.setInterpolator(new DecelerateInterpolator(1.0f));
-		anim.addUpdateListener(new AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator valueAnim) {
-				float value = (Float) valueAnim.getAnimatedValue();
-				ViewHelper.setPivotX(rootView, screenW / 2.0f);
-				ViewHelper.setPivotY(rootView, screenH / 2.0f);
-				ViewHelper.setScaleX(rootView, 1 + value * 0.3f);
-				ViewHelper.setScaleY(rootView, 1 + value * 0.3f);
-			}
-		});
-		anim.start();
 		if (PreConfig.isAutoLogin() && PreConfig.isUserRemember()) {
 			if (PhoneUtil.isNetworkConnected()) {
-				new Handler().postDelayed(new Runnable() {
-					@Override
-					public void run() {
-						goToNext();
-					}
-				}, 2000);
+				goToNext();
 			}
 		} else {
 			new Handler().postDelayed(new Runnable() {
 				@Override
 				public void run() {
-					animEnd = true;
 					if (PhoneUtil.isNetworkConnected()) {
 						goToNext();
 					}
@@ -132,17 +93,12 @@ public class SplashActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		animEnd = true;
 		super.onPause();
 	}
 
 	@Override
 	protected void onDestroy() {
 		unregisterReceiver(mReceiver);
-		if (anim != null) {
-			anim.cancel();
-			anim = null;
-		}
 		if (loginTask != null) {
 			loginTask.cancel(true);
 			loginTask = null;
@@ -151,7 +107,6 @@ public class SplashActivity extends Activity {
 	}
 
 	private void goToNext() {
-		animEnd = false;
 		if (PreConfig.isAutoLogin() && PreConfig.isUserRemember()) {
 			if (loginTask != null) {
 				loginTask.cancel(true);
@@ -178,9 +133,10 @@ public class SplashActivity extends Activity {
 				if (mDialog != null && mDialog.isShowing()) {
 					mDialog.dismiss();
 				}
-				if (animEnd) {
-					goToNext();
-				}
+				goToNext();
+//				if (animEnd) {
+//					
+//				}
 			} else {
 				if (mDialog == null) {
 					mDialog = new AlertDialog.Builder(SplashActivity.this)

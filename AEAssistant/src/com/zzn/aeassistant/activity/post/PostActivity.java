@@ -192,7 +192,8 @@ public class PostActivity extends BaseActivity {
 				ToastUtil.show(R.string.much_file);
 				return;
 			}
-			setCompress(true);
+			setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+					+ ".jpg", true);
 			AttchUtil.getPictureFromGallery(this);
 			break;
 		case R.id.camera:

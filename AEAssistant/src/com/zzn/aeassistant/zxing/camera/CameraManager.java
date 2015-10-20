@@ -257,8 +257,8 @@ public final class CameraManager {
 			}
 			// int width = screenResolution.x;
 			// int leftOffset = 0;
-			int width = screenResolution.x / 2;
-			int height = screenResolution.x / 2;
+			int width = screenResolution.x * 2 / 3;
+			int height = screenResolution.x * 2 / 3;
 			int leftOffset = (screenResolution.x - width) / 2;
 			int topOffset = (screenResolution.y - height) / 2;
 			framingRect = new Rect(leftOffset + framingOffsetRect.left, topOffset + framingOffsetRect.top,
@@ -279,11 +279,15 @@ public final class CameraManager {
 			Point cameraResolution = configManager.getCameraResolution();
 			Point screenResolution = configManager.getScreenResolution();
 
-			rect.left = rect.left * cameraResolution.y / screenResolution.x;
-			rect.right = rect.right * cameraResolution.y / screenResolution.x;
-			rect.top = rect.top * cameraResolution.x / screenResolution.y;
-			rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
-
+//			rect.left = rect.left * cameraResolution.y / screenResolution.x;
+//			rect.right = rect.right * cameraResolution.y / screenResolution.x;
+//			rect.top = rect.top * cameraResolution.x / screenResolution.y;
+//			rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
+			rect.left = 0;
+			rect.right = cameraResolution.y;
+			rect.top = 0;
+			rect.bottom = cameraResolution.x;
+			
 			framingRectInPreview = rect;
 		}
 		return framingRectInPreview;
