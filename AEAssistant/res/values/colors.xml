@@ -29,6 +29,9 @@
     <drawable name="btn_text_light">#A9A9A9</drawable>
     <drawable name="btn_text_pressed">#FFFFFF</drawable>
     <drawable name="transparent">#00000000</drawable>
+    <drawable name="theme_green_pressed">#3E9EF7</drawable>
+    <drawable name="darkgray">#A9A9A9</drawable>
+    <drawable name="white">#FFFFFF</drawable>
     
     <color name="viewfinder_frame">#ff000000</color>
   	<color name="viewfinder_laser">#ffff0000</color>

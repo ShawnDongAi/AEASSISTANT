@@ -127,6 +127,8 @@ public class ContactFragment extends BaseFragment {
 								CodeConstants.REQUEST_CODE_QRCODE);
 					}
 				});
+		proListAdapter.setDatas(AEApp.getCurrentUser().getPROJECTS());
+		proListAdapter.notifyDataSetChanged();
 	}
 
 	private void initMenuView() {

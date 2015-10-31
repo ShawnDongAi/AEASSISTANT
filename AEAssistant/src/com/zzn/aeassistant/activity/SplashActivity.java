@@ -35,19 +35,18 @@ import com.zzn.aeassistant.vo.UserVO;
 public class SplashActivity extends Activity {
 	private AlertDialog mDialog;
 	private LoginTask loginTask = null;
+	private boolean isFirstLoad = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		IntentFilter filter = new IntentFilter(
-				ConnectivityManager.CONNECTIVITY_ACTION);
-		registerReceiver(mReceiver, filter);
 		if (PreConfig.isAutoLogin() && PreConfig.isUserRemember()) {
 			if (PhoneUtil.isNetworkConnected()) {
 				goToNext();
 			}
 		} else {
+			isFirstLoad = true;
 			new Handler().postDelayed(new Runnable() {
 				@Override
 				public void run() {
@@ -55,13 +54,16 @@ public class SplashActivity extends Activity {
 						goToNext();
 					}
 				}
-			}, 4000);
+			}, 2000);
 		}
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		IntentFilter filter = new IntentFilter(
+				ConnectivityManager.CONNECTIVITY_ACTION);
+		registerReceiver(mReceiver, filter);
 		if (!PhoneUtil.isNetworkConnected()) {
 			if (mDialog == null) {
 				mDialog = new AlertDialog.Builder(SplashActivity.this)
@@ -88,17 +90,19 @@ public class SplashActivity extends Activity {
 			if (!mDialog.isShowing()) {
 				mDialog.show();
 			}
+		} else if (!isFirstLoad) {
+			goToNext();
 		}
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		unregisterReceiver(mReceiver);
 	}
 
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(mReceiver);
 		if (loginTask != null) {
 			loginTask.cancel(true);
 			loginTask = null;
@@ -132,11 +136,8 @@ public class SplashActivity extends Activity {
 			if (PhoneUtil.isNetworkConnected()) {
 				if (mDialog != null && mDialog.isShowing()) {
 					mDialog.dismiss();
+					goToNext();
 				}
-				goToNext();
-//				if (animEnd) {
-//					
-//				}
 			} else {
 				if (mDialog == null) {
 					mDialog = new AlertDialog.Builder(SplashActivity.this)

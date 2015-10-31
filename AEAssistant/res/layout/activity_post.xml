@@ -4,7 +4,9 @@
 
     <include layout="@layout/top_bar" />
 
-    <LinearLayout style="@style/layout_body" >
+    <LinearLayout
+        style="@style/layout_body"
+        android:background="@color/gainsboro" >
 
         <EditText
             android:id="@+id/input_post"
@@ -16,29 +18,56 @@
             android:hint="输入您想说的话..."
             android:padding="10dp" />
 
-        <CheckBox
+        <LinearLayout
             android:id="@+id/is_private"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:padding="5dp"
-            android:text="所有人可见" />
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_common_white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="10dp" >
 
-        <com.zzn.aeassistant.view.FastenGridView
-            android:id="@+id/attch_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnWidth="80dp"
-            android:divider="@null"
-            android:horizontalSpacing="2dp"
-            android:numColumns="auto_fit"
-            android:padding="2dp"
-            android:visibility="gone" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_limits" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="谁可以看"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/private_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/tree_ec"
+                android:gravity="center_vertical"
+                android:text="所有人可见"
+                android:textColor="@color/darkgray" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gainsboro"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gainsboro" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -72,8 +101,8 @@
                 android:layout_height="50dp"
                 android:background="@drawable/btn_common_transparent"
                 android:padding="5dp"
-                android:visibility="gone"
-                android:src="@drawable/icon_file" />
+                android:src="@drawable/icon_file"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/send"
@@ -83,10 +112,21 @@
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="\@"
-                android:textColor="@color/white"
+                android:textColor="@color/darkgray"
                 android:textSize="25sp"
                 android:textStyle="bold" />
         </LinearLayout>
+
+        <com.zzn.aeassistant.view.FastenGridView
+            android:id="@+id/attch_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnWidth="80dp"
+            android:divider="@null"
+            android:horizontalSpacing="2dp"
+            android:numColumns="auto_fit"
+            android:padding="2dp"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

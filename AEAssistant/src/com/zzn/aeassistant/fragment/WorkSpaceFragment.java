@@ -149,6 +149,8 @@ public class WorkSpaceFragment extends BaseFragment {
 						}
 					}
 				});
+		proListAdapter.setDatas(AEApp.getCurrentUser().getPROJECTS());
+		proListAdapter.notifyDataSetChanged();
 	}
 
 	private void initMenuView() {

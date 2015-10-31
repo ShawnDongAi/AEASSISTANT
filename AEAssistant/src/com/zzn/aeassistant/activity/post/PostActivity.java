@@ -39,18 +39,21 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class PostActivity extends BaseActivity {
 	private EditText content;
 	private FastenGridView attachGroup;
 	private AttachAdapter adapter;
 	private View photo, camera, voice, file, send;
-	private CheckBox privateBox;
+	private View privateBox;
+	private TextView privateLable;
 	private PostTask postTask;
 	private ProjectVO project;
 	private List<ProjectVO> sendProjectVOs = new ArrayList<>();
 	private int currentPos = 0;
 	private String currentPath = "";
+	private String is_private = "0";
 
 	@Override
 	protected int layoutResID() {
@@ -76,7 +79,9 @@ public class PostActivity extends BaseActivity {
 		voice = findViewById(R.id.voice);
 		file = findViewById(R.id.file);
 		send = findViewById(R.id.send);
-		privateBox = (CheckBox) findViewById(R.id.is_private);
+		privateBox = findViewById(R.id.is_private);
+		privateBox.setOnClickListener(this);
+		privateLable = (TextView) findViewById(R.id.private_mode);
 		photo.setOnClickListener(this);
 		camera.setOnClickListener(this);
 		voice.setOnClickListener(this);
@@ -179,7 +184,6 @@ public class PostActivity extends BaseActivity {
 			return;
 		}
 		postTask = new PostTask();
-		String is_private = privateBox.isChecked() ? "0" : "1";
 		postTask.execute(content.getText().toString(), is_private);
 	}
 
@@ -187,6 +191,15 @@ public class PostActivity extends BaseActivity {
 	public void onClick(View v) {
 		super.onClick(v);
 		switch (v.getId()) {
+		case R.id.is_private:
+			if (is_private.equals("0")) {
+				is_private = "1";
+				privateLable.setText("仅抄送人员及各上级可见");
+			} else {
+				is_private = "0";
+				privateLable.setText("所有人可见");
+			}
+			break;
 		case R.id.photo:
 			if (adapter.getCount() >= 9) {
 				ToastUtil.show(R.string.much_file);
