@@ -4,7 +4,8 @@
 
     <include layout="@layout/top_bar" />
 
-    <LinearLayout style="@style/layout_body" >
+    <LinearLayout style="@style/layout_body"
+        android:background="@color/gainsboro" >
 
         <EditText
             android:id="@+id/input_comment"
@@ -16,21 +17,11 @@
             android:hint="输入您想说的话..."
             android:padding="10dp" />
 
-        <com.zzn.aeassistant.view.FastenGridView
-            android:id="@+id/attch_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnWidth="80dp"
-            android:divider="@null"
-            android:horizontalSpacing="2dp"
-            android:numColumns="auto_fit"
-            android:padding="2dp"
-            android:visibility="gone" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/gainsboro"
+            android:background="@color/white"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal" >
 
             <ImageButton
@@ -67,6 +58,17 @@
                 android:src="@drawable/icon_file"
                 android:visibility="gone" />
         </LinearLayout>
+        
+        <com.zzn.aeassistant.view.FastenGridView
+            android:id="@+id/attch_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnWidth="80dp"
+            android:divider="@null"
+            android:horizontalSpacing="2dp"
+            android:numColumns="auto_fit"
+            android:padding="2dp"
+            android:visibility="gone" />
     </LinearLayout>
 
 </LinearLayout>

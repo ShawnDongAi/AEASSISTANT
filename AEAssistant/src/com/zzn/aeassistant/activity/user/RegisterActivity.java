@@ -1,15 +1,5 @@
 package com.zzn.aeassistant.activity.user;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.IndexActivity;
@@ -25,6 +15,19 @@ import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.UserVO;
+
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.EditText;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -53,11 +56,9 @@ public class RegisterActivity extends BaseActivity {
 		mVerifyBtn = (Button) findViewById(R.id.register_verify);
 		mRegisterBtn.setOnClickListener(this);
 		mVerifyBtn.setOnClickListener(this);
-		SMSSDK.initSDK(this, PlatformkEY.SMS_APP_KEY,
-				PlatformkEY.SMS_APP_SECRET);
+		SMSSDK.initSDK(this, PlatformkEY.SMS_APP_KEY, PlatformkEY.SMS_APP_SECRET);
 		EventHandler eventHandler = new EventHandler() {
-			public void afterEvent(final int event, final int result,
-					Object data) {
+			public void afterEvent(final int event, final int result, Object data) {
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
@@ -84,6 +85,13 @@ public class RegisterActivity extends BaseActivity {
 		};
 		// 注册回调监听接口
 		SMSSDK.registerEventHandler(eventHandler);
+		((CheckBox) findViewById(R.id.agreement_checkbox)).setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mRegisterBtn.setEnabled(isChecked);
+			}
+		});
+		findViewById(R.id.agreement_text).setOnClickListener(this);
 	}
 
 	@Override
@@ -108,6 +116,9 @@ public class RegisterActivity extends BaseActivity {
 			AEProgressDialog.showLoadingDialog(this);
 			mVerifyBtn.setEnabled(false);
 			SMSSDK.getVerificationCode(PlatformkEY.ZONE, phone);
+			break;
+		case R.id.agreement_text:
+			startActivity(new Intent(this, AgreementActivity.class));
 			break;
 		default:
 			break;
@@ -163,10 +174,8 @@ public class RegisterActivity extends BaseActivity {
 			String phone = params[0];
 			String password = params[1];
 			String smsCode = params[2];
-			String param = "phone=" + phone + "&password=" + password
-					+ "&code=" + smsCode;
-			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_REGISTER,
-					param);
+			String param = "phone=" + phone + "&password=" + password + "&code=" + smsCode;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_REGISTER, param);
 			return result;
 		}
 
@@ -176,11 +185,9 @@ public class RegisterActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				try {
-					UserVO user = GsonUtil.getInstance().fromJson(
-							result.getRES_OBJ().toString(), UserVO.class);
+					UserVO user = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(), UserVO.class);
 					AEApp.setUser(user);
-					PreConfig.saveUserInfo(phone, mPswInput.getText()
-							.toString());
+					PreConfig.saveUserInfo(phone, mPswInput.getText().toString());
 					startActivity(new Intent(mContext, IndexActivity.class));
 					finish();
 				} catch (Exception e) {
@@ -209,8 +216,7 @@ public class RegisterActivity extends BaseActivity {
 				mVerifyBtn.setEnabled(true);
 				restTime = 60;
 			} else {
-				mVerifyBtn
-						.setText(getString(R.string.login_sms_timer, restTime));
+				mVerifyBtn.setText(getString(R.string.login_sms_timer, restTime));
 				restTime--;
 				mHandler.postDelayed(smsTimerTask, 1000);
 			}

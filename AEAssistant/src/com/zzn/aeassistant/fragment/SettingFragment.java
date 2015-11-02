@@ -2,25 +2,11 @@ package com.zzn.aeassistant.fragment;
 
 import java.io.File;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.text.InputType;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-
 import com.google.zxing.WriterException;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.TextEditActivity;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
+import com.zzn.aeassistant.activity.user.AgreementActivity;
 import com.zzn.aeassistant.activity.user.LoginActivity;
 import com.zzn.aeassistant.activity.user.VerifyActivity;
 import com.zzn.aeassistant.app.AEApp;
@@ -33,6 +19,20 @@ import com.zzn.aeassistant.util.BitmapUtil;
 import com.zzn.aeassistant.util.PhoneUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.vo.HttpResult;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 /**
  * 设置页
@@ -68,6 +68,7 @@ public class SettingFragment extends BaseFragment {
 		share.setOnClickListener(this);
 		twocode.setOnClickListener(this);
 		logout.setOnClickListener(this);
+		container.findViewById(R.id.setting_agreenment).setOnClickListener(this);
 		version.setText(PhoneUtil.getAppVersionName());
 		initTwoCode();
 	}
@@ -129,6 +130,11 @@ public class SettingFragment extends BaseFragment {
 			PreConfig.setLoginStatus(false);
 			startActivity(new Intent(mContext, LoginActivity.class));
 			getActivity().finish();
+			break;
+		case R.id.setting_agreenment:
+			startActivity(new Intent(mContext, AgreementActivity.class));
+			break;
+		default:
 			break;
 		}
 	}

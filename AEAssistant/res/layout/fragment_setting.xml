@@ -79,6 +79,23 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/gainsboro" />
+        
+        <TextView
+            android:id="@+id/setting_agreenment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_top"
+            android:drawableRight="@drawable/ic_to"
+            android:gravity="left|center_vertical"
+            android:padding="15dp"
+            android:text="@string/agreement"
+            android:textColor="@drawable/text_normal"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/gainsboro" />
 
         <TextView
             android:id="@+id/setting_share"

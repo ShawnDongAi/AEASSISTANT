@@ -68,6 +68,7 @@
     <string name="title_user_center">个人中心</string>
     <string name="title_home">主页</string>
     <string name="title_setting">设置</string>
+    <string name="title_agreement">《工事用户使用协议》</string>
     <string name="out_of_project_location">您当前位置无激活项目</string>
     <string name="current_project">当前激活项目：%s</string>
     <string name="scanning_for_other">温馨提示：在此页面，接收来电后可为其签到</string>
@@ -168,6 +169,7 @@
 
     <!-- 设置 -->
     <string name="feed_back">意见反馈</string>
+    <string name="agreement">用户协议</string>
     <string name="share_version">分享给好友</string>
     <string name="share_title">将工事分享给好友</string>
     <string name="share_text">我正在使用工事，项目管理快捷方便，猛戳这里下载:%s</string>

@@ -53,8 +53,8 @@
                     android:id="@+id/register_verify"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_common"
                     android:layout_marginLeft="10dp"
+                    android:background="@drawable/btn_common"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:text="@string/login_sms_verify"
@@ -62,11 +62,35 @@
                     android:textSize="15sp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <CheckBox
+                    android:id="@+id/agreement_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/checkbox"
+                    android:checked="true"
+                    android:gravity="center_vertical"
+                    android:text="本人已同意" />
+
+                <TextView
+                    android:id="@+id/agreement_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_agreement"
+                    android:textColor="@color/theme_green" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/register_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/btn_common"
                 android:padding="10dp"
                 android:text="@string/register"

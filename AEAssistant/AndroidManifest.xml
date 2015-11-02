@@ -87,6 +87,10 @@
             android:name=".activity.user.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <activity
+            android:name=".activity.user.AgreementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 短信验证页面 -->
         <activity
             android:name=".activity.user.VerifyActivity"
