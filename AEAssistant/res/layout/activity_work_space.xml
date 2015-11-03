@@ -6,11 +6,10 @@
 
     <RelativeLayout style="@style/layout_body" >
 
-        <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshExpandableListView
+        <com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView
             android:id="@+id/base_list"
             style="@style/base_list"
-            android:childDivider="@color/transparent"
-            android:groupIndicator="@null" />
+            android:listSelector="@color/transparent" />
     </RelativeLayout>
 
 </LinearLayout>

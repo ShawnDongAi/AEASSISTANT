@@ -21,7 +21,7 @@ public class AgreementActivity extends BaseActivity {
 	@Override
 	protected void initView() {
 		content = (TextView) findViewById(R.id.content);
-		content.setText("用户协议");
+		content.setText(R.string.agreement_content);
 	}
 
 	@Override

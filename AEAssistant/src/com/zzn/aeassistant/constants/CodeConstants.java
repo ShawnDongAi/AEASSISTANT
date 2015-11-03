@@ -41,4 +41,7 @@ public class CodeConstants {
 
 	public static final String KEY_SCAN_RESULT = "scan_result";
 	public static final String KEY_SCAN_RESULT_FORMAT = "scan_result_format";
+	
+	public static final String KEY_IMG_URL = "img_url";
+	public static final String KEY_POSITION = "position";
 }

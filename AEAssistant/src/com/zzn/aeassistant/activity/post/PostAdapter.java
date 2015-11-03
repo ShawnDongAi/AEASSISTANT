@@ -1,10 +1,11 @@
 package com.zzn.aeassistant.activity.post;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,9 +14,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -34,15 +37,17 @@ import com.zzn.aeassistant.vo.CommentVO;
 import com.zzn.aeassistant.vo.PostVO;
 import com.zzn.aeassistant.vo.ProjectVO;
 
-public class PostAdapter extends BaseExpandableListAdapter {
+public class PostAdapter extends BaseAdapter {
 	private Context mContext;
 	private ProjectVO project;
 	private List<PostVO> postList = new ArrayList<PostVO>();
 	private List<List<CommentVO>> commentList = new ArrayList<>();
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
+	private SimpleDateFormat allFormat = new SimpleDateFormat(
+			"yyyy-MM-ddHH:mm:ss");
+	private SimpleDateFormat format = new SimpleDateFormat("MM-dd HH:mm");
 	private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
-	private OnGroupClickListener onGroupClickListener;
 
 	public PostAdapter(Context context) {
 		this.mContext = context;
@@ -65,15 +70,6 @@ public class PostAdapter extends BaseExpandableListAdapter {
 				// .displayer(new RoundedBitmapDisplayer(20))// 是否设置为圆角，弧度为多少
 				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
 				.build();// 构建完成
-	}
-
-	public void setOnGroupClickListener(
-			OnGroupClickListener onGroupClickListener) {
-		this.onGroupClickListener = onGroupClickListener;
-	}
-
-	public interface OnGroupClickListener {
-		void onGroupClick(int groupPos);
 	}
 
 	public void setProject(ProjectVO projectVO) {
@@ -104,7 +100,7 @@ public class PostAdapter extends BaseExpandableListAdapter {
 		FastenGridView attachList;
 		TextView time;
 		View comment;
-		View arrow;
+		LinearLayout commentLayout;
 	}
 
 	/** 图片加载监听事件 **/
@@ -134,44 +130,22 @@ public class PostAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public int getGroupCount() {
+	public int getCount() {
 		return postList.size();
 	}
 
 	@Override
-	public int getChildrenCount(int groupPosition) {
-		return commentList.get(groupPosition).size();
+	public PostVO getItem(int position) {
+		return postList.get(position);
 	}
 
 	@Override
-	public PostVO getGroup(int groupPosition) {
-		return postList.get(groupPosition);
+	public long getItemId(int position) {
+		return position;
 	}
 
 	@Override
-	public CommentVO getChild(int groupPosition, int childPosition) {
-		return commentList.get(groupPosition).get(childPosition);
-	}
-
-	@Override
-	public long getGroupId(int groupPosition) {
-		return groupPosition;
-	}
-
-	@Override
-	public long getChildId(int groupPosition, int childPosition) {
-		return childPosition;
-	}
-
-	@Override
-	public boolean hasStableIds() {
-		return false;
-	}
-
-	@SuppressLint("NewApi")
-	@Override
-	public View getGroupView(final int groupPosition, boolean isExpanded,
-			View convertView, ViewGroup parent) {
+	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
@@ -184,18 +158,25 @@ public class PostAdapter extends BaseExpandableListAdapter {
 					.findViewById(R.id.attach_list);
 			holder.time = (TextView) convertView.findViewById(R.id.time);
 			holder.comment = convertView.findViewById(R.id.comment);
-			holder.arrow = convertView.findViewById(R.id.arrow);
+			holder.commentLayout = (LinearLayout) convertView
+					.findViewById(R.id.comment_layout);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		final PostVO item = getGroup(groupPosition);
+		final PostVO item = getItem(position);
 		imageLoader.displayImage(
 				String.format(URLConstants.URL_IMG, item.getUser_head()),
 				holder.head, options);
 		holder.name.setText(item.getProject_name());
 		holder.content.setText(item.getContent());
-		holder.time.setText(item.getTime());
+		String timeString = item.getTime();
+		try {
+			timeString = format.format(allFormat.parse(item.getTime()
+					.replaceAll("\r", "").replaceAll(" ", "")));
+		} catch (Exception e) {
+		}
+		holder.time.setText(timeString);
 		holder.comment.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -235,75 +216,50 @@ public class PostAdapter extends BaseExpandableListAdapter {
 				}
 			}
 		});
-		holder.arrow.setRotation(isExpanded ? 180 : 0);
-		holder.arrow
-				.setVisibility(getChildrenCount(groupPosition) > 0 ? View.VISIBLE
-						: View.INVISIBLE);
-		convertView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (onGroupClickListener != null) {
-					onGroupClickListener.onGroupClick(groupPosition);
+		holder.commentLayout.removeAllViews();
+		List<CommentVO> comments = commentList.get(position);
+		for (CommentVO comment : comments) {
+			View commentView = View.inflate(mContext, R.layout.item_comment,
+					null);
+			((TextView) commentView.findViewById(R.id.content)).setText(comment
+					.getProject_name() + "：" + comment.getContent().trim());
+			String commentTimeString = comment.getTime();
+			try {
+				commentTimeString = format.format(allFormat.parse(comment
+						.getTime().replaceAll("\r", "").replaceAll(" ", "")));
+			} catch (Exception e) {
+			}
+			((TextView) commentView.findViewById(R.id.time))
+					.setText(commentTimeString);
+			AttachAdapter commentAttachAdapter = new AttachAdapter(mContext,
+					false);
+			if (comment.getAttch_id() != null
+					&& !StringUtil.isEmpty(comment.getAttch_id())) {
+				for (String id : comment.getAttch_id().split("#")) {
+					if (!StringUtil.isEmpty(id)) {
+						AttchVO vo = new AttchVO();
+						vo.setATTCH_ID(id);
+						vo.setTYPE(AttchVO.TYPE_IMG);
+						commentAttachAdapter.addItem(vo);
+					}
 				}
 			}
-		});
-		return convertView;
-	}
-
-	@Override
-	public View getChildView(int groupPosition, int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
-		CommentHolder holder;
-		if (convertView == null) {
-			holder = new CommentHolder();
-			convertView = View.inflate(mContext, R.layout.item_comment, null);
-			holder.content = (TextView) convertView.findViewById(R.id.content);
-			holder.attachList = (FastenGridView) convertView
+			FastenGridView commentAttachList = (FastenGridView) commentView
 					.findViewById(R.id.attach_list);
-			holder.time = (TextView) convertView.findViewById(R.id.time);
-			convertView.setTag(holder);
-		} else {
-			holder = (CommentHolder) convertView.getTag();
-		}
-		CommentVO item = getChild(groupPosition, childPosition);
-		holder.content.setText(item.getProject_name() + "："
-				+ item.getContent().trim());
-		holder.time.setText(item.getTime());
-		AttachAdapter attachAdapter;
-		if (holder.attachList.getTag() == null) {
-			attachAdapter = new AttachAdapter(mContext, false);
-		} else {
-			attachAdapter = (AttachAdapter) holder.attachList.getTag();
-			attachAdapter.clear();
-		}
-		if (item.getAttch_id() != null
-				&& !StringUtil.isEmpty(item.getAttch_id())) {
-			for (String id : item.getAttch_id().split("#")) {
-				if (!StringUtil.isEmpty(id)) {
-					AttchVO vo = new AttchVO();
-					vo.setATTCH_ID(id);
-					vo.setTYPE(AttchVO.TYPE_IMG);
-					attachAdapter.addItem(vo);
+			commentAttachList.setAdapter(commentAttachAdapter);
+			commentAttachList.setTag(commentAttachAdapter);
+			commentAttachList.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					if (parent.getTag() != null
+							&& parent.getTag() instanceof AttachAdapter) {
+						((AttachAdapter) parent.getTag()).onItemClick(position);
+					}
 				}
-			}
+			});
+			holder.commentLayout.addView(commentView);
 		}
-		holder.attachList.setAdapter(attachAdapter);
-		holder.attachList.setTag(attachAdapter);
-		holder.attachList.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				if (parent.getTag() != null
-						&& parent.getTag() instanceof AttachAdapter) {
-					((AttachAdapter) parent.getTag()).onItemClick(position);
-				}
-			}
-		});
 		return convertView;
-	}
-
-	@Override
-	public boolean isChildSelectable(int groupPosition, int childPosition) {
-		return false;
 	}
 }

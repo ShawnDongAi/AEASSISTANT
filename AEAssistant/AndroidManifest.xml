@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zzn.aeassistant"
-    android:versionCode="0104034"
-    android:versionName="1.4.34" >
+    android:versionCode="0105033"
+    android:versionName="1.5.33" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -69,6 +69,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.GuideActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_fullscreen" />
         <!-- 登陆页 -->
         <activity
             android:name=".activity.user.LoginActivity"
@@ -219,6 +223,11 @@
         <!-- 头像裁剪页面 -->
         <activity
             android:name=".view.cropimage.CropImageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <!-- 图片预览页面 -->
+        <activity
+            android:name=".activity.ImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- apk下载服务 -->

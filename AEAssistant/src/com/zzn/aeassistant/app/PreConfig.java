@@ -20,6 +20,7 @@ public class PreConfig {
 	public static final String USER_PSW = "password";
 	public static final String USER_REMEMBER = "remember";
 	public static final String AUTO_LOGIN = "auto_login";
+	public static final String FIRST_LOAD = "first_load";
 
 	public static SharedPreferences getDefaultPre() {
 		return PreferenceManager.getDefaultSharedPreferences(AEApp
@@ -55,6 +56,14 @@ public class PreConfig {
 	
 	public static boolean isAutoLogin() {
 		return getDefaultPre().getBoolean(AUTO_LOGIN, false);
+	}
+	
+	public static boolean isFirstLoad() {
+		return getDefaultPre().getBoolean(FIRST_LOAD, true);
+	}
+	
+	public static void setFirstLoad() {
+		getDefaultPreEditor().putBoolean(FIRST_LOAD, false).commit();
 	}
 
 	public static void clearPsw() {

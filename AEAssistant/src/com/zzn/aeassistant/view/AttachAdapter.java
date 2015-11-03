@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.activity.ImageActivity;
+import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.FileUtils;
 import com.zzn.aeassistant.util.StringUtil;
@@ -163,18 +166,26 @@ public class AttachAdapter extends BaseAdapter {
 			notifyDataSetChanged();
 			return;
 		}
-		AttchVO item = getItem(position);
-		String path = item.getLOCAL_PATH();
-		if (StringUtil.isEmpty(path)) {
-			path = imageLoader
-					.getInstance()
-					.getDiscCache()
-					.get(String.valueOf(String.format(URLConstants.URL_IMG,
-							item.getATTCH_ID()))).getPath();
+		ArrayList<String> imgs = new ArrayList<String>();
+		for (int i=0;i<getCount();i++) {
+			imgs.add(String.format(URLConstants.URL_IMG,
+					getItem(i).getATTCH_ID()));
 		}
-		if (FileUtils.exists(path)) {
-			FileUtils.openImg(mContext, new File(path));
-		}
+		Intent intent = new Intent(mContext, ImageActivity.class);
+		intent.putStringArrayListExtra(CodeConstants.KEY_IMG_URL, imgs);
+		intent.putExtra(CodeConstants.KEY_POSITION, position);
+		mContext.startActivity(intent);
+//		AttchVO item = getItem(position);
+//		String path = item.getLOCAL_PATH();
+//		if (StringUtil.isEmpty(path)) {
+//			path = imageLoader
+//					.getInstance()
+//					.getDiscCache()
+//					.get(String.valueOf()).getPath();
+//		}
+//		if (FileUtils.exists(path)) {
+//			FileUtils.openImg(mContext, new File(path));
+//		}
 	}
 
 	/** 图片加载监听事件 **/

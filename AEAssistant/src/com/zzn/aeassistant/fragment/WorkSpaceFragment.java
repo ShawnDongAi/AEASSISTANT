@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -27,7 +26,6 @@ import com.zzn.aeassistant.activity.IndexActivity;
 import com.zzn.aeassistant.activity.IndexActivity.SaveClickListener;
 import com.zzn.aeassistant.activity.post.PostActivity;
 import com.zzn.aeassistant.activity.post.PostAdapter;
-import com.zzn.aeassistant.activity.post.PostAdapter.OnGroupClickListener;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -44,7 +42,7 @@ import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshExpandableListView;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView;
 import com.zzn.aeassistant.vo.CommentVO;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.PostVO;
@@ -57,7 +55,7 @@ import com.zzn.aeassistant.vo.ProjectVO;
  */
 public class WorkSpaceFragment extends BaseFragment {
 	private TextView projectTitle;
-	private PullToRefreshExpandableListView mListView;
+	private PullToRefreshListView mListView;
 	private PostAdapter adapter;
 	private boolean hasMore = true;
 	private boolean dbHasMore = true;
@@ -107,26 +105,21 @@ public class WorkSpaceFragment extends BaseFragment {
 
 	@Override
 	protected void initView(View container) {
-		projectTitle = (TextView) container.findViewById(R.id.workspace_project);
+		projectTitle = (TextView) container
+				.findViewById(R.id.workspace_project);
 		projectTitle.setOnClickListener(this);
-		mListView = (PullToRefreshExpandableListView) container.findViewById(R.id.base_list);
-		mListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
+		mListView = (PullToRefreshListView) container
+				.findViewById(R.id.base_list);
+		mListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view,
+				null));
 		adapter = new PostAdapter(mContext);
 		mListView.setAdapter(adapter);
-		adapter.setOnGroupClickListener(new OnGroupClickListener() {
-			@Override
-			public void onGroupClick(int groupPos) {
-				if (mListView.getRefreshableView().isGroupExpanded(groupPos)) {
-					mListView.getRefreshableView().collapseGroup(groupPos);
-				} else {
-					mListView.getRefreshableView().expandGroup(groupPos);
-				}
-			}
-		});
 		initMenuView();
 		initPullToRefresh();
-		getActivity().getContentResolver().registerContentObserver(PostProvider.CONTENT_URI, true, observer);
-		getActivity().getContentResolver().registerContentObserver(CommentProvider.CONTENT_URI, true, commentObserver);
+		getActivity().getContentResolver().registerContentObserver(
+				PostProvider.CONTENT_URI, true, observer);
+		getActivity().getContentResolver().registerContentObserver(
+				CommentProvider.CONTENT_URI, true, commentObserver);
 	}
 
 	@Override
@@ -156,20 +149,25 @@ public class WorkSpaceFragment extends BaseFragment {
 	private void initMenuView() {
 		View menuView = View.inflate(mContext, R.layout.menu_list, null);
 		projectList = (ListView) menuView.findViewById(R.id.menu_list);
-		proListAdapter = new ProListAdapter(mContext, AEApp.getCurrentUser().getPROJECTS());
+		proListAdapter = new ProListAdapter(mContext, AEApp.getCurrentUser()
+				.getPROJECTS());
 		projectList.setAdapter(proListAdapter);
-		projectMenu = new PopupWindow(menuView, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		projectMenu.setBackgroundDrawable(getResources().getDrawable(R.color.transparent_lightslategray));
+		projectMenu = new PopupWindow(menuView, LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT);
+		projectMenu.setBackgroundDrawable(getResources().getDrawable(
+				R.color.transparent_lightslategray));
 		projectMenu.setOutsideTouchable(true);
 		projectMenu.setFocusable(true);
 		projectList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
 				if (projectMenu != null && projectMenu.isShowing()) {
 					projectMenu.dismiss();
 				}
 				project = proListAdapter.getItem(position);
-				projectTitle.setText(project.getROOT_PROJECT_NAME() + "-" + project.getPROJECT_NAME());
+				projectTitle.setText(project.getROOT_PROJECT_NAME() + "-"
+						+ project.getPROJECT_NAME());
 				adapter.setProject(project);
 				adapter.clear();
 				adapter.notifyDataSetChanged();
@@ -195,7 +193,8 @@ public class WorkSpaceFragment extends BaseFragment {
 	@Override
 	public void onDestroyView() {
 		getActivity().getContentResolver().unregisterContentObserver(observer);
-		getActivity().getContentResolver().unregisterContentObserver(commentObserver);
+		getActivity().getContentResolver().unregisterContentObserver(
+				commentObserver);
 		if (initProTask != null) {
 			initProTask.cancel(true);
 			initProTask = null;
@@ -205,13 +204,17 @@ public class WorkSpaceFragment extends BaseFragment {
 
 	private void initPullToRefresh() {
 		mListView.setMode(Mode.PULL_FROM_START);
-		mListView.setOnRefreshListener(new OnRefreshListener2<ExpandableListView>() {
+		mListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 			@Override
-			public void onPullDownToRefresh(final PullToRefreshBase<ExpandableListView> refreshView) {
-				String label = DateUtils.formatDateTime(AEApp.getInstance(), System.currentTimeMillis(),
-						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+			public void onPullDownToRefresh(
+					final PullToRefreshBase<ListView> refreshView) {
+				String label = DateUtils.formatDateTime(AEApp.getInstance(),
+						System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME
+								| DateUtils.FORMAT_SHOW_DATE
+								| DateUtils.FORMAT_ABBREV_ALL);
 				// Update the LastUpdatedLabel
-				refreshView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+				refreshView.getLoadingLayoutProxy(true, false)
+						.setLastUpdatedLabel(label);
 				if (postTask != null) {
 					postTask.cancel(true);
 				}
@@ -221,19 +224,21 @@ public class WorkSpaceFragment extends BaseFragment {
 			}
 
 			@Override
-			public void onPullUpToRefresh(final PullToRefreshBase<ExpandableListView> refreshView) {
+			public void onPullUpToRefresh(
+					final PullToRefreshBase<ListView> refreshView) {
 				if (hasMore) {
-					if (dbHasMore && adapter.getGroupCount() > 0) {
-						refreshFromDB(adapter.getGroup(adapter.getGroupCount() - 1).getTime(), false, true);
+					if (dbHasMore && adapter.getCount() > 0) {
+						refreshFromDB(adapter.getItem(adapter.getCount() - 1)
+								.getTime(), false, true);
 						return;
 					}
 					if (postTask != null) {
 						postTask.cancel(true);
 					}
-					if (adapter.getGroupCount() > 0) {
+					if (adapter.getCount() > 0) {
 						postTask = new RefreshPostTask(false);
-						postTask.execute(project.getPROJECT_ID(),
-								adapter.getGroup(adapter.getGroupCount() - 1).getTime());
+						postTask.execute(project.getPROJECT_ID(), adapter
+								.getItem(adapter.getCount() - 1).getTime());
 					}
 				} else {
 					refreshView.onRefreshComplete();
@@ -242,25 +247,33 @@ public class WorkSpaceFragment extends BaseFragment {
 		});
 	}
 
-	private class InitProjectTask extends AsyncTask<ProjectVO, Integer, ProjectVO> {
+	private class InitProjectTask extends
+			AsyncTask<ProjectVO, Integer, ProjectVO> {
 
 		@Override
 		protected ProjectVO doInBackground(ProjectVO... params) {
 			ProjectVO currentProject = null;
 			if (AEApp.getCurrentLoc() == null) {
-				if (AEApp.getCurrentUser().getPROJECTS() != null && AEApp.getCurrentUser().getPROJECTS().size() > 0) {
-					currentProject = AEApp.getCurrentUser().getPROJECTS().get(0);
+				if (AEApp.getCurrentUser().getPROJECTS() != null
+						&& AEApp.getCurrentUser().getPROJECTS().size() > 0) {
+					currentProject = AEApp.getCurrentUser().getPROJECTS()
+							.get(0);
 				}
 			} else {
 				double currentLatitude = AEApp.getCurrentLoc().getLatitude();
 				double currentLongitude = AEApp.getCurrentLoc().getLongitude();
-				if (AEApp.getCurrentUser().getPROJECTS() != null && AEApp.getCurrentUser().getPROJECTS().size() > 0) {
-					currentProject = AEApp.getCurrentUser().getPROJECTS().get(0);
+				if (AEApp.getCurrentUser().getPROJECTS() != null
+						&& AEApp.getCurrentUser().getPROJECTS().size() > 0) {
+					currentProject = AEApp.getCurrentUser().getPROJECTS()
+							.get(0);
 				}
 				for (ProjectVO projectVO : AEApp.getCurrentUser().getPROJECTS()) {
-					double proLatitude = Double.parseDouble(projectVO.getLATITUDE());
-					double proLongitude = Double.parseDouble(projectVO.getLONGITUDE());
-					if (ToolsUtil.getDistance(currentLongitude, currentLatitude, proLongitude, proLatitude) < 500) {
+					double proLatitude = Double.parseDouble(projectVO
+							.getLATITUDE());
+					double proLongitude = Double.parseDouble(projectVO
+							.getLONGITUDE());
+					if (ToolsUtil.getDistance(currentLongitude,
+							currentLatitude, proLongitude, proLatitude) < 500) {
 						currentProject = projectVO;
 						break;
 					}
@@ -280,7 +293,8 @@ public class WorkSpaceFragment extends BaseFragment {
 			}
 			project = result;
 			adapter.setProject(project);
-			projectTitle.setText(project.getROOT_PROJECT_NAME() + "-" + project.getPROJECT_NAME());
+			projectTitle.setText(project.getROOT_PROJECT_NAME() + "-"
+					+ project.getPROJECT_NAME());
 			if (refreshTask != null) {
 				refreshTask.cancel(true);
 				refreshTask = null;
@@ -296,7 +310,8 @@ public class WorkSpaceFragment extends BaseFragment {
 		}
 	}
 
-	private class RefreshPostTask extends AsyncTask<String, Integer, HttpResult> {
+	private class RefreshPostTask extends
+			AsyncTask<String, Integer, HttpResult> {
 		private boolean refresh = false;
 
 		public RefreshPostTask(boolean refresh) {
@@ -316,28 +331,33 @@ public class WorkSpaceFragment extends BaseFragment {
 			if (!StringUtil.isEmpty(time)) {
 				param.append("&time=" + time);
 			}
-			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_QUERY_POST, param.toString());
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_QUERY_POST,
+					param.toString());
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				try {
-					JSONObject json = new JSONObject(result.getRES_OBJ().toString());
+					JSONObject json = new JSONObject(result.getRES_OBJ()
+							.toString());
 					if (refresh) {
 						PostDBHelper.deleteAll(project_id);
 						CommentDBHelper.deleteAll(project_id);
 					}
 					List<PostVO> postList = new ArrayList<>();
 					if (json.has("post")) {
-						postList = GsonUtil.getInstance().fromJson(json.getString("post"),
+						postList = GsonUtil.getInstance().fromJson(
+								json.getString("post"),
 								new TypeToken<List<PostVO>>() {
 								}.getType());
 					}
 					List<CommentVO> tempCommentList = new ArrayList<>();
 					if (json.has("comment")) {
-						tempCommentList = GsonUtil.getInstance().fromJson(json.getString("comment"),
+						tempCommentList = GsonUtil.getInstance().fromJson(
+								json.getString("comment"),
 								new TypeToken<List<CommentVO>>() {
 								}.getType());
 					}
 					PostDBHelper.insertPostList(postList, project_id);
-					CommentDBHelper.insertCommentList(tempCommentList, project_id);
+					CommentDBHelper.insertCommentList(tempCommentList,
+							project_id);
 					Map<String, Object> map = new HashMap<>();
 					map.put("post", postList);
 					List<List<CommentVO>> commentList = new ArrayList<>();
@@ -372,10 +392,12 @@ public class WorkSpaceFragment extends BaseFragment {
 					adapter.clear();
 				}
 				try {
-					Map<String, Object> map = (Map<String, Object>) result.getRES_OBJ();
+					Map<String, Object> map = (Map<String, Object>) result
+							.getRES_OBJ();
 					if (((List<PostVO>) map.get("post")).size() > 0) {
 						adapter.addPost((List<PostVO>) map.get("post"));
-						adapter.addComment((List<List<CommentVO>>) map.get("comment"));
+						adapter.addComment((List<List<CommentVO>>) map
+								.get("comment"));
 					}
 				} catch (Exception e) {
 				}
@@ -398,7 +420,8 @@ public class WorkSpaceFragment extends BaseFragment {
 		}
 	}
 
-	private class RefreshTask extends AsyncTask<String, Integer, Map<String, Object>> {
+	private class RefreshTask extends
+			AsyncTask<String, Integer, Map<String, Object>> {
 		private boolean refresh = false;
 
 		public RefreshTask(boolean refresh) {
@@ -419,7 +442,8 @@ public class WorkSpaceFragment extends BaseFragment {
 			result.put("post", postList);
 			List<List<CommentVO>> commentList = new ArrayList<>();
 			for (PostVO post : postList) {
-				commentList.add(CommentDBHelper.queryList(post.getPost_id(), project_id));
+				commentList.add(CommentDBHelper.queryList(post.getPost_id(),
+						project_id));
 			}
 			result.put("comment", commentList);
 			return result;
@@ -435,10 +459,10 @@ public class WorkSpaceFragment extends BaseFragment {
 			adapter.addPost((List<PostVO>) result.get("post"));
 			adapter.addComment((List<List<CommentVO>>) result.get("comment"));
 			adapter.notifyDataSetChanged();
-			if (adapter.getGroupCount() < 20) {
+			if (adapter.getCount() < 20) {
 				dbHasMore = false;
 			}
-			if (adapter.getGroupCount() == 0) {
+			if (adapter.getCount() == 0) {
 				mListView.setMode(Mode.PULL_FROM_START);
 			} else if (hasMore) {
 				mListView.setMode(Mode.BOTH);

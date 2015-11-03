@@ -9,14 +9,12 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
         android:textSize="15sp" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
         android:textColor="@color/transparent_lightslategray"
         android:textSize="13sp" />
 
@@ -24,16 +22,9 @@
         android:id="@+id/attach_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
         android:columnWidth="80dp"
         android:horizontalSpacing="5dp"
         android:numColumns="auto_fit"
         android:verticalSpacing="5dp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="60dp"
-        android:background="@color/gainsboro" />
 
 </LinearLayout>

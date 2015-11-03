@@ -41,7 +41,8 @@ public class SplashActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		if (PreConfig.isAutoLogin() && PreConfig.isUserRemember()) {
+		if (PreConfig.isAutoLogin() && PreConfig.isUserRemember()
+				&& !PreConfig.isFirstLoad()) {
 			if (PhoneUtil.isNetworkConnected()) {
 				goToNext();
 			}
@@ -111,6 +112,11 @@ public class SplashActivity extends Activity {
 	}
 
 	private void goToNext() {
+		if (PreConfig.isFirstLoad()) {
+			startActivity(new Intent(this, GuideActivity.class));
+			finish();
+			return;
+		}
 		if (PreConfig.isAutoLogin() && PreConfig.isUserRemember()) {
 			if (loginTask != null) {
 				loginTask.cancel(true);

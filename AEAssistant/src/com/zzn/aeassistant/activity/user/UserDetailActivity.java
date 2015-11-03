@@ -39,8 +39,8 @@ public class UserDetailActivity extends BaseActivity {
 	public static final int REQUEST_PROJECT_NAME = 1;
 	public static final int REQUEST_RATE = 2;
 	public static final String ACTION_UPDATE_IDCARD_IMG = "com.zzn.aeassistant.update_idcard_img";
-	private View layoutProject, layoutIDCard, layoutIDCardImg, btnCall,
-			layoutRate, rateIcon, diverIDCard, diverIDCardImg, idCardIcon,
+	private View layoutProject, /*layoutIDCard, layoutIDCardImg,*/ btnCall,
+			layoutRate, rateIcon, /*diverIDCard, diverIDCardImg, idCardIcon,*/
 			layoutWorkSpace, diverWorkSpace;
 	private TextView project, name, phone, sex, remark, idcard, score;
 	private View projectIcon;
@@ -79,12 +79,12 @@ public class UserDetailActivity extends BaseActivity {
 			finish();
 		}
 		projectVO = (ProjectVO) (node.getData());
-		diverIDCard = findViewById(R.id.diver_idcard);
-		diverIDCardImg = findViewById(R.id.diver_idcard_img);
-		idCardIcon = findViewById(R.id.user_idcard_ic);
+//		diverIDCard = findViewById(R.id.diver_idcard);
+//		diverIDCardImg = findViewById(R.id.diver_idcard_img);
+//		idCardIcon = findViewById(R.id.user_idcard_ic);
 		layoutProject = findViewById(R.id.user_layout_project);
-		layoutIDCard = findViewById(R.id.user_layout_idcard);
-		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
+//		layoutIDCard = findViewById(R.id.user_layout_idcard);
+//		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
 		layoutWorkSpace = findViewById(R.id.user_layout_workspace);
 		diverWorkSpace = findViewById(R.id.diver_workspace);
 		btnCall = findViewById(R.id.btn_call);
@@ -98,16 +98,16 @@ public class UserDetailActivity extends BaseActivity {
 		if (projectVO.getPARENT_ID().equals(projectID)
 				|| projectVO.getPROJECT_ID().equals(projectID)) {
 			layoutProject.setOnClickListener(this);
-			layoutIDCard.setOnClickListener(this);
-			layoutIDCardImg.setOnClickListener(this);
+//			layoutIDCard.setOnClickListener(this);
+//			layoutIDCardImg.setOnClickListener(this);
 		} else {
 			projectIcon.setVisibility(View.INVISIBLE);
-			layoutIDCard.setVisibility(View.GONE);
-			diverIDCard.setVisibility(View.GONE);
-			layoutIDCardImg.setVisibility(View.GONE);
-			diverIDCardImg.setVisibility(View.GONE);
+//			layoutIDCard.setVisibility(View.GONE);
+//			diverIDCard.setVisibility(View.GONE);
+//			layoutIDCardImg.setVisibility(View.GONE);
+//			diverIDCardImg.setVisibility(View.GONE);
 		}
-		layoutIDCardImg.setOnClickListener(this);
+//		layoutIDCardImg.setOnClickListener(this);
 		layoutWorkSpace.setOnClickListener(this);
 		btnCall.setOnClickListener(this);
 
@@ -373,13 +373,13 @@ public class UserDetailActivity extends BaseActivity {
 					if (!StringUtil.isEmpty(mRemark)) {
 						remark.setText(mRemark);
 					}
-					String mIDCard = userVO.getIDCARD();
-					if (!StringUtil.isEmpty(mIDCard)) {
-						idcard.setText(mIDCard);
-						idCardIcon.setVisibility(View.INVISIBLE);
-					} else {
-						idCardIcon.setVisibility(View.VISIBLE);
-					}
+//					String mIDCard = userVO.getIDCARD();
+//					if (!StringUtil.isEmpty(mIDCard)) {
+//						idcard.setText(mIDCard);
+//						idCardIcon.setVisibility(View.INVISIBLE);
+//					} else {
+//						idCardIcon.setVisibility(View.VISIBLE);
+//					}
 					rate.setRating(userVO.getRATE());
 					score.setText(getString(R.string.lable_score,
 							userVO.getRATE() + ""));

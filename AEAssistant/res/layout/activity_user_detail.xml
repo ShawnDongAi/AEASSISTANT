@@ -280,7 +280,8 @@
                 android:background="@drawable/btn_item"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -315,7 +316,8 @@
                 android:id="@+id/diver_idcard"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gainsboro" />
+                android:background="@color/gainsboro"
+                android:visibility="gone" />
 
             <!-- 身份证照 -->
 
@@ -326,7 +328,8 @@
                 android:background="@drawable/btn_item"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <TextView
                     android:layout_width="0dp"
@@ -349,7 +352,8 @@
                 android:id="@+id/diver_idcard_img"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gainsboro" />
+                android:background="@color/gainsboro"
+                android:visibility="gone" />
 
             <!-- 评价 -->
 

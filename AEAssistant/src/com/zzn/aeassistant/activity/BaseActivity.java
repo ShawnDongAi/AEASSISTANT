@@ -158,7 +158,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		screenH = displayMetrics.heightPixels;
 		setContentView(layoutResID());
 		title = (TextView) findViewById(R.id.title);
-		if (title != null) {
+		if (title != null && titleStringID() > 0) {
 			title.setText(titleStringID());
 		}
 		back = (ImageButton) findViewById(R.id.back);

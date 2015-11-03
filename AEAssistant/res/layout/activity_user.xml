@@ -229,6 +229,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_item"
                 android:clickable="true"
+                android:visibility="gone"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" >
 
@@ -262,6 +263,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
+                android:visibility="gone"
                 android:background="@color/gainsboro" />
             
             <!-- 身份证照 -->
@@ -272,6 +274,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_item"
                 android:clickable="true"
+                android:visibility="gone"
                 android:gravity="center_vertical"
                 android:orientation="horizontal" >
 
@@ -294,6 +297,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
+                android:visibility="gone"
                 android:background="@color/gainsboro" />
 
             <!-- 个人说明 -->
