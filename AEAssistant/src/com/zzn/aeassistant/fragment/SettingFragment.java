@@ -2,6 +2,8 @@ package com.zzn.aeassistant.fragment;
 
 import java.io.File;
 
+import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
+import com.baidu.autoupdatesdk.UICheckUpdateCallback;
 import com.google.zxing.WriterException;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.TextEditActivity;
@@ -12,12 +14,14 @@ import com.zzn.aeassistant.activity.user.VerifyActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.app.PreConfig;
 import com.zzn.aeassistant.constants.CodeConstants;
+import com.zzn.aeassistant.constants.Config;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.BitmapUtil;
 import com.zzn.aeassistant.util.PhoneUtil;
 import com.zzn.aeassistant.util.ToastUtil;
+import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.vo.HttpResult;
 
 import android.app.Activity;
@@ -85,11 +89,21 @@ public class SettingFragment extends BaseFragment {
 			startActivity(modIntent);
 			break;
 		case R.id.setting_version_update:
-			if (versionUpdateTask != null) {
-				versionUpdateTask.cancel(true);
+			if (Config.channel == Config.CHANNEL_BAIDU) {
+				AEProgressDialog.showLoadingDialog(mContext);
+				BDAutoUpdateSDK.uiUpdateAction(mContext, new UICheckUpdateCallback() {
+					@Override
+					public void onCheckComplete() {
+						AEProgressDialog.dismissLoadingDialog();
+					}
+				});
+			} else {
+				if (versionUpdateTask != null) {
+					versionUpdateTask.cancel(true);
+				}
+				versionUpdateTask = new VersionUpdateTask(mContext, true);
+				versionUpdateTask.execute();
 			}
-			versionUpdateTask = new VersionUpdateTask(mContext, true);
-			versionUpdateTask.execute();
 			break;
 		case R.id.setting_feedback:
 			Intent feedIntent = new Intent(getActivity(),

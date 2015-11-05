@@ -1,5 +1,7 @@
 package com.zzn.aeassistant.activity;
 
+import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
+import com.baidu.autoupdatesdk.UICheckUpdateCallback;
 import com.baidu.location.BDLocation;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -9,6 +11,7 @@ import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.UserActivity;
 import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.constants.Config;
 import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.fragment.AttendanceFragment;
 import com.zzn.aeassistant.fragment.BaseFragment;
@@ -106,7 +109,15 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		// adapter.getItem(0).getFragment().getClass().getSimpleName());
 		// fragTrans.commitAllowingStateLoss();
 
-		new VersionUpdateTask(mContext, false).execute();
+		if (Config.channel == Config.CHANNEL_BAIDU) {
+			BDAutoUpdateSDK.uiUpdateAction(mContext, new UICheckUpdateCallback() {
+				@Override
+				public void onCheckComplete() {
+				}
+			});
+		} else {
+			new VersionUpdateTask(mContext, false).execute();
+		}
 	}
 
 	@Override
