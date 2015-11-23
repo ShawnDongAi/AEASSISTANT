@@ -127,7 +127,7 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 				SQLiteDatabase db = AEApp.getDbHelper().getReadableDatabase(ENCRYPT_KEY);
 				db.execSQL(sql);
 				db.close();
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
