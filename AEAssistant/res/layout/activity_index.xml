@@ -1,10 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/layout_bg" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg"
+    android:orientation="vertical" >
 
-    <com.zzn.aeassistant.view.menudrawer.OverlayDrawer
+    <!--
+         <com.zzn.aeassistant.view.menudrawer.OverlayDrawer
         android:id="@+id/menu_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+    -->
 
-</RelativeLayout>
+    <include
+        android:id="@+id/header"
+        layout="@layout/top_bar" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        style="@style/layout_body"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gainsboro" />
+
+    <RadioGroup
+        android:id="@+id/index_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/body_bg"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/project_manager"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/icon_project_manager"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/title_project_manager"
+            android:textColor="@drawable/text_index"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/contact"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/icon_contact"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/title_contact"
+            android:textColor="@drawable/text_index"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/workspace"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/icon_work_space"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/title_work_space"
+            android:textColor="@drawable/text_index"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/attendance"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/icon_attendance"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/title_attendance"
+            android:textColor="@drawable/text_index"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/settings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/icon_setting"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/title_setting"
+            android:textColor="@drawable/text_index"
+            android:textSize="13sp" />
+    </RadioGroup>
+
+</LinearLayout>

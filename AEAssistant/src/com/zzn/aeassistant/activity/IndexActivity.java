@@ -1,5 +1,8 @@
 package com.zzn.aeassistant.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.baidu.autoupdatesdk.BDAutoUpdateSDK;
 import com.baidu.autoupdatesdk.UICheckUpdateCallback;
 import com.baidu.location.BDLocation;
@@ -10,18 +13,13 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.setting.VersionUpdateTask;
 import com.zzn.aeassistant.activity.user.UserActivity;
-import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.Config;
-import com.zzn.aeassistant.constants.URLConstants;
 import com.zzn.aeassistant.fragment.AttendanceFragment;
 import com.zzn.aeassistant.fragment.BaseFragment;
 import com.zzn.aeassistant.fragment.ContactFragment;
 import com.zzn.aeassistant.fragment.ProjectManagerFragment;
 import com.zzn.aeassistant.fragment.SettingFragment;
 import com.zzn.aeassistant.fragment.WorkSpaceFragment;
-import com.zzn.aeassistant.view.CircleImageView;
-import com.zzn.aeassistant.view.menudrawer.OverlayDrawer;
-import com.zzn.aeassistant.vo.Module;
 
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -29,27 +27,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
 	public static final String ACTION_USER_INFO_CHANGED = "com.zzn.aeassistant.user_info_changed";
-	private OverlayDrawer mDrawer;
-	private View userLayout;
-	private TextView mUserName;
-	private CircleImageView mUserHead;
-	private ListView menuList;
-	private ModuleAdapter adapter;
+	private RadioGroup indexGroup;
+	private List<BaseFragment> fragmentList = new ArrayList<>();
+//	private OverlayDrawer mDrawer;
+//	private View userLayout;
+//	private TextView mUserName;
+//	private CircleImageView mUserHead;
+//	private ListView menuList;
+//	private ModuleAdapter adapter;
 
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
@@ -70,14 +69,14 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	protected void initView() {
 		setSwipeBackEnable(false);
-		mDrawer = (OverlayDrawer) findViewById(R.id.menu_drawer);
-		View menuView = View.inflate(mContext, R.layout.menu_drawer, null);
-		userLayout = menuView.findViewById(R.id.index_user);
-		mUserName = (TextView) menuView.findViewById(R.id.index_name);
-		mUserHead = (CircleImageView) menuView.findViewById(R.id.index_head);
-		menuList = (ListView) menuView.findViewById(R.id.index_menu_list);
-		mDrawer.setMenuView(menuView);
-		mDrawer.setContentView(R.layout.menu_drawer_content);
+//		mDrawer = (OverlayDrawer) findViewById(R.id.menu_drawer);
+//		View menuView = View.inflate(mContext, R.layout.menu_drawer, null);
+//		userLayout = menuView.findViewById(R.id.index_user);
+//		mUserName = (TextView) menuView.findViewById(R.id.index_name);
+//		mUserHead = (CircleImageView) menuView.findViewById(R.id.index_head);
+//		menuList = (ListView) menuView.findViewById(R.id.index_menu_list);
+//		mDrawer.setMenuView(menuView);
+//		mDrawer.setContentView(R.layout.menu_drawer_content);
 		title = (TextView) findViewById(R.id.title);
 		if (title != null) {
 			title.setText(titleStringID());
@@ -88,19 +87,62 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		}
 		back = (ImageButton) findViewById(R.id.back);
 		if (back != null) {
-			back.setImageResource(R.drawable.title_bar_menu);
-			back.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					mDrawer.openMenu();
-				}
-			});
+			back.setVisibility(View.GONE);
+//			back.setImageResource(R.drawable.title_bar_menu);
+//			back.setOnClickListener(new OnClickListener() {
+//				@Override
+//				public void onClick(View v) {
+//					mDrawer.openMenu();
+//				}
+//			});
 		}
-		userLayout.setOnClickListener(this);
+		fragmentList.add(new ProjectManagerFragment());
+		fragmentList.add(new ContactFragment());
+		fragmentList.add(new WorkSpaceFragment());
+		fragmentList.add(new AttendanceFragment());
+		fragmentList.add(new SettingFragment());
+		indexGroup = (RadioGroup) findViewById(R.id.index_group);
+		indexGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				save.setVisibility(View.INVISIBLE);
+				switch (checkedId) {
+				case R.id.project_manager:
+					currentIndex = 0;
+					setTitle(getString(R.string.title_project_manager));
+					break;
+				case R.id.contact:
+					currentIndex = 1;
+					setTitle(getString(R.string.title_contact));
+					save.setText(R.string.lable_qrcode_scanning);
+					save.setVisibility(View.VISIBLE);
+					break;
+				case R.id.workspace:
+					currentIndex = 2;
+					setTitle(getString(R.string.title_work_space));
+					save.setText(R.string.post);
+					save.setVisibility(View.VISIBLE);
+					break;
+				case R.id.attendance:
+					currentIndex = 3;
+					setTitle(getString(R.string.title_attendance));
+					break;
+				case R.id.settings:
+					currentIndex = 4;
+					setTitle(getString(R.string.title_setting));
+					break;
+					default:
+						break;
+				}
+				turnToFragment(fragmentList.get(currentIndex));
+			}
+		});
+		turnToFragment(fragmentList.get(0));
+//		userLayout.setOnClickListener(this);
 		initImageLoader();
-		initUserView();
+//		initUserView();
 		registerReceiver(userInfoReceiver, new IntentFilter(ACTION_USER_INFO_CHANGED));
-		initModuleView();
+//		initModuleView();
 
 		// FragmentTransaction fragTrans =
 		// getSupportFragmentManager().beginTransaction();
@@ -132,33 +174,33 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		}
 	}
 
-	private void initModuleView() {
-		adapter = new ModuleAdapter(mContext);
-		// // 主页
-		// adapter.addItem(new Module(R.drawable.ic_user_center,
-		// R.string.title_home, new HomeFragment()));
-		// 项目管理
-		adapter.addItem(new Module(R.drawable.ic_project_manager, R.string.title_project_manager,
-				new ProjectManagerFragment()));
-		// 通讯录
-		adapter.addItem(new Module(R.drawable.ic_contact, R.string.title_contact, new ContactFragment()));
-		// 工作圈
-		adapter.addItem(new Module(R.drawable.ic_user_center, R.string.title_work_space, new WorkSpaceFragment()));
-		// 考勤
-		adapter.addItem(
-				new Module(R.drawable.ic_attendance_record, R.string.title_attendance, new AttendanceFragment()));
-		// 设置
-		adapter.addItem(new Module(R.drawable.ic_setting, R.string.title_setting, new SettingFragment()));
-		menuList.setAdapter(adapter);
-		menuList.setOnItemClickListener(this);
-		turnToFragment(null, adapter.getItem(0).getFragment(), new Bundle());
-	}
+//	private void initModuleView() {
+//		adapter = new ModuleAdapter(mContext);
+//		// // 主页
+//		// adapter.addItem(new Module(R.drawable.ic_user_center,
+//		// R.string.title_home, new HomeFragment()));
+//		// 项目管理
+//		adapter.addItem(new Module(R.drawable.ic_project_manager, R.string.title_project_manager,
+//				new ProjectManagerFragment()));
+//		// 通讯录
+//		adapter.addItem(new Module(R.drawable.ic_contact, R.string.title_contact, new ContactFragment()));
+//		// 工作圈
+//		adapter.addItem(new Module(R.drawable.ic_user_center, R.string.title_work_space, new WorkSpaceFragment()));
+//		// 考勤
+//		adapter.addItem(
+//				new Module(R.drawable.ic_attendance_record, R.string.title_attendance, new AttendanceFragment()));
+//		// 设置
+//		adapter.addItem(new Module(R.drawable.ic_setting, R.string.title_setting, new SettingFragment()));
+//		menuList.setAdapter(adapter);
+//		menuList.setOnItemClickListener(this);
+//		turnToFragment(null, adapter.getItem(0).getFragment(), new Bundle());
+//	}
 
-	private void initUserView() {
-		mUserName.setText(AEApp.getCurrentUser().getUSER_NAME());
-		imageLoader.displayImage(String.format(URLConstants.URL_IMG, AEApp.getCurrentUser().getBIG_HEAD()), mUserHead,
-				options);
-	}
+//	private void initUserView() {
+//		mUserName.setText(AEApp.getCurrentUser().getUSER_NAME());
+//		imageLoader.displayImage(String.format(URLConstants.URL_IMG, AEApp.getCurrentUser().getBIG_HEAD()), mUserHead,
+//				options);
+//	}
 
 	@SuppressWarnings("deprecation")
 	private void initImageLoader() {
@@ -182,15 +224,18 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	public void onBackPressed() {
-		if (adapter.getItem(currentIndex).getFragment().onBackPressed()) {
+//		if (adapter.getItem(currentIndex).getFragment().onBackPressed()) {
+//			return;
+//		}
+		if (fragmentList.get(currentIndex).onBackPressed()) {
 			return;
 		}
-		if (!mDrawer.isMenuVisible()) {
-			mDrawer.openMenu();
-		} else {
+//		if (!mDrawer.isMenuVisible()) {
+//			mDrawer.openMenu();
+//		} else {
 			super.onBackPressed();
-			AEApp.getInstance().exit();
-		}
+//			AEApp.getInstance().exit();
+//		}
 		// long time = System.currentTimeMillis();
 		// if (time - lastPressTime > 2000) {
 		// lastPressTime = time;
@@ -214,31 +259,40 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	protected void onActivityReceiveLocation(BDLocation location) {
 		super.onActivityReceiveLocation(location);
-		if (adapter != null && adapter.getItem(currentIndex).getFragment() != null) {
-			adapter.getItem(currentIndex).getFragment().onActivityReceiveLocation(location);
+//		if (adapter != null && adapter.getItem(currentIndex).getFragment() != null) {
+//			adapter.getItem(currentIndex).getFragment().onActivityReceiveLocation(location);
+//		}
+		if (fragmentList.get(currentIndex) != null) {
+			fragmentList.get(currentIndex).onActivityReceiveLocation(location);
 		}
 	}
 
 	@Override
 	protected void onActivityReceivePoi(BDLocation poiLocation) {
 		super.onActivityReceivePoi(poiLocation);
-		if (adapter != null && adapter.getItem(currentIndex).getFragment() != null) {
-			adapter.getItem(currentIndex).getFragment().onActivityReceivePoi(poiLocation);
+//		if (adapter != null && adapter.getItem(currentIndex).getFragment() != null) {
+//			adapter.getItem(currentIndex).getFragment().onActivityReceivePoi(poiLocation);
+//		}
+		if (fragmentList.get(currentIndex) != null) {
+			fragmentList.get(currentIndex).onActivityReceivePoi(poiLocation);
 		}
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (adapter != null && adapter.getItem(currentIndex).getFragment() != null) {
-			adapter.getItem(currentIndex).getFragment().onActivityResult(requestCode, resultCode, data);
+//		if (adapter != null && adapter.getItem(currentIndex).getFragment() != null) {
+//			adapter.getItem(currentIndex).getFragment().onActivityResult(requestCode, resultCode, data);
+//		}
+		if (fragmentList.get(currentIndex) != null) {
+			fragmentList.get(currentIndex).onActivityResult(requestCode, resultCode, data);
 		}
 	}
 
 	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			initUserView();
+//			initUserView();
 		}
 	};
 
@@ -247,21 +301,21 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		if (currentIndex == position) {
 			return;
 		}
-		turnToFragment(adapter.getItem(currentIndex).getFragment(), adapter.getItem(position).getFragment(),
-				new Bundle());
-		currentIndex = position;
-		setTitle(getString(adapter.getItem(position).getTitleID()));
-		mDrawer.closeMenu(true);
-		adapter.setCurrentIndex(currentIndex);
-		if (currentIndex == 2) {
-			save.setText(R.string.post);
-			save.setVisibility(View.VISIBLE);
-		} else if (currentIndex == 1) {
-			save.setText(R.string.lable_qrcode_scanning);
-			save.setVisibility(View.VISIBLE);
-		} else {
-			save.setVisibility(View.INVISIBLE);
-		}
+//		turnToFragment(adapter.getItem(currentIndex).getFragment(), adapter.getItem(position).getFragment(),
+//				new Bundle());
+//		currentIndex = position;
+//		setTitle(getString(adapter.getItem(position).getTitleID()));
+//		mDrawer.closeMenu(true);
+//		adapter.setCurrentIndex(currentIndex);
+//		if (currentIndex == 2) {
+//			save.setText(R.string.post);
+//			save.setVisibility(View.VISIBLE);
+//		} else if (currentIndex == 1) {
+//			save.setText(R.string.lable_qrcode_scanning);
+//			save.setVisibility(View.VISIBLE);
+//		} else {
+//			save.setVisibility(View.INVISIBLE);
+//		}
 	}
 
 	@Override
@@ -290,14 +344,14 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	 * @param tag
 	 * @param args
 	 */
-	public void turnToFragment(BaseFragment fromFragment, BaseFragment toFragment, Bundle args) {
+	public void turnToFragment(BaseFragment toFragment) {
 		FragmentManager fm = getSupportFragmentManager();
 		// 切换到的Fragment标签
 		String toTag = toFragment.getClass().getSimpleName();
 		// 如果有参数传递，
-		if (args != null && !args.isEmpty()) {
-			toFragment.getArguments().putAll(args);
-		}
+//		if (args != null && !args.isEmpty()) {
+//			toFragment.getArguments().putAll(args);
+//		}
 		// Fragment事务
 		FragmentTransaction ft = fm.beginTransaction();
 		// 设置Fragment切换效果
@@ -307,27 +361,28 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		 * 如果要切换到的Fragment没有被Fragment事务添加，则隐藏被切换的Fragment，添加要切换的Fragment
 		 * 否则，则隐藏被切换的Fragment，显示要切换的Fragment
 		 */
-		if (fromFragment != null) {
-			if (!toFragment.isAdded()) {
-				ft.hide(fromFragment).add(R.id.fragment_container, toFragment, toTag);
-			} else {
-				ft.hide(fromFragment).show(toFragment);
-				toFragment.onResume();
-			}
-		} else {
-			if (!toFragment.isAdded()) {
-				ft.add(R.id.fragment_container, toFragment, toTag);
-			} else {
-				ft.show(toFragment);
-				toFragment.onResume();
-			}
-		}
+		ft.replace(R.id.fragment_container, toFragment);
+//		if (fromFragment != null) {
+//			if (!toFragment.isAdded()) {
+//				ft.hide(fromFragment).add(R.id.fragment_container, toFragment, toTag);
+//			} else {
+//				ft.hide(fromFragment).show(toFragment);
+//				toFragment.onResume();
+//			}
+//		} else {
+//			if (!toFragment.isAdded()) {
+//				ft.add(R.id.fragment_container, toFragment, toTag);
+//			} else {
+//				ft.show(toFragment);
+//				toFragment.onResume();
+//			}
+//		}
 		// 添加到返回堆栈
 		// ft.addToBackStack(tag);
 		// 不保留状态提交事务
 		ft.commitAllowingStateLoss();
-		if (fromFragment != null) {
-			fromFragment.onPause();
-		}
+//		if (fromFragment != null) {
+//			fromFragment.onPause();
+//		}
 	}
 }
