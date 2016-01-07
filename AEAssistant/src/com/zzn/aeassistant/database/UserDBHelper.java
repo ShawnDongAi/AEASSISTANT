@@ -3,13 +3,12 @@ package com.zzn.aeassistant.database;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.ContentValues;
-
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.vo.UserVO;
 
-import net.sqlcipher.Cursor;
-import net.sqlcipher.database.SQLiteDatabase;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 public class UserDBHelper {
 	private static final String table = "ae_user";
@@ -23,8 +22,7 @@ public class UserDBHelper {
 
 	public static void insertUser(String userID, String phone, String name) {
 		delete(userID, phone);
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("logon_user_id", userID);
 		values.put("user_phone", phone);
@@ -39,8 +37,7 @@ public class UserDBHelper {
 	}
 
 	private static int delete(String whereClause, String[] whereArgs) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		int result = db.delete(table, whereClause, whereArgs);
 		db.close();
 		return result;
@@ -48,8 +45,7 @@ public class UserDBHelper {
 
 	public static List<UserVO> getUserHistory(String userID) {
 		List<UserVO> result = new ArrayList<UserVO>();
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		Cursor cursor = db.query(table, null, "logon_user_id=?",
 				new String[] { userID }, null, null, null);
 		while (cursor.moveToNext()) {

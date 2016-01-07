@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sqlcipher.database.SQLiteDatabase;
 import android.app.Activity;
 import android.app.Application;
 
@@ -45,7 +44,7 @@ public class AEApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		Thread.setDefaultUncaughtExceptionHandler(new AEExceptionHandler());
-		SQLiteDatabase.loadLibs(this);
+//		SQLiteDatabase.loadLibs(this);
 		mAESQLiteHelper = new AESQLiteHelper(instance);
 		creatFileOrDir();
 		createDatabase();

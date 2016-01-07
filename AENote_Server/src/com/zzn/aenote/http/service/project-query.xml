@@ -42,12 +42,7 @@
 	<select id="query_project_by_create_user">
 		select
 		a.project_id as
-		project_id,(select
-		project_name
-		from t_project where 1=1 and a.project_id!=a.parent_id
-		and project_id =
-		a.parent_id)
-		|| '-' ||
+		project_id,
 		a.project_name as project_name,
 		(select
 		project_name from t_project

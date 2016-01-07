@@ -152,9 +152,9 @@ public class ProjectVO implements Serializable {
 		ProjectVO vo = new ProjectVO();
 		vo.setPROJECT_ID(project.get("project_id").toString().trim());
 		String projectName = project.get("project_name").toString().trim();
-		if (projectName.startsWith("-")) {
-			projectName = projectName.substring(1, projectName.length());
-		}
+//		if (projectName.startsWith("-")) {
+//			projectName = projectName.substring(1, projectName.length());
+//		}
 		vo.setPROJECT_NAME(projectName);
 		if (project.get("head") != null) {
 			vo.setHEAD(project.get("head").toString().trim());

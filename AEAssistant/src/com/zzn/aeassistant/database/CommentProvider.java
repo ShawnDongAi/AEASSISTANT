@@ -12,10 +12,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import net.sqlcipher.database.SQLiteDatabase;
-import net.sqlcipher.database.SQLiteQueryBuilder;
 
 public class CommentProvider extends ContentProvider {
 	public static final Uri CONTENT_URI = Uri
@@ -86,8 +86,7 @@ public class CommentProvider extends ContentProvider {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		SQLiteQueryBuilder sqlBuilder = new SQLiteQueryBuilder();
 		String limit = null;
 		switch (uriMatcher.match(uri)) {
@@ -130,8 +129,7 @@ public class CommentProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		long id = 0;
 		try {
 			id = db.insert(CommentDBHelper.table, CommentDBHelper.USER_ID,
@@ -156,8 +154,7 @@ public class CommentProvider extends ContentProvider {
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		int count = 0;
 		switch (uriMatcher.match(uri)) {
 		case CommentDBHelper.ITEM: {

@@ -36,6 +36,7 @@ import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.fragment.SettingFragment;
 import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.BitmapUtil;
@@ -323,7 +324,7 @@ public class UserActivity extends BaseActivity {
 				}
 				name.setText(nameString);
 				AEApp.getCurrentUser().setUSER_NAME(nameString);
-				sendBroadcast(new Intent(IndexActivity.ACTION_USER_INFO_CHANGED));
+				sendBroadcast(new Intent(SettingFragment.ACTION_USER_INFO_CHANGED));
 				new UpdateNameTask().execute(nameString);
 				break;
 			case REQUEST_USER_REMARK:
@@ -402,7 +403,7 @@ public class UserActivity extends BaseActivity {
 							URLConstants.URL_IMG, AEApp.getCurrentUser()
 									.getBIG_HEAD()), head, options);
 					sendBroadcast(new Intent(
-							IndexActivity.ACTION_USER_INFO_CHANGED));
+							SettingFragment.ACTION_USER_INFO_CHANGED));
 				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());

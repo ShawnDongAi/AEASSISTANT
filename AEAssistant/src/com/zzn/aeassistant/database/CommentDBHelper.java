@@ -7,9 +7,9 @@ import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.vo.CommentVO;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import net.sqlcipher.Cursor;
-import net.sqlcipher.database.SQLiteDatabase;
 
 public class CommentDBHelper {
 
@@ -71,7 +71,7 @@ public class CommentDBHelper {
 	}
 
 	public static void insertCommentList(List<CommentVO> commentList, String projectId) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		db.beginTransaction(); // 为了提过效率，批量插入 手动设置开始事务
 		for (CommentVO commentVo : commentList) {
 			try {
@@ -99,7 +99,7 @@ public class CommentDBHelper {
 	}
 
 	public static void insertComment(CommentVO commentVO, String projectId) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		try {
 			ContentValues values = new ContentValues();
 			values.put(POST_ID, commentVO.getPost_id());
@@ -122,7 +122,7 @@ public class CommentDBHelper {
 
 	public static List<CommentVO> queryList(String post_id, String projectId) {
 		List<CommentVO> result = new ArrayList<>();
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		Cursor cursor = db.query(table, null, CommentDBHelper.POST_ID + "='" + post_id + "' and "
 				+ CommentDBHelper.CURRENT_PROJECT + "='" + projectId + "'", new String[] {}, null, null, "time desc");
 		while (cursor.moveToNext()) {
@@ -147,14 +147,14 @@ public class CommentDBHelper {
 	}
 
 	public static void delete(String post_id) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String sql = "delete from " + table + " where " + POST_ID + "='" + post_id + "'";
 		db.execSQL(sql);
 		db.close();
 	}
 
 	public static void deleteAll(String project_id) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String sql = "delete from " + table + " where " + PostDBHelper.CURRENT_PROJECT + "='" + project_id + "'";
 		db.execSQL(sql);
 		db.close();

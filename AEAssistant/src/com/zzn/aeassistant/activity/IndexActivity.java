@@ -22,10 +22,7 @@ import com.zzn.aeassistant.fragment.SettingFragment;
 import com.zzn.aeassistant.fragment.WorkSpaceFragment;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -40,7 +37,7 @@ import android.widget.TextView;
 
 public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
-	public static final String ACTION_USER_INFO_CHANGED = "com.zzn.aeassistant.user_info_changed";
+//	public static final String ACTION_USER_INFO_CHANGED = "com.zzn.aeassistant.user_info_changed";
 	private RadioGroup indexGroup;
 	private List<BaseFragment> fragmentList = new ArrayList<>();
 //	private OverlayDrawer mDrawer;
@@ -108,40 +105,44 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 				save.setVisibility(View.INVISIBLE);
 				switch (checkedId) {
 				case R.id.project_manager:
+					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(0));
 					currentIndex = 0;
 					setTitle(getString(R.string.title_project_manager));
 					break;
 				case R.id.contact:
+					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(1));
 					currentIndex = 1;
 					setTitle(getString(R.string.title_contact));
 					save.setText(R.string.lable_qrcode_scanning);
 					save.setVisibility(View.VISIBLE);
 					break;
 				case R.id.workspace:
+					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(2));
 					currentIndex = 2;
 					setTitle(getString(R.string.title_work_space));
 					save.setText(R.string.post);
 					save.setVisibility(View.VISIBLE);
 					break;
 				case R.id.attendance:
+					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(3));
 					currentIndex = 3;
 					setTitle(getString(R.string.title_attendance));
 					break;
 				case R.id.settings:
+					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(4));
 					currentIndex = 4;
 					setTitle(getString(R.string.title_setting));
 					break;
 					default:
 						break;
 				}
-				turnToFragment(fragmentList.get(currentIndex));
 			}
 		});
-		turnToFragment(fragmentList.get(0));
+		turnToFragment(null, fragmentList.get(0));
 //		userLayout.setOnClickListener(this);
-		initImageLoader();
+//		initImageLoader();
 //		initUserView();
-		registerReceiver(userInfoReceiver, new IntentFilter(ACTION_USER_INFO_CHANGED));
+//		registerReceiver(userInfoReceiver, new IntentFilter(ACTION_USER_INFO_CHANGED));
 //		initModuleView();
 
 		// FragmentTransaction fragTrans =
@@ -247,7 +248,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(userInfoReceiver);
+//		unregisterReceiver(userInfoReceiver);
 		super.onDestroy();
 	}
 
@@ -289,12 +290,12 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		}
 	}
 
-	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
+//	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
 //			initUserView();
-		}
-	};
+//		}
+//	};
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -344,7 +345,7 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 	 * @param tag
 	 * @param args
 	 */
-	public void turnToFragment(BaseFragment toFragment) {
+	public void turnToFragment(BaseFragment fromFragment, BaseFragment toFragment) {
 		FragmentManager fm = getSupportFragmentManager();
 		// 切换到的Fragment标签
 		String toTag = toFragment.getClass().getSimpleName();
@@ -361,28 +362,28 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		 * 如果要切换到的Fragment没有被Fragment事务添加，则隐藏被切换的Fragment，添加要切换的Fragment
 		 * 否则，则隐藏被切换的Fragment，显示要切换的Fragment
 		 */
-		ft.replace(R.id.fragment_container, toFragment);
-//		if (fromFragment != null) {
-//			if (!toFragment.isAdded()) {
-//				ft.hide(fromFragment).add(R.id.fragment_container, toFragment, toTag);
-//			} else {
-//				ft.hide(fromFragment).show(toFragment);
-//				toFragment.onResume();
-//			}
-//		} else {
-//			if (!toFragment.isAdded()) {
-//				ft.add(R.id.fragment_container, toFragment, toTag);
-//			} else {
-//				ft.show(toFragment);
-//				toFragment.onResume();
-//			}
-//		}
+//		ft.replace(R.id.fragment_container, toFragment);
+		if (fromFragment != null) {
+			if (!toFragment.isAdded()) {
+				ft.hide(fromFragment).add(R.id.fragment_container, toFragment, toTag);
+			} else {
+				ft.hide(fromFragment).show(toFragment);
+				toFragment.onResume();
+			}
+		} else {
+			if (!toFragment.isAdded()) {
+				ft.add(R.id.fragment_container, toFragment, toTag);
+			} else {
+				ft.show(toFragment);
+				toFragment.onResume();
+			}
+		}
 		// 添加到返回堆栈
 		// ft.addToBackStack(tag);
 		// 不保留状态提交事务
 		ft.commitAllowingStateLoss();
-//		if (fromFragment != null) {
-//			fromFragment.onPause();
-//		}
+		if (fromFragment != null) {
+			fromFragment.onPause();
+		}
 	}
 }
