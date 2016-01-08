@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_bg" >
+
+    <include layout="@layout/top_bar" />
+
+    <RelativeLayout style="@style/layout_body" >
+
+        <com.zzn.aeassistant.view.pinnedsection.PinnedSectionListView
+            android:id="@+id/base_list"
+            style="@style/base_list" />
+        <com.zzn.aeassistant.view.pinnedsection.SideBar
+            android:id="@+id/side_bar"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true" />
+        
+        <TextView
+            android:id="@+id/letter"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/loading_bg"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</LinearLayout>

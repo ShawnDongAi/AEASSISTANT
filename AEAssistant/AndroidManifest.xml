@@ -167,6 +167,11 @@
             android:name=".activity.project.ProjectUsersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <!-- 系统通讯录导入 -->
+        <activity
+            android:name=".activity.user.PhoneContactActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 项目迁移页 -->
         <activity
             android:name=".activity.project.UpdateParentActivity"

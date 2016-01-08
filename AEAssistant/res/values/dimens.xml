@@ -13,4 +13,6 @@
     <dimen name="rating_bar_height">20dp</dimen>
     <dimen name="rating_bar_big_height">42.5dp</dimen>
     
+    <dimen name="menu_text_size">16sp</dimen>
+    
 </resources>
