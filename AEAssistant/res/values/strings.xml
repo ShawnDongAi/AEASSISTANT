@@ -32,6 +32,7 @@
     <string name="qrcode_scanning">二维码扫描</string>
     <string name="error_qrcode">不支持此二维码格式</string>
     <string name="null_phone_contace">请选择需要导入的联系人</string>
+    <string name="null_leaf">请选择需要点工的下级</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>
@@ -70,6 +71,7 @@
     <string name="title_scanning_out">外勤签到</string>
     <string name="title_attendance">签到</string>
     <string name="title_user_center">个人中心</string>
+    <string name="scanning_leaf_project">点工签到</string>
     <string name="title_home">主页</string>
     <string name="title_setting">设置</string>
     <string name="title_agreement">《工事用户使用协议》</string>

@@ -187,6 +187,10 @@
             android:name=".activity.attendance.OutScanningActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <activity
+            android:name=".activity.attendance.LeafProjectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 按项目查询 -->
         <activity
             android:name=".activity.attendance.SumByProjectActivity"
