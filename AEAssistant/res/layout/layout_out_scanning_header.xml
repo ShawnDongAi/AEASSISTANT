@@ -14,10 +14,9 @@
         android:layout_margin="10dp"
         android:background="@drawable/btn_circle"
         android:enabled="false"
-        android:padding="20dp"
+        android:padding="0dp"
         android:text="外勤\n签到"
-        android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textColor="@color/white" />
 
     <TextView
         android:layout_width="match_parent"

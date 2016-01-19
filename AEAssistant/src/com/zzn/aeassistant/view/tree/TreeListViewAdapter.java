@@ -2,6 +2,8 @@ package com.zzn.aeassistant.view.tree;
 
 import java.util.List;
 
+import com.zzn.aeassistant.util.ToolsUtil;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,8 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
 	 */
 	private OnTreeNodeClickListener onTreeNodeClickListener;
 
+	private float leftPadding = 0.0f;
+
 	public interface OnTreeNodeClickListener {
 		void onClick(Node node, int position);
 	}
@@ -52,6 +56,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
 			boolean expand) throws IllegalArgumentException,
 			IllegalAccessException {
 		mContext = context;
+		leftPadding = ToolsUtil.dip2px(context, 20);
 		/**
 		 * 对所有的Node进行排序
 		 */
@@ -65,19 +70,17 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
 		/**
 		 * 设置节点点击时，可以展开以及关闭；并且将ItemClick事件继续往外公布
 		 */
-		/*mTree.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				expandOrCollapse(position);
-
-				if (onTreeNodeClickListener != null) {
-					onTreeNodeClickListener.onClick(mNodes.get(position),
-							position);
-				}
-			}
-
-		});*/
+		/*
+		 * mTree.setOnItemClickListener(new OnItemClickListener() {
+		 * 
+		 * @Override public void onItemClick(AdapterView<?> parent, View view,
+		 * int position, long id) { expandOrCollapse(position);
+		 * 
+		 * if (onTreeNodeClickListener != null) {
+		 * onTreeNodeClickListener.onClick(mNodes.get(position), position); } }
+		 * 
+		 * });
+		 */
 
 	}
 
@@ -119,7 +122,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter {
 		Node node = mNodes.get(position);
 		convertView = getConvertView(node, position, convertView, parent);
 		// 设置内边距
-		convertView.setPadding(node.getLevel() * 30, 3, 3, 3);
+		convertView.setPadding((int) (node.getLevel() * leftPadding), 3, 3, 3);
 		return convertView;
 	}
 

@@ -10,12 +10,12 @@
 <html>
 	<head>
 		<base href="<%=basePath%>">
-		<title>简正劳务</title>
+		<title>工事</title>
 		<meta http-equiv="pragma" content="no-cache">
 		<meta http-equiv="cache-control" content="no-cache">
 		<meta http-equiv="expires" content="0">
 		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-		<meta http-equiv="description" content="简正劳务app下载">
+		<meta http-equiv="description" content="工事app下载">
 		<script type="text/javascript">
             /*
              * 智能机浏览器版本信息:
@@ -70,7 +70,7 @@
 	</head>
 
 	<body>
-		开始下载简正劳务app...
+		开始下载工事app...
 		<br>
 	</body>
 </html>

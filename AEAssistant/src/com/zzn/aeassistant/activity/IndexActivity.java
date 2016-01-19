@@ -110,11 +110,15 @@ public class IndexActivity extends BaseActivity implements OnItemClickListener {
 		// fragTrans.commitAllowingStateLoss();
 
 		if (Config.channel == Config.CHANNEL_BAIDU) {
-			BDAutoUpdateSDK.uiUpdateAction(mContext, new UICheckUpdateCallback() {
-				@Override
-				public void onCheckComplete() {
-				}
-			});
+			try {
+				BDAutoUpdateSDK.uiUpdateAction(mContext, new UICheckUpdateCallback() {
+					@Override
+					public void onCheckComplete() {
+					}
+				});
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			new VersionUpdateTask(mContext, false).execute();
 		}
