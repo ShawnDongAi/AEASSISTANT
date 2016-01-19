@@ -25,8 +25,7 @@ public class JoinProject implements CmHandler {
 	private UserService userService;
 
 	@Override
-	public void doHandler(HttpServletRequest req, HttpServletResponse resp,
-			BaseRep rs) throws Exception {
+	public void doHandler(HttpServletRequest req, HttpServletResponse resp, BaseRep rs) throws Exception {
 		try {
 			String parent_project_id = req.getParameter("parent_project_id");
 			String leaf_user_phone = req.getParameter("leaf_user_phone");
@@ -42,118 +41,199 @@ public class JoinProject implements CmHandler {
 				rs.setRES_MESSAGE("缺少用户信息");
 				return;
 			}
-			// 先取用户
-			List<Map<String, Object>> users = userService
-					.queryUserByPhone(leaf_user_phone);
-			String leaf_user_id = "";
-			String leaf_user_name = "";
-			if (users == null || users.size() == 0) {
-				UserVO userVO = userService.register(leaf_user_phone,
-						UtilUniqueKey.getKey());
-				if (userVO != null) {
-					leaf_user_id = userVO.getUSER_ID();
-					leaf_user_name = userVO.getUSER_NAME();
-				}
-			} else {
-				if (users.get(0).get("user_id") != null) {
-					leaf_user_id = users.get(0).get("user_id").toString();
-					leaf_user_name = users.get(0).get("user_name").toString();
-				}
-			}
-			if (StringUtil.isEmpty(leaf_user_name)) {
-				logger.info("用户信息查询失败或插入新用户失败");
-				rs.setRES_CODE(Global.USER_ID_NULL);
-				rs.setRES_MESSAGE("用户信息查询失败,请重试");
-				return;
-			}
-
-			List<Map<String, Object>> parentProjects = projectService
-					.queryProjectByID(parent_project_id);
-			ProjectVO parentProjectVO = null;
-			if (parentProjects != null && parentProjects.size() > 0) {
-				parentProjectVO = ProjectVO.assembleProject(parentProjects
-						.get(0));
-			}
-			if (parentProjectVO == null) {
-				logger.info("缺少项目信息");
-				rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
-				rs.setRES_MESSAGE("缺少项目信息");
-				return;
-			}
-			double longitude = Double.parseDouble(parentProjectVO
-					.getLONGITUDE());
-			double latitude = Double.parseDouble(parentProjectVO.getLATITUDE());
-			ProjectVO leafProjectVO = null;
-			List<Map<String, Object>> leafProjects = projectService
-					.queryProjectByCreateUser(leaf_user_id);
-			if (leafProjects != null && leafProjects.size() > 0) {
-				for (Map<String, Object> projectMap : leafProjects) {
-					ProjectVO project = ProjectVO.assembleProject(projectMap);
-					if (project.getROOT_ID().equals(
-							parentProjectVO.getROOT_ID())) {
-						leafProjectVO = project;
-						break;
+			String[] leafPhones = leaf_user_phone.split(",");
+			if (leafPhones.length > 1) {
+				StringBuilder failedPhone = new StringBuilder();
+				for (String leafPhone : leafPhones) {
+					if (StringUtil.isEmpty(leafPhone)) {
+						continue;
 					}
-					double current_longitude = Double.parseDouble(project
-							.getLONGITUDE());
-					double current_latitude = Double.parseDouble(project
-							.getLATITUDE());
-					if (ToolsUtil.getDistance(current_longitude,
-							current_latitude, longitude, latitude) < 500) {
-						if (project.getROOT_ID()
-								.equals(project.getPROJECT_ID())) {
-							leafProjectVO = project;
-							break;
+					// 先取用户
+					List<Map<String, Object>> users = userService.queryUserByPhone(leafPhone);
+					String leaf_user_id = "";
+					String leaf_user_name = "";
+					if (users == null || users.size() == 0) {
+						UserVO userVO = userService.register(leafPhone, UtilUniqueKey.getKey());
+						if (userVO != null) {
+							leaf_user_id = userVO.getUSER_ID();
+							leaf_user_name = userVO.getUSER_NAME();
 						}
-						logger.info("用户在当前位置已经有项目");
-						rs.setRES_CODE(Global.PROJECT_NULL);
-						rs.setRES_MESSAGE("该用户在当前位置已加入其他项目，请提示对方删除当前所属项目");
-						return;
+					} else {
+						if (users.get(0).get("user_id") != null) {
+							leaf_user_id = users.get(0).get("user_id").toString();
+							leaf_user_name = users.get(0).get("user_name").toString();
+						}
+					}
+					if (StringUtil.isEmpty(leaf_user_name)) {
+						logger.info("用户信息查询失败或插入新用户失败");
+						failedPhone.append(leafPhone + ",");
+						continue;
+					}
+					List<Map<String, Object>> parentProjects = projectService.queryProjectByID(parent_project_id);
+					ProjectVO parentProjectVO = null;
+					if (parentProjects != null && parentProjects.size() > 0) {
+						parentProjectVO = ProjectVO.assembleProject(parentProjects.get(0));
+					}
+					if (parentProjectVO == null) {
+						logger.info("缺少项目信息");
+						failedPhone.append(leafPhone + ",");
+						continue;
+					}
+					double longitude = Double.parseDouble(parentProjectVO.getLONGITUDE());
+					double latitude = Double.parseDouble(parentProjectVO.getLATITUDE());
+					ProjectVO leafProjectVO = null;
+					List<Map<String, Object>> leafProjects = projectService.queryProjectByCreateUser(leaf_user_id);
+					if (leafProjects != null && leafProjects.size() > 0) {
+						for (Map<String, Object> projectMap : leafProjects) {
+							ProjectVO project = ProjectVO.assembleProject(projectMap);
+							if (project.getROOT_ID().equals(parentProjectVO.getROOT_ID())) {
+								leafProjectVO = project;
+								break;
+							}
+							double current_longitude = Double.parseDouble(project.getLONGITUDE());
+							double current_latitude = Double.parseDouble(project.getLATITUDE());
+							if (ToolsUtil.getDistance(current_longitude, current_latitude, longitude, latitude) < 500) {
+								if (project.getROOT_ID().equals(project.getPROJECT_ID())) {
+									leafProjectVO = project;
+									break;
+								}
+								logger.info("用户在当前位置已经有项目");
+								failedPhone.append(leafPhone + ",");
+								continue;
+							}
+						}
+					}
+					if (leafProjectVO == null) {
+						leafProjectVO = projectService.createProject(leaf_user_name + "的项目", "",
+								parentProjectVO.getPROJECT_ID(), parentProjectVO.getROOT_ID(), leaf_user_id,
+								parentProjectVO.getADDRESS(), parentProjectVO.getLONGITUDE(),
+								parentProjectVO.getLATITUDE(), parentProjectVO.getROOT_PROJECT_NAME());
+						if (leafProjectVO == null) {
+							failedPhone.append(leafPhone + ",");
+						}
+						continue;
+					}
+					if (isProjectsParent(leafProjectVO, parentProjectVO)) {
+						failedPhone.append(leafPhone + ",");
+						continue;
+					}
+					if (leafProjectVO.getROOT_ID().equals(leafProjectVO.getPROJECT_ID())) {
+						if (!projectService.updateRootProject(leafProjectVO.getPROJECT_ID(),
+								parentProjectVO.getROOT_ID())) {
+							failedPhone.append(leafPhone + ",");
+							continue;
+						}
+					}
+					boolean result = projectService.updateParentProject(leafProjectVO.getPROJECT_ID(),
+							parent_project_id, parentProjectVO.getROOT_ID());
+					if (!result) {
+						failedPhone.append(leafPhone + ",");
 					}
 				}
-			}
-			if (leafProjectVO == null) {
-				leafProjectVO = projectService.createProject(leaf_user_name+"的项目",
-						"", parentProjectVO.getPROJECT_ID(),
-						parentProjectVO.getROOT_ID(), leaf_user_id,
-						parentProjectVO.getADDRESS(),
-						parentProjectVO.getLONGITUDE(),
-						parentProjectVO.getLATITUDE(),
-						parentProjectVO.getROOT_PROJECT_NAME());
-				if (leafProjectVO == null) {
-					logger.info("创建子项目失败");
-					rs.setRES_CODE(Global.PROJECT_NULL);
-					rs.setRES_MESSAGE("创建子项目失败");
-					return;
+				if (failedPhone.length() > 0) {
+					failedPhone.deleteCharAt(failedPhone.length() - 1);
+					rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
+					rs.setRES_MESSAGE(failedPhone + "导入失败");
 				} else {
 					rs.setRES_CODE(Global.RESP_SUCCESS);
 					rs.setRES_MESSAGE("迁移成功");
 				}
-			}
-			if (isProjectsParent(leafProjectVO, parentProjectVO)) {
-				rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
-				rs.setRES_MESSAGE("该用户为您的上级用户,无法进行项目迁移");
-				return;
-			}
-			if (leafProjectVO.getROOT_ID()
-					.equals(leafProjectVO.getPROJECT_ID())) {
-				if (!projectService.updateRootProject(
-						leafProjectVO.getPROJECT_ID(),
-						parentProjectVO.getROOT_ID())) {
-					rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
-					rs.setRES_MESSAGE("迁移失败");
+			} else {
+				// 先取用户
+				List<Map<String, Object>> users = userService.queryUserByPhone(leaf_user_phone);
+				String leaf_user_id = "";
+				String leaf_user_name = "";
+				if (users == null || users.size() == 0) {
+					UserVO userVO = userService.register(leaf_user_phone, UtilUniqueKey.getKey());
+					if (userVO != null) {
+						leaf_user_id = userVO.getUSER_ID();
+						leaf_user_name = userVO.getUSER_NAME();
+					}
+				} else {
+					if (users.get(0).get("user_id") != null) {
+						leaf_user_id = users.get(0).get("user_id").toString();
+						leaf_user_name = users.get(0).get("user_name").toString();
+					}
+				}
+				if (StringUtil.isEmpty(leaf_user_name)) {
+					logger.info("用户信息查询失败或插入新用户失败");
+					rs.setRES_CODE(Global.USER_ID_NULL);
+					rs.setRES_MESSAGE("用户信息查询失败,请重试");
 					return;
 				}
-			}
-			boolean result = projectService.updateParentProject(
-					leafProjectVO.getPROJECT_ID(), parent_project_id,
-					parentProjectVO.getROOT_ID());
-			if (result) {
-				rs.setRES_CODE(Global.RESP_SUCCESS);
-				rs.setRES_MESSAGE("迁移成功");
-			} else {
-				rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
-				rs.setRES_MESSAGE("迁移失败");
+				List<Map<String, Object>> parentProjects = projectService.queryProjectByID(parent_project_id);
+				ProjectVO parentProjectVO = null;
+				if (parentProjects != null && parentProjects.size() > 0) {
+					parentProjectVO = ProjectVO.assembleProject(parentProjects.get(0));
+				}
+				if (parentProjectVO == null) {
+					logger.info("缺少项目信息");
+					rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
+					rs.setRES_MESSAGE("缺少项目信息");
+					return;
+				}
+				double longitude = Double.parseDouble(parentProjectVO.getLONGITUDE());
+				double latitude = Double.parseDouble(parentProjectVO.getLATITUDE());
+				ProjectVO leafProjectVO = null;
+				List<Map<String, Object>> leafProjects = projectService.queryProjectByCreateUser(leaf_user_id);
+				if (leafProjects != null && leafProjects.size() > 0) {
+					for (Map<String, Object> projectMap : leafProjects) {
+						ProjectVO project = ProjectVO.assembleProject(projectMap);
+						if (project.getROOT_ID().equals(parentProjectVO.getROOT_ID())) {
+							leafProjectVO = project;
+							break;
+						}
+						double current_longitude = Double.parseDouble(project.getLONGITUDE());
+						double current_latitude = Double.parseDouble(project.getLATITUDE());
+						if (ToolsUtil.getDistance(current_longitude, current_latitude, longitude, latitude) < 500) {
+							if (project.getROOT_ID().equals(project.getPROJECT_ID())) {
+								leafProjectVO = project;
+								break;
+							}
+							logger.info("用户在当前位置已经有项目");
+							rs.setRES_CODE(Global.PROJECT_NULL);
+							rs.setRES_MESSAGE("该用户在当前位置已加入其他项目，请提示对方删除当前所属项目");
+							return;
+						}
+					}
+				}
+				if (leafProjectVO == null) {
+					leafProjectVO = projectService.createProject(leaf_user_name + "的项目", "",
+							parentProjectVO.getPROJECT_ID(), parentProjectVO.getROOT_ID(), leaf_user_id,
+							parentProjectVO.getADDRESS(), parentProjectVO.getLONGITUDE(), parentProjectVO.getLATITUDE(),
+							parentProjectVO.getROOT_PROJECT_NAME());
+					if (leafProjectVO == null) {
+						logger.info("创建子项目失败");
+						rs.setRES_CODE(Global.PROJECT_NULL);
+						rs.setRES_MESSAGE("创建子项目失败");
+						return;
+					} else {
+						rs.setRES_CODE(Global.RESP_SUCCESS);
+						rs.setRES_MESSAGE("迁移成功");
+					}
+				}
+				if (isProjectsParent(leafProjectVO, parentProjectVO)) {
+					rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
+					rs.setRES_MESSAGE("该用户为您的上级用户,无法进行项目迁移");
+					return;
+				}
+				if (leafProjectVO.getROOT_ID().equals(leafProjectVO.getPROJECT_ID())) {
+					if (!projectService.updateRootProject(leafProjectVO.getPROJECT_ID(),
+							parentProjectVO.getROOT_ID())) {
+						rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
+						rs.setRES_MESSAGE("迁移失败");
+						return;
+					}
+				}
+				boolean result = projectService.updateParentProject(leafProjectVO.getPROJECT_ID(), parent_project_id,
+						parentProjectVO.getROOT_ID());
+				if (result) {
+					rs.setRES_CODE(Global.RESP_SUCCESS);
+					rs.setRES_MESSAGE("迁移成功");
+				} else {
+					rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
+					rs.setRES_MESSAGE("迁移失败");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -170,24 +250,20 @@ public class JoinProject implements CmHandler {
 		this.userService = userService;
 	}
 
-	private boolean isProjectsParent(ProjectVO projectVO,
-			ProjectVO parentProjectVO) {
+	private boolean isProjectsParent(ProjectVO projectVO, ProjectVO parentProjectVO) {
 		boolean result = false;
-		if (!parentProjectVO.getPROJECT_ID().equals(
-				parentProjectVO.getROOT_ID())) {
-			if (parentProjectVO.getPARENT_ID()
-					.equals(projectVO.getPROJECT_ID())) {
+		if (!parentProjectVO.getPROJECT_ID().equals(parentProjectVO.getROOT_ID())) {
+			if (parentProjectVO.getPARENT_ID().equals(projectVO.getPROJECT_ID())) {
 				result = false;
 				return result;
 			}
-			List<Map<String, Object>> parentProjects = projectService
-					.queryProjectByID(parentProjectVO.getPARENT_ID());
+			List<Map<String, Object>> parentProjects = projectService.queryProjectByID(parentProjectVO.getPARENT_ID());
 			if (parentProjects != null && parentProjects.size() > 0) {
-				parentProjectVO = ProjectVO.assembleProject(parentProjects
-						.get(0));
+				parentProjectVO = ProjectVO.assembleProject(parentProjects.get(0));
 				result = isProjectsParent(projectVO, parentProjectVO);
 			}
 		}
 		return result;
 	}
+
 }

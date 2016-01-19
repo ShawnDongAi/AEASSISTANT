@@ -2,7 +2,7 @@ package com.zzn.aeassistant.database;
 
 import com.zzn.aeassistant.app.AEApp;
 
-import net.sqlcipher.database.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase;
 /**
  * 群组表
  * 
@@ -20,8 +20,7 @@ public class GroupDBHelper {
 	}
 
 	public static int delete(String whereClause, String[] whereArgs) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		int result = db.delete(table, whereClause, whereArgs);
 		return result;
 	}

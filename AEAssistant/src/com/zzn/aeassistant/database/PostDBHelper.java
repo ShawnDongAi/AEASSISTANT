@@ -3,13 +3,13 @@ package com.zzn.aeassistant.database;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sqlcipher.Cursor;
-import net.sqlcipher.database.SQLiteDatabase;
-import android.content.ContentValues;
-import android.net.Uri;
-
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.vo.PostVO;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 public class PostDBHelper {
 
@@ -80,7 +80,7 @@ public class PostDBHelper {
 	}
 
 	public static void insertPostList(List<PostVO> postList, String projectId) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		db.beginTransaction(); // 为了提过效率，批量插入 手动设置开始事务
 		for (PostVO postVo : postList) {
 			try {
@@ -113,7 +113,7 @@ public class PostDBHelper {
 	}
 
 	public static void insertPost(PostVO postVO, String projectId) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		try {
 			ContentValues values = new ContentValues();
 			values.put(POST_ID, postVO.getPost_id());
@@ -142,7 +142,7 @@ public class PostDBHelper {
 
 	public static List<String> queryExistPost(String project_id) {
 		List<String> result = new ArrayList<>();
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String sql = "select * from " + table + " where " + PostDBHelper.PROJECT_ID + "='" + project_id + "' or "
 				+ PostDBHelper.SEND_PROJECT_ID + " like '%" + project_id + "%' order by time desc";
 		Cursor cursor = db.rawQuery(sql, null);
@@ -156,7 +156,7 @@ public class PostDBHelper {
 
 	public static List<PostVO> queryList(String project_id) {
 		List<PostVO> result = new ArrayList<>();
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String sql = "select * from " + table + " where " + PostDBHelper.CURRENT_PROJECT + "='" + project_id
 				+ "' order by time desc limit 20 offset 0";
 		Cursor cursor = db.rawQuery(sql, null);
@@ -188,7 +188,7 @@ public class PostDBHelper {
 
 	public static List<PostVO> queryNextList(String project_id, String time) {
 		List<PostVO> result = new ArrayList<>();
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String sql = "select * from " + table + " where " + PostDBHelper.CURRENT_PROJECT + "='" + project_id
 				+ "' and time < '" + time + "' order by time desc limit 20 offset 0";
 		Cursor cursor = db.rawQuery(sql, null);
@@ -219,14 +219,14 @@ public class PostDBHelper {
 	}
 
 	public static void delete(String post_id) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String sql = "delete from " + table + " where " + POST_ID + "='" + post_id + "'";
 		db.execSQL(sql);
 		db.close();
 	}
 
 	public static void deleteAll(String project_id) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String sql = "delete from " + table + " where " + PostDBHelper.CURRENT_PROJECT + "='" + project_id + "'";
 		db.execSQL(sql);
 		db.close();

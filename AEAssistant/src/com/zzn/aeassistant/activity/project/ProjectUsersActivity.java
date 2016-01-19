@@ -190,7 +190,7 @@ public class ProjectUsersActivity extends BaseActivity {
 				sortModel.sortLetter = sortString.toUpperCase();
 				mSortList.add(sortModel);
 			}
-			Collections.sort(mSortList, new PinyinComparator());
+			Collections.sort(mSortList, PinyinComparator.userComparator);
 			return mSortList;
 		}
 

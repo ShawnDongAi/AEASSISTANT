@@ -79,6 +79,11 @@ public class URLConstants {
 	public static final String URL_PROJECT_STRUCTURE = URL_HOST
 			+ "queryProjectStructure";
 	/**
+	 * 查询下级项目
+	 */
+	public static final String URL_LEAF_PROJECT = URL_HOST
+			+ "queryLeafProject";
+	/**
 	 * 查询项目成员
 	 */
 	public static final String URL_PROJECT_USERS = URL_HOST
@@ -87,6 +92,10 @@ public class URLConstants {
 	 * 打卡接口
 	 */
 	public static final String URL_SCANNING = URL_HOST + "scanning";
+	/**
+	 * 打卡接口
+	 */
+	public static final String URL_SCANNING_LEAF = URL_HOST + "scanningLeaf";
 	/**
 	 * 更新上级项目
 	 */

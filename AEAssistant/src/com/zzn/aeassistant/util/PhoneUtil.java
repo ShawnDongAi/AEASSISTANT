@@ -76,7 +76,7 @@ public class PhoneUtil {
 		TelephonyManager phoneManager = (TelephonyManager) AEApp.getInstance()
 				.getSystemService(Context.TELEPHONY_SERVICE);
 		String deviceID = phoneManager.getDeviceId();
-		if (TextUtils.isEmpty(deviceID)) {
+		if (deviceID == null || StringUtil.isEmpty(deviceID)) {
 			deviceID = "80F62CD8FDF044CC9E875BAB4A4056A7";
 		}
 		return phoneManager.getDeviceId();

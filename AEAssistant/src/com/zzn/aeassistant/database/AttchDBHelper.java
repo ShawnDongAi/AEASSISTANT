@@ -1,11 +1,11 @@
 package com.zzn.aeassistant.database;
 
-import net.sqlcipher.database.SQLiteDatabase;
-import android.content.ContentValues;
-import android.database.Cursor;
-
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.vo.AttchVO;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 public class AttchDBHelper {
 	private static final String table = "ae_attch";
@@ -17,8 +17,7 @@ public class AttchDBHelper {
 	}
 
 	public static int delete(String whereClause, String[] whereArgs) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		int result = db.delete(table, whereClause, whereArgs);
 		return result;
 	}
@@ -26,8 +25,7 @@ public class AttchDBHelper {
 	public static AttchVO getAttch(String attchID) {
 		AttchVO attch = new AttchVO();
 		attch.setATTCH_ID(attchID);
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		String selection = "attch_id=?";
 		Cursor cursor = db.query(table, null, selection,
 				new String[] { attchID }, null, null, null);
@@ -44,8 +42,7 @@ public class AttchDBHelper {
 	}
 
 	public static void insertAtth(AttchVO attch) {
-		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase(
-				AESQLiteHelper.ENCRYPT_KEY);
+		SQLiteDatabase db = AEApp.getDbHelper().getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put("attch_id", attch.getATTCH_ID());
 		values.put("type", attch.getTYPE());

@@ -10,6 +10,7 @@
     <string name="save">提交</string>
     <string name="warning">提示</string>
     <string name="loading">拼命加载中…</string>
+    <string name="import_contact">导入</string>
     <string name="http_error">网络不给力,请检查您的网络连接</string>
     <string name="http_null">当前无网络连接,请设置您的网络连接</string>
     <string name="http_out">服务器离家出走了</string>
@@ -20,14 +21,18 @@
     <string name="exit_toast">再按一次返回键退出</string>
     <string name="unknow">未知</string>
     <string name="delete">删除</string>
+    <string name="add">添加</string>
     <string name="dial_error">电话号码格式有误</string>
     <string name="list_empty">这里什么都没有哦,下拉刷新试试吧~~~</string>
     <string name="null_input">请输入有效字符</string>
+    <string name="search_hint">请输入关键字</string>
     <string name="list">无图模式</string>
     <string name="grid">大图模式</string>
     <string name="code_tip">请将二维码置于扫描框的红线，即可自动扫描</string>
     <string name="qrcode_scanning">二维码扫描</string>
     <string name="error_qrcode">不支持此二维码格式</string>
+    <string name="null_phone_contace">请选择需要导入的联系人</string>
+    <string name="null_leaf">请选择需要点工的下级</string>
 
     <!-- 登陆&注册 -->
     <string name="login">登录</string>
@@ -66,6 +71,7 @@
     <string name="title_scanning_out">外勤签到</string>
     <string name="title_attendance">签到</string>
     <string name="title_user_center">个人中心</string>
+    <string name="scanning_leaf_project">点工签到</string>
     <string name="title_home">主页</string>
     <string name="title_setting">设置</string>
     <string name="title_agreement">《工事用户使用协议》</string>
@@ -88,7 +94,8 @@
     <string name="lable_project">项目名</string>
     <string name="lable_phone">电话</string>
     <string name="lable_qrcode">我的二维码</string>
-    <string name="lable_qrcode_scanning">扫一扫</string>
+    <string name="lable_qrcode_scanning">二维码添加</string>
+    <string name="lable_phone_contace">通讯录导入</string>
     <string name="lable_sex">性别</string>
     <string name="lable_remark">个人说明</string>
     <string name="lable_certification">资质认证</string>

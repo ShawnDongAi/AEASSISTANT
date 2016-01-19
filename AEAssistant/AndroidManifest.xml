@@ -167,6 +167,11 @@
             android:name=".activity.project.ProjectUsersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
+        <!-- 系统通讯录导入 -->
+        <activity
+            android:name=".activity.user.PhoneContactActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 项目迁移页 -->
         <activity
             android:name=".activity.project.UpdateParentActivity"
@@ -180,6 +185,10 @@
         <!-- 外出考勤页 -->
         <activity
             android:name=".activity.attendance.OutScanningActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <activity
+            android:name=".activity.attendance.LeafProjectActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 按项目查询 -->

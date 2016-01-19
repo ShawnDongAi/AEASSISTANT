@@ -6,6 +6,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.zxing.WriterException;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.activity.TextEditActivity;
+import com.zzn.aeassistant.app.AEApp;
+import com.zzn.aeassistant.constants.CodeConstants;
+import com.zzn.aeassistant.constants.FileCostants;
+import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.fragment.SettingFragment;
+import com.zzn.aeassistant.util.AEHttpUtil;
+import com.zzn.aeassistant.util.AttchUtil;
+import com.zzn.aeassistant.util.BitmapUtil;
+import com.zzn.aeassistant.util.GsonUtil;
+import com.zzn.aeassistant.util.StringUtil;
+import com.zzn.aeassistant.util.ToastUtil;
+import com.zzn.aeassistant.view.AEProgressDialog;
+import com.zzn.aeassistant.view.CircleImageView;
+import com.zzn.aeassistant.view.cropimage.Crop;
+import com.zzn.aeassistant.vo.AttchVO;
+import com.zzn.aeassistant.vo.HttpResult;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,31 +47,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
-import com.google.zxing.WriterException;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.BaseActivity;
-import com.zzn.aeassistant.activity.IndexActivity;
-import com.zzn.aeassistant.activity.TextEditActivity;
-import com.zzn.aeassistant.app.AEApp;
-import com.zzn.aeassistant.constants.CodeConstants;
-import com.zzn.aeassistant.constants.FileCostants;
-import com.zzn.aeassistant.constants.URLConstants;
-import com.zzn.aeassistant.util.AEHttpUtil;
-import com.zzn.aeassistant.util.AttchUtil;
-import com.zzn.aeassistant.util.BitmapUtil;
-import com.zzn.aeassistant.util.GsonUtil;
-import com.zzn.aeassistant.util.StringUtil;
-import com.zzn.aeassistant.util.ToastUtil;
-import com.zzn.aeassistant.view.AEProgressDialog;
-import com.zzn.aeassistant.view.CircleImageView;
-import com.zzn.aeassistant.view.cropimage.Crop;
-import com.zzn.aeassistant.vo.AttchVO;
-import com.zzn.aeassistant.vo.HttpResult;
 
 public class UserActivity extends BaseActivity {
 	public static final int REQUEST_PHOTOGRAPH = 0;
@@ -323,7 +323,7 @@ public class UserActivity extends BaseActivity {
 				}
 				name.setText(nameString);
 				AEApp.getCurrentUser().setUSER_NAME(nameString);
-				sendBroadcast(new Intent(IndexActivity.ACTION_USER_INFO_CHANGED));
+				sendBroadcast(new Intent(SettingFragment.ACTION_USER_INFO_CHANGED));
 				new UpdateNameTask().execute(nameString);
 				break;
 			case REQUEST_USER_REMARK:
@@ -402,7 +402,7 @@ public class UserActivity extends BaseActivity {
 							URLConstants.URL_IMG, AEApp.getCurrentUser()
 									.getBIG_HEAD()), head, options);
 					sendBroadcast(new Intent(
-							IndexActivity.ACTION_USER_INFO_CHANGED));
+							SettingFragment.ACTION_USER_INFO_CHANGED));
 				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());

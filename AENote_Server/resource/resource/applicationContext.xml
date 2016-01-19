@@ -161,6 +161,13 @@
 			<ref local="projectService" />
 		</property>
 	</bean>
+	<!-- 查询下级所有项目 -->
+	<bean id="queryLeafProject"
+		class="com.zzn.aenote.http.server.project.QueryLeafProject">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+	</bean>
 	<!-- 查询项目成员 -->
 	<bean id="queryProjectUsers" class="com.zzn.aenote.http.server.project.QueryProjectUsers">
 		<property name="projectService">
@@ -192,6 +199,15 @@
 		</property>
 		<property name="maxSize"><!-- 默认接收最大文件大小为10M -->
 			<value>104857600</value>
+		</property>
+	</bean>
+	<!-- 打卡 -->
+	<bean id="scanningLeaf" class="com.zzn.aenote.http.server.attendance.ScanningLeaf">
+		<property name="projectService">
+			<ref local="projectService" />
+		</property>
+		<property name="attendanceService">
+			<ref local="attendanceService" />
 		</property>
 	</bean>
 	<!-- 根据项目查询考勤记录 -->

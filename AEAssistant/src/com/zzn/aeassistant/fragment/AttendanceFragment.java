@@ -31,6 +31,7 @@ import com.baidu.location.BDLocation;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.UserHistoryAdapter;
 import com.zzn.aeassistant.activity.attendance.AttendanceRecordActivity;
+import com.zzn.aeassistant.activity.attendance.LeafProjectActivity;
 import com.zzn.aeassistant.activity.attendance.OutScanningActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
@@ -62,7 +63,7 @@ public class AttendanceFragment extends BaseFragment {
 	private TextView mCurrentProject;
 	private SwipeMenuListView mHistoryList;
 	private UserHistoryAdapter mUserAdapter;
-	private Button mScanning, mAttendance, mOutScanning;
+	private Button mScanning, mAttendance, mOutScanning, mScanningLeaf;
 	private ProjectVO project;
 
 	// 打卡拍照的照片路径
@@ -102,11 +103,13 @@ public class AttendanceFragment extends BaseFragment {
 		mAttendance = (Button) headerView
 				.findViewById(R.id.home_attendance_record);
 		mOutScanning = (Button) headerView.findViewById(R.id.home_scanning_out);
+		mScanningLeaf = (Button) headerView.findViewById(R.id.home_scanning_leaf);
 		mHistoryList.addHeaderView(headerView);
 
 		mScanning.setOnClickListener(this);
 		mAttendance.setOnClickListener(this);
 		mOutScanning.setOnClickListener(this);
+		mScanningLeaf.setOnClickListener(this);
 		initUserHistory();
 	}
 
@@ -214,6 +217,10 @@ public class AttendanceFragment extends BaseFragment {
 		case R.id.home_scanning_out:
 			startActivity(new Intent(mContext, OutScanningActivity.class));
 			break;
+		case R.id.home_scanning_leaf:
+			Intent intent = new Intent(mContext, LeafProjectActivity.class);
+			intent.putExtra(CodeConstants.KEY_PROJECT_ID, project.getPROJECT_ID());
+			startActivity(new Intent(mContext, LeafProjectActivity.class));
 		default:
 			break;
 		}
@@ -269,10 +276,12 @@ public class AttendanceFragment extends BaseFragment {
 			if (result == null) {
 				mCurrentProject.setText(R.string.out_of_project_location);
 				mScanning.setEnabled(false);
+				mScanningLeaf.setEnabled(false);
 			} else {
 				mCurrentProject.setText(getString(R.string.current_project,
 						result.getROOT_PROJECT_NAME()));
 				mScanning.setEnabled(true);
+				mScanningLeaf.setEnabled(true);
 			}
 		}
 	}
