@@ -1,16 +1,10 @@
 package com.zzn.aeassistant.activity.user;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.text.InputType;
-import android.view.View;
-import android.widget.RatingBar;
-import android.widget.TextView;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -22,24 +16,46 @@ import com.zzn.aeassistant.activity.TextEditActivity;
 import com.zzn.aeassistant.activity.post.WorkSpaceActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
+import com.zzn.aeassistant.constants.FileCostants;
 import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.fragment.SettingFragment;
 import com.zzn.aeassistant.util.AEHttpUtil;
+import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.CircleImageView;
+import com.zzn.aeassistant.view.cropimage.Crop;
 import com.zzn.aeassistant.view.tree.Node;
+import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 import com.zzn.aeassistant.vo.UserVO;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.text.InputType;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.PopupWindow;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 public class UserDetailActivity extends BaseActivity {
 	public static final int REQUEST_USER_IDCARD = 0;
 	public static final int REQUEST_PROJECT_NAME = 1;
 	public static final int REQUEST_RATE = 2;
 	public static final String ACTION_UPDATE_IDCARD_IMG = "com.zzn.aeassistant.update_idcard_img";
-	private View layoutProject, /*layoutIDCard, layoutIDCardImg,*/ btnCall,
+	private View layoutHead, userHeadIcon, layoutProject, /*layoutIDCard, layoutIDCardImg,*/ btnCall,
 			layoutRate, rateIcon, /*diverIDCard, diverIDCardImg, idCardIcon,*/
 			layoutWorkSpace, diverWorkSpace;
 	private TextView project, name, phone, sex, remark, idcard, score;
@@ -54,6 +70,9 @@ public class UserDetailActivity extends BaseActivity {
 	private String projectID;
 	private UserVO userVO;
 	private boolean changed = false;
+	
+	private PopupWindow headMenu;
+	private Button photograph, album, cancel;
 
 	@Override
 	protected int layoutResID() {
@@ -82,6 +101,8 @@ public class UserDetailActivity extends BaseActivity {
 //		diverIDCard = findViewById(R.id.diver_idcard);
 //		diverIDCardImg = findViewById(R.id.diver_idcard_img);
 //		idCardIcon = findViewById(R.id.user_idcard_ic);
+		layoutHead = findViewById(R.id.user_layout_head);
+		userHeadIcon = findViewById(R.id.user_head_icon);
 		layoutProject = findViewById(R.id.user_layout_project);
 //		layoutIDCard = findViewById(R.id.user_layout_idcard);
 //		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
@@ -107,6 +128,10 @@ public class UserDetailActivity extends BaseActivity {
 //			layoutIDCardImg.setVisibility(View.GONE);
 //			diverIDCardImg.setVisibility(View.GONE);
 		}
+		if (!projectVO.getPROJECT_ID().equals(projectID)) {
+			layoutRate.setOnClickListener(UserDetailActivity.this);
+			rateIcon.setVisibility(View.VISIBLE);
+		}
 //		layoutIDCardImg.setOnClickListener(this);
 		layoutWorkSpace.setOnClickListener(this);
 		btnCall.setOnClickListener(this);
@@ -130,6 +155,31 @@ public class UserDetailActivity extends BaseActivity {
 		new GetUserTask().execute(projectVO.getCREATE_USER());
 		registerReceiver(userInfoReceiver, new IntentFilter(
 				ACTION_UPDATE_IDCARD_IMG));
+		initMenu();
+	}
+	
+	private void initMenu() {
+		View menuView = View.inflate(mContext, R.layout.menu_user_head, null);
+		photograph = (Button) menuView.findViewById(R.id.menu_photograph);
+		album = (Button) menuView.findViewById(R.id.menu_album);
+		cancel = (Button) menuView.findViewById(R.id.menu_cancel);
+		photograph.setOnClickListener(this);
+		album.setOnClickListener(this);
+		cancel.setOnClickListener(this);
+		menuView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (headMenu != null && headMenu.isShowing()) {
+					headMenu.dismiss();
+				}
+			}
+		});
+		headMenu = new PopupWindow(menuView, LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT);
+		headMenu.setBackgroundDrawable(getResources().getDrawable(
+				R.color.transparent_lightslategray));
+		headMenu.setAnimationStyle(R.style.bottommenu_anim_style);
+		headMenu.setOutsideTouchable(false);
 	}
 
 	@Override
@@ -204,6 +254,32 @@ public class UserDetailActivity extends BaseActivity {
 			}
 			startActivity(intent);
 			break;
+		case R.id.user_layout_head:
+			if (headMenu != null && !headMenu.isShowing()) {
+				headMenu.showAtLocation(layoutHead, Gravity.BOTTOM, 0, 0);
+			}
+			break;
+		case R.id.menu_photograph:
+			if (headMenu != null && headMenu.isShowing()) {
+				headMenu.dismiss();
+			}
+			setImgPath(
+					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
+							+ "_" + System.currentTimeMillis() + ".jpg", true);
+			AttchUtil.capture(this, getImgPath());
+			break;
+		case R.id.menu_album:
+			if (headMenu != null && headMenu.isShowing()) {
+				headMenu.dismiss();
+			}
+			setCompress(false);
+			AttchUtil.getPictureFromGallery(this);
+			break;
+		case R.id.menu_cancel:
+			if (headMenu != null && headMenu.isShowing()) {
+				headMenu.dismiss();
+			}
+			break;
 		default:
 			break;
 		}
@@ -234,6 +310,10 @@ public class UserDetailActivity extends BaseActivity {
 			case REQUEST_RATE:
 				new GetUserTask().execute(projectVO.getCREATE_USER());
 				break;
+			case Crop.REQUEST_CROP:
+				new UpdateHeadTask().execute(AttchUtil.getPath(mContext,
+						Crop.getOutput(data)));
+				break;
 			default:
 				break;
 			}
@@ -250,6 +330,10 @@ public class UserDetailActivity extends BaseActivity {
 
 	@Override
 	public void onBackPressed() {
+		if (headMenu != null && headMenu.isShowing()) {
+			headMenu.dismiss();
+			return;
+		}
 		if (changed) {
 			setResult(RESULT_OK);
 			finish();
@@ -262,6 +346,15 @@ public class UserDetailActivity extends BaseActivity {
 	protected void onDestroy() {
 		unregisterReceiver(userInfoReceiver);
 		super.onDestroy();
+	}
+	
+	@Override
+	protected void getImg(String path) {
+		Uri outputUri = Uri.fromFile(new File(FileCostants.DIR_HEAD, AEApp
+				.getCurrentUser().getUSER_ID()
+				+ "_"
+				+ System.currentTimeMillis()));
+		new Crop(path).output(outputUri).asSquare().start(this);
 	}
 
 	private BroadcastReceiver userInfoReceiver = new BroadcastReceiver() {
@@ -331,13 +424,11 @@ public class UserDetailActivity extends BaseActivity {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			if (result) {
-				layoutRate.setOnClickListener(UserDetailActivity.this);
-				rateIcon.setVisibility(View.VISIBLE);
-			}
 			if (result || projectVO.getPROJECT_ID().equals(projectID)) {
 				layoutWorkSpace.setVisibility(View.VISIBLE);
 				diverWorkSpace.setVisibility(View.VISIBLE);
+				layoutHead.setOnClickListener(UserDetailActivity.this);
+				userHeadIcon.setVisibility(View.VISIBLE);
 			}
 		}
 	}
@@ -464,6 +555,55 @@ public class UserDetailActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				idcard.setText(result.getRES_OBJ().toString());
+			} else {
+				ToastUtil.show(result.getRES_MESSAGE());
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
+		}
+	}
+	
+	private class UpdateHeadTask extends AsyncTask<String, Integer, HttpResult> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String filePath = params[0];
+			Map<String, String> param = new HashMap<String, String>();
+			param.put("user_id", projectVO.getCREATE_USER());
+			List<String> files = new ArrayList<String>();
+			files.add(filePath);
+			HttpResult result = AEHttpUtil.doPostWithFile(
+					URLConstants.URL_UPDATE_HEAD, files, param);
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				if (result.getRES_OBJ() != null
+						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
+					AttchVO vo = GsonUtil.getInstance().fromJson(
+							result.getRES_OBJ().toString(), AttchVO.class);
+					imageLoader.displayImage(String.format(
+							URLConstants.URL_IMG, vo.getURL()), head, options);
+					if (projectVO.getPROJECT_ID().equals(projectID)) {
+						AEApp.getCurrentUser().setBIG_HEAD(vo.getATTCH_ID());
+						AEApp.getCurrentUser().setSMALL_HEAD(vo.getATTCH_ID());
+						sendBroadcast(new Intent(
+								SettingFragment.ACTION_USER_INFO_CHANGED));
+					}
+				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}

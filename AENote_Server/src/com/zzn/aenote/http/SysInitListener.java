@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.zzn.aenote.http.push.PushServer;
 import com.zzn.aenote.http.sqlmap.SqlMapCache;
 
 public class SysInitListener implements ServletContextListener {
@@ -27,5 +28,6 @@ public class SysInitListener implements ServletContextListener {
 		// 加载根路径
 		ServiceLocator.init(ctx);
 		SqlMapCache.getSqlMapCache().reflash();
+//		PushServer.push();
 	}
 }
