@@ -125,7 +125,7 @@ public class JoinProject implements CmHandler {
 						}
 					}
 					boolean result = projectService.updateParentProject(leafProjectVO.getPROJECT_ID(),
-							parent_project_id, parentProjectVO.getROOT_ID());
+							parentProjectVO.getPROJECT_ID(), parentProjectVO.getROOT_ID());
 					if (!result) {
 						failedPhone.append(leafPhone + ",");
 					}
@@ -207,10 +207,10 @@ public class JoinProject implements CmHandler {
 						rs.setRES_CODE(Global.PROJECT_NULL);
 						rs.setRES_MESSAGE("创建子项目失败");
 						return;
-					} else {
-						rs.setRES_CODE(Global.RESP_SUCCESS);
-						rs.setRES_MESSAGE("迁移成功");
 					}
+					rs.setRES_CODE(Global.RESP_SUCCESS);
+					rs.setRES_MESSAGE("添加下级成功");
+					return;
 				}
 				if (isProjectsParent(leafProjectVO, parentProjectVO)) {
 					rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
@@ -225,8 +225,8 @@ public class JoinProject implements CmHandler {
 						return;
 					}
 				}
-				boolean result = projectService.updateParentProject(leafProjectVO.getPROJECT_ID(), parent_project_id,
-						parentProjectVO.getROOT_ID());
+				boolean result = projectService.updateParentProject(leafProjectVO.getPROJECT_ID(),
+						parentProjectVO.getPROJECT_ID(), parentProjectVO.getROOT_ID());
 				if (result) {
 					rs.setRES_CODE(Global.RESP_SUCCESS);
 					rs.setRES_MESSAGE("迁移成功");
@@ -252,10 +252,11 @@ public class JoinProject implements CmHandler {
 
 	private boolean isProjectsParent(ProjectVO projectVO, ProjectVO parentProjectVO) {
 		boolean result = false;
+		logger.info("projectVO==>" + projectVO.getPROJECT_NAME() + ",parentProjectVO==>"
+				+ parentProjectVO.getPROJECT_NAME());
 		if (!parentProjectVO.getPROJECT_ID().equals(parentProjectVO.getROOT_ID())) {
 			if (parentProjectVO.getPARENT_ID().equals(projectVO.getPROJECT_ID())) {
-				result = false;
-				return result;
+				return true;
 			}
 			List<Map<String, Object>> parentProjects = projectService.queryProjectByID(parentProjectVO.getPARENT_ID());
 			if (parentProjects != null && parentProjects.size() > 0) {
@@ -265,5 +266,4 @@ public class JoinProject implements CmHandler {
 		}
 		return result;
 	}
-
 }

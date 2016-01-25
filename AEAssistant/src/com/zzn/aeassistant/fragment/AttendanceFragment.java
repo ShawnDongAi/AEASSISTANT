@@ -220,7 +220,7 @@ public class AttendanceFragment extends BaseFragment {
 		case R.id.home_scanning_leaf:
 			Intent intent = new Intent(mContext, LeafProjectActivity.class);
 			intent.putExtra(CodeConstants.KEY_PROJECT_ID, project.getPROJECT_ID());
-			startActivity(new Intent(mContext, LeafProjectActivity.class));
+			startActivity(intent);
 		default:
 			break;
 		}
@@ -235,6 +235,7 @@ public class AttendanceFragment extends BaseFragment {
 			ToastUtil.show(R.string.location_failed);
 			mCurrentProject.setText(R.string.out_of_project_location);
 			mScanning.setEnabled(false);
+			mScanningLeaf.setEnabled(false);
 			return;
 		}
 		if (initProjectTask != null) {

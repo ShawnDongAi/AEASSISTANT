@@ -2,6 +2,7 @@ package com.zzn.aeassistant.view.pulltorefresh;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.util.PhoneUtil;
 
 public class PullToRefreshWebView extends PullToRefreshBase<WebView> {
 
@@ -99,7 +101,8 @@ public class PullToRefreshWebView extends PullToRefreshBase<WebView> {
 
 	@Override
 	protected boolean isReadyForPullEnd() {
-		float exactContentHeight = FloatMath.floor(mRefreshableView.getContentHeight() * mRefreshableView.getScale());
+//		float exactContentHeight = FloatMath.floor(mRefreshableView.getContentHeight() * mRefreshableView.getScale());
+		double exactContentHeight = Math.floor(mRefreshableView.getContentHeight() * mRefreshableView.getScale());
 		return mRefreshableView.getScrollY() >= (exactContentHeight - mRefreshableView.getHeight());
 	}
 
@@ -145,8 +148,10 @@ public class PullToRefreshWebView extends PullToRefreshBase<WebView> {
 		}
 
 		private int getScrollRange() {
-			return (int) Math.max(0, FloatMath.floor(mRefreshableView.getContentHeight() * mRefreshableView.getScale())
+			return (int) Math.max(0, Math.floor(mRefreshableView.getContentHeight() * mRefreshableView.getScale())
 					- (getHeight() - getPaddingBottom() - getPaddingTop()));
+//			return (int) Math.max(0, FloatMath.floor(mRefreshableView.getContentHeight() * mRefreshableView.getScale())
+//					- (getHeight() - getPaddingBottom() - getPaddingTop()));
 		}
 	}
 }

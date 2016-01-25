@@ -30,7 +30,7 @@
 		HH24:mi:ss')) as
 		create_time,
 		t.status
-		from t_project t right join t_user
+		from t_project t inner join t_user
 		b on
 		t.create_user=b.user_id
 		where 1=1
@@ -42,12 +42,7 @@
 	<select id="query_project_by_create_user">
 		select
 		a.project_id as
-		project_id,(select
-		project_name
-		from t_project where 1=1 and a.project_id!=a.parent_id
-		and project_id =
-		a.parent_id)
-		|| '-' ||
+		project_id,
 		a.project_name as project_name,
 		(select
 		project_name from t_project
@@ -71,7 +66,7 @@
 		HH24:mi:ss')) as
 		create_time,
 		a.status
-		from t_project a right join t_user
+		from t_project a inner join t_user
 		b on
 		a.create_user=b.user_id
 		where
@@ -116,7 +111,7 @@
 		HH24:mi:ss')) as
 		create_time,
 		t.status
-		from t_project t right join t_user a on
+		from t_project t inner join t_user a on
 		t.create_user=a.user_id
 		where 1=1
 		[and
@@ -182,7 +177,7 @@
 		status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time
-		from t_project t right join t_user a on
+		from t_project t inner join t_user a on
 		t.create_user=a.user_id
 		where
 		1=1
@@ -219,7 +214,7 @@
 		status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time
-		from t_project t right join t_user a on
+		from t_project t inner join t_user a on
 		t.create_user=a.user_id
 		where
 		1=1
@@ -256,7 +251,7 @@
 		status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time
-		from t_project t right join t_user a on
+		from t_project t inner join t_user a on
 		t.create_user=a.user_id
 		where
 		1=1
@@ -293,13 +288,14 @@
 		status,(to_char(t.create_time,'yyyy-MM-dd
 		HH24:mi:ss')) as
 		create_time
-		from t_project t right join t_user a on
+		from t_project t inner join t_user a on
 		t.create_user=a.user_id
 		where
 		1=1
 		and
 		[t.parent_id='#project_id#']
 		and t.status='0'
+		and t.parent_id!=t.project_id
 		order by
 		t.create_time asc
 	</select>

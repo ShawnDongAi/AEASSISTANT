@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -73,13 +74,18 @@ public class PhoneUtil {
 	}
 
 	public static String getIMEI() {
-		TelephonyManager phoneManager = (TelephonyManager) AEApp.getInstance()
-				.getSystemService(Context.TELEPHONY_SERVICE);
-		String deviceID = phoneManager.getDeviceId();
-		if (deviceID == null || StringUtil.isEmpty(deviceID)) {
-			deviceID = "80F62CD8FDF044CC9E875BAB4A4056A7";
+		String deviceID = "80F62CD8FDF044CC9E875BAB4A4056A7";
+		try {
+			TelephonyManager phoneManager = (TelephonyManager) AEApp.getInstance()
+					.getSystemService(Context.TELEPHONY_SERVICE);
+			deviceID = phoneManager.getDeviceId();
+			if (deviceID == null || StringUtil.isEmpty(deviceID)) {
+				deviceID = "80F62CD8FDF044CC9E875BAB4A4056A7";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return phoneManager.getDeviceId();
+		return deviceID;
 	}
 
 	/**
@@ -95,5 +101,9 @@ public class PhoneUtil {
 			return mNetworkInfo.isAvailable();
 		}
 		return false;
+	}
+	
+	public static int getSDKVersion() {
+		return Build.VERSION.SDK_INT;
 	}
 }

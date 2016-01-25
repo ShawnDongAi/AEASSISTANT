@@ -69,21 +69,21 @@ public class PreConfig {
 	public static String getPhone() {
 		String phone = getDefaultPre().getString(USER_PHONE, "");
 		try {
-			return DESCoderUtil.decrypt(phone, PhoneUtil.getIMEI());
+			phone = DESCoderUtil.decrypt(phone, PhoneUtil.getIMEI());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return phone;
 		}
+		return phone; 
 	}
 
 	public static String getPsw() {
 		String psw = getDefaultPre().getString(USER_PSW, "");
 		try {
-			return DESCoderUtil.decrypt(psw, PhoneUtil.getIMEI());
-		} catch (Exception e) {
+			psw = DESCoderUtil.decrypt(psw, PhoneUtil.getIMEI());
+		} catch (Exception e){
 			e.printStackTrace();
-			return psw;
 		}
+		return psw;
 	}
 
 	public static void setUserRemember(boolean remember) {

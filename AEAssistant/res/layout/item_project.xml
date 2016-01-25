@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/project_name"
+        android:id="@+id/project_root_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -16,23 +16,23 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/project_address"
+        android:id="@+id/project_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@+id/project_name"
+        android:layout_below="@+id/project_root_name"
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="3dp"
-        android:textColor="@drawable/text_light"
+        android:textColor="@drawable/text_normal"
         android:textSize="14sp" />
     
     <TextView
-        android:id="@+id/project_root_name"
+        android:id="@+id/project_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/project_address"
+        android:layout_below="@+id/project_name"
         android:paddingRight="3dp"
         android:textColor="@drawable/text_light"
         android:textSize="14sp"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/project_root_name"
+        android:layout_below="@+id/project_address"
         android:paddingRight="3dp"
         android:textColor="@drawable/text_light"
         android:textSize="14sp"

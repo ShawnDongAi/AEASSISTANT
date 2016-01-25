@@ -52,11 +52,11 @@ public class VersionVO implements Serializable {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	public static VersionVO assembleVersion(Map<String, Object> version) {
 		VersionVO vo = new VersionVO();
 		vo.setPlatform(version.get("platform").toString());
-		vo.setInstruction(version.get("instruction").toString());
+		vo.setInstruction(version.get("instruction").toString() == null ? "" : version.get("instruction").toString());
 		vo.setUrl(version.get("url").toString());
 		vo.setVersion_code(version.get("version_code").toString());
 		vo.setVersion_name(version.get("version_name").toString());

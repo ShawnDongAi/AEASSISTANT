@@ -1,8 +1,9 @@
 <resources>
 
     <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
-        <item name="android:colorPrimary">@color/theme_green</item>
-        <item name="android:colorPrimaryDark">@color/theme_green</item>
+        <!-- <item name="android:colorPrimary">@color/theme_green</item>
+        <item name="android:colorPrimaryDark">@color/theme_green</item> -->
+        <item name="android:statusBarColor">@color/theme_green</item>
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
     </style>
 

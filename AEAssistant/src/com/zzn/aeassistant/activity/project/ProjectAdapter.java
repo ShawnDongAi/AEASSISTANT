@@ -14,8 +14,7 @@ import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.view.pinnedsection.PinnedSectionListAdapter;
 import com.zzn.aeassistant.vo.ProjectVO;
 
-public class ProjectAdapter extends BaseAdapter implements
-		PinnedSectionListAdapter, SectionIndexer {
+public class ProjectAdapter extends BaseAdapter implements PinnedSectionListAdapter, SectionIndexer {
 	private Context mContext;
 	private List<ProjectItem> sections = new ArrayList<ProjectItem>();
 	private List<ProjectItem> datas = new ArrayList<ProjectItem>();
@@ -81,12 +80,9 @@ public class ProjectAdapter extends BaseAdapter implements
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = View.inflate(mContext, R.layout.item_project, null);
-			holder.projectName = (TextView) convertView
-					.findViewById(R.id.project_name);
-			holder.address = (TextView) convertView
-					.findViewById(R.id.project_address);
-			holder.time = (TextView) convertView
-					.findViewById(R.id.project_create_time);
+			holder.projectName = (TextView) convertView.findViewById(R.id.project_name);
+			holder.address = (TextView) convertView.findViewById(R.id.project_address);
+			holder.time = (TextView) convertView.findViewById(R.id.project_create_time);
 			holder.root = (TextView) convertView.findViewById(R.id.project_root_name);
 			convertView.setTag(holder);
 		} else {
@@ -96,32 +92,25 @@ public class ProjectAdapter extends BaseAdapter implements
 		boolean isSection = isItemViewTypePinned(item.type);
 		holder.address.setVisibility(isSection ? View.GONE : View.VISIBLE);
 		holder.time.setVisibility(isSection ? View.GONE : View.VISIBLE);
-		holder.projectName.setText(item.toString());
+		holder.projectName.setVisibility(isSection ? View.GONE : View.VISIBLE);
+		holder.root.setText(item.title);
 		if (isSection) {
-			holder.projectName.setPadding(10, 5, 5, 10);
-			holder.projectName.setTextSize(15f);
-			holder.projectName.setTextColor(mContext.getResources().getColor(
-					R.color.white));
+			holder.root.setPadding(10, 5, 5, 10);
+			holder.root.setTextSize(15f);
+			holder.root.setTextColor(mContext.getResources().getColor(R.color.white));
 			convertView.setBackgroundResource(R.color.theme_green);
 		} else {
 			ProjectVO project = item.project;
 			if (project != null) {
-				holder.address.setText(project.getADDRESS() != null ? project
-						.getADDRESS() : "");
+				holder.address.setText(project.getADDRESS() != null ? project.getADDRESS() : "");
 				holder.time.setText(project.getCREATE_TIME());
 				if (project.getROOT_PROJECT_NAME() != null) {
-					holder.root.setText(project.getROOT_PROJECT_NAME());
+					holder.projectName.setText(project.getPROJECT_NAME());
 				}
 			}
-			holder.address
-					.setVisibility(project != null ? View.VISIBLE
-							: View.GONE);
-			holder.time
-					.setVisibility(project != null ? View.VISIBLE
-							: View.GONE);
-			holder.root
-			.setVisibility(project != null ? View.VISIBLE
-					: View.GONE);
+			holder.address.setVisibility(project != null ? View.VISIBLE : View.GONE);
+			holder.time.setVisibility(project != null ? View.VISIBLE : View.GONE);
+			holder.projectName.setVisibility(project != null ? View.VISIBLE : View.GONE);
 			convertView.setBackgroundResource(R.color.transparent);
 		}
 		return convertView;
@@ -168,10 +157,6 @@ public class ProjectAdapter extends BaseAdapter implements
 		public ProjectItem(int type, String title) {
 			this.type = type;
 			this.title = title;
-		}
-
-		public String toString() {
-			return title;
 		}
 	}
 

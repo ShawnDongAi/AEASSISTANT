@@ -20,7 +20,7 @@ public class AESQLiteHelper extends SQLiteOpenHelper {
 	private static AESQLiteHelper instance = null;
 	public static String DATABASE_NAME = "AENote.db";// 数据库文件名
 	private static int DATABASE_VERSION = 3;// 数据库版本
-	public final static String ENCRYPT_KEY = PhoneUtil.getIMEI();
+//	public final static String ENCRYPT_KEY = PhoneUtil.getIMEI();
 
 	public AESQLiteHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);

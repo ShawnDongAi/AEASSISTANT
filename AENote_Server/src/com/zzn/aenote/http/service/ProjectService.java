@@ -201,6 +201,16 @@ public class ProjectService extends BaseService {
 		try {
 			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("project_id", project_id);
+			List<Map<String, Object>> projectList = getJdbc().queryForList(
+					getSql("query_project_by_id", data));
+			String parent_id = project_id;
+			String root_id = project_id;
+			if (projectList != null && projectList.size() > 0) {
+				for (Map<String, Object> project : projectList) {
+					parent_id = project.get("parent_id").toString();
+					root_id = project.get("root_id").toString();
+				}
+			}
 			getJdbc().execute(getSql("delete_project", data));
 			List<Map<String, Object>> leafProject = getJdbc().queryForList(
 					getSql("query_leaf_project", data));
@@ -208,11 +218,15 @@ public class ProjectService extends BaseService {
 				for (Map<String, Object> project : leafProject) {
 					data.clear();
 					String leafProjectId = project.get("project_id").toString();
+					if (project_id.equals(root_id)) {
+						parent_id = leafProjectId;
+						root_id = leafProjectId;
+					}
 					data.put("project_id", leafProjectId);
-					data.put("parent_id", leafProjectId);
-					data.put("root_id", leafProjectId);
+					data.put("parent_id", parent_id);
+					data.put("root_id", root_id);
 					getJdbc().execute(getSql("update_parent_project", data));
-					updateLeafsProject(leafProjectId, leafProjectId);
+					updateLeafsProject(leafProjectId, root_id);
 				}
 			}
 			return true;
@@ -225,14 +239,14 @@ public class ProjectService extends BaseService {
 	private void updateLeafsProject(String parent_id, String root_id) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("project_id", parent_id);
-		data.put("root_id", root_id);
-		data.put("parent_id", parent_id);
 		List<Map<String, Object>> leafProject = getJdbc().queryForList(
 				getSql("query_leaf_project", data));
 		if (leafProject != null && leafProject.size() > 0) {
 			for (Map<String, Object> leaf : leafProject) {
 				String leafId = leaf.get("project_id").toString();
 				data.put("project_id", leafId);
+				data.put("parent_id", parent_id);
+				data.put("root_id", root_id);
 				getJdbc().execute(getSql("update_parent_project", data));
 				updateLeafsProject(leafId, root_id);
 			}

@@ -319,7 +319,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 				adapter.addItem(currentProject);
 			} else {
 				ProjectItem currentProject = new ProjectItem(
-						ProjectItem.CURRENT_PROJECT, result.getPROJECT_NAME());
+						ProjectItem.CURRENT_PROJECT, result.getROOT_PROJECT_NAME());
 				currentProject.project = result;
 				adapter.addItem(currentProject);
 			}
@@ -327,7 +327,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 			for (ProjectVO managerVO : AEApp.getCurrentUser().getPROJECTS()) {
 				ProjectItem managerProject = new ProjectItem(
 						ProjectItem.MANAGER_PROJECT,
-						managerVO.getPROJECT_NAME());
+						managerVO.getROOT_PROJECT_NAME());
 				managerProject.project = managerVO;
 				adapter.addItem(managerProject);
 			}

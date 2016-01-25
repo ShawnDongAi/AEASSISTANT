@@ -45,7 +45,6 @@ public class AEHttpUtil {
 	private static final String CHARSET = HTTP.UTF_8;
 
 	public static HttpResult doPost(String urlString, byte[] param) {
-		LogUtil.i("doPost the URL >>" + urlString);
 		HttpResult result = new HttpResult();
 		result.setRES_CODE(HttpResult.CODE_FAILED);
 		result.setRES_MESSAGE(AEApp.getInstance()
@@ -107,9 +106,6 @@ public class AEHttpUtil {
 			result.setRES_MESSAGE(AEApp.getInstance().getString(
 					R.string.http_out));
 		}
-		if (result == null) {
-			result = new HttpResult();
-		}
 		if (result.getRES_CODE() == null) {
 			result.setRES_CODE(HttpResult.CODE_FAILED);
 			result.setRES_MESSAGE(AEApp.getInstance()
@@ -119,14 +115,12 @@ public class AEHttpUtil {
 	}
 
 	public static HttpResult doPost(String urlString, String param) {
-		LogUtil.i("doPost the param>>" + param);
 		byte[] paramByte = null;
 		paramByte = param.getBytes();
 		return doPost(urlString, paramByte);
 	}
 
 	public static HttpResult doGet(String urlString) {
-		LogUtil.i("doGet the URL >>" + urlString);
 		HttpResult result = new HttpResult();
 		result.setRES_CODE(HttpResult.CODE_FAILED);
 		result.setRES_MESSAGE(AEApp.getInstance()
@@ -183,7 +177,6 @@ public class AEHttpUtil {
 
 	public static HttpResult doPostWithFile(String urlString,
 			List<String> filePaths, Map<String, String> params) {
-		LogUtil.i("doPost the URL >>" + urlString);
 		HttpResult result = new HttpResult();
 		result.setRES_CODE(HttpResult.CODE_FAILED);
 		result.setRES_MESSAGE(AEApp.getInstance()

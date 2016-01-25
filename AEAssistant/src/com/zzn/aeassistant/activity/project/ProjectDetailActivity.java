@@ -60,6 +60,7 @@ public class ProjectDetailActivity extends BaseActivity {
 
 		project = (ProjectVO) getIntent().getSerializableExtra(
 				CodeConstants.KEY_PROJECT_VO);
+		title.setText(project.getROOT_PROJECT_NAME());
 		name.setText(getString(R.string.project_name, project.getPROJECT_NAME()));
 		status.setVisibility(project.getSTATUS() != null
 				&& project.getSTATUS().equals("1") ? View.VISIBLE : View.GONE);

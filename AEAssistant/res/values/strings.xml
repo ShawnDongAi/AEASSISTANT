@@ -131,7 +131,7 @@
     <string name="project_current">当前激活项目</string>
     <string name="project_manager">所有项目</string>
     <string name="project_create">新建项目</string>
-    <string name="project_hint_name">请输入项目名称</string>
+    <string name="project_hint_name">请输入项目岗位</string>
     <string name="project_hint_address">请输入项目地址</string>
     <string name="address_search_failed">地址解析失败,请确认地址信息</string>
     <string name="location_search_failed">获取地址失败,请重试</string>
@@ -139,12 +139,12 @@
     <string name="null_project_name">请填写项目名</string>
     <string name="null_project_location">缺少项目位置信息</string>
     <string name="null_project">您当前未加入任何项目</string>
-    <string name="modify_project_name">修改项目名称</string>
+    <string name="modify_project_name">修改项目岗位</string>
 
     <!-- 项目详情 -->
     <string name="project_detail">项目详情</string>
     <string name="project_create_leaf">创建子项目</string>
-    <string name="project_name">项目名称：\n%s</string>
+    <string name="project_name">项目岗位：\n%s</string>
     <string name="project_status_close">已关闭</string>
     <string name="project_manager_user">管理员：%s</string>
     <string name="project_create_time">创建时间：\n%s</string>

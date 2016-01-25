@@ -23,16 +23,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class IndexActivity extends BaseActivity {
+public class IndexActivity extends BaseActivity implements OnCheckedChangeListener {
 
-	private RadioGroup indexGroup;
+	private RadioButton projectManager, contact, workspace, attendance, settings;
 	private List<BaseFragment> fragmentList = new ArrayList<>();
 	private int currentIndex = 0;
+	private View workspaceUnread;
 
 	@Override
 	protected int layoutResID() {
@@ -58,53 +60,24 @@ public class IndexActivity extends BaseActivity {
 		}
 		back = (ImageButton) findViewById(R.id.back);
 		if (back != null) {
-			back.setVisibility(View.GONE);
+			back.setVisibility(View.INVISIBLE);
 		}
 		fragmentList.add(new ProjectManagerFragment());
 		fragmentList.add(new ContactFragment());
 		fragmentList.add(new WorkSpaceFragment());
 		fragmentList.add(new AttendanceFragment());
 		fragmentList.add(new SettingFragment());
-		indexGroup = (RadioGroup) findViewById(R.id.index_group);
-		indexGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				save.setVisibility(View.INVISIBLE);
-				switch (checkedId) {
-				case R.id.project_manager:
-					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(0));
-					currentIndex = 0;
-					setTitle(getString(R.string.title_project_manager));
-					break;
-				case R.id.contact:
-					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(1));
-					currentIndex = 1;
-					setTitle(getString(R.string.title_contact));
-					save.setText(R.string.add);
-					save.setVisibility(View.VISIBLE);
-					break;
-				case R.id.workspace:
-					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(2));
-					currentIndex = 2;
-					setTitle(getString(R.string.title_work_space));
-					save.setText(R.string.post);
-					save.setVisibility(View.VISIBLE);
-					break;
-				case R.id.attendance:
-					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(3));
-					currentIndex = 3;
-					setTitle(getString(R.string.title_attendance));
-					break;
-				case R.id.settings:
-					turnToFragment(fragmentList.get(currentIndex), fragmentList.get(4));
-					currentIndex = 4;
-					setTitle(getString(R.string.title_setting));
-					break;
-					default:
-						break;
-				}
-			}
-		});
+		projectManager = (RadioButton) findViewById(R.id.project_manager);
+		contact = (RadioButton) findViewById(R.id.contact);
+		workspace = (RadioButton) findViewById(R.id.workspace);
+		attendance = (RadioButton) findViewById(R.id.attendance);
+		settings = (RadioButton) findViewById(R.id.settings);
+		projectManager.setOnCheckedChangeListener(this);
+		contact.setOnCheckedChangeListener(this);
+		workspace.setOnCheckedChangeListener(this);
+		attendance.setOnCheckedChangeListener(this);
+		settings.setOnCheckedChangeListener(this);
+		workspaceUnread = findViewById(R.id.workspace_unread);
 		turnToFragment(null, fragmentList.get(0));
 		if (Config.channel == Config.CHANNEL_BAIDU) {
 			try {
@@ -118,6 +91,67 @@ public class IndexActivity extends BaseActivity {
 			}
 		} else {
 			new VersionUpdateTask(mContext, false).execute();
+		}
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (isChecked) {
+			save.setVisibility(View.INVISIBLE);
+			switch (buttonView.getId()) {
+			case R.id.project_manager:
+				turnToFragment(fragmentList.get(currentIndex), fragmentList.get(0));
+				currentIndex = 0;
+				setTitle(getString(R.string.title_project_manager));
+				contact.setChecked(false);
+				workspace.setChecked(false);
+				attendance.setChecked(false);
+				settings.setChecked(false);
+				break;
+			case R.id.contact:
+				turnToFragment(fragmentList.get(currentIndex), fragmentList.get(1));
+				currentIndex = 1;
+				setTitle(getString(R.string.title_contact));
+				// save.setText(R.string.add);
+				// save.setVisibility(View.VISIBLE);
+				projectManager.setChecked(false);
+				workspace.setChecked(false);
+				attendance.setChecked(false);
+				settings.setChecked(false);
+				break;
+			case R.id.workspace:
+				turnToFragment(fragmentList.get(currentIndex), fragmentList.get(2));
+				currentIndex = 2;
+				setTitle(getString(R.string.title_work_space));
+				save.setText(R.string.post);
+				save.setVisibility(View.VISIBLE);
+				workspaceUnread.setVisibility(View.GONE);
+				projectManager.setChecked(false);
+				contact.setChecked(false);
+				attendance.setChecked(false);
+				settings.setChecked(false);
+				break;
+			case R.id.attendance:
+				turnToFragment(fragmentList.get(currentIndex), fragmentList.get(3));
+				currentIndex = 3;
+				setTitle(getString(R.string.title_attendance));
+				projectManager.setChecked(false);
+				contact.setChecked(false);
+				workspace.setChecked(false);
+				settings.setChecked(false);
+				break;
+			case R.id.settings:
+				turnToFragment(fragmentList.get(currentIndex), fragmentList.get(4));
+				currentIndex = 4;
+				setTitle(getString(R.string.title_setting));
+				projectManager.setChecked(false);
+				contact.setChecked(false);
+				workspace.setChecked(false);
+				attendance.setChecked(false);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -208,8 +242,9 @@ public class IndexActivity extends BaseActivity {
 		// Fragment事务
 		FragmentTransaction ft = fm.beginTransaction();
 		// 设置Fragment切换效果
-//		ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in,
-//				android.R.anim.fade_out);
+		// ft.setCustomAnimations(android.R.anim.fade_in,
+		// android.R.anim.fade_out, android.R.anim.fade_in,
+		// android.R.anim.fade_out);
 		/**
 		 * 如果要切换到的Fragment没有被Fragment事务添加，则隐藏被切换的Fragment，添加要切换的Fragment
 		 * 否则，则隐藏被切换的Fragment，显示要切换的Fragment

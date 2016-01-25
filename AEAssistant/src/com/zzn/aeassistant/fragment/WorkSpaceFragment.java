@@ -84,7 +84,7 @@ public class WorkSpaceFragment extends BaseFragment {
 		public void onChange(boolean selfChange) {
 			super.onChange(selfChange);
 			if (project != null) {
-				refreshFromDB("", true, true);
+				refreshFromDB("", true, true, false);
 			}
 		}
 	}
@@ -98,7 +98,7 @@ public class WorkSpaceFragment extends BaseFragment {
 		public void onChange(boolean selfChange) {
 			super.onChange(selfChange);
 			if (project != null) {
-				refreshFromDB("", true, true);
+				refreshFromDB("", true, true, false);
 			}
 		}
 	}
@@ -171,7 +171,7 @@ public class WorkSpaceFragment extends BaseFragment {
 				adapter.setProject(project);
 				adapter.clear();
 				adapter.notifyDataSetChanged();
-				refreshFromDB("", true, true);
+				refreshFromDB("", true, true, true);
 			}
 		});
 	}
@@ -229,7 +229,7 @@ public class WorkSpaceFragment extends BaseFragment {
 				if (hasMore) {
 					if (dbHasMore && adapter.getCount() > 0) {
 						refreshFromDB(adapter.getItem(adapter.getCount() - 1)
-								.getTime(), false, true);
+								.getTime(), false, true, false);
 						return;
 					}
 					if (postTask != null) {
@@ -299,7 +299,7 @@ public class WorkSpaceFragment extends BaseFragment {
 				refreshTask.cancel(true);
 				refreshTask = null;
 			}
-			refreshTask = new RefreshTask(true);
+			refreshTask = new RefreshTask(true, true);
 			refreshTask.execute(project.getPROJECT_ID(), "");
 		}
 
@@ -423,9 +423,11 @@ public class WorkSpaceFragment extends BaseFragment {
 	private class RefreshTask extends
 			AsyncTask<String, Integer, Map<String, Object>> {
 		private boolean refresh = false;
+		private boolean loadFromNet = false;
 
-		public RefreshTask(boolean refresh) {
+		public RefreshTask(boolean refresh, boolean loadFromNet) {
 			this.refresh = refresh;
+			this.loadFromNet = loadFromNet;
 		}
 
 		@Override
@@ -462,26 +464,34 @@ public class WorkSpaceFragment extends BaseFragment {
 			if (adapter.getCount() < 20) {
 				dbHasMore = false;
 			}
-			if (adapter.getCount() == 0) {
-				mListView.setMode(Mode.PULL_FROM_START);
-			} else if (hasMore) {
+			if (hasMore) {
 				mListView.setMode(Mode.BOTH);
+			} else {
+				mListView.setMode(Mode.PULL_FROM_START);
+			}
+			if (loadFromNet) {
+				if (postTask != null) {
+					postTask.cancel(true);
+				}
+				postTask = new RefreshPostTask(true);
+				postTask.execute(project.getPROJECT_ID(), "");
+				hasMore = true;
 			}
 		}
 	}
 
-	private void refreshFromDB(String time, boolean refresh, boolean reset) {
+	private void refreshFromDB(String time, boolean refresh, boolean reset, boolean loadFromNet) {
 		if (reset) {
 			hasMore = true;
 			dbHasMore = true;
 			mListView.onRefreshComplete();
-			mListView.setMode(Mode.PULL_FROM_START);
+			mListView.setMode(Mode.BOTH);
 		}
 		if (refreshTask != null) {
 			refreshTask.cancel(true);
 			refreshTask = null;
 		}
-		refreshTask = new RefreshTask(refresh);
+		refreshTask = new RefreshTask(refresh, loadFromNet);
 		refreshTask.execute(project.getPROJECT_ID(), time);
 	}
 }
