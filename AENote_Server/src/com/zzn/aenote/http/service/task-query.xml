@@ -35,7 +35,7 @@
 	</select>
 
 	<!-- 查询全部任务 -->
-	<select id="query_task">
+	<select id="query_task_all">
 		select * from(
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
@@ -44,15 +44,17 @@
 		time,(select user_name
 		from
 		t_user where
-		user_id=t.user_id) as create_user_name,
+		user_id=t.create_user_id) as create_user_name,
 		(select
 		small_head from
 		t_user where
-		user_id=t.user_id) as user_head,
+		user_id=t.create_user_id) as
+		create_user_head,
 		(select
 		project_name from
 		t_project
-		where project_id=t.create_project_id) as
+		where
+		project_id=t.create_project_id) as
 		create_project_name,
 		(select
 		project_name
@@ -64,7 +66,7 @@
 		[and rn between '#start#'] [and '#end#']
 	</select>
 	<!-- 查询我分配的全部任务 -->
-	<select id="query_task">
+	<select id="query_task_create">
 		select * from(
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
@@ -73,29 +75,33 @@
 		time,(select user_name
 		from
 		t_user where
-		user_id=t.user_id) as create_user_name,
+		user_id=t.create_user_id) as create_user_name,
 		(select
 		small_head from
 		t_user where
-		user_id=t.user_id) as user_head,
+		user_id=t.create_user_id) as
+		create_user_head,
 		(select
 		project_name from
 		t_project
-		where project_id=t.create_project_id) as
+		where
+		project_id=t.create_project_id) as
 		create_project_name,
 		(select
 		project_name
 		from t_project where
 		project_id=t.root_id) as
 		root_project_name from t_task t where 1=1 [and
-		root_id='#root_id#'] [and
+		root_id='#root_id#']
+		[and
 		create_user_id='#user_id#'])
 		where 1=1
 		[and rn
-		between '#start#'] [and '#end#']
+		between '#start#']
+		[and '#end#']
 	</select>
 	<!-- 查询我执行的全部任务 -->
-	<select id="query_task">
+	<select id="query_task_process">
 		select * from(
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
@@ -104,27 +110,52 @@
 		time,(select user_name
 		from
 		t_user where
-		user_id=t.user_id) as create_user_name,
+		user_id=t.create_user_id) as create_user_name,
 		(select
 		small_head from
 		t_user where
-		user_id=t.user_id) as user_head,
+		user_id=t.create_user_id) as
+		create_user_head,
 		(select
 		project_name from
 		t_project
-		where project_id=t.create_project_id) as
+		where
+		project_id=t.create_project_id) as
 		create_project_name,
 		(select
 		project_name
 		from t_project where
 		project_id=t.root_id) as
-		root_project_name from t_task t
-		inner join t_task_detail a on t.task_id=a.task_id where 1=1 [and
+		root_project_name,
+		a.task_detail_id,a.process_user_id,a.process_project_id,
+		a.content,a.attch_id,(to_char(a.start_time,'yyyy-MM-dd HH24:mi:ss'))
+		as
+		start_time,(to_char(a.end_time,'yyyy-MM-dd HH24:mi:ss')) as
+		end_time,a.status,a.process_content,a.process_attch_id,
+		(select
+		user_name
+		from
+		t_user where
+		user_id=a.process_user_id) as
+		process_user_name,
+		(select
+		small_head from
+		t_user where
+		user_id=a.process_user_id) as process_user_head,
+		(select
+		project_name
+		from
+		t_project
+		where project_id=a.process_project_id) as
+		process_project_name from t_task t
+		inner join t_task_detail a on
+		t.task_id=a.task_id where 1=1 [and
 		t.root_id='#root_id#'] [and
 		a.process_user_id='#user_id#'])
 		where 1=1
 		[and rn
-		between '#start#'] [and '#end#']
+		between '#start#'] [and
+		'#end#']
 	</select>
 	<!-- 查询任务详细 -->
 	<select id="query_task_detail">
@@ -149,8 +180,39 @@
 		from
 		t_project
 		where project_id=t.process_project_id) as
-		process_project_name from t_task_detail t
-		where 1=1 [and
+		process_project_name,
+		a.task_id,a.create_user_id,a.create_project_id,a.root_id,
+		(to_char(a.time,'yyyy-MM-dd HH24:mi:ss')) as
+		time,(select user_name
+		from
+		t_user where
+		user_id=a.create_user_id) as create_user_name,
+		(select
+		small_head from
+		t_user where
+		user_id=a.create_user_id) as
+		create_user_head,
+		(select
+		project_name from
+		t_project
+		where
+		project_id=a.create_project_id) as
+		create_project_name,
+		(select
+		project_name
+		from t_project where
+		project_id=a.root_id) as
+		root_project_name from t_task_detail t inner join t_task a
+		where 1=1
+		[and
+		task_id='#task_id#']
+	</select>
+	<select id="delete_task">
+		delete from t_task where 1=1 and [and
+		task_id='#task_id#']
+	</select>
+	<select id="delete_task_detail">
+		delete from t_task_detail where 1=1 and [and
 		task_id='#task_id#']
 	</select>
 </Scheme>

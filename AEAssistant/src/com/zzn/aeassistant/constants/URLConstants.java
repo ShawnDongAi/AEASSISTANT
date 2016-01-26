@@ -153,4 +153,20 @@ public class URLConstants {
 	 * 查询工作圈
 	 */
 	public static final String URL_QUERY_POST = URL_HOST + "queryPost";
+	/**
+	 * 新建任务
+	 */
+	public static final String URL_CREATE_TASK = URL_HOST + "createTask";
+	/**
+	 * 处理任务
+	 */
+	public static final String URL_PROCESS_TASK = URL_HOST + "processTask";
+	/**
+	 * 查询任务(全部任务以及我分配的任务)
+	 */
+	public static final String URL_QUERY_TASK = URL_HOST + "queryTask";
+	/**
+	 * 查询我执行的任务
+	 */
+	public static final String URL_QUERY_MY_TASK = URL_HOST + "queryMyTask";
 }

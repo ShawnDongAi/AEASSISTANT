@@ -12,9 +12,9 @@ public final class StringUtil {
 	public static final String EMPTY_STRING = "";
 
 	
-	public static boolean isEmpty(String data) {
-		return data == null || data.trim().equals("")
-				|| data.trim().equals("null");
+	public static boolean isEmpty(Object data) {
+		return data == null || data.toString().trim().equals("")
+				|| data.toString().trim().equals("null");
 	}
    
     public static boolean toBoolean(String theString) {

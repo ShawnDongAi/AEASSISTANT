@@ -230,6 +230,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent"
             android:windowSoftInputMode="adjustResize" />
+        <!-- 任务管控 -->
+        <activity
+            android:name=".activity.task.TaskActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <activity
+            android:name=".activity.task.CreateTaskActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <activity
+            android:name=".activity.task.TaskDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
         <!-- 头像裁剪页面 -->
         <activity
             android:name=".view.cropimage.CropImageActivity"

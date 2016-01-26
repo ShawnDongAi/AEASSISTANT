@@ -22,6 +22,7 @@
     <string name="unknow">未知</string>
     <string name="delete">删除</string>
     <string name="add">添加</string>
+    <string name="new_">新增</string>
     <string name="dial_error">电话号码格式有误</string>
     <string name="list_empty">这里什么都没有哦,下拉刷新试试吧~~~</string>
     <string name="null_input">请输入有效字符</string>
@@ -105,6 +106,12 @@
     <string name="lable_rate_today">今日评价</string>
     <string name="lable_rate_history">历史评价</string>
     <string name="lable_rate_content">请输入您对该用户的评价</string>
+    <string name="lable_task">任务管控</string>
+    <string name="lable_task_all">所有任务</string>
+    <string name="lable_task_create">我分配的</string>
+    <string name="lable_task_process">我执行的</string>
+    <string name="lable_task_new">新增任务</string>
+    <string name="lable_task_detail">任务详情</string>
     <string name="lable_score">%s分</string>
     <string name="lable_address">位置</string>
     <string name="modify_user_name">修改姓名</string>

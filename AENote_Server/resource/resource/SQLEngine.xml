@@ -6,4 +6,5 @@
 	<sql-map resource="com/zzn/aenote/http/service/attendance-query.xml" />
 	<sql-map resource="com/zzn/aenote/http/service/rate-query.xml" />
 	<sql-map resource="com/zzn/aenote/http/service/post-query.xml" />
+	<sql-map resource="com/zzn/aenote/http/service/task-query.xml" />
 </sql-map-config>

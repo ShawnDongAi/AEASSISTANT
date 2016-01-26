@@ -276,4 +276,28 @@
 			<ref local="postService" />
 		</property>
 	</bean>
+	<!-- 创建新任务 -->
+	<bean id="createTask" class="com.zzn.aenote.http.server.task.CreateTask">
+		<property name="taskService">
+			<ref local="taskService" />
+		</property>
+	</bean>
+	<!-- 更新任务状态 -->
+	<bean id="processTask" class="com.zzn.aenote.http.server.task.ProcessTask">
+		<property name="taskService">
+			<ref local="taskService" />
+		</property>
+	</bean>
+	<!-- 查询任务 -->
+	<bean id="queryTask" class="com.zzn.aenote.http.server.task.QueryTask">
+		<property name="taskService">
+			<ref local="taskService" />
+		</property>
+	</bean>
+	<!-- 查询我执行的任务 -->
+	<bean id="queryMyTask" class="com.zzn.aenote.http.server.task.QueryMyTask">
+		<property name="taskService">
+			<ref local="taskService" />
+		</property>
+	</bean>
 </beans>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/task_process_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_common_white"
+            android:text="请指派任务执行人"
+            android:textColor="@color/text_normal"
+            android:textSize="@dimen/menu_text_size" />
+
+        <EditText
+            android:id="@+id/task_create_content"
+            style="@style/base_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="3"
+            android:hint="请输入任务描述" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="任务开始时间："
+            android:textSize="@dimen/menu_text_size" />
+
+        <Button
+            android:id="@+id/task_start_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_bg_round"
+            android:drawableRight="@drawable/ic_date"
+            android:padding="10dp"
+            android:text="2015-06-12"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <com.zzn.aeassistant.view.FastenGridView
+        android:id="@+id/task_create_attach_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="80dp"
+        android:divider="@null"
+        android:horizontalSpacing="2dp"
+        android:numColumns="auto_fit"
+        android:padding="2dp" />
+
+</LinearLayout>

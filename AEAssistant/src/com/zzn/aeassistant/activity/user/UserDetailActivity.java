@@ -14,6 +14,7 @@ import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.TextEditActivity;
 import com.zzn.aeassistant.activity.post.WorkSpaceActivity;
+import com.zzn.aeassistant.activity.task.TaskActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.FileCostants;
@@ -55,7 +56,7 @@ public class UserDetailActivity extends BaseActivity {
 	public static final int REQUEST_PROJECT_NAME = 1;
 	public static final int REQUEST_RATE = 2;
 	public static final String ACTION_UPDATE_IDCARD_IMG = "com.zzn.aeassistant.update_idcard_img";
-	private View layoutHead, userHeadIcon, layoutProject, /*layoutIDCard, layoutIDCardImg,*/ btnCall,
+	private View layoutHead, userHeadIcon, layoutProject, layoutTask, /*layoutIDCard, layoutIDCardImg,*/ btnCall,
 			layoutRate, rateIcon, /*diverIDCard, diverIDCardImg, idCardIcon,*/
 			layoutWorkSpace, diverWorkSpace;
 	private TextView project, name, phone, sex, remark, idcard, score;
@@ -104,6 +105,7 @@ public class UserDetailActivity extends BaseActivity {
 		layoutHead = findViewById(R.id.user_layout_head);
 		userHeadIcon = findViewById(R.id.user_head_icon);
 		layoutProject = findViewById(R.id.user_layout_project);
+		layoutTask = findViewById(R.id.user_layout_task);
 //		layoutIDCard = findViewById(R.id.user_layout_idcard);
 //		layoutIDCardImg = findViewById(R.id.user_layout_idcard_img);
 		layoutWorkSpace = findViewById(R.id.user_layout_workspace);
@@ -134,6 +136,7 @@ public class UserDetailActivity extends BaseActivity {
 		}
 //		layoutIDCardImg.setOnClickListener(this);
 		layoutWorkSpace.setOnClickListener(this);
+		layoutTask.setOnClickListener(this);
 		btnCall.setOnClickListener(this);
 
 		project = (TextView) findViewById(R.id.user_project);
@@ -237,10 +240,10 @@ public class UserDetailActivity extends BaseActivity {
 			break;
 		case R.id.user_layout_rate:
 			if (userVO != null) {
-				Intent intent = new Intent(this, RatingActivity.class);
-				intent.putExtra(CodeConstants.KEY_USER_ID, userVO.getUSER_ID());
-				intent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
-				startActivityForResult(intent, REQUEST_RATE);
+				Intent rateIntent = new Intent(this, RatingActivity.class);
+				rateIntent.putExtra(CodeConstants.KEY_USER_ID, userVO.getUSER_ID());
+				rateIntent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
+				startActivityForResult(rateIntent, REQUEST_RATE);
 			}
 			break;
 		case R.id.user_layout_workspace:
@@ -253,6 +256,11 @@ public class UserDetailActivity extends BaseActivity {
 				}
 			}
 			startActivity(intent);
+			break;
+		case R.id.user_layout_task:
+			Intent taskIntent = new Intent(this, TaskActivity.class);
+			taskIntent.putExtra(CodeConstants.KEY_PROJECT_VO, projectVO);
+			startActivity(taskIntent);
 			break;
 		case R.id.user_layout_head:
 			if (headMenu != null && !headMenu.isShowing()) {
