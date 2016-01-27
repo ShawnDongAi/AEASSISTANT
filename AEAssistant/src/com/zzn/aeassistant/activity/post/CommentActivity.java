@@ -19,6 +19,7 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.AttachAdapter;
+import com.zzn.aeassistant.view.AttachAdapter.OnAddAttachCallBack;
 import com.zzn.aeassistant.view.FastenGridView;
 import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.CommentVO;
@@ -61,7 +62,28 @@ public class CommentActivity extends BaseActivity {
 		save.setVisibility(View.VISIBLE);
 		content = (EditText) findViewById(R.id.input_comment);
 		attachGroup = (FastenGridView) findViewById(R.id.attch_list);
-		adapter = new AttachAdapter(this, true);
+		adapter = new AttachAdapter(this, true, new OnAddAttachCallBack() {
+			@Override
+			public void onAddPhoto() {
+				if (adapter.getCount() >= 9) {
+					ToastUtil.show(R.string.much_file);
+					return;
+				}
+				setCompress(true);
+				AttchUtil.getPictureFromGallery(mContext);
+			}
+			@Override
+			public void onAddCamera() {
+				if (adapter.getCount() >= 9) {
+					ToastUtil.show(R.string.much_file);
+					return;
+				}
+				setCompress(true);
+				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+						+ ".jpg", true);
+				AttchUtil.capture(mContext, getImgPath());
+			}
+		});
 		attachGroup.setAdapter(adapter);
 		photo = findViewById(R.id.photo);
 		camera = findViewById(R.id.camera);

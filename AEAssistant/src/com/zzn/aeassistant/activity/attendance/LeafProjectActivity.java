@@ -24,6 +24,7 @@ import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
@@ -44,6 +45,7 @@ public class LeafProjectActivity extends BaseActivity {
 	private ListLeafTask listLeafTask = null;
 	private ScanningTask scanningTask = null;
 	private List<String> selectDatas = new ArrayList<String>();
+	private int selectMode = CodeConstants.STATUS_SCANNING_LEAF;
 
 	@Override
 	protected int layoutResID() {
@@ -57,22 +59,38 @@ public class LeafProjectActivity extends BaseActivity {
 
 	@Override
 	protected void initView() {
+		if (getIntent().hasExtra(CodeConstants.KEY_TITLE)) {
+			title.setText(getIntent().getStringExtra(CodeConstants.KEY_TITLE));
+		}
+		if (getIntent().hasExtra(CodeConstants.KEY_SELECT_LEAF_MODE)) {
+			selectMode = getIntent().getIntExtra(CodeConstants.KEY_SELECT_LEAF_MODE,
+					CodeConstants.STATUS_SCANNING_LEAF);
+		}
 		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
-		save.setVisibility(View.VISIBLE);
-		save.setText(R.string.confirm);
+		if (selectMode == CodeConstants.STATUS_SCANNING_LEAF) {
+			save.setVisibility(View.VISIBLE);
+			save.setText(R.string.confirm);
+		}
 		mListView = (ListView) findViewById(R.id.base_list);
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ProjectVO vo = (ProjectVO) adapter.getItem(position).getData();
-				if (selectDatas.contains(vo.getPROJECT_ID())) {
-					selectDatas.remove(vo.getPROJECT_ID());
-				} else {
-					if (!vo.getPROJECT_ID().equals(project_id)) {
-						selectDatas.add(vo.getPROJECT_ID());
+				if (selectMode == CodeConstants.STATUS_SCANNING_LEAF) {
+					if (selectDatas.contains(vo.getPROJECT_ID())) {
+						selectDatas.remove(vo.getPROJECT_ID());
+					} else {
+						if (!vo.getPROJECT_ID().equals(project_id)) {
+							selectDatas.add(vo.getPROJECT_ID());
+						}
 					}
+					adapter.notifyDataSetChanged();
+				} else {
+					Intent intent = new Intent();
+					intent.putExtra(CodeConstants.KEY_PROJECT_VO, vo);
+					setResult(RESULT_OK, intent);
+					finish();
 				}
-				adapter.notifyDataSetChanged();
 			}
 		});
 		listLeafTask = new ListLeafTask();
@@ -87,7 +105,6 @@ public class LeafProjectActivity extends BaseActivity {
 			ToastUtil.show(R.string.null_leaf);
 			return;
 		}
-		scanningTask = new ScanningTask();
 		StringBuilder projectIds = new StringBuilder();
 		for (String id : selectDatas) {
 			projectIds.append(id + ",");
@@ -95,6 +112,7 @@ public class LeafProjectActivity extends BaseActivity {
 		if (projectIds.length() > 0) {
 			projectIds.deleteCharAt(projectIds.length() - 1);
 		}
+		scanningTask = new ScanningTask();
 		scanningTask.execute(projectIds.toString());
 	}
 
@@ -202,7 +220,9 @@ public class LeafProjectActivity extends BaseActivity {
 			}
 			viewHolder.label.setText(node.getName());
 			final ProjectVO vo = (ProjectVO) node.getData();
-			viewHolder.checkBox.setVisibility(vo.getPROJECT_ID().equals(project_id) ? View.GONE : View.VISIBLE);
+			viewHolder.checkBox.setVisibility(
+					selectMode == CodeConstants.STATUS_SELECT_PROCESS_USER || vo.getPROJECT_ID().equals(project_id)
+							? View.GONE : View.VISIBLE);
 			viewHolder.checkBox.setOnCheckedChangeListener(null);
 			viewHolder.checkBox
 					.setChecked(!vo.getPROJECT_ID().equals(project_id) && selectDatas.contains(vo.getPROJECT_ID()));

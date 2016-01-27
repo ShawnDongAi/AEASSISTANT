@@ -24,7 +24,7 @@ public abstract class BasePageActivity extends BaseActivity implements OnPageCha
 
 	@Override
 	protected void initView() {
-		tab = (PagerSlidingTabStrip) findViewById(R.id.base_page);
-		pager = (ViewPager) findViewById(R.id.base_tab);
+		tab = (PagerSlidingTabStrip) findViewById(R.id.base_tab);
+		pager = (ViewPager) findViewById(R.id.base_page);
 	}
 }

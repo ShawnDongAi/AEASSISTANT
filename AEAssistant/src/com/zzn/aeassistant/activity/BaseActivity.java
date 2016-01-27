@@ -40,7 +40,7 @@ import com.zzn.aeassistant.vo.UserVO;
 
 public abstract class BaseActivity extends SwipeBackActivity implements
 		OnClickListener {
-	public Context mContext;
+	public BaseActivity mContext;
 	protected TextView title;
 	protected ImageButton back;
 	protected Button save;
@@ -81,7 +81,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	protected void onActivityReceivePoi(BDLocation poiLocation) {
 	}
 
-	protected void setImgPath(String imgPath, boolean compress) {
+	public void setImgPath(String imgPath, boolean compress) {
 		this.imgPath = imgPath;
 		this.compress = compress;
 	}

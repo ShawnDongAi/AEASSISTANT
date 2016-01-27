@@ -7,7 +7,7 @@
     <string name="settings">设置</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
-    <string name="save">提交</string>
+    <string name="save">保存</string>
     <string name="warning">提示</string>
     <string name="loading">拼命加载中…</string>
     <string name="import_contact">导入</string>
@@ -106,12 +106,6 @@
     <string name="lable_rate_today">今日评价</string>
     <string name="lable_rate_history">历史评价</string>
     <string name="lable_rate_content">请输入您对该用户的评价</string>
-    <string name="lable_task">任务管控</string>
-    <string name="lable_task_all">所有任务</string>
-    <string name="lable_task_create">我分配的</string>
-    <string name="lable_task_process">我执行的</string>
-    <string name="lable_task_new">新增任务</string>
-    <string name="lable_task_detail">任务详情</string>
     <string name="lable_score">%s分</string>
     <string name="lable_address">位置</string>
     <string name="modify_user_name">修改姓名</string>
@@ -126,6 +120,7 @@
     <string name="call">拨打电话</string>
 
     <!-- 附件 -->
+    <string name="title_attach_select">请选择文件</string>
     <string name="photograph">拍照</string>
     <string name="album">从相册选取</string>
     <string name="pick_error">没有可用的图片资源管理器</string>
@@ -207,4 +202,18 @@
     <string name="comment">评论</string>
     <string name="much_file">最多添加9个文件</string>
 
+    <!-- 任务管控 -->
+    <string name="lable_task">任务管控</string>
+    <string name="lable_task_all">所有任务</string>
+    <string name="lable_task_create">我分配的</string>
+    <string name="lable_task_process">我执行的</string>
+    <string name="lable_task_new">新增任务</string>
+    <string name="lable_task_detail">任务详情</string>
+    <string name="lable_task_process_user">执行人：</string>
+    <string name="lable_task_content">任务描述：</string>
+    <string name="hint_task_content">请输入任务描述</string>
+    <string name="lable_task_start_time">开始时间：</string>
+    <string name="lable_select_process_user">选择执行人</string>
+    <string name="toast_empty_task_content">请输入任务描述</string>
+    <string name="toast_out_of_ten_task">最多允许添加十个任务</string>
 </resources>

@@ -19,6 +19,7 @@ import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.AttachAdapter;
+import com.zzn.aeassistant.view.AttachAdapter.OnAddAttachCallBack;
 import com.zzn.aeassistant.view.FastenGridView;
 import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.HttpResult;
@@ -37,7 +38,6 @@ import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -72,7 +72,23 @@ public class PostActivity extends BaseActivity {
 		save.setVisibility(View.VISIBLE);
 		content = (EditText) findViewById(R.id.input_post);
 		attachGroup = (FastenGridView) findViewById(R.id.attch_list);
-		adapter = new AttachAdapter(this, true);
+		adapter = new AttachAdapter(this, true, new OnAddAttachCallBack() {
+			@Override
+			public void onAddPhoto() {
+				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+						+ ".jpg", true);
+				setCompress(true);
+				AttchUtil.getPictureFromGallery(mContext);
+			}
+			
+			@Override
+			public void onAddCamera() {
+				setCompress(true);
+				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+						+ ".jpg", true);
+				AttchUtil.capture(mContext, getImgPath());
+			}
+		});
 		attachGroup.setAdapter(adapter);
 		photo = findViewById(R.id.photo);
 		camera = findViewById(R.id.camera);

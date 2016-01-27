@@ -58,7 +58,21 @@ public class TaskActivity extends BasePageActivity {
 		super.onSaveClick();
 		Intent intent = new Intent(this, CreateTaskActivity.class);
 		intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
-		startActivity(intent);
+		startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+			case CodeConstants.REQUEST_CODE_REFRESH:
+				//刷新列表
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override

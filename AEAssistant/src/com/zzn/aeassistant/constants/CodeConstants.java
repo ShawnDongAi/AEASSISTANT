@@ -8,10 +8,13 @@ public class CodeConstants {
 	public static final int REQUEST_CODE_VOICE = 3;
 	public static final int REQUEST_CODE_GETFILE = 4;
 	public static final int REQUEST_CODE_QRCODE = 5;
+	public static final int REQUEST_CODE_PROJECT = 6;
 	
 	public static final int STATUS_TASK_ALL = 10;
 	public static final int STATUS_TASK_CREATE = 11;
 	public static final int STATUS_TASK_PROCESS = 12;
+	public static final int STATUS_SCANNING_LEAF = 13;
+	public static final int STATUS_SELECT_PROCESS_USER = 14;
 
 	public static final String KEY_USER_ID = "user_id";
 	public static final String KEY_USER_PHONE = "user_phone";
@@ -53,4 +56,5 @@ public class CodeConstants {
 	public static final String KEY_TASK_VO = "task_vo";
 	public static final String KEY_TASK_ID = "task_id";
 	public static final String KEY_TASK_DETAIL = "task_detail";
+	public static final String KEY_SELECT_LEAF_MODE = "select_leaf_mode";
 }

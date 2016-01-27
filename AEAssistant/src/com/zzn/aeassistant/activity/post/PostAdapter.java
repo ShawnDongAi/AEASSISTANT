@@ -188,7 +188,7 @@ public class PostAdapter extends BaseAdapter {
 		});
 		AttachAdapter attachAdapter;
 		if (holder.attachList.getTag() == null) {
-			attachAdapter = new AttachAdapter(mContext, false);
+			attachAdapter = new AttachAdapter(mContext, false, null);
 		} else {
 			attachAdapter = (AttachAdapter) holder.attachList.getTag();
 			attachAdapter.clear();
@@ -232,7 +232,7 @@ public class PostAdapter extends BaseAdapter {
 			((TextView) commentView.findViewById(R.id.time))
 					.setText(commentTimeString);
 			AttachAdapter commentAttachAdapter = new AttachAdapter(mContext,
-					false);
+					false, null);
 			if (comment.getAttch_id() != null
 					&& !StringUtil.isEmpty(comment.getAttch_id())) {
 				for (String id : comment.getAttch_id().split("#")) {
