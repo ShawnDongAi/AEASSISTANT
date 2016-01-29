@@ -23,10 +23,10 @@ public class CreateTask implements CmHandler {
 	@Override
 	public void doHandler(HttpServletRequest req, HttpServletResponse resp, BaseRep rs) throws Exception {
 		try {
-			String create_user_id = req.getParameter("create_user_id").trim();
-			String create_project_id = req.getParameter("create_project_id").trim();
-			String root_id = req.getParameter("root_id").trim();
-			String taskDetailString = req.getParameter("taskDetails").trim();
+			String create_user_id = req.getParameter("create_user_id");
+			String create_project_id = req.getParameter("create_project_id");
+			String root_id = req.getParameter("root_id");
+			String taskDetailString = req.getParameter("taskDetails");
 			if (StringUtil.isEmpty(create_user_id) || StringUtil.isEmpty(create_project_id)
 					|| StringUtil.isEmpty(root_id)) {
 				rs.setRES_CODE(Global.RESP_PARAM_NULL);

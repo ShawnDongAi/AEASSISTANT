@@ -1,6 +1,9 @@
 package com.zzn.aenote.http.vo;
 
 import java.io.Serializable;
+import java.util.Map;
+
+import com.zzn.aenote.http.utils.StringUtil;
 
 public class TaskDetailVO implements Serializable {
 
@@ -21,6 +24,9 @@ public class TaskDetailVO implements Serializable {
 	private String process_user_head;
 	private String process_project_name;
 	private String time;
+	private String create_user_id;
+	private String create_project_id;
+	private String root_id;
 	private String create_user_name;
 	private String create_user_head;
 	private String create_project_name;
@@ -176,5 +182,56 @@ public class TaskDetailVO implements Serializable {
 
 	public void setRoot_project_name(String root_project_name) {
 		this.root_project_name = root_project_name;
+	}
+
+	public String getCreate_user_id() {
+		return create_user_id;
+	}
+
+	public void setCreate_user_id(String create_user_id) {
+		this.create_user_id = create_user_id;
+	}
+
+	public String getCreate_project_id() {
+		return create_project_id;
+	}
+
+	public void setCreate_project_id(String create_project_id) {
+		this.create_project_id = create_project_id;
+	}
+
+	public String getRoot_id() {
+		return root_id;
+	}
+
+	public void setRoot_id(String root_id) {
+		this.root_id = root_id;
+	}
+
+	public static TaskDetailVO assembleTaskDetailVO(Map<String, Object> taskDetail) {
+		TaskDetailVO vo = new TaskDetailVO();
+		vo.setTask_id(StringUtil.nullToString(taskDetail.get("task_id")));
+		vo.setTask_detail_id(StringUtil.nullToString(taskDetail.get("task_detail_id")));
+		vo.setProcess_user_id(StringUtil.nullToString(taskDetail.get("process_user_id")));
+		vo.setProcess_project_id(StringUtil.nullToString(taskDetail.get("process_project_id")));
+		vo.setContent(StringUtil.nullToString(taskDetail.get("content")));
+		vo.setAttch_id(StringUtil.nullToString(taskDetail.get("attch_id")));
+		vo.setStart_time(StringUtil.nullToString(taskDetail.get("start_time")));
+		vo.setEnd_time(StringUtil.nullToString(taskDetail.get("end_time")));
+		vo.setStatus(StringUtil.nullToString(taskDetail.get("status")));
+		vo.setProcess_content(StringUtil.nullToString(taskDetail.get("process_content")));
+		vo.setProcess_attch_id(StringUtil.nullToString(taskDetail.get("process_attch_id")));
+		vo.setProcess_user_name(StringUtil.nullToString(taskDetail.get("process_user_name")));
+		vo.setProcess_user_head(StringUtil.nullToString(taskDetail.get("process_user_head")));
+		vo.setProcess_project_name(StringUtil.nullToString(taskDetail.get("process_project_name")));
+		vo.setTime(StringUtil.nullToString(taskDetail.get("time")));
+		vo.setCreate_user_name(StringUtil.nullToString(taskDetail.get("create_user_name")));
+		vo.setCreate_user_head(StringUtil.nullToString(taskDetail.get("create_user_head")));
+		vo.setCreate_project_name(StringUtil.nullToString(taskDetail.get("create_project_name")));
+		vo.setRoot_project_name(StringUtil.nullToString(taskDetail.get("root_project_name")));
+		vo.setCreate_user_id(StringUtil.nullToString(taskDetail.get("create_user_id")));
+		vo.setCreate_project_id(StringUtil.nullToString(taskDetail.get("create_project_id")));
+		vo.setRoot_id(StringUtil.nullToString(taskDetail.get("root_id")));
+		return vo;
 	}
 }

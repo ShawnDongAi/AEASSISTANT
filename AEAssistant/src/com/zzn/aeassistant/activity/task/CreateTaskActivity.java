@@ -463,8 +463,8 @@ public class CreateTaskActivity extends BaseActivity {
 			StringBuilder param = new StringBuilder();
 			param.append("create_user_id=" + create_user_id);
 			param.append("&create_project_id=" + create_project_id);
-			param.append("&root_id" + root_id);
-			param.append("&taskDetails" + taskDetails);
+			param.append("&root_id=" + root_id);
+			param.append("&taskDetails=" + taskDetails);
 			return AEHttpUtil.doPost(URLConstants.URL_CREATE_TASK, param.toString());
 		}
 

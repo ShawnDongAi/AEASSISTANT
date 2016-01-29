@@ -3,7 +3,7 @@ package com.zzn.aeassistant.activity.task;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BasePageActivity;
 import com.zzn.aeassistant.constants.CodeConstants;
-import com.zzn.aeassistant.fragment.TaskFragment;
+import com.zzn.aeassistant.fragment.ExpandTaskFragment;
 import com.zzn.aeassistant.view.viewpager.SectionPage;
 import com.zzn.aeassistant.view.viewpager.SectionPageAdapter;
 import com.zzn.aeassistant.vo.ProjectVO;
@@ -26,9 +26,10 @@ public class TaskActivity extends BasePageActivity {
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
 		save.setVisibility(View.VISIBLE);
 		save.setText(R.string.new_);
+		pager.setOffscreenPageLimit(3);
 		for (int i = 0; i < 3; i++) {
 			SectionPage item = new SectionPage();
-			TaskFragment fragment = new TaskFragment();
+			ExpandTaskFragment fragment = new ExpandTaskFragment();
 			Bundle bundle = new Bundle();
 			bundle.putSerializable(CodeConstants.KEY_PROJECT_VO, project);
 			if (i == 0) {

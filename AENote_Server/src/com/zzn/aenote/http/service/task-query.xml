@@ -5,32 +5,29 @@
 	<select id="insert_task">
 		insert into
 		t_task(task_id,create_user_id,create_project_id,root_id,time)
-		values('#task_id#','#create_user_id#','#create_project_id#','#root_id#',[to_date('#time#','yyyy-MM-dd
-		HH24:mi')])
+		values('#task_id#','#create_user_id#','#create_project_id#','#root_id#',[to_date('#time#','yyyy-MM-dd HH24:mi')])
 	</select>
 	<!-- 插入任务详情 -->
 	<select id="insert_task_detail">
 		insert into
-		t_task(task_detail_id,task_id,process_user_id,process_project_id,content,attch_id,start_time,status,process_content,process_attch_id,end_time)
-		values('#task_detail_id#','#task_id#','#process_user_id#','#process_project_id#','#content#','#attch_id#',[to_date('#start_time#','yyyy-MM-dd
-		HH24:mi')],'#status#','#process_content#','#process_attch_id#',[to_date('#end_time#','yyyy-MM-dd
-		HH24:mi')])
+		t_task_detail(task_detail_id,task_id,process_user_id,process_project_id,content,attch_id,start_time,status)
+		values('#task_detail_id#','#task_id#','#process_user_id#','#process_project_id#','#content#','#attch_id#',[to_date('#start_time#','yyyy-MM-dd')],
+		'0')
 	</select>
 	<!-- 更新任务详情 -->
 	<select id="update_task_detail">
 		update
-		t_task set content ='#content#',
+		t_task_detail set content ='#content#',
 		attch_id='#attch_id#' where 1=1 [and
 		task_detail_id='#task_detail_id#']
 	</select>
 	<!-- 更新任务详情状态 -->
 	<select id="process_task_detail">
 		update
-		t_task set status ='#status#',
+		t_task_detail set status ='#status#',
 		process_content='#process_content#',
 		process_attch_id='#process_attch_id#',
-		end_time=[to_date('#end_time#','yyyy-MM-dd
-		HH24:mi')] where 1=1 [and
+		end_time=[to_date('#end_time#','yyyy-MM-dd')] where 1=1 [and
 		task_detail_id='#task_detail_id#']
 	</select>
 
@@ -40,13 +37,15 @@
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
 		t.task_id,t.create_user_id,t.create_project_id,t.root_id,
-		(to_char(t.time,'yyyy-MM-dd HH24:mi:ss')) as
+		(to_char(t.time,'yyyy-MM-dd HH24:mi')) as
 		time,(select user_name
 		from
-		t_user where
+		t_user
+		where
 		user_id=t.create_user_id) as create_user_name,
 		(select
-		small_head from
+		small_head
+		from
 		t_user where
 		user_id=t.create_user_id) as
 		create_user_head,
@@ -71,13 +70,15 @@
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
 		t.task_id,t.create_user_id,t.create_project_id,t.root_id,
-		(to_char(t.time,'yyyy-MM-dd HH24:mi:ss')) as
+		(to_char(t.time,'yyyy-MM-dd HH24:mi')) as
 		time,(select user_name
 		from
-		t_user where
+		t_user
+		where
 		user_id=t.create_user_id) as create_user_name,
 		(select
-		small_head from
+		small_head
+		from
 		t_user where
 		user_id=t.create_user_id) as
 		create_user_head,
@@ -106,13 +107,15 @@
 		select ROW_NUMBER() OVER (ORDER BY
 		t.time asc) rn,
 		t.task_id,t.create_user_id,t.create_project_id,t.root_id,
-		(to_char(t.time,'yyyy-MM-dd HH24:mi:ss')) as
+		(to_char(t.time,'yyyy-MM-dd HH24:mi')) as
 		time,(select user_name
 		from
-		t_user where
+		t_user
+		where
 		user_id=t.create_user_id) as create_user_name,
 		(select
-		small_head from
+		small_head
+		from
 		t_user where
 		user_id=t.create_user_id) as
 		create_user_head,
@@ -128,9 +131,9 @@
 		project_id=t.root_id) as
 		root_project_name,
 		a.task_detail_id,a.process_user_id,a.process_project_id,
-		a.content,a.attch_id,(to_char(a.start_time,'yyyy-MM-dd HH24:mi:ss'))
+		a.content,a.attch_id,(to_char(a.start_time,'yyyy-MM-dd'))
 		as
-		start_time,(to_char(a.end_time,'yyyy-MM-dd HH24:mi:ss')) as
+		start_time,(to_char(a.end_time,'yyyy-MM-dd')) as
 		end_time,a.status,a.process_content,a.process_attch_id,
 		(select
 		user_name
@@ -161,9 +164,9 @@
 	<select id="query_task_detail">
 		select
 		t.task_detail_id,t.task_id,t.process_user_id,t.process_project_id,
-		t.content,t.attch_id,(to_char(t.start_time,'yyyy-MM-dd HH24:mi:ss'))
+		t.content,t.attch_id,(to_char(t.start_time,'yyyy-MM-dd'))
 		as
-		start_time,(to_char(t.end_time,'yyyy-MM-dd HH24:mi:ss')) as
+		start_time,(to_char(t.end_time,'yyyy-MM-dd')) as
 		end_time,t.status,t.process_content,t.process_attch_id,
 		(select
 		user_name
@@ -181,14 +184,16 @@
 		t_project
 		where project_id=t.process_project_id) as
 		process_project_name,
-		a.task_id,a.create_user_id,a.create_project_id,a.root_id,
-		(to_char(a.time,'yyyy-MM-dd HH24:mi:ss')) as
+		a.create_user_id,a.create_project_id,a.root_id,
+		(to_char(a.time,'yyyy-MM-dd HH24:mi')) as
 		time,(select user_name
 		from
-		t_user where
+		t_user
+		where
 		user_id=a.create_user_id) as create_user_name,
 		(select
-		small_head from
+		small_head
+		from
 		t_user where
 		user_id=a.create_user_id) as
 		create_user_head,
@@ -202,10 +207,11 @@
 		project_name
 		from t_project where
 		project_id=a.root_id) as
-		root_project_name from t_task_detail t inner join t_task a
+		root_project_name from t_task_detail t inner
+		join t_task a on t.task_id=a.task_id
 		where 1=1
 		[and
-		task_id='#task_id#']
+		t.task_id='#task_id#']
 	</select>
 	<select id="delete_task">
 		delete from t_task where 1=1 and [and

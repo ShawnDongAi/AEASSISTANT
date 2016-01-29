@@ -14,6 +14,7 @@ public class TaskVO implements Serializable {
 	private String create_user_name;
 	private String create_project_name;
 	private String root_project_name;
+	private String create_user_head;
 	private List<TaskDetailVO> task_detail_list = new ArrayList<>();
 
 	public String getTask_id() {
@@ -86,5 +87,13 @@ public class TaskVO implements Serializable {
 
 	public void setTask_detail_list(List<TaskDetailVO> task_detail_list) {
 		this.task_detail_list = task_detail_list;
+	}
+
+	public String getCreate_user_head() {
+		return create_user_head;
+	}
+
+	public void setCreate_user_head(String create_user_head) {
+		this.create_user_head = create_user_head;
 	}
 }

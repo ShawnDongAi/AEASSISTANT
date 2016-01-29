@@ -20,6 +20,9 @@ public class TaskDetailVO implements Serializable {
 	private String process_user_head;
 	private String process_project_name;
 	private String time;
+	private String create_user_id;
+	private String create_project_id;
+	private String root_id;
 	private String create_user_name;
 	private String create_user_head;
 	private String create_project_name;
@@ -175,5 +178,29 @@ public class TaskDetailVO implements Serializable {
 
 	public void setRoot_project_name(String root_project_name) {
 		this.root_project_name = root_project_name;
+	}
+
+	public String getCreate_user_id() {
+		return create_user_id;
+	}
+
+	public void setCreate_user_id(String create_user_id) {
+		this.create_user_id = create_user_id;
+	}
+
+	public String getCreate_project_id() {
+		return create_project_id;
+	}
+
+	public void setCreate_project_id(String create_project_id) {
+		this.create_project_id = create_project_id;
+	}
+
+	public String getRoot_id() {
+		return root_id;
+	}
+
+	public void setRoot_id(String root_id) {
+		this.root_id = root_id;
 	}
 }

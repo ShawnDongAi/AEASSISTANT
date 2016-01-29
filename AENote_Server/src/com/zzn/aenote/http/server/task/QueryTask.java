@@ -22,9 +22,9 @@ public class QueryTask implements CmHandler {
 	@Override
 	public void doHandler(HttpServletRequest req, HttpServletResponse resp, BaseRep rs) throws Exception {
 		try {
-			String pageString = req.getParameter("page").trim();
-			String root_id = req.getParameter("root_id").trim();
-			String user_id = req.getParameter("user_id").trim();
+			String pageString = req.getParameter("page");
+			String root_id = req.getParameter("root_id");
+			String user_id = req.getParameter("user_id");
 			if (StringUtil.isEmpty(root_id)) {
 				rs.setRES_CODE(Global.RESP_PARAM_NULL);
 				rs.setRES_MESSAGE("缺少参数");

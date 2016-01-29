@@ -220,4 +220,7 @@
     <string name="toast_empty_task_content">请输入任务描述</string>
     <string name="lable_task_process_content">处理结果：</string>
     <string name="toast_out_of_ten_task">最多允许添加十个任务</string>
+    <string name="task_status_pending_confirmation">待确认</string>
+    <string name="task_status_no_completed">未完成</string>
+    <string name="task_status_completed">已完成</string>
 </resources>

@@ -66,14 +66,6 @@
             android:gravity="center_vertical|right"
             android:textSize="13sp" />
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/root"
-            android:gravity="right"
-            android:textSize="13sp" />
     </RelativeLayout>
 
 </LinearLayout>

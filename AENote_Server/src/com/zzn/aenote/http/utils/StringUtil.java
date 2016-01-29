@@ -11,13 +11,18 @@ public final class StringUtil {
 
 	public static final String EMPTY_STRING = "";
 
-	
-	public static boolean isEmpty(Object data) {
-		return data == null || data.toString().trim().equals("")
-				|| data.toString().trim().equals("null");
+	public static String nullToString(Object data) {
+		if (isEmpty(data)) {
+			return "";
+		}
+		return data.toString().trim();
 	}
-   
-    public static boolean toBoolean(String theString) {
+
+	public static boolean isEmpty(Object data) {
+		return data == null || data.toString().trim().equals("") || data.toString().trim().equals("null");
+	}
+
+	public static boolean toBoolean(String theString) {
 		if (theString == null) {
 			return false;
 		}
@@ -31,7 +36,6 @@ public final class StringUtil {
 		return false;
 	}
 
-	
 	public static String replace(String s, String sub, String with) {
 		int c = 0;
 		int i = s.indexOf(sub, c);
@@ -54,7 +58,6 @@ public final class StringUtil {
 		return buf.toString();
 	}
 
-	
 	public static String xmlEscape(String s) {
 		int length = s.length();
 		StringBuffer fsb = new StringBuffer(length);
@@ -66,7 +69,6 @@ public final class StringUtil {
 		return fsb.toString();
 	}
 
-	
 	public static String truncate(String str, int len) {
 		String result = str;
 		if (str.length() > len) {
@@ -81,12 +83,10 @@ public final class StringUtil {
 		return dec1.compareTo(dec2);
 	}
 
-	
 	public static boolean isAlphaNumeric(String s) {
 		return isAlphaNumeric(s, "");
 	}
 
-	
 	public static boolean isAlphaNumeric(String str, String otherChars) {
 		String alphaNum = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + otherChars;
 		for (int i = 0; i < str.length(); i++) {
@@ -115,7 +115,6 @@ public final class StringUtil {
 		}
 	}
 
-
 	public static boolean isNumber(String str) {
 		try {
 			Double.parseDouble(str);
@@ -139,13 +138,11 @@ public final class StringUtil {
 
 		return 0;
 	}
-	
-	
+
 	public static List string2List(String s) {
 		return string2List(s, ",");
 	}
 
-	
 	public static List string2List(String s, String sep) {
 		return string2List(s, sep, s != null ? s.length() : Integer.MAX_VALUE);
 	}
@@ -668,6 +665,7 @@ public final class StringUtil {
 
 		return fsb;
 	}
+
 	protected static String getEntityRef(int ch) {
 		// Encode special XML characters into the equivalent character
 		// references.
@@ -686,76 +684,84 @@ public final class StringUtil {
 		}
 		return null;
 	}
-	
-  public static int toInt(String str) {
-    int lpResult = 0;
-    try {
-      lpResult = Integer.parseInt(str);
-    } catch(NumberFormatException notint) {}
-    return lpResult;
-  }
-  public static float toFloat(String str) {
-    float lpResult = 0;
 
-    try {
-      lpResult = Float.parseFloat(nullToZero(str));
-    }catch(NumberFormatException nfe){}
-    return lpResult;
-  }
+	public static int toInt(String str) {
+		int lpResult = 0;
+		try {
+			lpResult = Integer.parseInt(str);
+		} catch (NumberFormatException notint) {
+		}
+		return lpResult;
+	}
 
-  public static short toShort(String str) {
-    short lpResult = 0;
+	public static float toFloat(String str) {
+		float lpResult = 0;
 
-    try {
-      lpResult = Short.parseShort(nullToZero(str));
-    }catch(NumberFormatException nfe){}
-    return lpResult;
-  }
-  public static long toLong(String str) {
-    long lpResult = 0;
+		try {
+			lpResult = Float.parseFloat(nullToZero(str));
+		} catch (NumberFormatException nfe) {
+		}
+		return lpResult;
+	}
 
-    try {
-      lpResult = Long.parseLong(nullToZero(str));
-    }catch(NumberFormatException nfe){}
-    return lpResult;
-  }
+	public static short toShort(String str) {
+		short lpResult = 0;
 
-  public static double toDouble(String str) {
-    double lpResult = 0;
+		try {
+			lpResult = Short.parseShort(nullToZero(str));
+		} catch (NumberFormatException nfe) {
+		}
+		return lpResult;
+	}
 
-    try {
-      lpResult = Double.parseDouble(nullToZero(str));
-    }catch(NumberFormatException nfe) {}
-    return lpResult;
-  }
-  public static BigDecimal toBigDecimal(String str){
-    java.math.BigDecimal lpReturnValue = new java.math.BigDecimal( (long) 0);
-    try{
-      lpReturnValue = new BigDecimal(nullToZero(str));
-    }catch(NumberFormatException nfe) {
-      lpReturnValue = new BigDecimal((long) 0);
-    }catch(Exception nfe) {
-      lpReturnValue = new BigDecimal((long) 0);
-    }
-    return lpReturnValue;
-  }
-  
-  public static String intToStr(int lpInt, int lpMaxLength){
-    int length, i;
-    String returnValue = "";
+	public static long toLong(String str) {
+		long lpResult = 0;
 
-    length = Integer.toString(lpInt).length();
-    if (length < lpMaxLength){
-      i = lpMaxLength - length;
-      while( i > 0) {
-        returnValue = returnValue + "0";
-        i--;
-      }
-      returnValue = returnValue + Integer.toString(lpInt);
-    }else{
-      returnValue = Integer.toString(lpInt);
-    }
-   return returnValue;
-  }
-  
+		try {
+			lpResult = Long.parseLong(nullToZero(str));
+		} catch (NumberFormatException nfe) {
+		}
+		return lpResult;
+	}
+
+	public static double toDouble(String str) {
+		double lpResult = 0;
+
+		try {
+			lpResult = Double.parseDouble(nullToZero(str));
+		} catch (NumberFormatException nfe) {
+		}
+		return lpResult;
+	}
+
+	public static BigDecimal toBigDecimal(String str) {
+		java.math.BigDecimal lpReturnValue = new java.math.BigDecimal((long) 0);
+		try {
+			lpReturnValue = new BigDecimal(nullToZero(str));
+		} catch (NumberFormatException nfe) {
+			lpReturnValue = new BigDecimal((long) 0);
+		} catch (Exception nfe) {
+			lpReturnValue = new BigDecimal((long) 0);
+		}
+		return lpReturnValue;
+	}
+
+	public static String intToStr(int lpInt, int lpMaxLength) {
+		int length, i;
+		String returnValue = "";
+
+		length = Integer.toString(lpInt).length();
+		if (length < lpMaxLength) {
+			i = lpMaxLength - length;
+			while (i > 0) {
+				returnValue = returnValue + "0";
+				i--;
+			}
+			returnValue = returnValue + Integer.toString(lpInt);
+		} else {
+			returnValue = Integer.toString(lpInt);
+		}
+		return returnValue;
+	}
+
 }

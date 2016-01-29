@@ -43,6 +43,9 @@
 	<!-- 工作圈 -->
 	<bean id="postService" class="com.zzn.aenote.http.service.PostService">
 	</bean>
+	<!-- 进度管控 -->
+	<bean id="taskService" class="com.zzn.aenote.http.service.TaskService">
+	</bean>
 	<!-- 注册 -->
 	<bean id="register" class="com.zzn.aenote.http.server.user.Register">
 		<property name="userService">

@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import com.zzn.aenote.http.BaseService;
 import com.zzn.aenote.http.utils.UtilUniqueKey;
 import com.zzn.aenote.http.vo.TaskDetailVO;
@@ -20,7 +18,8 @@ import com.zzn.aenote.http.vo.TaskVO;
  * @author Shawn
  */
 public class TaskService extends BaseService {
-	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	/**
 	 * 插入一条新任务
@@ -41,7 +40,7 @@ public class TaskService extends BaseService {
 			data.put("create_project_id", create_project_id);
 			data.put("root_id", root_id);
 			Date time = new Date(System.currentTimeMillis());
-			data.put("time", format.format(time));
+			data.put("time", timeFormat.format(time));
 			getJdbc().execute(getSql("insert_task", data));
 			for (TaskDetailVO taskDetail : taskDetails) {
 				data.clear();
@@ -51,7 +50,6 @@ public class TaskService extends BaseService {
 				data.put("content", taskDetail.getContent());
 				data.put("attch_id", taskDetail.getAttch_id());
 				data.put("start_time", taskDetail.getStart_time());
-				data.put("status", "0");
 				getJdbc().execute(getSql("insert_task_detail", data));
 			}
 			return true;
@@ -64,9 +62,10 @@ public class TaskService extends BaseService {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * 处理任务
+	 * 
 	 * @param task_detail_id
 	 * @param status
 	 * @param process_content
@@ -98,21 +97,28 @@ public class TaskService extends BaseService {
 	 * @return
 	 */
 	public List<TaskVO> queryTaskAll(String root_id, int page) {
-		List<TaskVO> result;
+		List<TaskVO> taskList = new ArrayList<TaskVO>();
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("root_id", root_id);
 		data.put("start", (page * 20 + 1) + "");
 		data.put("end", (page + 1) * 20 + "");
-		result = getJdbc().queryForList(getSql("query_task_all", data));
-		if (result == null) {
-			result = new ArrayList<>();
+		List<Map<String, Object>> result = getJdbc().queryForList(getSql("query_task_all", data));
+		if (result == null || result.size() == 0) {
+			return taskList;
 		}
-		for (TaskVO task : result) {
+		for (Map<String, Object> map : result) {
+			TaskVO task = TaskVO.assembleTaskVO(map);
 			data.clear();
 			data.put("task_id", task.getTask_id());
-			task.setTask_detail_list(getJdbc().queryForList(getSql("query_task_detail", data)));
+			List<Map<String, Object>> taskDetailList = getJdbc().queryForList(getSql("query_task_detail", data));
+			if (result != null && result.size() > 0) {
+				for (Map<String, Object> taskDetail : taskDetailList) {
+					task.getTask_detail_list().add(TaskDetailVO.assembleTaskDetailVO(taskDetail));
+				}
+			}
+			taskList.add(task);
 		}
-		return result;
+		return taskList;
 	}
 
 	/**
@@ -124,35 +130,45 @@ public class TaskService extends BaseService {
 	 * @return
 	 */
 	public List<TaskVO> queryTaskCreate(String root_id, String user_id, int page) {
-		List<TaskVO> result;
+		List<TaskVO> taskList = new ArrayList<TaskVO>();
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("root_id", root_id);
 		data.put("user_id", user_id);
 		data.put("start", (page * 20 + 1) + "");
 		data.put("end", (page + 1) * 20 + "");
-		result = getJdbc().queryForList(getSql("query_task_create", data));
-		if (result == null) {
-			result = new ArrayList<>();
+		List<Map<String, Object>> result = getJdbc().queryForList(getSql("query_task_create", data));
+		if (result == null || result.size() == 0) {
+			return taskList;
 		}
-		for (TaskVO task : result) {
+		for (Map<String, Object> map : result) {
+			TaskVO task = TaskVO.assembleTaskVO(map);
 			data.clear();
 			data.put("task_id", task.getTask_id());
-			task.setTask_detail_list(getJdbc().queryForList(getSql("query_task_detail", data)));
+			List<Map<String, Object>> taskDetailList = getJdbc().queryForList(getSql("query_task_detail", data));
+			if (result != null && result.size() > 0) {
+				for (Map<String, Object> taskDetail : taskDetailList) {
+					task.getTask_detail_list().add(TaskDetailVO.assembleTaskDetailVO(taskDetail));
+				}
+			}
+			taskList.add(task);
 		}
-		return result;
+		return taskList;
 	}
 
 	public List<TaskDetailVO> queryTaskProcess(String root_id, String user_id, int page) {
-		List<TaskDetailVO> result;
+		List<TaskDetailVO> taskDetailList = new ArrayList<TaskDetailVO>();
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("root_id", root_id);
 		data.put("user_id", user_id);
 		data.put("start", (page * 20 + 1) + "");
 		data.put("end", (page + 1) * 20 + "");
-		result = getJdbc().queryForList(getSql("query_task_process", data));
-		if (result == null) {
-			result = new ArrayList<>();
+		List<Map<String, Object>> result = getJdbc().queryForList(getSql("query_task_process", data));
+		if (result == null || result.size() == 0) {
+			return taskDetailList;
 		}
-		return result;
+		for (Map<String, Object> map : result) {
+			taskDetailList.add(TaskDetailVO.assembleTaskDetailVO(map));
+		}
+		return taskDetailList;
 	}
 }
