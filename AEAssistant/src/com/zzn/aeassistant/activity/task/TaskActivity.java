@@ -3,7 +3,9 @@ package com.zzn.aeassistant.activity.task;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BasePageActivity;
 import com.zzn.aeassistant.constants.CodeConstants;
+import com.zzn.aeassistant.fragment.BaseFragment;
 import com.zzn.aeassistant.fragment.ExpandTaskFragment;
+import com.zzn.aeassistant.fragment.TaskFragment;
 import com.zzn.aeassistant.view.viewpager.SectionPage;
 import com.zzn.aeassistant.view.viewpager.SectionPageAdapter;
 import com.zzn.aeassistant.vo.ProjectVO;
@@ -29,24 +31,29 @@ public class TaskActivity extends BasePageActivity {
 		pager.setOffscreenPageLimit(3);
 		for (int i = 0; i < 3; i++) {
 			SectionPage item = new SectionPage();
-			ExpandTaskFragment fragment = new ExpandTaskFragment();
+			BaseFragment fragment = null;
 			Bundle bundle = new Bundle();
 			bundle.putSerializable(CodeConstants.KEY_PROJECT_VO, project);
 			if (i == 0) {
+				fragment = new ExpandTaskFragment();
 				item.setTitle(getString(R.string.lable_task_all));
 				bundle.putInt(CodeConstants.KEY_TASK_STATUS, CodeConstants.STATUS_TASK_ALL);
 			}
 			if (i == 1) {
+				fragment = new ExpandTaskFragment();
 				item.setTitle(getString(R.string.lable_task_create));
 				bundle.putInt(CodeConstants.KEY_TASK_STATUS, CodeConstants.STATUS_TASK_CREATE);
 			}
 			if (i == 2) {
+				fragment = new TaskFragment();
 				item.setTitle(getString(R.string.lable_task_process));
 				bundle.putInt(CodeConstants.KEY_TASK_STATUS, CodeConstants.STATUS_TASK_PROCESS);
 			}
-			fragment.setArguments(bundle);
-			item.setFragment(fragment);
-			pageList.add(item);
+			if (fragment != null) {
+				fragment.setArguments(bundle);
+				item.setFragment(fragment);
+				pageList.add(item);
+			}
 		}
 		adapterPages = new SectionPageAdapter(getSupportFragmentManager(), pageList);
 		pager.setAdapter(adapterPages);
@@ -68,7 +75,7 @@ public class TaskActivity extends BasePageActivity {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case CodeConstants.REQUEST_CODE_REFRESH:
-				//刷新列表
+				// 刷新列表
 				break;
 			default:
 				break;

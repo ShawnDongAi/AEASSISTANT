@@ -17,9 +17,11 @@ import android.widget.TextView;
 public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private List<TaskVO> datas = new ArrayList<>();
+	private boolean mShowCreateUser = true;
 
-	public ExpandTaskAdapter(Context context) {
+	public ExpandTaskAdapter(Context context, boolean showCreateUser) {
 		this.mContext = context;
+		this.mShowCreateUser = showCreateUser;
 	}
 
 	public void addData(TaskVO task) {
@@ -86,6 +88,7 @@ public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 			holder = new GroupHolder();
 			convertView = View.inflate(mContext, R.layout.item_task_group, null);
 			holder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
+			holder.lableCreateUser = (TextView) convertView.findViewById(R.id.lable_create_user);
 			holder.createUser = (TextView) convertView.findViewById(R.id.create_user);
 			holder.date = (TextView) convertView.findViewById(R.id.date);
 			convertView.setTag(holder);
@@ -94,6 +97,8 @@ public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 		}
 		TaskVO group = getGroup(groupPosition);
 		holder.createUser.setText(group.getCreate_user_name());
+		holder.lableCreateUser.setVisibility(mShowCreateUser ? View.VISIBLE : View.GONE);
+		holder.createUser.setVisibility(mShowCreateUser ? View.VISIBLE : View.GONE);
 		holder.date.setText(group.getTime());
 		holder.arrow.setImageResource(isExpanded ? R.drawable.ic_down : R.drawable.ic_to);
 		return convertView;
@@ -139,6 +144,7 @@ public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 	class GroupHolder {
 		ImageView arrow;
 		TextView date;
+		TextView lableCreateUser;
 		TextView createUser;
 	}
 

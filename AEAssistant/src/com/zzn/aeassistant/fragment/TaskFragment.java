@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.activity.task.ExpandTaskAdapter;
+import com.zzn.aeassistant.activity.task.TaskAdapter;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -16,57 +16,54 @@ import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.Mode;
 import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshBase.OnRefreshListener2;
-import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshExpandableListView;
+import com.zzn.aeassistant.view.pulltorefresh.PullToRefreshListView;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 import com.zzn.aeassistant.vo.TaskDetailVO;
-import com.zzn.aeassistant.vo.TaskVO;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 
-public class ExpandTaskFragment extends BaseFragment implements OnChildClickListener {
-	private int taskStatus = CodeConstants.STATUS_TASK_ALL;
+public class TaskFragment extends BaseFragment implements OnItemClickListener {
 	private ProjectVO project;
-	private PullToRefreshExpandableListView mListView;
-	private ExpandTaskAdapter mAdapter;
+	private PullToRefreshListView mListView;
+	private TaskAdapter mAdapter;
 	private int page = 0;
 	private boolean hasMore = true;
 	private ListTask listTask;
 
 	@Override
 	protected int layoutResID() {
-		return R.layout.layout_expand_list;
+		return R.layout.layout_base_list;
 	}
 
 	@Override
 	protected void initView(View container) {
 		Bundle bundle = getArguments();
-		taskStatus = bundle.getInt(CodeConstants.KEY_TASK_STATUS);
 		project = (ProjectVO) bundle.getSerializable(CodeConstants.KEY_PROJECT_VO);
-		mListView = (PullToRefreshExpandableListView) container.findViewById(R.id.base_list);
+		mListView = (PullToRefreshListView) container.findViewById(R.id.base_list);
 		mListView.setEmptyView(View.inflate(mContext, R.layout.list_empty_view, null));
-		mAdapter = new ExpandTaskAdapter(mContext, taskStatus == CodeConstants.STATUS_TASK_ALL);
+		mAdapter = new TaskAdapter(mContext);
 		mListView.getRefreshableView().setAdapter(mAdapter);
-		mListView.getRefreshableView().setOnChildClickListener(this);
+		mListView.setOnItemClickListener(this);
 		initPullToRefresh();
 	}
 
 	@Override
-	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-		TaskDetailVO taskDetail = mAdapter.getChild(groupPosition, childPosition);
-		return false;
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		TaskDetailVO taskDetail = mAdapter.getItem(position - 1);
 	}
 
 	private void initPullToRefresh() {
 		mListView.setMode(Mode.BOTH);
-		mListView.setOnRefreshListener(new OnRefreshListener2<ExpandableListView>() {
+		mListView.setOnRefreshListener(new OnRefreshListener2<ListView>() {
 			@Override
-			public void onPullDownToRefresh(final PullToRefreshBase<ExpandableListView> refreshView) {
+			public void onPullDownToRefresh(final PullToRefreshBase<ListView> refreshView) {
 				String label = DateUtils.formatDateTime(AEApp.getInstance(), System.currentTimeMillis(),
 						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
 				// Update the LastUpdatedLabel
@@ -80,7 +77,7 @@ public class ExpandTaskFragment extends BaseFragment implements OnChildClickList
 			}
 
 			@Override
-			public void onPullUpToRefresh(final PullToRefreshBase<ExpandableListView> refreshView) {
+			public void onPullUpToRefresh(final PullToRefreshBase<ListView> refreshView) {
 				if (listTask != null) {
 					listTask.cancel(true);
 				}
@@ -100,10 +97,8 @@ public class ExpandTaskFragment extends BaseFragment implements OnChildClickList
 			StringBuilder param = new StringBuilder();
 			param.append("root_id=" + project.getROOT_ID());
 			param.append("&page=" + page);
-			if (taskStatus == CodeConstants.STATUS_TASK_CREATE) {
-				param.append("&user_id=" + project.getCREATE_USER());
-			}
-			return AEHttpUtil.doPost(URLConstants.URL_QUERY_TASK, param.toString());
+			param.append("&user_id=" + project.getCREATE_USER());
+			return AEHttpUtil.doPost(URLConstants.URL_QUERY_MY_TASK, param.toString());
 		}
 
 		@Override
@@ -114,8 +109,8 @@ public class ExpandTaskFragment extends BaseFragment implements OnChildClickList
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				if (result.getRES_OBJ() != null && !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
 					try {
-						List<TaskVO> taskList = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(),
-								new TypeToken<List<TaskVO>>() {
+						List<TaskDetailVO> taskList = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(),
+								new TypeToken<List<TaskDetailVO>>() {
 								}.getType());
 						if (page == 0) {
 							mAdapter.setDatas(taskList);
