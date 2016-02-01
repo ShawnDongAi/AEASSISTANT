@@ -35,7 +35,7 @@
             android:layout_alignTop="@+id/project"
             android:layout_below="@+id/thumbnail"
             android:layout_marginLeft="8dp"
-            android:src="@drawable/ic_warning" />
+            android:src="@drawable/ic_warning_red" />
 
         <TextView
             android:id="@+id/project"

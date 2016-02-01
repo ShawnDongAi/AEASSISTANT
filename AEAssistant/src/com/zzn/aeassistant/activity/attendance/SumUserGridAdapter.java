@@ -101,7 +101,7 @@ public class SumUserGridAdapter extends BaseAdapter {
 					R.color.theme_green_pressed));
 			holder.progress.setWidthInDp(2);
 			holder.project = (TextView) convertView.findViewById(R.id.project);
-			holder.normal = (ImageView) convertView.findViewById(R.id.normal);
+			holder.status = (ImageView) convertView.findViewById(R.id.normal);
 			holder.root = (TextView) convertView.findViewById(R.id.root);
 			convertView.setTag(holder);
 		} else {
@@ -111,8 +111,10 @@ public class SumUserGridAdapter extends BaseAdapter {
 		holder.address.setText(vo.getAddress());
 		holder.time.setText(vo.getDate());
 		holder.project.setText(vo.getProject_name());
-		holder.normal.setVisibility(vo.getNormal() != null
-				&& vo.getNormal().equals("1") ? View.VISIBLE : View.INVISIBLE);
+		holder.status
+				.setVisibility(vo.getNormal() != null && !vo.getNormal().equals("0") ? View.VISIBLE : View.INVISIBLE);
+		holder.status.setImageResource(vo.getNormal() != null && vo.getNormal().equals("1") ? R.drawable.ic_warning_red
+				: R.drawable.ic_warning_green);
 		if (vo.getRoot_project_name() != null) {
 			holder.root.setText(vo.getRoot_project_name());
 		}
@@ -158,7 +160,7 @@ public class SumUserGridAdapter extends BaseAdapter {
 		private STGVImageView photo;
 		private SquareProgressView progress;
 		private TextView project;
-		private ImageView normal;
+		private ImageView status;
 		private TextView root;
 	}
 }

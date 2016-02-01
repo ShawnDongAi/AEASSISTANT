@@ -41,11 +41,11 @@ public class ScanningLeaf implements CmHandler {
 						if (attendanceService.isScanningTodayVaild(id)) {
 							result = attendanceService.scanning(project.getCREATE_USER(), id, project.getPARENT_ID(),
 									project.getROOT_ID(), project.getCREATE_USER_HEAD(), project.getADDRESS(),
-									project.getLONGITUDE(), project.getLATITUDE(), "0", "");
+									project.getLONGITUDE(), project.getLATITUDE(), "2", "");
 						} else {
 							result = attendanceService.updateScanning(project.getCREATE_USER(), id,
 									project.getPARENT_ID(), project.getROOT_ID(), project.getCREATE_USER_HEAD(),
-									project.getADDRESS(), project.getLONGITUDE(), project.getLATITUDE(), "0", "");
+									project.getADDRESS(), project.getLONGITUDE(), project.getLATITUDE(), "2", "");
 						}
 					} else {
 						if (!id.equals(project.getPARENT_ID())) {
@@ -54,7 +54,7 @@ public class ScanningLeaf implements CmHandler {
 						}
 						result = attendanceService.scanning(project.getCREATE_USER(), id, project.getPARENT_ID(),
 								project.getROOT_ID(), project.getCREATE_USER_HEAD(), project.getADDRESS(),
-								project.getLONGITUDE(), project.getLATITUDE(), "0", "");
+								project.getLONGITUDE(), project.getLATITUDE(), "2", "");
 					}
 					if (!result) {
 						failedProject.append(project.getPROJECT_NAME() + ",");

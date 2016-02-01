@@ -2,6 +2,7 @@ package com.zzn.aeassistant.activity.task;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BasePageActivity;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.fragment.BaseFragment;
 import com.zzn.aeassistant.fragment.ExpandTaskFragment;
@@ -26,8 +27,10 @@ public class TaskActivity extends BasePageActivity {
 	protected void initView() {
 		super.initView();
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
-		save.setVisibility(View.VISIBLE);
-		save.setText(R.string.new_);
+		if (project.getCREATE_USER().equals(AEApp.getCurrentUser().getUSER_ID())) {
+			save.setVisibility(View.VISIBLE);
+			save.setText(R.string.new_);
+		}
 		pager.setOffscreenPageLimit(3);
 		for (int i = 0; i < 3; i++) {
 			SectionPage item = new SectionPage();

@@ -31,7 +31,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignTop="@+id/project"
             android:layout_below="@+id/thumbnail"
-            android:src="@drawable/ic_warning" />
+            android:src="@drawable/ic_warning_red" />
 
         <TextView
             android:id="@+id/project"

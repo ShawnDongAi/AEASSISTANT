@@ -44,7 +44,6 @@
 		select * from t_attendance
 		where
 		1=1
-		and photo!='null'
 		and photo!='00000000000000000000000000000000'
 		[and
 		project_id='#project_id#']
@@ -53,8 +52,7 @@
 	</select>
 	<!-- 根据项目查询某时间段内的考勤记录数量 -->
 	<select id="sum_count_by_project">
-		select count(case when t.photo!='null'
-		and
+		select count(case when 
 		t.photo!='00000000000000000000000000000000' then '0'
 		end) as count,
 		count(case
@@ -84,8 +82,7 @@
 	</select>
 	<!-- 根据父项目查询某时间段内的考勤记录数量 -->
 	<select id="sum_count_by_parent">
-		select count(case when t.photo!='null'
-		and
+		select count(case when 
 		t.photo!='00000000000000000000000000000000' then '0'
 		end) as count,
 		count(case
@@ -159,7 +156,6 @@
 		t_project b on
 		t.project_id=b.project_id
 		where 1=1
-		and t.photo!='null'
 		and
 		t.photo!='00000000000000000000000000000000'
 		[and
@@ -215,7 +211,6 @@
 		t_project b on
 		t.project_id=b.project_id
 		where 1=1
-		and t.photo!='null'
 		and
 		t.photo!='00000000000000000000000000000000'
 		[and t.user_id='#user_id#']
@@ -230,7 +225,6 @@
 	<select id="sum_count_by_user">
 		select count(project_id) from t_attendance
 		where 1=1
-		and photo!='null'
 		and
 		photo!='00000000000000000000000000000000'
 		[and
