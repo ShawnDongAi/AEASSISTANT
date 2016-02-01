@@ -22,6 +22,7 @@ import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.AttachAdapter;
 import com.zzn.aeassistant.view.AttachAdapter.OnAddAttachCallBack;
+import com.zzn.aeassistant.view.AttachAdapter.OnDeleteListener;
 import com.zzn.aeassistant.view.FastenGridView;
 import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.HttpResult;
@@ -53,7 +54,6 @@ public class CreateTaskActivity extends BaseActivity {
 	private ListView listView;
 	private EditTaskAdapter adapter;
 	private int currentPos = 0;
-	private String currentPath = "";
 	private CreateTask createTask;
 
 	@Override
@@ -72,6 +72,7 @@ public class CreateTaskActivity extends BaseActivity {
 		save.setText(R.string.save);
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
 		listView = (ListView) findViewById(R.id.base_list);
+		listView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 		adapter = new EditTaskAdapter();
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -144,14 +145,12 @@ public class CreateTaskActivity extends BaseActivity {
 	@Override
 	protected void getImg(String path) {
 		super.getImg(path);
-		currentPath = path;
 		new UploadFileTask().execute(path);
 	}
 
 	@Override
 	protected void getFile(String path) {
 		super.getFile(path);
-		currentPath = path;
 		new UploadFileTask().execute(path);
 	}
 
@@ -304,6 +303,12 @@ public class CreateTaskActivity extends BaseActivity {
 					attachAdapter = (AttachAdapter) holder.attach.getTag();
 					attachAdapter.clear();
 				}
+				attachAdapter.setOnDeleteListener(new OnDeleteListener() {
+					@Override
+					public void onDelete(int position) {
+						getItem(position).attachList.remove(position);
+					}
+				});
 				if (item.attachList != null && item.attachList.size() > 0) {
 					for (String id : item.attachList) {
 						if (!StringUtil.isEmpty(id)) {
@@ -330,7 +335,7 @@ public class CreateTaskActivity extends BaseActivity {
 						if (parent.getTag() != null && parent.getTag() instanceof AttachAdapter) {
 							((AttachAdapter) parent.getTag()).onItemLongClick();
 						}
-						return false;
+						return true;
 					}
 				});
 			}
@@ -430,13 +435,11 @@ public class CreateTaskActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				AttchVO vo = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(), AttchVO.class);
-				vo.setLOCAL_PATH(currentPath);
 				adapter.getItem(currentPos).attachList.add(vo.getATTCH_ID());
 				adapter.notifyDataSetChanged();
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}
-			currentPath = "";
 		}
 
 		@Override
@@ -472,11 +475,10 @@ public class CreateTaskActivity extends BaseActivity {
 		protected void onPostExecute(HttpResult result) {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
+			ToastUtil.show(result.getRES_MESSAGE());
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				setResult(RESULT_OK);
 				finish();
-			} else {
-				ToastUtil.show(result.getRES_MESSAGE());
 			}
 		}
 

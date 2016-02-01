@@ -240,7 +240,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <activity
-            android:name=".activity.task.TaskDetailActivity"
+            android:name=".activity.task.TaskDetailViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ae_theme_translucent" />
+        <activity
+            android:name=".activity.task.TaskDetailEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ae_theme_translucent" />
         <!-- 头像裁剪页面 -->

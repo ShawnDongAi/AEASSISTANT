@@ -1,17 +1,15 @@
 package com.zzn.aenote.http.server.task;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
-import com.google.gson.reflect.TypeToken;
+
 import com.zzn.aenote.http.Global;
 import com.zzn.aenote.http.server.CmHandler;
 import com.zzn.aenote.http.service.TaskService;
-import com.zzn.aenote.http.utils.GsonUtil;
 import com.zzn.aenote.http.utils.StringUtil;
 import com.zzn.aenote.http.vo.BaseRep;
-import com.zzn.aenote.http.vo.TaskDetailVO;
 
 public class ProcessTask implements CmHandler {
 	protected static final Logger logger = Logger.getLogger(ProcessTask.class);

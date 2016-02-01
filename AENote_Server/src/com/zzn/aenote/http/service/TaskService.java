@@ -19,7 +19,7 @@ import com.zzn.aenote.http.vo.TaskVO;
  */
 public class TaskService extends BaseService {
 	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-	private SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 	/**
 	 * 插入一条新任务
@@ -47,6 +47,7 @@ public class TaskService extends BaseService {
 				data.put("task_detail_id", UtilUniqueKey.getKey("taskDetail" + System.currentTimeMillis()));
 				data.put("task_id", task_id);
 				data.put("process_user_id", taskDetail.getProcess_user_id());
+				data.put("process_project_id", taskDetail.getProcess_project_id());
 				data.put("content", taskDetail.getContent());
 				data.put("attch_id", taskDetail.getAttch_id());
 				data.put("start_time", taskDetail.getStart_time());

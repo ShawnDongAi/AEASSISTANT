@@ -61,15 +61,12 @@
 
     <com.zzn.aeassistant.view.FastenGridView
         android:id="@+id/attach_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/base_attach_grid"
         android:layout_below="@+id/content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:columnWidth="80dp"
         android:horizontalSpacing="5dp"
-        android:numColumns="auto_fit"
         android:verticalSpacing="5dp" />
 
     <ImageView

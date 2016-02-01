@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/lable_task_process_content"
+        android:textSize="@dimen/menu_text_size" />
+
+    <EditText
+        android:id="@+id/task_process_content"
+        style="@style/base_edit_text"
+        android:gravity="left|top"
+        android:hint="@string/hint_task_process_content"
+        android:maxLength="3000"
+        android:minLines="5"
+        android:singleLine="false" />
+
+    <com.zzn.aeassistant.view.FastenGridView
+        android:id="@+id/task_process_attach_list"
+        style="@style/base_attach_grid" />
+
+</LinearLayout>

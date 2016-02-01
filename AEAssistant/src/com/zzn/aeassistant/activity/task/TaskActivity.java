@@ -76,6 +76,9 @@ public class TaskActivity extends BasePageActivity {
 			switch (requestCode) {
 			case CodeConstants.REQUEST_CODE_REFRESH:
 				// 刷新列表
+				for (int i = 0; i < pageList.size(); i++) {
+					pageList.get(i).getFragment().onActivityResult(requestCode, resultCode, data);
+				}
 				break;
 			default:
 				break;

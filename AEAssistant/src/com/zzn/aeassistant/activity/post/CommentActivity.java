@@ -103,7 +103,7 @@ public class CommentActivity extends BaseActivity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				adapter.onItemLongClick();
-				return false;
+				return true;
 			}
 		});
 	}

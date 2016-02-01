@@ -32,7 +32,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <TextView
@@ -47,7 +46,11 @@
             style="@style/base_edit_text"
             android:layout_width="0dp"
             android:layout_weight="3"
+            android:gravity="left|top"
             android:hint="@string/hint_task_content"
+            android:lines="5"
+            android:maxLength="3000"
+            android:singleLine="false"
             android:textColor="@color/text_normal" />
     </LinearLayout>
 
@@ -80,12 +83,6 @@
 
     <com.zzn.aeassistant.view.FastenGridView
         android:id="@+id/task_create_attach_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnWidth="80dp"
-        android:divider="@null"
-        android:horizontalSpacing="2dp"
-        android:numColumns="auto_fit"
-        android:padding="2dp" />
+        style="@style/base_attach_grid" />
 
 </LinearLayout>

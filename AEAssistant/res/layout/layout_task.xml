@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -37,31 +39,19 @@
             android:text="@string/lable_task_create_user"
             android:textSize="@dimen/menu_text_size" />
 
+        <com.zzn.aeassistant.view.CircleImageView
+            android:id="@+id/task_create_user_head"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_head"
+            app:border_color="@color/theme_green"
+            app:border_width="1dp" />
+
         <TextView
             android:id="@+id/task_create_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_normal"
-            android:textSize="@dimen/menu_text_size" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lable_task_process_user"
-            android:textSize="@dimen/menu_text_size" />
-
-        <TextView
-            android:id="@+id/task_process_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:textColor="@color/text_normal"
             android:textSize="@dimen/menu_text_size" />
     </LinearLayout>
@@ -110,13 +100,37 @@
 
     <com.zzn.aeassistant.view.FastenGridView
         android:id="@+id/task_create_attach_list"
+        style="@style/base_attach_grid"
+        android:visibility="gone" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnWidth="80dp"
-        android:divider="@null"
-        android:horizontalSpacing="2dp"
-        android:numColumns="auto_fit"
-        android:padding="2dp"
-        android:visibility="gone" />
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lable_task_process_user"
+            android:textSize="@dimen/menu_text_size" />
+
+        <com.zzn.aeassistant.view.CircleImageView
+            android:id="@+id/task_process_user_head"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_head"
+            app:border_color="@color/theme_green"
+            app:border_width="1dp" />
+
+        <TextView
+            android:id="@+id/task_process_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/text_normal"
+            android:textSize="@dimen/menu_text_size" />
+    </LinearLayout>
 
 </LinearLayout>

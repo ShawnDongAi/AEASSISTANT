@@ -35,7 +35,7 @@
 	<select id="query_task_all">
 		select * from(
 		select ROW_NUMBER() OVER (ORDER BY
-		t.time asc) rn,
+		t.time desc) rn,
 		t.task_id,t.create_user_id,t.create_project_id,t.root_id,
 		(to_char(t.time,'yyyy-MM-dd HH24:mi')) as
 		time,(select user_name
@@ -68,7 +68,7 @@
 	<select id="query_task_create">
 		select * from(
 		select ROW_NUMBER() OVER (ORDER BY
-		t.time asc) rn,
+		t.time desc) rn,
 		t.task_id,t.create_user_id,t.create_project_id,t.root_id,
 		(to_char(t.time,'yyyy-MM-dd HH24:mi')) as
 		time,(select user_name
@@ -105,7 +105,7 @@
 	<select id="query_task_process">
 		select * from(
 		select ROW_NUMBER() OVER (ORDER BY
-		t.time asc) rn,
+		t.time desc) rn,
 		t.task_id,t.create_user_id,t.create_project_id,t.root_id,
 		(to_char(t.time,'yyyy-MM-dd HH24:mi')) as
 		time,(select user_name
@@ -214,11 +214,11 @@
 		t.task_id='#task_id#']
 	</select>
 	<select id="delete_task">
-		delete from t_task where 1=1 and [and
+		delete from t_task where 1=1 [and
 		task_id='#task_id#']
 	</select>
 	<select id="delete_task_detail">
-		delete from t_task_detail where 1=1 and [and
+		delete from t_task_detail where 1=1 [and
 		task_id='#task_id#']
 	</select>
 </Scheme>

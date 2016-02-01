@@ -6,7 +6,7 @@
         <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
         <item name="android:activityCloseExitAnimation">@anim/out_to_right</item>
     </style>
-    
+
     <!-- Application theme. -->
     <style name="AppTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
@@ -56,7 +56,7 @@
         <item name="android:textColor">@color/text_normal</item>
         <item name="android:textColorHint">@color/darkgray</item>
     </style>
-    
+
     <style name="base_list" parent="@android:style/Widget.AbsListView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -66,6 +66,21 @@
         <item name="android:footerDividersEnabled">false</item>
         <item name="android:headerDividersEnabled">false</item>
         <item name="android:smoothScrollbar">true</item>
+        <item name="android:descendantFocusability">blocksDescendants</item>
+    </style>
+
+    <style name="base_attach_grid">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:columnWidth">80dp</item>
+        <item name="android:divider">@null</item>
+        <item name="android:horizontalSpacing">2dp</item>
+        <item name="android:numColumns">auto_fit</item>
+        <item name="android:padding">2dp</item>
+        <item name="android:cacheColorHint">@color/transparent</item>
+        <item name="android:fadingEdge">none</item>
+        <item name="android:fastScrollEnabled">false</item>
+        <item name="android:descendantFocusability">blocksDescendants</item>
     </style>
 
     <style name="loading_dialog" parent="android:style/Theme.Dialog">
@@ -88,7 +103,6 @@
         <item name="shadow_bottom">@drawable/shadow_bottom</item>
     </style>
 
-    
     <style name="Crop"></style>
 
     <style name="Crop.DoneCancelBar">
@@ -111,7 +125,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingRight">20dp</item> <!-- Offsets left drawable -->
+        <item name="android:paddingRight">20dp</item>
+ <!-- Offsets left drawable -->
         <item name="android:drawablePadding">8dp</item>
         <item name="android:textColor">@drawable/text_light</item>
         <item name="android:textStyle">bold</item>
@@ -127,4 +142,5 @@
         <item name="android:drawableLeft">@drawable/crop__ic_cancel</item>
         <item name="android:text">@string/cancel</item>
     </style>
+
 </resources>

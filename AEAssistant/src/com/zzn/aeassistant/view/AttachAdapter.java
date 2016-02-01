@@ -42,7 +42,9 @@ public class AttachAdapter extends BaseAdapter {
 	private boolean isDeleteMode = false;
 	private boolean editable = false;
 	private OnAddAttachCallBack onAddAttachCallBack;
+	private OnDeleteListener onDeleteListener;
 	private AlertDialog chooseDialog;
+	private AttchVO addVO = new AttchVO();
 
 	public AttachAdapter(Context context, boolean editable, OnAddAttachCallBack mOnAddAttachCallBack) {
 		this.mContext = context;
@@ -66,7 +68,7 @@ public class AttachAdapter extends BaseAdapter {
 				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
 				.build();// 构建完成
 		if (editable) {
-			attchList.add(new AttchVO());
+			attchList.add(addVO);
 		}
 		this.onAddAttachCallBack = mOnAddAttachCallBack;
 		String items[] = new String[]{mContext.getString(R.string.photograph), mContext.getString(R.string.album)};
@@ -101,7 +103,7 @@ public class AttachAdapter extends BaseAdapter {
 	public void clear() {
 		attchList.clear();
 		if (editable) {
-			attchList.add(new AttchVO());
+			attchList.add(addVO);
 		}
 	}
 
@@ -116,6 +118,10 @@ public class AttachAdapter extends BaseAdapter {
 			ids.deleteCharAt(ids.length() - 1);
 		}
 		return ids.toString();
+	}
+	
+	public void setOnDeleteListener(OnDeleteListener onDeleteListener) {
+		this.onDeleteListener = onDeleteListener;
 	}
 
 	@Override
@@ -145,11 +151,11 @@ public class AttachAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		if (position == getCount() - 1 && editable) {
+		AttchVO item = getItem(position);
+		if (StringUtil.isEmpty(item.getATTCH_ID())) {
 			holder.delete.setVisibility(View.GONE);
 			holder.image.setImageResource(R.drawable.ic_add);
 		} else {
-			AttchVO item = getItem(position);
 			if (item.getTYPE().equals(AttchVO.TYPE_IMG)) {
 				if (!StringUtil.isEmpty(item.getLOCAL_PATH())) {
 					imageLoader.displayImage(Uri.fromFile(new File(item.getLOCAL_PATH())).toString(), holder.image,
@@ -176,6 +182,9 @@ public class AttachAdapter extends BaseAdapter {
 					public void onClick(View v) {
 						attchList.remove(position);
 						notifyDataSetChanged();
+						if (onDeleteListener != null) {
+							onDeleteListener.onDelete(position);
+						}
 					}
 				});
 			}
@@ -194,12 +203,18 @@ public class AttachAdapter extends BaseAdapter {
 	}
 
 	public void onItemClick(int position) {
-		if (isDeleteMode) {
-			isDeleteMode = false;
-			notifyDataSetChanged();
-			return;
+		if (getCount() == 0 || (editable && getCount() <= 1)) {
+			if (isDeleteMode) {
+				isDeleteMode = false;
+			}
+		} else {
+			if (isDeleteMode) {
+				isDeleteMode = false;
+				notifyDataSetChanged();
+				return;
+			}
 		}
-		if (position == getCount() - 1) {
+		if (position == getCount() - 1 && editable) {
 			if (getCount() >= 9) {
 				ToastUtil.show(R.string.much_file);
 				return;
@@ -251,5 +266,9 @@ public class AttachAdapter extends BaseAdapter {
 	public interface OnAddAttachCallBack {
 		public void onAddPhoto();
 		public void onAddCamera();
+	}
+	
+	public interface OnDeleteListener {
+		public void onDelete(int position);
 	}
 }

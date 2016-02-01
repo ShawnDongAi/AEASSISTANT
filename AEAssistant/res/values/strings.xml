@@ -223,4 +223,6 @@
     <string name="task_status_pending_confirmation">待确认</string>
     <string name="task_status_no_completed">未完成</string>
     <string name="task_status_completed">已完成</string>
+    <string name="hint_task_process_content">请输入处理结果</string>
+    <string name="toast_empty_task_process_content">请输入处理结果</string>
 </resources>

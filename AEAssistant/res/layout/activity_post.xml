@@ -119,13 +119,7 @@
 
         <com.zzn.aeassistant.view.FastenGridView
             android:id="@+id/attch_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnWidth="80dp"
-            android:divider="@null"
-            android:horizontalSpacing="2dp"
-            android:numColumns="auto_fit"
-            android:padding="2dp"
+            style="@style/base_attach_grid"
             android:visibility="gone" />
     </LinearLayout>
 

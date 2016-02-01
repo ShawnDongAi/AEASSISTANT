@@ -5,6 +5,8 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.task.TaskAdapter;
+import com.zzn.aeassistant.activity.task.TaskDetailEditActivity;
+import com.zzn.aeassistant.activity.task.TaskDetailViewActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -21,6 +23,8 @@ import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 import com.zzn.aeassistant.vo.TaskDetailVO;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -57,6 +61,30 @@ public class TaskFragment extends BaseFragment implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		TaskDetailVO taskDetail = mAdapter.getItem(position - 1);
+		Intent intent = new Intent();
+		intent.putExtra(CodeConstants.KEY_TASK_DETAIL, taskDetail);
+		if (taskDetail.getProcess_user_id().equals(project.getCREATE_USER()) && taskDetail.getStatus().equals("0")) {
+			intent.setClass(mContext, TaskDetailEditActivity.class);
+			getActivity().startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
+		} else {
+			intent.setClass(mContext, TaskDetailViewActivity.class);
+			startActivity(intent);
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			switch (requestCode) {
+			case CodeConstants.REQUEST_CODE_REFRESH:
+				// 刷新列表
+				mListView.setRefreshing();
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	private void initPullToRefresh() {
