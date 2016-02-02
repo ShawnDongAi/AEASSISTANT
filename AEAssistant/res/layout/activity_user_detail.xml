@@ -410,38 +410,6 @@
                 android:layout_height="1px"
                 android:background="@color/gainsboro" />
 
-            <!-- 任务管控 -->
-
-            <LinearLayout
-                android:id="@+id/user_layout_task"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_item"
-                android:clickable="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:text="@string/lable_task"
-                    android:textColor="@drawable/text_normal"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_to" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gainsboro" />
-
             <!-- 个人说明 -->
 
             <LinearLayout
