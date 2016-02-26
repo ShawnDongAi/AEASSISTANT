@@ -2,6 +2,7 @@ package com.zzn.aeassistant.activity.task;
 
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BasePageActivity;
+import com.zzn.aeassistant.activity.project.ProjectDetailActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.fragment.BaseFragment;
@@ -16,7 +17,13 @@ import android.os.Bundle;
 import android.view.View;
 
 public class TaskActivity extends BasePageActivity {
+	private View add;
 	private ProjectVO project;
+
+	@Override
+	protected int layoutResID() {
+		return R.layout.activity_page_add;
+	}
 
 	@Override
 	protected int titleStringID() {
@@ -26,10 +33,12 @@ public class TaskActivity extends BasePageActivity {
 	@Override
 	protected void initView() {
 		super.initView();
+		add = findViewById(R.id.btn_add);
+		add.setOnClickListener(this);
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
 		if (project.getCREATE_USER().equals(AEApp.getCurrentUser().getUSER_ID())) {
 			save.setVisibility(View.VISIBLE);
-			save.setText(R.string.new_);
+			save.setText(R.string.project_detail);
 		}
 		pager.setOffscreenPageLimit(3);
 		for (int i = 0; i < 3; i++) {
@@ -65,11 +74,24 @@ public class TaskActivity extends BasePageActivity {
 	}
 
 	@Override
+	public void onClick(View v) {
+		super.onClick(v);
+		switch (v.getId()) {
+		case R.id.btn_add:
+			Intent intent = new Intent(this, CreateTaskActivity.class);
+			intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
+			startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
 	protected void onSaveClick() {
 		super.onSaveClick();
-		Intent intent = new Intent(this, CreateTaskActivity.class);
-		intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
-		startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
+		startActivity(new Intent(mContext, ProjectDetailActivity.class)
+				.putExtra(CodeConstants.KEY_PROJECT_VO, project));
 	}
 
 	@Override

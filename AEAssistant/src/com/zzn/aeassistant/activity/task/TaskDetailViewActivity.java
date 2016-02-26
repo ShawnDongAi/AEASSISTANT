@@ -28,7 +28,7 @@ public class TaskDetailViewActivity extends BaseActivity implements OnItemClickL
 	private CircleImageView mCreateUserHead, mProcessUserHead;
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
-	private View mProcessContentLayout, mEndTimeLayout;
+	private View mEndTimeLayout;
 
 	@Override
 	protected int layoutResID() {
@@ -54,18 +54,14 @@ public class TaskDetailViewActivity extends BaseActivity implements OnItemClickL
 		mProcessContent = (TextView) findViewById(R.id.task_process_content);
 		mEndTime = (TextView) findViewById(R.id.task_end_time);
 		mProcessAttach = (FastenGridView) findViewById(R.id.task_process_attach_list);
-		mProcessContentLayout = findViewById(R.id.task_process_content_layout);
 		mEndTimeLayout = findViewById(R.id.task_end_time_layout);
 		mStatus = (TextView) findViewById(R.id.status);
 		mRootName.setText(taskDetail.getRoot_project_name());
-		mCreateUser.setText(taskDetail.getCreate_project_name() + "—" + taskDetail.getCreate_user_name());
-		mProcessUser.setText(taskDetail.getProcess_project_name() + "—" + taskDetail.getProcess_user_name());
+		mCreateUser.setText(taskDetail.getCreate_user_name());
+		mProcessUser.setText(taskDetail.getProcess_user_name());
 		mContent.setText(taskDetail.getContent());
 		mStartTime.setText(taskDetail.getStart_time());
 		mProcessContent.setText(taskDetail.getProcess_content());
-		if (!StringUtil.isEmpty(taskDetail.getProcess_content())) {
-			mProcessContentLayout.setVisibility(View.VISIBLE);
-		}
 		mEndTime.setText(taskDetail.getEnd_time());
 		if (!StringUtil.isEmpty(taskDetail.getEnd_time())) {
 			mEndTimeLayout.setVisibility(View.VISIBLE);

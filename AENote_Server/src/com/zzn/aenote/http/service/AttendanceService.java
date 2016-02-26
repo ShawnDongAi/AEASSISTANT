@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.zzn.aenote.http.BaseService;
+import com.zzn.aenote.http.utils.StringUtil;
 
 public class AttendanceService extends BaseService {
 	private static final Logger logger = Logger
@@ -28,7 +29,7 @@ public class AttendanceService extends BaseService {
 			data.put("user_id", user_id);
 			final Date date = new Date(System.currentTimeMillis());
 			data.put("time", format.format(date));
-			data.put("photo", photo);
+			data.put("photo", StringUtil.nullToEmpty(photo));
 			data.put("project_id", project_id);
 			data.put("parent_id", parent_id);
 			data.put("root_id", root_id);
@@ -70,7 +71,7 @@ public class AttendanceService extends BaseService {
 			data.put("project_id", project_id);
 			data.put("parent_id", parent_id);
 			data.put("root_id", root_id);
-			data.put("photo", photo);
+			data.put("photo", StringUtil.nullToEmpty(photo));
 			data.put("address", address);
 			data.put("longitude", longitude);
 			data.put("latitude", latitude);

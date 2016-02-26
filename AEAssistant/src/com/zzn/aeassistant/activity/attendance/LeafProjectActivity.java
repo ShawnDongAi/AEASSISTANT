@@ -41,7 +41,7 @@ import android.widget.TextView;
 public class LeafProjectActivity extends BaseActivity {
 	private ListView mListView;
 	private LeafProjectAdapter<ProjectVO> adapter;
-	private String project_id;
+	private ProjectVO projectVO;
 	private ListLeafTask listLeafTask = null;
 	private ScanningTask scanningTask = null;
 	private List<String> selectDatas = new ArrayList<String>();
@@ -66,7 +66,9 @@ public class LeafProjectActivity extends BaseActivity {
 			selectMode = getIntent().getIntExtra(CodeConstants.KEY_SELECT_LEAF_MODE,
 					CodeConstants.STATUS_SCANNING_LEAF);
 		}
-		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
+		projectVO = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
+		projectVO.setPARENT_ID(projectVO.getPROJECT_ID());
+		projectVO.setROOT_ID(projectVO.getPROJECT_ID());
 		if (selectMode == CodeConstants.STATUS_SCANNING_LEAF) {
 			save.setVisibility(View.VISIBLE);
 			save.setText(R.string.confirm);
@@ -80,7 +82,7 @@ public class LeafProjectActivity extends BaseActivity {
 					if (selectDatas.contains(vo.getPROJECT_ID())) {
 						selectDatas.remove(vo.getPROJECT_ID());
 					} else {
-						if (!vo.getPROJECT_ID().equals(project_id)) {
+						if (!vo.getPROJECT_ID().equals(projectVO.getPROJECT_ID())) {
 							selectDatas.add(vo.getPROJECT_ID());
 						}
 					}
@@ -94,7 +96,7 @@ public class LeafProjectActivity extends BaseActivity {
 			}
 		});
 		listLeafTask = new ListLeafTask();
-		listLeafTask.execute(project_id);
+		listLeafTask.execute(projectVO.getPROJECT_ID());
 		AEProgressDialog.showLoadingDialog(mContext);
 	}
 
@@ -150,11 +152,13 @@ public class LeafProjectActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				if (result.getRES_OBJ() != null && !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
-					List<ProjectVO> projectList = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(),
-							new TypeToken<List<ProjectVO>>() {
-							}.getType());
 					try {
-						adapter = new LeafProjectAdapter<ProjectVO>(mListView, mContext, projectList, true, project_id);
+						List<ProjectVO> projectList = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(),
+								new TypeToken<List<ProjectVO>>() {
+								}.getType());
+						projectList.add(0, projectVO);
+						adapter = new LeafProjectAdapter<ProjectVO>(mListView, mContext, projectList, true,
+								projectVO.getPROJECT_ID());
 						mListView.setAdapter(adapter);
 					} catch (Exception e) {
 						e.printStackTrace();

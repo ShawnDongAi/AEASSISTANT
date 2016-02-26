@@ -10,8 +10,8 @@
         android:id="@+id/treenode_head"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_margin="10dp"
         android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
         android:src="@drawable/ic_head"
         app:border_color="@color/transparent"
         app:border_width="0dp" />
@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/treenode_head"
         android:layout_toLeftOf="@+id/treenode_icon"
+        android:layout_toRightOf="@+id/treenode_head"
         android:orientation="vertical" >
 
         <TextView
@@ -40,13 +40,23 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <CheckBox
+        android:id="@+id/treenode_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/treenode_icon"
+        android:visibility="gone"
+        android:button="@drawable/checkbox" />
+
     <ImageView
         android:id="@+id/treenode_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:src="@drawable/tree_ec" />
+
 </RelativeLayout>

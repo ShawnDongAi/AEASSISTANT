@@ -1,10 +1,5 @@
 package com.zzn.aeassistant.activity.project;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.view.View;
-import android.widget.TextView;
-
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
@@ -15,7 +10,6 @@ import com.baidu.mapapi.model.LatLng;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.TextEditActivity;
-import com.zzn.aeassistant.activity.task.TaskActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -23,10 +17,15 @@ import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.view.View;
+import android.widget.TextView;
+
 public class ProjectDetailActivity extends BaseActivity {
 	public static final int REQUEST_PROJECT_NAME = 0;
 	private TextView name, status, managerUser, createTime, projectStructure,
-			projectUsers, projectUpdateParent, address, task;
+			projectUsers, projectUpdateParent, address;
 	private MapView mMapView;
 	private BaiduMap mBaiduMap;
 	private ProjectVO project;
@@ -51,12 +50,10 @@ public class ProjectDetailActivity extends BaseActivity {
 		projectUsers = (TextView) findViewById(R.id.project_users);
 		projectUpdateParent = (TextView) findViewById(R.id.project_update_parent);
 		address = (TextView) findViewById(R.id.project_address);
-		task = (TextView) findViewById(R.id.task);
 		name.setOnClickListener(this);
 		projectStructure.setOnClickListener(this);
 		projectUsers.setOnClickListener(this);
 		projectUpdateParent.setOnClickListener(this);
-		task.setOnClickListener(this);
 
 		mMapView = (MapView) findViewById(R.id.project_mapview);
 		mBaiduMap = mMapView.getMap();
@@ -137,11 +134,6 @@ public class ProjectDetailActivity extends BaseActivity {
 		case R.id.project_update_parent:
 			startActivity(new Intent(mContext, UpdateParentActivity.class)
 					.putExtra(CodeConstants.KEY_PROJECT_VO, project));
-			break;
-		case R.id.task:
-			Intent taskIntent = new Intent(this, TaskActivity.class);
-			taskIntent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
-			startActivity(taskIntent);
 			break;
 		default:
 			break;

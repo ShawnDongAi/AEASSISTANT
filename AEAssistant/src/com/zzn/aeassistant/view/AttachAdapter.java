@@ -154,7 +154,7 @@ public class AttachAdapter extends BaseAdapter {
 		AttchVO item = getItem(position);
 		if (StringUtil.isEmpty(item.getATTCH_ID())) {
 			holder.delete.setVisibility(View.GONE);
-			holder.image.setImageResource(R.drawable.ic_add);
+			holder.image.setImageResource(R.drawable.ic_add_black);
 		} else {
 			if (item.getTYPE().equals(AttchVO.TYPE_IMG)) {
 				if (!StringUtil.isEmpty(item.getLOCAL_PATH())) {

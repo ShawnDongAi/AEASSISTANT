@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.view.pla.STGVImageView;
 import com.zzn.aeassistant.view.squareprogressbar.SquareProgressView;
 import com.zzn.aeassistant.vo.AttendanceVO;
@@ -109,7 +110,7 @@ public class SumUserGridAdapter extends BaseAdapter {
 		}
 		AttendanceVO vo = getItem(position);
 		holder.address.setText(vo.getAddress());
-		holder.time.setText(vo.getDate());
+		holder.time.setText(StringUtil.null2String(vo.getDate()));
 		holder.project.setText(vo.getProject_name());
 		holder.status
 				.setVisibility(vo.getNormal() != null && !vo.getNormal().equals("0") ? View.VISIBLE : View.INVISIBLE);

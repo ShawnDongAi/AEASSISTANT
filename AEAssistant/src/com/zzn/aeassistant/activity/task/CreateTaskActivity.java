@@ -72,7 +72,7 @@ public class CreateTaskActivity extends BaseActivity {
 		save.setText(R.string.save);
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
 		listView = (ListView) findViewById(R.id.base_list);
-		listView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+		listView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
 		adapter = new EditTaskAdapter();
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -261,7 +261,7 @@ public class CreateTaskActivity extends BaseActivity {
 					public void onClick(View v) {
 						currentPos = position;
 						Intent intent = new Intent(mContext, LeafProjectActivity.class);
-						intent.putExtra(CodeConstants.KEY_PROJECT_ID, project.getPROJECT_ID());
+						intent.putExtra(CodeConstants.KEY_PROJECT_VO, project);
 						intent.putExtra(CodeConstants.KEY_TITLE, getString(R.string.lable_select_process_user));
 						intent.putExtra(CodeConstants.KEY_SELECT_LEAF_MODE, CodeConstants.STATUS_SELECT_PROCESS_USER);
 						startActivityForResult(intent, CodeConstants.REQUEST_CODE_PROJECT);

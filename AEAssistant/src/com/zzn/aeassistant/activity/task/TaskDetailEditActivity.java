@@ -78,8 +78,8 @@ public class TaskDetailEditActivity extends BaseActivity implements OnItemClickL
 		mConfirm.setOnClickListener(this);
 		mNoConfirm.setOnClickListener(this);
 		mRootName.setText(taskDetail.getRoot_project_name());
-		mCreateUser.setText(taskDetail.getCreate_project_name() + "—" + taskDetail.getCreate_user_name());
-		mProcessUser.setText(taskDetail.getProcess_project_name() + "—" + taskDetail.getProcess_user_name());
+		mCreateUser.setText(taskDetail.getCreate_user_name());
+		mProcessUser.setText(taskDetail.getProcess_user_name());
 		mContent.setText(taskDetail.getContent());
 		mStartTime.setText(taskDetail.getStart_time());
 		initImageLoader();

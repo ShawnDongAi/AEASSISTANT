@@ -2,24 +2,13 @@ package com.zzn.aeassistant.fragment;
 
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.text.format.DateUtils;
-import android.view.View;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageButton;
-
 import com.baidu.location.BDLocation;
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.project.CreateProjectActivity;
 import com.zzn.aeassistant.activity.project.ProjectAdapter;
 import com.zzn.aeassistant.activity.project.ProjectAdapter.ProjectItem;
-import com.zzn.aeassistant.activity.project.ProjectDetailActivity;
+import com.zzn.aeassistant.activity.task.TaskActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
@@ -39,6 +28,17 @@ import com.zzn.aeassistant.view.swipemenu.SwipeMenuItem;
 import com.zzn.aeassistant.view.swipemenu.SwipeMenuListView.OnMenuItemClickListener;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.text.format.DateUtils;
+import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 
 public class ProjectManagerFragment extends BaseFragment implements
 		OnItemClickListener {
@@ -243,8 +243,9 @@ public class ProjectManagerFragment extends BaseFragment implements
 		}
 		ProjectVO vo = item.project;
 		if (vo != null) {
-			startActivity(new Intent(mContext, ProjectDetailActivity.class)
-					.putExtra(CodeConstants.KEY_PROJECT_VO, vo));
+			Intent taskIntent = new Intent(mContext, TaskActivity.class);
+			taskIntent.putExtra(CodeConstants.KEY_PROJECT_VO, vo);
+			startActivity(taskIntent);
 		}
 	}
 

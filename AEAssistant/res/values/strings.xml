@@ -63,7 +63,7 @@
     <string name="different_psw">两次输入的密码不一致</string>
 
     <!-- 主页 -->
-    <string name="title_project_manager">项目管理</string>
+    <string name="title_project_manager">项目</string>
     <string name="title_contact">通讯录</string>
     <string name="title_scanning">每日签到</string>
     <string name="title_today">今日考勤</string>

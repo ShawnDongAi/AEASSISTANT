@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.zzn.aeassistant"
+    style="@style/layout_bg" >
+
+    <include
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/top_bar" />
+
+    <com.zzn.aeassistant.view.viewpager.PagerSlidingTabStrip
+        android:id="@+id/base_tab"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/top_bar"
+        android:background="@color/body_bg"
+        android:textSize="16sp"
+        app:indicatorColor="@color/theme_green"
+        app:indicatorHeight="2dp"
+        app:shouldExpand="true"
+        app:tabBackground="@drawable/pager_background_tab"
+        app:underlineHeight="3dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/base_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/base_tab" />
+
+    <ImageButton
+        android:id="@+id/btn_add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="30dp"
+        android:background="@drawable/btn_circle"
+        android:src="@drawable/ic_add" />
+</RelativeLayout>

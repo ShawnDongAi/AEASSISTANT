@@ -122,7 +122,6 @@ public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 			holder = new GroupHolder();
 			convertView = View.inflate(mContext, R.layout.item_task_group, null);
 			holder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
-			holder.lableCreateUser = (TextView) convertView.findViewById(R.id.lable_create_user);
 			holder.createUser = (TextView) convertView.findViewById(R.id.create_user);
 			holder.date = (TextView) convertView.findViewById(R.id.date);
 			convertView.setTag(holder);
@@ -130,8 +129,7 @@ public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 			holder = (GroupHolder) convertView.getTag();
 		}
 		TaskVO group = getGroup(groupPosition);
-		holder.createUser.setText(group.getCreate_project_name() + "—" + group.getCreate_user_name());
-		holder.lableCreateUser.setVisibility(mShowCreateUser ? View.VISIBLE : View.GONE);
+		holder.createUser.setText(group.getCreate_user_name());
 		holder.createUser.setVisibility(mShowCreateUser ? View.VISIBLE : View.GONE);
 		holder.date.setText(group.getTime());
 		holder.arrow.setImageResource(isExpanded ? R.drawable.ic_down : R.drawable.ic_to);
@@ -155,7 +153,7 @@ public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 			holder = (ChildHolder) convertView.getTag();
 		}
 		TaskDetailVO child = getChild(groupPosition, childPosition);
-		holder.processUser.setText(child.getProcess_project_name() + "—" + child.getProcess_user_name());
+		holder.processUser.setText(child.getProcess_user_name());
 		if (!StringUtil.isEmpty(child.getProcess_user_head())) {
 			imageLoader.displayImage(String.format(URLConstants.URL_IMG, child.getProcess_user_head()),
 					holder.processUserHead, options, animateFirstListener);
@@ -183,7 +181,6 @@ public class ExpandTaskAdapter extends BaseExpandableListAdapter {
 	class GroupHolder {
 		ImageView arrow;
 		TextView date;
-		TextView lableCreateUser;
 		TextView createUser;
 	}
 

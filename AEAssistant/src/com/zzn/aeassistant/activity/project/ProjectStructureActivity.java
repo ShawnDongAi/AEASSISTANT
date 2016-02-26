@@ -1,26 +1,15 @@
 package com.zzn.aeassistant.activity.project;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
-import android.text.format.DateUtils;
-import android.view.View;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import java.util.Map;
 
 import com.google.gson.reflect.TypeToken;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
 import com.zzn.aeassistant.activity.QRScanningActivity;
+import com.zzn.aeassistant.activity.user.PhoneContactActivity;
 import com.zzn.aeassistant.activity.user.UserDetailActivity;
 import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
@@ -44,6 +33,24 @@ import com.zzn.aeassistant.view.tree.Node;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
+import android.text.format.DateUtils;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
+
 public class ProjectStructureActivity extends BaseActivity {
 	private PullToRefreshSwipeMenuListView pullListView;
 	private ProjectStructureAdapter<ProjectVO> adapter;
@@ -62,6 +69,9 @@ public class ProjectStructureActivity extends BaseActivity {
 
 	private UpdateParentTask updateParentTask;
 	private DeleteProjectTask deleteProjectTask;
+
+	private PopupWindow addMenu;
+	private ListView addList;
 
 	@Override
 	protected int layoutResID() {
@@ -82,8 +92,7 @@ public class ProjectStructureActivity extends BaseActivity {
 		project_id = getIntent().getStringExtra(CodeConstants.KEY_PROJECT_ID);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (System.currentTimeMillis() - lastClickTime < 500) {
 					return;
 				}
@@ -97,31 +106,64 @@ public class ProjectStructureActivity extends BaseActivity {
 			}
 		});
 		initPullToRefresh();
-		save.setText(R.string.lable_qrcode_scanning);
+		save.setText(R.string.add);
 		save.setVisibility(View.VISIBLE);
+		initMenuView();
+	}
+
+	private void initMenuView() {
+		View menuView = View.inflate(mContext, R.layout.menu_list, null);
+		addList = (ListView) menuView.findViewById(R.id.menu_list);
+		List<Map<String, Object>> menuItems = new ArrayList<Map<String, Object>>();
+		Map<String, Object> item1 = new HashMap<String, Object>();
+		item1.put("menu", getString(R.string.lable_qrcode_scanning));
+		menuItems.add(item1);
+		Map<String, Object> item2 = new HashMap<String, Object>();
+		item2.put("menu", getString(R.string.lable_phone_contace));
+		menuItems.add(item2);
+		addList.setAdapter(new SimpleAdapter(this, menuItems, R.layout.item_base_title, new String[] { "menu" },
+				new int[] { R.id.title }));
+		addMenu = new PopupWindow(menuView, 300, LayoutParams.WRAP_CONTENT);
+		addMenu.setBackgroundDrawable(getResources().getDrawable(R.color.transparent_lightslategray));
+		addMenu.setOutsideTouchable(true);
+		addMenu.setFocusable(true);
+		addList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				if (addMenu != null && addMenu.isShowing()) {
+					addMenu.dismiss();
+				}
+				switch (position) {
+				case 0:
+					startActivityForResult(new Intent(mContext, QRScanningActivity.class),
+							CodeConstants.REQUEST_CODE_QRCODE);
+					break;
+				case 1:
+					Intent intent = new Intent(mContext, PhoneContactActivity.class);
+					intent.putExtra(CodeConstants.KEY_PROJECT_ID, project_id);
+					startActivity(intent);
+					break;
+				default:
+					break;
+				}
+			}
+		});
 	}
 
 	private void initPullToRefresh() {
 		initSwipeMenu();
 		pullListView.setMode(Mode.PULL_FROM_START);
-		pullListView
-				.setOnRefreshListener(new OnRefreshListener<SwipeMenuListView>() {
-					@Override
-					public void onRefresh(
-							PullToRefreshBase<SwipeMenuListView> refreshView) {
-						String label = DateUtils.formatDateTime(
-								getApplicationContext(),
-								System.currentTimeMillis(),
-								DateUtils.FORMAT_SHOW_TIME
-										| DateUtils.FORMAT_SHOW_DATE
-										| DateUtils.FORMAT_ABBREV_ALL);
-						// Update the LastUpdatedLabel
-						refreshView.getLoadingLayoutProxy()
-								.setLastUpdatedLabel(label);
-						listStruTask = new ListStructureTask();
-						listStruTask.execute(project_id);
-					}
-				});
+		pullListView.setOnRefreshListener(new OnRefreshListener<SwipeMenuListView>() {
+			@Override
+			public void onRefresh(PullToRefreshBase<SwipeMenuListView> refreshView) {
+				String label = DateUtils.formatDateTime(getApplicationContext(), System.currentTimeMillis(),
+						DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+				// Update the LastUpdatedLabel
+				refreshView.getLoadingLayoutProxy().setLastUpdatedLabel(label);
+				listStruTask = new ListStructureTask();
+				listStruTask.execute(project_id);
+			}
+		});
 		listStruTask = new ListStructureTask();
 		listStruTask.execute(project_id);
 		AEProgressDialog.showLoadingDialog(mContext);
@@ -149,8 +191,7 @@ public class ProjectStructureActivity extends BaseActivity {
 		listView.setMenuCreator(creator);
 		listView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
-			public boolean onMenuItemClick(int position, SwipeMenu menu,
-					int index) {
+			public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 				Node node = adapter.getItem(position);
 				ProjectVO item = (ProjectVO) (node.getData());
 				deleteProjectTask = new DeleteProjectTask();
@@ -170,8 +211,7 @@ public class ProjectStructureActivity extends BaseActivity {
 	@Override
 	protected void onPause() {
 		if (telephony != null) {
-			telephony.listen(myPhoneStateListener,
-					PhoneStateListener.LISTEN_NONE);
+			telephony.listen(myPhoneStateListener, PhoneStateListener.LISTEN_NONE);
 		}
 		super.onPause();
 	}
@@ -179,15 +219,24 @@ public class ProjectStructureActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		telephony.listen(myPhoneStateListener,
-				PhoneStateListener.LISTEN_CALL_STATE);
+		telephony.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
 	}
 
 	@Override
 	protected void onSaveClick() {
 		super.onSaveClick();
-		startActivityForResult(new Intent(mContext, QRScanningActivity.class),
-				CodeConstants.REQUEST_CODE_QRCODE);
+		if (!addMenu.isShowing()) {
+			addMenu.showAsDropDown(save);
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (addMenu != null && addMenu.isShowing()) {
+			addMenu.dismiss();
+			return;
+		}
+		super.onBackPressed();
 	}
 
 	@Override
@@ -221,37 +270,24 @@ public class ProjectStructureActivity extends BaseActivity {
 				if (comingCallDialog != null && comingCallDialog.isShowing()) {
 					return;
 				}
-				String result = data
-						.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
+				String result = data.getStringExtra(CodeConstants.KEY_SCAN_RESULT);
 				try {
-					String phone = GsonUtil.getInstance()
-							.fromJson(result, HashMap.class).get("user_phone")
-							.toString();
+					String phone = GsonUtil.getInstance().fromJson(result, HashMap.class).get("user_phone").toString();
 					lastComingPhone = phone;
-					comingCallDialog = new AlertDialog.Builder(mContext)
-							.setTitle(R.string.warning)
-							.setMessage(
-									getString(R.string.project_join_current,
-											lastComingPhone))
-							.setPositiveButton(R.string.confirm,
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											// 迁移
-											if (updateParentTask != null) {
-												updateParentTask.cancel(true);
-												updateParentTask = null;
-											}
-											updateParentTask = new UpdateParentTask();
-											updateParentTask
-													.execute(new String[] {
-															project_id,
-															lastComingPhone });
-										}
-									}).setNegativeButton(R.string.cancel, null)
-							.create();
+					comingCallDialog = new AlertDialog.Builder(mContext).setTitle(R.string.warning)
+							.setMessage(getString(R.string.project_join_current, lastComingPhone))
+							.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// 迁移
+									if (updateParentTask != null) {
+										updateParentTask.cancel(true);
+										updateParentTask = null;
+									}
+									updateParentTask = new UpdateParentTask();
+									updateParentTask.execute(new String[] { project_id, lastComingPhone });
+								}
+							}).setNegativeButton(R.string.cancel, null).create();
 					comingCallDialog.setCanceledOnTouchOutside(false);
 					comingCallDialog.show();
 				} catch (Exception e) {
@@ -265,15 +301,13 @@ public class ProjectStructureActivity extends BaseActivity {
 		}
 	}
 
-	private class ListStructureTask extends
-			AsyncTask<String, Integer, HttpResult> {
+	private class ListStructureTask extends AsyncTask<String, Integer, HttpResult> {
 
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String project_id = params[0];
 			String param = "project_id=" + project_id;
-			HttpResult result = AEHttpUtil.doPost(
-					URLConstants.URL_PROJECT_STRUCTURE, param);
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_PROJECT_STRUCTURE, param);
 			return result;
 		}
 
@@ -283,15 +317,12 @@ public class ProjectStructureActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			pullListView.onRefreshComplete();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				if (result.getRES_OBJ() != null
-						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
-					List<ProjectVO> projectList = GsonUtil.getInstance()
-							.fromJson(result.getRES_OBJ().toString(),
-									new TypeToken<List<ProjectVO>>() {
-									}.getType());
+				if (result.getRES_OBJ() != null && !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
+					List<ProjectVO> projectList = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(),
+							new TypeToken<List<ProjectVO>>() {
+							}.getType());
 					try {
-						adapter = new ProjectStructureAdapter<ProjectVO>(
-								listView, mContext, projectList, true,
+						adapter = new ProjectStructureAdapter<ProjectVO>(listView, mContext, projectList, true,
 								project_id);
 						listView.setAdapter(adapter);
 					} catch (Exception e) {
@@ -321,35 +352,27 @@ public class ProjectStructureActivity extends BaseActivity {
 					return;
 				}
 				lastComingPhone = incomingNumber;
-				comingCallDialog = new AlertDialog.Builder(mContext)
-						.setTitle(R.string.warning)
-						.setMessage(
-								getString(R.string.project_join_current,
-										lastComingPhone))
-						.setPositiveButton(R.string.confirm,
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog,
-											int which) {
-										// 迁移
-										if (updateParentTask != null) {
-											updateParentTask.cancel(true);
-											updateParentTask = null;
-										}
-										updateParentTask = new UpdateParentTask();
-										updateParentTask.execute(new String[] {
-												project_id, lastComingPhone });
-									}
-								}).setNegativeButton(R.string.cancel, null)
-						.create();
+				comingCallDialog = new AlertDialog.Builder(mContext).setTitle(R.string.warning)
+						.setMessage(getString(R.string.project_join_current, lastComingPhone))
+						.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// 迁移
+								if (updateParentTask != null) {
+									updateParentTask.cancel(true);
+									updateParentTask = null;
+								}
+								updateParentTask = new UpdateParentTask();
+								updateParentTask.execute(new String[] { project_id, lastComingPhone });
+							}
+						}).setNegativeButton(R.string.cancel, null).create();
 				comingCallDialog.setCanceledOnTouchOutside(false);
 				comingCallDialog.show();
 			}
 		}
 	}
 
-	private class UpdateParentTask extends
-			AsyncTask<String, Integer, HttpResult> {
+	private class UpdateParentTask extends AsyncTask<String, Integer, HttpResult> {
 
 		@Override
 		protected void onPreExecute() {
@@ -361,10 +384,8 @@ public class ProjectStructureActivity extends BaseActivity {
 		protected HttpResult doInBackground(String... params) {
 			String project_id = params[0];
 			String phone = params[1];
-			String param = "parent_project_id=" + project_id
-					+ "&leaf_user_phone=" + phone;
-			HttpResult result = AEHttpUtil.doPost(
-					URLConstants.URL_UPDATE_PARENT, param);
+			String param = "parent_project_id=" + project_id + "&leaf_user_phone=" + phone;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_PARENT, param);
 			return result;
 		}
 
@@ -376,8 +397,7 @@ public class ProjectStructureActivity extends BaseActivity {
 				pullListView.setRefreshing(true);
 				ToastUtil.show(result.getRES_MESSAGE());
 			} else {
-				ToastUtil.showImp(ProjectStructureActivity.this,
-						result.getRES_MESSAGE());
+				ToastUtil.showImp(ProjectStructureActivity.this, result.getRES_MESSAGE());
 			}
 		}
 
@@ -388,8 +408,7 @@ public class ProjectStructureActivity extends BaseActivity {
 		}
 	}
 
-	private class DeleteProjectTask extends
-			AsyncTask<String, Integer, HttpResult> {
+	private class DeleteProjectTask extends AsyncTask<String, Integer, HttpResult> {
 
 		@Override
 		protected void onPreExecute() {
@@ -400,10 +419,8 @@ public class ProjectStructureActivity extends BaseActivity {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String project_id = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
-					+ "&project_id=" + project_id;
-			HttpResult result = AEHttpUtil.doPost(
-					URLConstants.URL_DELETE_PRJECT, param);
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID() + "&project_id=" + project_id;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_DELETE_PRJECT, param);
 			return result;
 		}
 

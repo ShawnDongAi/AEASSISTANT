@@ -5,44 +5,26 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/red"
-        android:padding="5dp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/menu_text_size" />
-
-    <LinearLayout
-        android:id="@+id/task_process_content_layout"
+        android:id="@+id/task_process_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:visibility="gone" >
+        android:gravity="right"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text_size" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lable_task_process_content"
-            android:textSize="@dimen/menu_text_size" />
-
-        <TextView
-            android:id="@+id/task_process_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_normal"
-            android:textSize="@dimen/menu_text_size" />
-    </LinearLayout>
+    <com.zzn.aeassistant.view.FastenGridView
+        android:id="@+id/task_process_attach_list"
+        style="@style/base_attach_grid"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/task_end_time_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|right"
         android:orientation="horizontal"
         android:visibility="gone" >
 
@@ -60,9 +42,15 @@
             android:textSize="@dimen/menu_text_size" />
     </LinearLayout>
 
-    <com.zzn.aeassistant.view.FastenGridView
-        android:id="@+id/task_process_attach_list"
-        style="@style/base_attach_grid"
-        android:visibility="gone" />
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="10dp"
+        android:background="@color/red"
+        android:padding="5dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/menu_text_size" />
 
 </LinearLayout>

@@ -103,13 +103,13 @@ public class TaskAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		TaskDetailVO item = getItem(position);
-		holder.createUser.setText(item.getCreate_project_name() + "—" + item.getCreate_user_name());
+		holder.createUser.setText(item.getCreate_user_name());
 		if (!StringUtil.isEmpty(item.getCreate_user_head())) {
 			imageLoader.displayImage(String.format(URLConstants.URL_IMG, item.getCreate_user_head()),
 					holder.createUserHead, options, animateFirstListener);
 		}
-		holder.date.setText(item.getTime());
-		holder.startTime.setText(item.getStart_time());
+		holder.date.setText(item.getTime().trim());
+		holder.startTime.setText(item.getStart_time().trim());
 		holder.content.setText(item.getContent());
 		if (item.getStatus().equals("0")) {
 			holder.status.setText(R.string.task_status_pending_confirmation);

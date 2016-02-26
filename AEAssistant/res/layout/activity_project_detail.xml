@@ -85,25 +85,6 @@
                 android:layout_height="1px"
                 android:background="@color/gainsboro" />
 
-            <!-- 任务管控 -->
-
-            <TextView
-                android:id="@+id/task"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_top"
-                android:drawableRight="@drawable/ic_to"
-                android:gravity="left|center_vertical"
-                android:padding="15dp"
-                android:text="@string/lable_task"
-                android:textColor="@drawable/text_light"
-                android:textSize="16sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="@color/gainsboro" />
-
             <TextView
                 android:id="@+id/project_users"
                 android:layout_width="match_parent"

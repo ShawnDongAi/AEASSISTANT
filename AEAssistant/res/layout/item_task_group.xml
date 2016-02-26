@@ -21,19 +21,12 @@
         android:text="2016-01-29" />
 
     <TextView
-        android:id="@+id/lable_create_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/create_user"
-        android:text="@string/lable_task_create_user" />
-
-    <TextView
         android:id="@+id/create_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/create_user"
         android:gravity="right"
         android:text="xxx" />
 
