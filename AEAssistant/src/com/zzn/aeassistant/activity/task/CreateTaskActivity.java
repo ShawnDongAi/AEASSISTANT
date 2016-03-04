@@ -35,12 +35,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -72,7 +75,6 @@ public class CreateTaskActivity extends BaseActivity {
 		save.setText(R.string.save);
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
 		listView = (ListView) findViewById(R.id.base_list);
-		listView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
 		adapter = new EditTaskAdapter();
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -83,6 +85,7 @@ public class CreateTaskActivity extends BaseActivity {
 				}
 			}
 		});
+		listView.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
 	}
 
 	@Override
@@ -252,6 +255,15 @@ public class CreateTaskActivity extends BaseActivity {
 				} else {
 					holder = (ViewHolder) convertView.getTag();
 				}
+				holder.content.setOnTouchListener(new OnTouchListener() {
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						if (event.getAction() == MotionEvent.ACTION_UP) {
+							v.requestFocus();
+						}
+						return false;
+					}
+				});
 				holder.user.setOnClickListener(null);
 				holder.content.removeTextChangedListener((TextWatcher) holder.content.getTag());
 				holder.time.setOnClickListener(null);
@@ -275,7 +287,7 @@ public class CreateTaskActivity extends BaseActivity {
 				holder.time.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						selectDate((Button) v);
+						selectDate((Button) v, position);
 					}
 				});
 				AttachAdapter attachAdapter;
@@ -389,7 +401,7 @@ public class CreateTaskActivity extends BaseActivity {
 		}
 	}
 
-	private void selectDate(final Button button) {
+	private void selectDate(final Button button, final int position) {
 		Calendar calendar = Calendar.getInstance();
 		try {
 			calendar.setTime(dateFormat.parse(button.getText().toString()));
@@ -405,7 +417,9 @@ public class CreateTaskActivity extends BaseActivity {
 			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 				Calendar calendar = Calendar.getInstance();
 				calendar.set(year, monthOfYear, dayOfMonth);
-				button.setText(dateFormat.format(calendar.getTime()));
+				String time = dateFormat.format(calendar.getTime());
+				button.setText(time);
+				adapter.getItem(position).startTime = time;
 			}
 		}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 		datePicker.setTitle(R.string.select_date);

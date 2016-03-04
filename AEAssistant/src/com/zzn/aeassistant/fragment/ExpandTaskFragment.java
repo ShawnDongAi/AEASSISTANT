@@ -148,13 +148,13 @@ public class ExpandTaskFragment extends BaseFragment implements OnChildClickList
 						if (page == 0) {
 							mAdapter.setDatas(taskList);
 							for (int i = 0; i < mAdapter.getGroupCount(); i++) {
-								mListView.getRefreshableView().collapseGroup(i);
+								mListView.getRefreshableView().expandGroup(i);
 							}
 						} else {
 							mAdapter.addDatas(taskList);
 							for (int i = mAdapter.getGroupCount() - taskList.size(); i < mAdapter
 									.getGroupCount(); i++) {
-								mListView.getRefreshableView().collapseGroup(i);
+								mListView.getRefreshableView().expandGroup(i);
 							}
 						}
 						if (taskList.size() < 20) {

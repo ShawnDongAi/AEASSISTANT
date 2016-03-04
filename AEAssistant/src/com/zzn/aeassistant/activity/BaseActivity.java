@@ -44,6 +44,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 	protected TextView title;
 	protected ImageButton back;
 	protected Button save;
+	protected ImageButton add;
 
 	private String imgPath;
 	private boolean compress = false;
@@ -64,6 +65,8 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 
 	protected void onSaveClick() {
 	}
+	
+	protected void onAddClick() {}
 	
 	protected void onBackClick() {
 		finish();
@@ -169,6 +172,10 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 		if (save != null) {
 			save.setOnClickListener(this);
 		}
+		add = (ImageButton) findViewById(R.id.add);
+		if (add != null) {
+			add.setOnClickListener(this);
+		}
 		initView();
 		IntentFilter filter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
@@ -218,6 +225,9 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 			break;
 		case R.id.save:
 			onSaveClick();
+			break;
+		case R.id.add:
+			onAddClick();
 			break;
 		default:
 			break;

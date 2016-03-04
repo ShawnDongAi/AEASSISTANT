@@ -67,9 +67,9 @@ public class LeafProjectActivity extends BaseActivity {
 					CodeConstants.STATUS_SCANNING_LEAF);
 		}
 		projectVO = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
-		projectVO.setPARENT_ID(projectVO.getPROJECT_ID());
-		projectVO.setROOT_ID(projectVO.getPROJECT_ID());
 		if (selectMode == CodeConstants.STATUS_SCANNING_LEAF) {
+			projectVO.setPARENT_ID(projectVO.getPROJECT_ID());
+			projectVO.setROOT_ID(projectVO.getPROJECT_ID());
 			save.setVisibility(View.VISIBLE);
 			save.setText(R.string.confirm);
 		}
@@ -142,7 +142,12 @@ public class LeafProjectActivity extends BaseActivity {
 		protected HttpResult doInBackground(String... params) {
 			String project_id = params[0];
 			String param = "project_id=" + project_id;
-			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_LEAF_PROJECT, param);
+			HttpResult result = null;
+			if (selectMode == CodeConstants.STATUS_SCANNING_LEAF) {
+				result = AEHttpUtil.doPost(URLConstants.URL_LEAF_PROJECT, param);
+			} else {
+				result = AEHttpUtil.doPost(URLConstants.URL_PROJECT_STRUCTURE, param);
+			}
 			return result;
 		}
 
@@ -156,7 +161,9 @@ public class LeafProjectActivity extends BaseActivity {
 						List<ProjectVO> projectList = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(),
 								new TypeToken<List<ProjectVO>>() {
 								}.getType());
-						projectList.add(0, projectVO);
+						if (selectMode == CodeConstants.STATUS_SCANNING_LEAF) {
+							projectList.add(0, projectVO);
+						}
 						adapter = new LeafProjectAdapter<ProjectVO>(mListView, mContext, projectList, true,
 								projectVO.getPROJECT_ID());
 						mListView.setAdapter(adapter);

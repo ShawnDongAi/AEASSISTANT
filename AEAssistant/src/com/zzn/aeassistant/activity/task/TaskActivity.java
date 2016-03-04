@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.view.View;
 
 public class TaskActivity extends BasePageActivity {
-	private View add;
+	private View createTask;
 	private ProjectVO project;
 
 	@Override
@@ -33,13 +33,15 @@ public class TaskActivity extends BasePageActivity {
 	@Override
 	protected void initView() {
 		super.initView();
-		add = findViewById(R.id.btn_add);
-		add.setOnClickListener(this);
+		createTask = findViewById(R.id.btn_add);
+		createTask.setOnClickListener(this);
 		project = (ProjectVO) getIntent().getSerializableExtra(CodeConstants.KEY_PROJECT_VO);
 		if (project.getCREATE_USER().equals(AEApp.getCurrentUser().getUSER_ID())) {
-			save.setVisibility(View.VISIBLE);
-			save.setText(R.string.project_detail);
+			add.setVisibility(View.VISIBLE);
+			add.setImageResource(R.drawable.icon_user_group);
+			save.setVisibility(View.GONE);
 		}
+		title.setText(project.getROOT_PROJECT_NAME());
 		pager.setOffscreenPageLimit(3);
 		for (int i = 0; i < 3; i++) {
 			SectionPage item = new SectionPage();
@@ -88,7 +90,7 @@ public class TaskActivity extends BasePageActivity {
 	}
 
 	@Override
-	protected void onSaveClick() {
+	protected void onAddClick() {
 		super.onSaveClick();
 		startActivity(new Intent(mContext, ProjectDetailActivity.class)
 				.putExtra(CodeConstants.KEY_PROJECT_VO, project));

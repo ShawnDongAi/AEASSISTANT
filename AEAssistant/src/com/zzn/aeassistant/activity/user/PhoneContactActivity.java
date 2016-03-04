@@ -14,7 +14,6 @@ import com.zzn.aeassistant.util.CharacterParser;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
-import com.zzn.aeassistant.view.ClearEditText;
 import com.zzn.aeassistant.view.pinnedsection.PinnedSectionListAdapter;
 import com.zzn.aeassistant.view.pinnedsection.PinnedSectionListView;
 import com.zzn.aeassistant.view.pinnedsection.SideBar;
@@ -30,8 +29,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -72,12 +69,11 @@ public class PhoneContactActivity extends BaseActivity {
 		mListView = (PinnedSectionListView) findViewById(R.id.base_list);
 		mSideBar = (SideBar) findViewById(R.id.side_bar);
 		TextView mLetter = (TextView) findViewById(R.id.letter);
-		View headView = View.inflate(this, R.layout.layout_search, null);
+		/*View headView = View.inflate(this, R.layout.layout_search, null);
 		ClearEditText filterInput = (ClearEditText) headView.findViewById(R.id.filter);
 		filterInput.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				filterData(s.toString().toLowerCase());
 			}
 
 			@Override
@@ -86,8 +82,10 @@ public class PhoneContactActivity extends BaseActivity {
 
 			@Override
 			public void afterTextChanged(Editable s) {
+				filterData(s.toString().toLowerCase());
 			}
 		});
+		mListView.addHeaderView(headView);*/
 		mSideBar.setPopView(mLetter);
 		mSideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
 			@Override
@@ -98,7 +96,6 @@ public class PhoneContactActivity extends BaseActivity {
 				}
 			}
 		});
-		mListView.addHeaderView(headView);
 		mAdapter = new FastScrollerAdapter(mContext);
 		mListView.setAdapter(mAdapter);
 		init();
