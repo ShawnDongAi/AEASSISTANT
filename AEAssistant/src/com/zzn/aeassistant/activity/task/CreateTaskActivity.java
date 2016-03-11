@@ -1,5 +1,6 @@
 package com.zzn.aeassistant.activity.task;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.GsonUtil;
 import com.zzn.aeassistant.util.StringUtil;
 import com.zzn.aeassistant.util.ToastUtil;
+import com.zzn.aeassistant.util.ToolsUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.AttachAdapter;
 import com.zzn.aeassistant.view.AttachAdapter.OnAddAttachCallBack;
@@ -81,6 +83,7 @@ public class CreateTaskActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (position == adapter.getCount() - 1) {
+					// view.requestFocus();
 					adapter.addItem();
 				}
 			}
@@ -297,8 +300,13 @@ public class CreateTaskActivity extends BaseActivity {
 						public void onAddPhoto() {
 							currentPos = position;
 							setCompress(true);
-							setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_"
-									+ System.currentTimeMillis() + ".jpg", true);
+							if (new File(FileCostants.DIR_IMG).exists()) {
+								setImgPath(FileCostants.DIR_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+										+ System.currentTimeMillis() + ".jpg", true);
+							} else {
+								setImgPath(FileCostants.MB_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+										+ System.currentTimeMillis() + ".jpg", true);
+							}
 							AttchUtil.getPictureFromGallery(mContext);
 						}
 
@@ -306,8 +314,13 @@ public class CreateTaskActivity extends BaseActivity {
 						public void onAddCamera() {
 							currentPos = position;
 							setCompress(true);
-							setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_"
-									+ System.currentTimeMillis() + ".jpg", true);
+							if (new File(FileCostants.DIR_IMG).exists()) {
+								setImgPath(FileCostants.DIR_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+										+ System.currentTimeMillis() + ".jpg", true);
+							} else {
+								setImgPath(FileCostants.MB_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+										+ System.currentTimeMillis() + ".jpg", true);
+							}
 							AttchUtil.capture(mContext, getImgPath());
 						}
 					});

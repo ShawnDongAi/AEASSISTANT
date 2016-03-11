@@ -291,6 +291,12 @@
 			<ref local="taskService" />
 		</property>
 	</bean>
+	<!-- 删除任务 -->
+	<bean id="deleteTask" class="com.zzn.aenote.http.server.task.DeleteTask">
+		<property name="taskService">
+			<ref local="taskService" />
+		</property>
+	</bean>
 	<!-- 查询任务 -->
 	<bean id="queryTask" class="com.zzn.aenote.http.server.task.QueryTask">
 		<property name="taskService">

@@ -36,10 +36,12 @@ public class UpLoadFile extends CmHandlerFile {
 					rs.setRES_OBJ(GsonUtil.getInstance().toJson(attchVO, AttchVO.class));
 					rs.setRES_MESSAGE("文件上传成功");
 				} else {
+					logger.info("录入附件失败");
 					rs.setRES_CODE(Global.RESP_ERROR);
 					rs.setRES_MESSAGE("文件上传失败,请重试");
 				}
 			} else {
+				logger.info("未接收到任何文件");
 				rs.setRES_CODE(Global.RESP_ERROR);
 				rs.setRES_MESSAGE("文件上传失败,请重试");
 			}

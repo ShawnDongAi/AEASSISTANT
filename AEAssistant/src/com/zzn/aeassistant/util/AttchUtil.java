@@ -59,7 +59,7 @@ public class AttchUtil {
 			FilePathUtil.CreateFilePath(savePath);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+//			intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
 			intent.putExtra("photoPath", file);
 			fragment.startActivityForResult(intent,
 					CodeConstants.REQUEST_CODE_TAKEPHOTO);

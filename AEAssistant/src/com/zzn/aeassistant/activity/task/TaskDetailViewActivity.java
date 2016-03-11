@@ -6,16 +6,24 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.zzn.aeassistant.R;
 import com.zzn.aeassistant.activity.BaseActivity;
+import com.zzn.aeassistant.app.AEApp;
 import com.zzn.aeassistant.constants.CodeConstants;
 import com.zzn.aeassistant.constants.URLConstants;
+import com.zzn.aeassistant.util.AEHttpUtil;
 import com.zzn.aeassistant.util.StringUtil;
+import com.zzn.aeassistant.util.ToastUtil;
+import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.AttachAdapter;
 import com.zzn.aeassistant.view.CircleImageView;
 import com.zzn.aeassistant.view.FastenGridView;
 import com.zzn.aeassistant.vo.AttchVO;
+import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.TaskDetailVO;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -29,6 +37,7 @@ public class TaskDetailViewActivity extends BaseActivity implements OnItemClickL
 	private ImageLoader imageLoader = ImageLoader.getInstance();
 	private DisplayImageOptions options;
 	private View mEndTimeLayout;
+	private TaskDetailVO taskDetail;
 
 	@Override
 	protected int layoutResID() {
@@ -42,7 +51,11 @@ public class TaskDetailViewActivity extends BaseActivity implements OnItemClickL
 
 	@Override
 	protected void initView() {
-		TaskDetailVO taskDetail = (TaskDetailVO) getIntent().getSerializableExtra(CodeConstants.KEY_TASK_DETAIL);
+		taskDetail = (TaskDetailVO) getIntent().getSerializableExtra(CodeConstants.KEY_TASK_DETAIL);
+		if (taskDetail.getCreate_user_id().equals(AEApp.getCurrentUser().getUSER_ID())) {
+			save.setVisibility(View.VISIBLE);
+			save.setText(R.string.delete);
+		}
 		mRootName = (TextView) findViewById(R.id.task_root);
 		mCreateUser = (TextView) findViewById(R.id.task_create_user);
 		mCreateUserHead = (CircleImageView) findViewById(R.id.task_create_user_head);
@@ -138,11 +151,60 @@ public class TaskDetailViewActivity extends BaseActivity implements OnItemClickL
 	}
 
 	@Override
+	protected void onSaveClick() {
+		super.onSaveClick();
+		new AlertDialog.Builder(mContext).setTitle(R.string.warning).setMessage(R.string.info_delete_task)
+				.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						new DeleteTask().execute(taskDetail.getTask_id(), taskDetail.getTask_detail_id());
+					}
+				}).setNegativeButton(R.string.cancel, null).show();
+
+	}
+
+	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (parent.equals(mCreateAttach)) {
 			mCreateAttachAdapter.onItemClick(position);
 		} else if (parent.equals(mProcessAttach)) {
 			mProcessAttachAdapter.onItemClick(position);
+		}
+	}
+
+	private class DeleteTask extends AsyncTask<String, Integer, HttpResult> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String task_id = params[0];
+			String task_detail_id = params[1];
+			StringBuilder param = new StringBuilder();
+			param.append("task_id=" + task_id);
+			param.append("&task_detail_id=" + task_detail_id);
+			return AEHttpUtil.doPost(URLConstants.URL_DELETE_TASK, param.toString());
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			ToastUtil.show(result.getRES_MESSAGE());
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				setResult(RESULT_OK);
+				finish();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
 		}
 	}
 }

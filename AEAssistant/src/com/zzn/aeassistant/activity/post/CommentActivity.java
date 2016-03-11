@@ -1,5 +1,6 @@
 package com.zzn.aeassistant.activity.post;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +73,7 @@ public class CommentActivity extends BaseActivity {
 				setCompress(true);
 				AttchUtil.getPictureFromGallery(mContext);
 			}
+
 			@Override
 			public void onAddCamera() {
 				if (adapter.getCount() >= 9) {
@@ -79,8 +81,13 @@ public class CommentActivity extends BaseActivity {
 					return;
 				}
 				setCompress(true);
-				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
-						+ ".jpg", true);
+				if (new File(FileCostants.DIR_IMG).exists()) {
+					setImgPath(FileCostants.DIR_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+							+ System.currentTimeMillis() + ".jpg", true);
+				} else {
+					setImgPath(FileCostants.MB_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+							+ System.currentTimeMillis() + ".jpg", true);
+				}
 				AttchUtil.capture(mContext, getImgPath());
 			}
 		});
@@ -137,8 +144,13 @@ public class CommentActivity extends BaseActivity {
 				ToastUtil.show(R.string.much_file);
 				return;
 			}
-			setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
-					+ ".jpg", true);
+			if (new File(FileCostants.DIR_IMG).exists()) {
+				setImgPath(FileCostants.DIR_IMG + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+						+ ".jpg", true);
+			} else {
+				setImgPath(FileCostants.MB_IMG + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+						+ ".jpg", true);
+			}
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.voice:

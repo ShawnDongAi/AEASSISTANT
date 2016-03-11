@@ -219,6 +219,14 @@
 	</select>
 	<select id="delete_task_detail">
 		delete from t_task_detail where 1=1 [and
+		task_detail_id='#task_detail_id#']
+	</select>
+	<select id="delete_task_detail_by_task">
+		delete from t_task_detail where 1=1 [and
+		task_id='#task_id#']
+	</select>
+	<select id="count_task">
+		select count(*) from t_task_detail where 1=1 [and
 		task_id='#task_id#']
 	</select>
 </Scheme>

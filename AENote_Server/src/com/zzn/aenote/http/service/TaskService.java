@@ -172,4 +172,41 @@ public class TaskService extends BaseService {
 		}
 		return taskDetailList;
 	}
+	
+	/**
+	 * 根据任务详情删除任务
+	 * @param task_id
+	 * @param task_detail_id
+	 */
+	public void deleteTaskByDetail(String task_id, String task_detail_id) {
+		if (countTask(task_id) > 1) {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("task_detail_id", task_detail_id);
+			getJdbc().execute(getSql("delete_task_detail", data));
+		} else {
+			deleteTask(task_id);
+		}
+	}
+	
+	/**
+	 * 删除任务
+	 * @param task_id
+	 */
+	public void deleteTask(String task_id) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("task_id", task_id);
+		getJdbc().execute(getSql("delete_task", data));
+		getJdbc().execute(getSql("delete_task_detail_by_task", data));
+	}
+	
+	/**
+	 * 查询任务数
+	 * @param task_id
+	 * @return
+	 */
+	public int countTask(String task_id) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("task_id", task_id);
+		return getJdbc().queryForInt(getSql("count_task", data));
+	}
 }

@@ -67,11 +67,10 @@ public class ExpandTaskFragment extends BaseFragment implements OnChildClickList
 		intent.putExtra(CodeConstants.KEY_TASK_DETAIL, taskDetail);
 		if (taskDetail.getProcess_user_id().equals(project.getCREATE_USER()) && taskDetail.getStatus().equals("0")) {
 			intent.setClass(mContext, TaskDetailEditActivity.class);
-			getActivity().startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
 		} else {
 			intent.setClass(mContext, TaskDetailViewActivity.class);
-			startActivity(intent);
 		}
+		getActivity().startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
 		return false;
 	}
 

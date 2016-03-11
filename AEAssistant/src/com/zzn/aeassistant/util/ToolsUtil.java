@@ -5,9 +5,22 @@ import java.io.UnsupportedEncodingException;
 import android.content.Context;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 public class ToolsUtil {
+	
+	/**
+	 * 隐藏软键盘
+	 * @param context
+	 * @param view
+	 */
+	public static void hideInputManager(Context context, View view) {
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+	}
+	
 	/**
 	 * dp换算成像素
 	 * 

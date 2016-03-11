@@ -1,5 +1,6 @@
 package com.zzn.aeassistant.activity.task;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,8 @@ import com.zzn.aeassistant.vo.AttchVO;
 import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.TaskDetailVO;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.view.View;
@@ -63,6 +66,10 @@ public class TaskDetailEditActivity extends BaseActivity implements OnItemClickL
 	@Override
 	protected void initView() {
 		taskDetail = (TaskDetailVO) getIntent().getSerializableExtra(CodeConstants.KEY_TASK_DETAIL);
+		if (taskDetail.getCreate_user_id().equals(AEApp.getCurrentUser().getUSER_ID())) {
+			save.setVisibility(View.VISIBLE);
+			save.setText(R.string.delete);
+		}
 		mRootName = (TextView) findViewById(R.id.task_root);
 		mCreateUser = (TextView) findViewById(R.id.task_create_user);
 		mCreateUserHead = (CircleImageView) findViewById(R.id.task_create_user_head);
@@ -109,8 +116,13 @@ public class TaskDetailEditActivity extends BaseActivity implements OnItemClickL
 		mProcessAttachAdapter = new AttachAdapter(mContext, true, new OnAddAttachCallBack() {
 			@Override
 			public void onAddPhoto() {
-				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_"
-						+ System.currentTimeMillis() + ".jpg", true);
+				if (new File(FileCostants.DIR_IMG).exists()) {
+					setImgPath(FileCostants.DIR_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+							+ System.currentTimeMillis() + ".jpg", true);
+				} else {
+					setImgPath(FileCostants.MB_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+							+ System.currentTimeMillis() + ".jpg", true);
+				}
 				setCompress(true);
 				AttchUtil.getPictureFromGallery(mContext);
 			}
@@ -118,8 +130,13 @@ public class TaskDetailEditActivity extends BaseActivity implements OnItemClickL
 			@Override
 			public void onAddCamera() {
 				setCompress(true);
-				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_"
-						+ System.currentTimeMillis() + ".jpg", true);
+				if (new File(FileCostants.DIR_IMG).exists()) {
+					setImgPath(FileCostants.DIR_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+							+ System.currentTimeMillis() + ".jpg", true);
+				} else {
+					setImgPath(FileCostants.MB_IMG + AEApp.getCurrentUser().getUSER_ID() + "_"
+							+ System.currentTimeMillis() + ".jpg", true);
+				}
 				AttchUtil.capture(mContext, getImgPath());
 			}
 		});
@@ -137,6 +154,18 @@ public class TaskDetailEditActivity extends BaseActivity implements OnItemClickL
 	@Override
 	protected boolean needLocation() {
 		return false;
+	}
+
+	@Override
+	protected void onSaveClick() {
+		super.onSaveClick();
+		new AlertDialog.Builder(mContext).setTitle(R.string.warning).setMessage(R.string.info_delete_task)
+				.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						new DeleteTask().execute(taskDetail.getTask_id(), taskDetail.getTask_detail_id());
+					}
+				}).setNegativeButton(R.string.cancel, null).show();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -242,7 +271,7 @@ public class TaskDetailEditActivity extends BaseActivity implements OnItemClickL
 				vo.setLOCAL_PATH(currentPath);
 				mProcessAttachAdapter.addItem(vo);
 				mProcessAttach.setAdapter(mProcessAttachAdapter);
-//				mProcessAttachAdapter.notifyDataSetChanged();
+				// mProcessAttachAdapter.notifyDataSetChanged();
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}
@@ -276,6 +305,42 @@ public class TaskDetailEditActivity extends BaseActivity implements OnItemClickL
 			param.append("&process_content=" + process_content);
 			param.append("&process_attch_id=" + process_attch_id);
 			return AEHttpUtil.doPost(URLConstants.URL_PROCESS_TASK, param.toString());
+		}
+
+		@Override
+		protected void onPostExecute(HttpResult result) {
+			super.onPostExecute(result);
+			AEProgressDialog.dismissLoadingDialog();
+			ToastUtil.show(result.getRES_MESSAGE());
+			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
+				setResult(RESULT_OK);
+				finish();
+			}
+		}
+
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			AEProgressDialog.dismissLoadingDialog();
+		}
+	}
+
+	private class DeleteTask extends AsyncTask<String, Integer, HttpResult> {
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			AEProgressDialog.showLoadingDialog(mContext);
+		}
+
+		@Override
+		protected HttpResult doInBackground(String... params) {
+			String task_id = params[0];
+			String task_detail_id = params[1];
+			StringBuilder param = new StringBuilder();
+			param.append("task_id=" + task_id);
+			param.append("&task_detail_id=" + task_detail_id);
+			return AEHttpUtil.doPost(URLConstants.URL_DELETE_TASK, param.toString());
 		}
 
 		@Override

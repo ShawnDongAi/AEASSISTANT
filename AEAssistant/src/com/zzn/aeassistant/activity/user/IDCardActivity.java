@@ -1,5 +1,6 @@
 package com.zzn.aeassistant.activity.user;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,8 +62,7 @@ public class IDCardActivity extends BaseActivity {
 		imgFront = (ImageView) findViewById(R.id.idcard_front);
 		imgBack = (ImageView) findViewById(R.id.idcard_back);
 		imgHand = (ImageView) findViewById(R.id.idcard_hand);
-		editable = getIntent().getBooleanExtra(CodeConstants.KEY_EDITABLE,
-				false);
+		editable = getIntent().getBooleanExtra(CodeConstants.KEY_EDITABLE, false);
 		if (editable) {
 			editFront.setOnClickListener(this);
 			editBack.setOnClickListener(this);
@@ -85,26 +85,35 @@ public class IDCardActivity extends BaseActivity {
 		switch (v.getId()) {
 		case R.id.idcard_front_edit:
 			imgType = 0;
-			setImgPath(
-					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
-							+ "_front_" + System.currentTimeMillis() + ".jpg",
-					true);
+			if (new File(FileCostants.DIR_IMG).exists()) {
+				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_front_"
+						+ System.currentTimeMillis() + ".jpg", true);
+			} else {
+				setImgPath(FileCostants.MB_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_front_"
+						+ System.currentTimeMillis() + ".jpg", true);
+			}
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.idcard_back_eidt:
 			imgType = 1;
-			setImgPath(
-					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
-							+ "_back_" + System.currentTimeMillis() + ".jpg",
-					true);
+			if (new File(FileCostants.DIR_IMG).exists()) {
+				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_back_"
+						+ System.currentTimeMillis() + ".jpg", true);
+			} else {
+				setImgPath(FileCostants.MB_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_back_"
+						+ System.currentTimeMillis() + ".jpg", true);
+			}
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.idcard_hand_edit:
 			imgType = 2;
-			setImgPath(
-					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
-							+ "_hand_" + System.currentTimeMillis() + ".jpg",
-					true);
+			if (new File(FileCostants.DIR_IMG).exists()) {
+				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_hand_"
+						+ System.currentTimeMillis() + ".jpg", true);
+			} else {
+				setImgPath(FileCostants.MB_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_hand_"
+						+ System.currentTimeMillis() + ".jpg", true);
+			}
 			AttchUtil.capture(this, getImgPath());
 			break;
 		default:
@@ -129,8 +138,7 @@ public class IDCardActivity extends BaseActivity {
 		outState.putInt("imgType", imgType);
 	}
 
-	private class UpdateIDCardImgTask extends
-			AsyncTask<String, Integer, HttpResult> {
+	private class UpdateIDCardImgTask extends AsyncTask<String, Integer, HttpResult> {
 		private int imgType = 0;
 
 		public UpdateIDCardImgTask(int imgType) {
@@ -151,8 +159,7 @@ public class IDCardActivity extends BaseActivity {
 			param.put("img_type", imgType + "");
 			List<String> files = new ArrayList<String>();
 			files.add(filePath);
-			HttpResult result = AEHttpUtil.doPostWithFile(
-					URLConstants.URL_UPDATE_IDCARD_IMG, files, param);
+			HttpResult result = AEHttpUtil.doPostWithFile(URLConstants.URL_UPDATE_IDCARD_IMG, files, param);
 			return result;
 		}
 
@@ -161,55 +168,41 @@ public class IDCardActivity extends BaseActivity {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				if (result.getRES_OBJ() != null
-						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
-					AttchVO vo = GsonUtil.getInstance().fromJson(
-							result.getRES_OBJ().toString(), AttchVO.class);
+				if (result.getRES_OBJ() != null && !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
+					AttchVO vo = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(), AttchVO.class);
 					switch (imgType) {
 					case 0:
 						if (user_id.equals(AEApp.getCurrentUser().getUSER_ID())) {
-							AEApp.getCurrentUser().setIDCARD_FRONT(
-									vo.getATTCH_ID());
+							AEApp.getCurrentUser().setIDCARD_FRONT(vo.getATTCH_ID());
 						} else {
-							Intent intent = new Intent(
-									UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
-							intent.putExtra(CodeConstants.KEY_IDCARD_FRONT,
-									vo.getATTCH_ID());
+							Intent intent = new Intent(UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
+							intent.putExtra(CodeConstants.KEY_IDCARD_FRONT, vo.getATTCH_ID());
 							sendBroadcast(intent);
 						}
-						imageLoader.displayImage(
-								String.format(URLConstants.URL_IMG,
-										vo.getATTCH_ID()), imgFront, options);
+						imageLoader.displayImage(String.format(URLConstants.URL_IMG, vo.getATTCH_ID()), imgFront,
+								options);
 						break;
 					case 1:
 						if (user_id.equals(AEApp.getCurrentUser().getUSER_ID())) {
-							AEApp.getCurrentUser().setIDCARD_BACK(
-									vo.getATTCH_ID());
+							AEApp.getCurrentUser().setIDCARD_BACK(vo.getATTCH_ID());
 						} else {
-							Intent intent = new Intent(
-									UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
-							intent.putExtra(CodeConstants.KEY_IDCARD_BACK,
-									vo.getATTCH_ID());
+							Intent intent = new Intent(UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
+							intent.putExtra(CodeConstants.KEY_IDCARD_BACK, vo.getATTCH_ID());
 							sendBroadcast(intent);
 						}
-						imageLoader.displayImage(
-								String.format(URLConstants.URL_DOWNLOAD,
-										vo.getATTCH_ID()), imgBack, options);
+						imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, vo.getATTCH_ID()), imgBack,
+								options);
 						break;
 					case 2:
 						if (user_id.equals(AEApp.getCurrentUser().getUSER_ID())) {
-							AEApp.getCurrentUser().setIDCARD_HAND(
-									vo.getATTCH_ID());
+							AEApp.getCurrentUser().setIDCARD_HAND(vo.getATTCH_ID());
 						} else {
-							Intent intent = new Intent(
-									UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
-							intent.putExtra(CodeConstants.KEY_IDCARD_HAND,
-									vo.getATTCH_ID());
+							Intent intent = new Intent(UserDetailActivity.ACTION_UPDATE_IDCARD_IMG);
+							intent.putExtra(CodeConstants.KEY_IDCARD_HAND, vo.getATTCH_ID());
 							sendBroadcast(intent);
 						}
-						imageLoader.displayImage(
-								String.format(URLConstants.URL_DOWNLOAD,
-										vo.getATTCH_ID()), imgHand, options);
+						imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, vo.getATTCH_ID()), imgHand,
+								options);
 						break;
 					default:
 						break;
@@ -234,8 +227,7 @@ public class IDCardActivity extends BaseActivity {
 
 	@SuppressWarnings("deprecation")
 	private void initImageLoader() {
-		options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
+		options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.icon_loading) // 设置图片在下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.icon_failed)// 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.icon_failed) // 设置图片加载/解码过程中错误时候显示的图片
 				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
@@ -254,19 +246,13 @@ public class IDCardActivity extends BaseActivity {
 				.displayer(new FadeInBitmapDisplayer(100))// 是否图片加载好后渐入的动画时间
 				.build();// 构建完成
 		if (!StringUtil.isEmpty(imgFrontID)) {
-			imageLoader.displayImage(
-					String.format(URLConstants.URL_DOWNLOAD, imgFrontID),
-					imgFront, options);
+			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, imgFrontID), imgFront, options);
 		}
 		if (!StringUtil.isEmpty(imgBackID)) {
-			imageLoader.displayImage(
-					String.format(URLConstants.URL_DOWNLOAD, imgBackID),
-					imgBack, options);
+			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, imgBackID), imgBack, options);
 		}
 		if (!StringUtil.isEmpty(imgHandID)) {
-			imageLoader.displayImage(
-					String.format(URLConstants.URL_DOWNLOAD, imgHandID),
-					imgHand, options);
+			imageLoader.displayImage(String.format(URLConstants.URL_DOWNLOAD, imgHandID), imgHand, options);
 		}
 	}
 }

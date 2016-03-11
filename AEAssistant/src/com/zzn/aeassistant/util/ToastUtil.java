@@ -20,18 +20,27 @@ public class ToastUtil {
 	private static Toast toast = null;
 	
 	public static void showImp(Activity activity, String msg) {
+		if (StringUtil.isEmpty(msg)) {
+			return;
+		}
 		new AlertDialog.Builder(activity).setTitle(R.string.warning)
 				.setMessage(msg).setPositiveButton(R.string.confirm, null)
 				.create().show();
 	}
 	
 	public static void showImp(Activity activity, int msg) {
+		if (StringUtil.isEmpty(activity.getString(msg))) {
+			return;
+		}
 		new AlertDialog.Builder(activity).setTitle(R.string.warning)
 				.setMessage(msg).setPositiveButton(R.string.confirm, null)
 				.create().show();
 	}
 
 	public static void show(String msg) {
+		if (StringUtil.isEmpty(msg)) {
+			return;
+		}
 		cancelToast();
 //		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_SHORT);
 		toast = createToast(msg);
@@ -40,6 +49,9 @@ public class ToastUtil {
 	}
 
 	public static void show(int msg) {
+		if (StringUtil.isEmpty(AEApp.getInstance().getString(msg))) {
+			return;
+		}
 		cancelToast();
 //		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_SHORT);
 		toast = createToast(msg);
@@ -48,6 +60,9 @@ public class ToastUtil {
 	}
 
 	public static void showLong(String msg) {
+		if (StringUtil.isEmpty(msg)) {
+			return;
+		}
 		cancelToast();
 //		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_LONG);
 		toast = createToast(msg);
@@ -56,6 +71,9 @@ public class ToastUtil {
 	}
 
 	public static void showLong(int msg) {
+		if (StringUtil.isEmpty(AEApp.getInstance().getString(msg))) {
+			return;
+		}
 		cancelToast();
 //		toast = Toast.makeText(AEApp.getInstance(), msg, Toast.LENGTH_LONG);
 		toast = createToast(msg);

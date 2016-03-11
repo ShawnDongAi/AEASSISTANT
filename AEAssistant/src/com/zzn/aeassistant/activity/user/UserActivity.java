@@ -55,8 +55,8 @@ public class UserActivity extends BaseActivity {
 	public static final int REQUEST_USER_REMARK = 3;
 	public static final int REQUEST_USER_IDCARD = 4;
 
-	private View layoutHead, layoutName, layoutPhone, layoutSex, layoutRemark,
-			layoutIDCard, layoutIDCardImg, layoutQRCode;
+	private View layoutHead, layoutName, layoutPhone, layoutSex, layoutRemark, layoutIDCard, layoutIDCardImg,
+			layoutQRCode;
 	private TextView name, phone, sex, remark, idcard;
 	private CircleImageView head;
 	private PopupWindow menu;
@@ -105,8 +105,7 @@ public class UserActivity extends BaseActivity {
 
 		name.setText(AEApp.getCurrentUser().getUSER_NAME());
 		phone.setText(AEApp.getCurrentUser().getPHONE());
-		sex.setText(!AEApp.getCurrentUser().getSEX().trim().equals("1") ? R.string.male
-				: R.string.female);
+		sex.setText(!AEApp.getCurrentUser().getSEX().trim().equals("1") ? R.string.male : R.string.female);
 		String mRemark = AEApp.getCurrentUser().getREMARK();
 		if (!StringUtil.isEmpty(mRemark)) {
 			remark.setText(mRemark);
@@ -118,16 +117,15 @@ public class UserActivity extends BaseActivity {
 		initImageLoader();
 		initMenu();
 		if (!StringUtil.isEmpty(AEApp.getCurrentUser().getBIG_HEAD())) {
-			imageLoader.displayImage(String.format(URLConstants.URL_IMG, AEApp
-					.getCurrentUser().getBIG_HEAD()), head, options);
+			imageLoader.displayImage(String.format(URLConstants.URL_IMG, AEApp.getCurrentUser().getBIG_HEAD()), head,
+					options);
 		}
 		initTwoCode();
 	}
 
 	@SuppressWarnings("deprecation")
 	private void initImageLoader() {
-		options = new DisplayImageOptions.Builder()
-				.showImageOnLoading(R.drawable.ic_head) // 设置图片在下载期间显示的图片
+		options = new DisplayImageOptions.Builder().showImageOnLoading(R.drawable.ic_head) // 设置图片在下载期间显示的图片
 				.showImageForEmptyUri(R.drawable.ic_head)// 设置图片Uri为空或是错误的时候显示的图片
 				.showImageOnFail(R.drawable.ic_head) // 设置图片加载/解码过程中错误时候显示的图片
 				.cacheInMemory(true)// 设置下载的图片是否缓存在内存中
@@ -163,10 +161,8 @@ public class UserActivity extends BaseActivity {
 				}
 			}
 		});
-		menu = new PopupWindow(menuView, LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT);
-		menu.setBackgroundDrawable(getResources().getDrawable(
-				R.color.transparent_lightslategray));
+		menu = new PopupWindow(menuView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		menu.setBackgroundDrawable(getResources().getDrawable(R.color.transparent_lightslategray));
 		menu.setAnimationStyle(R.style.bottommenu_anim_style);
 		menu.setOutsideTouchable(false);
 	}
@@ -175,13 +171,11 @@ public class UserActivity extends BaseActivity {
 		LinearLayout twoCodeView = new LinearLayout(this);
 		twoCodeView.setGravity(Gravity.CENTER);
 		twocodeImg = new ImageView(mContext);
-		twoCodeView.addView(twocodeImg, (int) (screenW / 2),
-				(int) (screenW / 2));
+		twoCodeView.addView(twocodeImg, (int) (screenW / 2), (int) (screenW / 2));
 		try {
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("user_phone", AEApp.getCurrentUser().getPHONE());
-			Bitmap bitmap = BitmapUtil.cretaeTwoCode(mContext, GsonUtil
-					.getInstance().toJson(map), head.getDrawable());
+			Bitmap bitmap = BitmapUtil.cretaeTwoCode(mContext, GsonUtil.getInstance().toJson(map), head.getDrawable());
 			twocodeImg.setImageBitmap(bitmap);
 		} catch (WriterException e) {
 			e.printStackTrace();
@@ -197,10 +191,8 @@ public class UserActivity extends BaseActivity {
 				return false;
 			}
 		});
-		twocodeWindow = new PopupWindow(twoCodeView, LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT);
-		twocodeWindow.setBackgroundDrawable(getResources().getDrawable(
-				R.color.transparent_lightslategray));
+		twocodeWindow = new PopupWindow(twoCodeView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		twocodeWindow.setBackgroundDrawable(getResources().getDrawable(R.color.transparent_lightslategray));
 		twocodeWindow.setAnimationStyle(R.style.bottommenu_anim_style);
 	}
 
@@ -215,12 +207,9 @@ public class UserActivity extends BaseActivity {
 			break;
 		case R.id.user_layout_name:
 			Intent nameIntent = new Intent(mContext, TextEditActivity.class);
-			nameIntent.putExtra(CodeConstants.KEY_TITLE,
-					getString(R.string.modify_user_name));
-			nameIntent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, name.getText()
-					.toString());
-			nameIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
-					getString(R.string.hint_user));
+			nameIntent.putExtra(CodeConstants.KEY_TITLE, getString(R.string.modify_user_name));
+			nameIntent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, name.getText().toString());
+			nameIntent.putExtra(CodeConstants.KEY_HINT_TEXT, getString(R.string.hint_user));
 			nameIntent.putExtra(CodeConstants.KEY_SINGLELINE, true);
 			startActivityForResult(nameIntent, REQUEST_USER_NAME);
 			break;
@@ -230,54 +219,46 @@ public class UserActivity extends BaseActivity {
 			break;
 		case R.id.user_layout_remark:
 			Intent remarkIntent = new Intent(mContext, TextEditActivity.class);
-			remarkIntent.putExtra(CodeConstants.KEY_TITLE,
-					getString(R.string.modify_user_remark));
-			remarkIntent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, remark
-					.getText().toString());
-			remarkIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
-					getString(R.string.hint_remark));
+			remarkIntent.putExtra(CodeConstants.KEY_TITLE, getString(R.string.modify_user_remark));
+			remarkIntent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, remark.getText().toString());
+			remarkIntent.putExtra(CodeConstants.KEY_HINT_TEXT, getString(R.string.hint_remark));
 			remarkIntent.putExtra(CodeConstants.KEY_SINGLELINE, false);
 			startActivityForResult(remarkIntent, REQUEST_USER_REMARK);
 			break;
 		case R.id.user_layout_idcard:
 			Intent idcardIntent = new Intent(mContext, TextEditActivity.class);
-			idcardIntent.putExtra(CodeConstants.KEY_TITLE,
-					getString(R.string.modify_user_idcard));
-			idcardIntent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, idcard
-					.getText().toString());
-			idcardIntent.putExtra(CodeConstants.KEY_HINT_TEXT,
-					getString(R.string.hint_idcard));
+			idcardIntent.putExtra(CodeConstants.KEY_TITLE, getString(R.string.modify_user_idcard));
+			idcardIntent.putExtra(CodeConstants.KEY_DEFAULT_TEXT, idcard.getText().toString());
+			idcardIntent.putExtra(CodeConstants.KEY_HINT_TEXT, getString(R.string.hint_idcard));
 			idcardIntent.putExtra(CodeConstants.KEY_SINGLELINE, true);
-			idcardIntent.putExtra(CodeConstants.KEY_INPUT_TYPE,
-					InputType.TYPE_NUMBER_FLAG_SIGNED);
+			idcardIntent.putExtra(CodeConstants.KEY_INPUT_TYPE, InputType.TYPE_NUMBER_FLAG_SIGNED);
 			startActivityForResult(idcardIntent, REQUEST_USER_IDCARD);
 			break;
 		case R.id.user_layout_idcard_img:
 			Intent intent = new Intent(this, IDCardActivity.class);
 			intent.putExtra(CodeConstants.KEY_EDITABLE, true);
-			intent.putExtra(CodeConstants.KEY_IDCARD_FRONT, AEApp
-					.getCurrentUser().getIDCARD_FRONT());
-			intent.putExtra(CodeConstants.KEY_IDCARD_BACK, AEApp
-					.getCurrentUser().getIDCARD_BACK());
-			intent.putExtra(CodeConstants.KEY_IDCARD_HAND, AEApp
-					.getCurrentUser().getIDCARD_HAND());
-			intent.putExtra(CodeConstants.KEY_USER_ID, AEApp.getCurrentUser()
-					.getUSER_ID());
+			intent.putExtra(CodeConstants.KEY_IDCARD_FRONT, AEApp.getCurrentUser().getIDCARD_FRONT());
+			intent.putExtra(CodeConstants.KEY_IDCARD_BACK, AEApp.getCurrentUser().getIDCARD_BACK());
+			intent.putExtra(CodeConstants.KEY_IDCARD_HAND, AEApp.getCurrentUser().getIDCARD_HAND());
+			intent.putExtra(CodeConstants.KEY_USER_ID, AEApp.getCurrentUser().getUSER_ID());
 			startActivity(intent);
 			break;
 		case R.id.user_layout_qrcode:
 			if (twocodeWindow != null && !twocodeWindow.isShowing()) {
-				twocodeWindow
-						.showAtLocation(layoutQRCode, Gravity.CENTER, 0, 0);
+				twocodeWindow.showAtLocation(layoutQRCode, Gravity.CENTER, 0, 0);
 			}
 			break;
 		case R.id.menu_photograph:
 			if (menu != null && menu.isShowing()) {
 				menu.dismiss();
 			}
-			setImgPath(
-					FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID()
-							+ "_" + System.currentTimeMillis() + ".jpg", true);
+			if (new File(FileCostants.DIR_HEAD).exists()) {
+				setImgPath(FileCostants.DIR_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_"
+						+ System.currentTimeMillis() + ".jpg", true);
+			} else {
+				setImgPath(FileCostants.MB_HEAD + AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis()
+						+ ".jpg", true);
+			}
 			AttchUtil.capture(this, getImgPath());
 			break;
 		case R.id.menu_album:
@@ -316,8 +297,7 @@ public class UserActivity extends BaseActivity {
 		if (resultCode == RESULT_OK) {
 			switch (requestCode) {
 			case REQUEST_USER_NAME:
-				String nameString = data
-						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
+				String nameString = data.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
 				if (name.getText().toString().trim().equals(nameString)) {
 					break;
 				}
@@ -327,8 +307,7 @@ public class UserActivity extends BaseActivity {
 				new UpdateNameTask().execute(nameString);
 				break;
 			case REQUEST_USER_REMARK:
-				String remarkString = data
-						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
+				String remarkString = data.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
 				if (remark.getText().toString().trim().equals(remarkString)) {
 					break;
 				}
@@ -337,12 +316,10 @@ public class UserActivity extends BaseActivity {
 				new UpdateRemarkTask().execute(remarkString);
 				break;
 			case Crop.REQUEST_CROP:
-				new UpdateHeadTask().execute(AttchUtil.getPath(mContext,
-						Crop.getOutput(data)));
+				new UpdateHeadTask().execute(AttchUtil.getPath(mContext, Crop.getOutput(data)));
 				break;
 			case REQUEST_USER_IDCARD:
-				String idcardString = data
-						.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
+				String idcardString = data.getStringExtra(CodeConstants.KEY_TEXT_RESULT);
 				if (idcard.getText().toString().trim().equals(idcardString)) {
 					break;
 				}
@@ -356,10 +333,13 @@ public class UserActivity extends BaseActivity {
 
 	@Override
 	protected void getImg(String path) {
-		Uri outputUri = Uri.fromFile(new File(FileCostants.DIR_HEAD, AEApp
-				.getCurrentUser().getUSER_ID()
-				+ "_"
-				+ System.currentTimeMillis()));
+		File file = new File(FileCostants.DIR_HEAD,
+				AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis());
+		if (!file.exists()) {
+			file = new File(FileCostants.MB_HEAD,
+					AEApp.getCurrentUser().getUSER_ID() + "_" + System.currentTimeMillis());
+		}
+		Uri outputUri = Uri.fromFile(file);
 		new Crop(path).output(outputUri).asSquare().start(this);
 	}
 
@@ -382,8 +362,7 @@ public class UserActivity extends BaseActivity {
 			param.put("user_id", AEApp.getCurrentUser().getUSER_ID());
 			List<String> files = new ArrayList<String>();
 			files.add(filePath);
-			HttpResult result = AEHttpUtil.doPostWithFile(
-					URLConstants.URL_UPDATE_HEAD, files, param);
+			HttpResult result = AEHttpUtil.doPostWithFile(URLConstants.URL_UPDATE_HEAD, files, param);
 			return result;
 		}
 
@@ -392,17 +371,13 @@ public class UserActivity extends BaseActivity {
 			super.onPostExecute(result);
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
-				if (result.getRES_OBJ() != null
-						&& !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
-					AttchVO vo = GsonUtil.getInstance().fromJson(
-							result.getRES_OBJ().toString(), AttchVO.class);
+				if (result.getRES_OBJ() != null && !StringUtil.isEmpty(result.getRES_OBJ().toString())) {
+					AttchVO vo = GsonUtil.getInstance().fromJson(result.getRES_OBJ().toString(), AttchVO.class);
 					AEApp.getCurrentUser().setBIG_HEAD(vo.getATTCH_ID());
 					AEApp.getCurrentUser().setSMALL_HEAD(vo.getATTCH_ID());
-					imageLoader.displayImage(String.format(
-							URLConstants.URL_IMG, AEApp.getCurrentUser()
-									.getBIG_HEAD()), head, options);
-					sendBroadcast(new Intent(
-							SettingFragment.ACTION_USER_INFO_CHANGED));
+					imageLoader.displayImage(String.format(URLConstants.URL_IMG, AEApp.getCurrentUser().getBIG_HEAD()),
+							head, options);
+					sendBroadcast(new Intent(SettingFragment.ACTION_USER_INFO_CHANGED));
 				}
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
@@ -420,30 +395,24 @@ public class UserActivity extends BaseActivity {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String nameString = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
-					+ "&user_name=" + nameString;
-			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_NAME,
-					param);
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID() + "&user_name=" + nameString;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_NAME, param);
 			return result;
 		}
 	}
 
-	private class UpdateRemarkTask extends
-			AsyncTask<String, Integer, HttpResult> {
+	private class UpdateRemarkTask extends AsyncTask<String, Integer, HttpResult> {
 
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String remarkString = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
-					+ "&remark=" + remarkString;
-			HttpResult result = AEHttpUtil.doPost(
-					URLConstants.URL_UPDATE_REMARK, param);
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID() + "&remark=" + remarkString;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_REMARK, param);
 			return result;
 		}
 	}
 
-	private class UpdateIDCardTask extends
-			AsyncTask<String, Integer, HttpResult> {
+	private class UpdateIDCardTask extends AsyncTask<String, Integer, HttpResult> {
 
 		@Override
 		protected void onPreExecute() {
@@ -454,10 +423,8 @@ public class UserActivity extends BaseActivity {
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String idcardString = params[0];
-			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
-					+ "&idcard=" + idcardString;
-			HttpResult result = AEHttpUtil.doPost(
-					URLConstants.URL_UPDATE_IDCARD, param);
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID() + "&idcard=" + idcardString;
+			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_IDCARD, param);
 			result.setRES_OBJ(idcardString);
 			return result;
 		}
@@ -468,8 +435,7 @@ public class UserActivity extends BaseActivity {
 			AEProgressDialog.dismissLoadingDialog();
 			if (result.getRES_CODE().equals(HttpResult.CODE_SUCCESS)) {
 				idcard.setText(result.getRES_OBJ().toString());
-				AEApp.getCurrentUser()
-						.setIDCARD(result.getRES_OBJ().toString());
+				AEApp.getCurrentUser().setIDCARD(result.getRES_OBJ().toString());
 			} else {
 				ToastUtil.show(result.getRES_MESSAGE());
 			}

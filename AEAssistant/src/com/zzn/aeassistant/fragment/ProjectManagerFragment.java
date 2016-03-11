@@ -84,26 +84,26 @@ public class ProjectManagerFragment extends BaseFragment implements
 	}
 
 	private void initSwipeMenu() {
-		SwipeMenuCreator creator = new SwipeMenuCreator() {
-			@Override
-			public void create(SwipeMenu menu) {
-				switch (menu.getViewType()) {
-				case ProjectItem.CURRENT_PROJECT:
-				case ProjectItem.MANAGER_PROJECT:
-					SwipeMenuItem item = new SwipeMenuItem(mContext);
-					item.setBackground(R.drawable.swipe_menu_item1);
-					item.setWidth(ToolsUtil.dip2px(mContext, 90));
-					item.setTitle(R.string.delete);
-					item.setTitleSize(18);
-					item.setTitleColor(Color.WHITE);
-					menu.addMenuItem(item);
-					break;
-				default:
-					break;
-				}
-			}
-		};
-		listView.setMenuCreator(creator);
+//		SwipeMenuCreator creator = new SwipeMenuCreator() {
+//			@Override
+//			public void create(SwipeMenu menu) {
+//				switch (menu.getViewType()) {
+//				case ProjectItem.CURRENT_PROJECT:
+//				case ProjectItem.MANAGER_PROJECT:
+//					SwipeMenuItem item = new SwipeMenuItem(mContext);
+//					item.setBackground(R.drawable.swipe_menu_item1);
+//					item.setWidth(ToolsUtil.dip2px(mContext, 90));
+//					item.setTitle(R.string.delete);
+//					item.setTitleSize(18);
+//					item.setTitleColor(Color.WHITE);
+//					menu.addMenuItem(item);
+//					break;
+//				default:
+//					break;
+//				}
+//			}
+//		};
+//		listView.setMenuCreator(creator);
 		listView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(int position, SwipeMenu menu,

@@ -44,7 +44,7 @@ public class AEApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		Thread.setDefaultUncaughtExceptionHandler(new AEExceptionHandler());
-//		SQLiteDatabase.loadLibs(this);
+		// SQLiteDatabase.loadLibs(this);
 		mAESQLiteHelper = new AESQLiteHelper(instance);
 		creatFileOrDir();
 		createDatabase();
@@ -81,15 +81,24 @@ public class AEApp extends Application {
 			return;
 		}
 		File baseDir = new File(FileCostants.DIR_BASE);
-		baseDir.mkdirs();
+		if (!baseDir.exists()) {
+			baseDir.mkdirs();
+		}
 		File scanningDir = new File(FileCostants.DIR_SCANNING);
 		scanningDir.mkdirs();
 		File headDir = new File(FileCostants.DIR_HEAD);
 		headDir.mkdirs();
 		File apkDir = new File(FileCostants.DIR_APK);
 		apkDir.mkdirs();
-		// File imgDir = new File(FileCostants.DIR_IMG);
-		// imgDir.mkdirs();
+		File imgDir = new File(FileCostants.DIR_IMG);
+		imgDir.mkdirs();
+		
+		File headMB = new File(FileCostants.MB_HEAD);
+		headMB.mkdirs();
+		File apkMB = new File(FileCostants.MB_APK);
+		apkMB.mkdirs();
+		File imgMB = new File(FileCostants.MB_IMG);
+		imgMB.mkdirs();
 		// File audioDir = new File(FileCostants.DIR_AUDIO);
 		// audioDir.mkdirs();
 		// File otherDir = new File(FileCostants.DIR_OTHER);
@@ -106,23 +115,14 @@ public class AEApp extends Application {
 
 	@SuppressWarnings("deprecation")
 	private void initImageLoader() {
-		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
-				instance)
-				.threadPoolSize(3)
-				.threadPriority(Thread.NORM_PRIORITY - 2)
-				.denyCacheImageMultipleSizesInMemory()
+		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(instance).threadPoolSize(3)
+				.threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
 				// .memoryCache(new WeakMemoryCache())
 				// .memoryCacheSize(2 * 1024 * 1024)
-				.discCacheFileNameGenerator(new Md5FileNameGenerator())
-				.tasksProcessingOrder(QueueProcessingType.LIFO)
-				.discCacheFileCount(100)
-				.discCache(
-						new UnlimitedDiskCache(new File(
-								FileCostants.DIR_SCANNING)))
+				.discCacheFileNameGenerator(new Md5FileNameGenerator()).tasksProcessingOrder(QueueProcessingType.LIFO)
+				.discCacheFileCount(100).discCache(new UnlimitedDiskCache(new File(FileCostants.DIR_SCANNING)))
 				.defaultDisplayImageOptions(DisplayImageOptions.createSimple())
-				.imageDownloader(
-						new BaseImageDownloader(instance, 10 * 1000, 30 * 1000))
-				.build();
+				.imageDownloader(new BaseImageDownloader(instance, 10 * 1000, 30 * 1000)).build();
 		ImageLoader.getInstance().init(config);
 	}
 

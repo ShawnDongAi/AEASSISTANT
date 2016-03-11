@@ -25,6 +25,7 @@
     <string name="new_">新增</string>
     <string name="add_task">添加新任务</string>
     <string name="add_task_detail">添加更多任务</string>
+    <string name="info_delete_task">是否删除此任务</string>
     <string name="dial_error">电话号码格式有误</string>
     <string name="list_empty">这里什么都没有哦,下拉刷新试试吧~~~</string>
     <string name="null_input">请输入有效字符</string>
@@ -153,7 +154,7 @@
     <string name="project_manager_user">管理员：%s</string>
     <string name="project_create_time">创建时间：\n%s</string>
     <string name="project_address">项目地址：\n%s</string>
-    <string name="project_leaf">组织架构</string>
+    <string name="project_leaf">项目成员</string>
     <string name="project_user">项目通讯录</string>
     <string name="project_update_parent">项目迁移</string>
     <string name="project_update_parent_hint">温馨提示:在此页面，接收来电后可设置其为当前项目下级</string>

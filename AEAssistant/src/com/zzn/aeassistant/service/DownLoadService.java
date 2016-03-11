@@ -11,6 +11,10 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.zzn.aeassistant.R;
+import com.zzn.aeassistant.constants.FileCostants;
+import com.zzn.aeassistant.util.AEThreadManager;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -25,10 +29,6 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.widget.RemoteViews;
-
-import com.zzn.aeassistant.R;
-import com.zzn.aeassistant.constants.FileCostants;
-import com.zzn.aeassistant.util.AEThreadManager;
 
 /**
  * 下载APK服务 无需绑定Activity,适合带通知的下载服务,在后台下载
@@ -215,7 +215,7 @@ public class DownLoadService extends Service {
 					File file = new File(filePath);
 					// 判断文件目录是否存在
 					if (!file.exists()) {
-						file.mkdir();
+						filePath = FileCostants.MB_APK;
 					}
 					File apkFile = new File(filePath, fileName);
 					// 如果apk文件存在则删除重新下载

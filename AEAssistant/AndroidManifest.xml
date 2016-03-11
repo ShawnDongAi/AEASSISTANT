@@ -238,7 +238,8 @@
         <activity
             android:name=".activity.task.CreateTaskActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/ae_theme_translucent" />
+            android:theme="@style/ae_theme_translucent"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.task.TaskDetailViewActivity"
             android:screenOrientation="portrait"
