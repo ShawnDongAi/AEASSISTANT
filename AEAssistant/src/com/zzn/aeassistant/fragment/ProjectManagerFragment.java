@@ -30,6 +30,8 @@ import com.zzn.aeassistant.vo.HttpResult;
 import com.zzn.aeassistant.vo.ProjectVO;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -60,7 +62,8 @@ public class ProjectManagerFragment extends BaseFragment implements
 	protected void initView(View container) {
 		btnAdd = (ImageButton) container.findViewById(R.id.project_btn_add);
 		btnAdd.setOnClickListener(this);
-		pullListView = (PullToRefreshPinnedSwipeMenuListView) container.findViewById(R.id.project_listview);
+		pullListView = (PullToRefreshPinnedSwipeMenuListView) container
+				.findViewById(R.id.project_listview);
 		listView = pullListView.getRefreshableView();
 		adapter = new ProjectAdapter(mContext);
 		currentSection = new ProjectItem(ProjectItem.SECTION,
@@ -84,33 +87,45 @@ public class ProjectManagerFragment extends BaseFragment implements
 	}
 
 	private void initSwipeMenu() {
-//		SwipeMenuCreator creator = new SwipeMenuCreator() {
-//			@Override
-//			public void create(SwipeMenu menu) {
-//				switch (menu.getViewType()) {
-//				case ProjectItem.CURRENT_PROJECT:
-//				case ProjectItem.MANAGER_PROJECT:
-//					SwipeMenuItem item = new SwipeMenuItem(mContext);
-//					item.setBackground(R.drawable.swipe_menu_item1);
-//					item.setWidth(ToolsUtil.dip2px(mContext, 90));
-//					item.setTitle(R.string.delete);
-//					item.setTitleSize(18);
-//					item.setTitleColor(Color.WHITE);
-//					menu.addMenuItem(item);
-//					break;
-//				default:
-//					break;
-//				}
-//			}
-//		};
-//		listView.setMenuCreator(creator);
+		SwipeMenuCreator creator = new SwipeMenuCreator() {
+			@Override
+			public void create(SwipeMenu menu) {
+				switch (menu.getViewType()) {
+				case ProjectItem.CURRENT_PROJECT:
+				case ProjectItem.MANAGER_PROJECT:
+					SwipeMenuItem item = new SwipeMenuItem(mContext);
+					item.setBackground(R.drawable.swipe_menu_item1);
+					item.setWidth(ToolsUtil.dip2px(mContext, 90));
+					item.setTitle(R.string.project_exit);
+					item.setTitleSize(18);
+					item.setTitleColor(Color.WHITE);
+					menu.addMenuItem(item);
+					break;
+				default:
+					break;
+				}
+			}
+		};
+		listView.setMenuCreator(creator);
 		listView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(int position, SwipeMenu menu,
 					int index) {
-				ProjectVO item = adapter.getItem(position).project;
-				deleteProjectTask = new DeleteProjectTask();
-				deleteProjectTask.execute(item.getPROJECT_ID());
+				final ProjectVO item = adapter.getItem(position).project;
+				new AlertDialog.Builder(mContext)
+						.setTitle(R.string.warning)
+						.setMessage(R.string.info_exit_project)
+						.setPositiveButton(R.string.confirm,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										deleteProjectTask = new DeleteProjectTask();
+										deleteProjectTask.execute(item
+												.getPROJECT_ID());
+									}
+								}).setNegativeButton(R.string.cancel, null)
+						.show();
 				return false;
 			}
 		});
@@ -125,8 +140,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 					@Override
 					public void onRefresh(
 							PullToRefreshBase<PinnedSectionSwipeMenuListView> refreshView) {
-						String label = DateUtils.formatDateTime(
-								mContext,
+						String label = DateUtils.formatDateTime(mContext,
 								System.currentTimeMillis(),
 								DateUtils.FORMAT_SHOW_TIME
 										| DateUtils.FORMAT_SHOW_DATE
@@ -145,8 +159,8 @@ public class ProjectManagerFragment extends BaseFragment implements
 		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.project_btn_add:
-			startActivityForResult(
-					new Intent(mContext, CreateProjectActivity.class),
+			startActivityForResult(new Intent(mContext,
+					CreateProjectActivity.class),
 					CodeConstants.REQUEST_CODE_REFRESH);
 			break;
 		default:
@@ -164,9 +178,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 
 		@Override
 		protected HttpResult doInBackground(String... params) {
-			String param = "user_id="
-					+ AEApp.getCurrentUser()
-							.getUSER_ID();
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID();
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_PROJECT_MANAGER_LIST, param);
 			return result;
@@ -182,8 +194,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 							result.getRES_OBJ().toString(),
 							new TypeToken<List<ProjectVO>>() {
 							}.getType());
-					AEApp.getCurrentUser()
-							.setPROJECTS(projects);
+					AEApp.getCurrentUser().setPROJECTS(projects);
 					if (initProjectTask != null) {
 						initProjectTask.cancel(true);
 						initProjectTask = null;
@@ -320,7 +331,8 @@ public class ProjectManagerFragment extends BaseFragment implements
 				adapter.addItem(currentProject);
 			} else {
 				ProjectItem currentProject = new ProjectItem(
-						ProjectItem.CURRENT_PROJECT, result.getROOT_PROJECT_NAME());
+						ProjectItem.CURRENT_PROJECT,
+						result.getROOT_PROJECT_NAME());
 				currentProject.project = result;
 				adapter.addItem(currentProject);
 			}
@@ -332,8 +344,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 				managerProject.project = managerVO;
 				adapter.addItem(managerProject);
 			}
-			if (AEApp.getCurrentUser().getPROJECTS()
-					.size() <= 0) {
+			if (AEApp.getCurrentUser().getPROJECTS().size() <= 0) {
 				ProjectItem managerProject = new ProjectItem(
 						ProjectItem.MANAGER_PROJECT_NULL,
 						getString(R.string.null_project));
@@ -355,9 +366,8 @@ public class ProjectManagerFragment extends BaseFragment implements
 		@Override
 		protected HttpResult doInBackground(String... params) {
 			String project_id = params[0];
-			String param = "user_id="
-					+ AEApp.getCurrentUser()
-							.getUSER_ID() + "&project_id=" + project_id;
+			String param = "user_id=" + AEApp.getCurrentUser().getUSER_ID()
+					+ "&project_id=" + project_id;
 			HttpResult result = AEHttpUtil.doPost(
 					URLConstants.URL_DELETE_PRJECT, param);
 			return result;
@@ -374,8 +384,7 @@ public class ProjectManagerFragment extends BaseFragment implements
 							result.getRES_OBJ().toString(),
 							new TypeToken<List<ProjectVO>>() {
 							}.getType());
-					AEApp.getCurrentUser()
-							.setPROJECTS(projects);
+					AEApp.getCurrentUser().setPROJECTS(projects);
 					initProjectTask = new InitProjectTask();
 					if (AEApp.getCurrentLoc() == null) {
 						initProjectTask.execute(new Double[] { 0.0, 0.0 });

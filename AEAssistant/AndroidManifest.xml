@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zzn.aeassistant"
-    android:versionCode="0105074"
-    android:versionName="1.5.74" >
+    android:versionCode="0105075"
+    android:versionName="1.5.75" >
 
     <uses-sdk
         android:minSdkVersion="9"

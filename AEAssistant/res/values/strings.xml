@@ -25,7 +25,7 @@
     <string name="new_">新增</string>
     <string name="add_task">添加新任务</string>
     <string name="add_task_detail">添加更多任务</string>
-    <string name="info_delete_task">是否删除此任务</string>
+    <string name="info_delete_task">确定删除此任务？</string>
     <string name="dial_error">电话号码格式有误</string>
     <string name="list_empty">这里什么都没有哦,下拉刷新试试吧~~~</string>
     <string name="null_input">请输入有效字符</string>
@@ -134,6 +134,7 @@
     <string name="project_join">加入</string>
     <string name="project_exit">退出</string>
     <string name="project_close">关闭</string>
+    <string name="info_exit_project">确定退出此项目？</string>
     <string name="project_current">当前激活项目</string>
     <string name="project_manager">所有项目</string>
     <string name="project_create">新建项目</string>

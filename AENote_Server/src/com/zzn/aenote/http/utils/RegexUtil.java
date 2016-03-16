@@ -19,6 +19,29 @@ public class RegexUtil {
 	}
 
 	/**
+	 * 格式化手机号码
+	 * @param input
+	 * @return
+	 */
+	public static String formatPhoneNum(String input) {
+		String phone = input.replaceAll("\\s*", "");
+		phone = phone.replaceAll("-", "");
+		Pattern p1 = Pattern.compile("^((\\+{0,1}86){0,1})1[0-9]{10}");
+		Matcher m1 = p1.matcher(phone);
+		if (m1.matches()) {
+			Pattern p2 = Pattern.compile("^((\\+{0,1}86){0,1})");
+			Matcher m2 = p2.matcher(phone);
+			StringBuffer sb = new StringBuffer();
+			while (m2.find()) {
+				m2.appendReplacement(sb, "");
+			}
+			m2.appendTail(sb);
+			phone = sb.toString();
+		}
+		return phone;
+	}
+
+	/**
 	 * 判断是否身份证号码
 	 * 
 	 * @param input

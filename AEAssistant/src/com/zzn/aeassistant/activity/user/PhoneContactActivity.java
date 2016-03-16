@@ -129,11 +129,13 @@ public class PhoneContactActivity extends BaseActivity {
 		StringBuilder name = new StringBuilder();
 		for (String key : selectDatas.keySet()) {
 			phone.append(selectDatas.get(key) + ",");
-			name.append(key.replaceAll(selectDatas.get(key), ""));
+			name.append(key.replace(selectDatas.get(key), "") + ",");
 		}
 		if (phone.length() > 0) {
 			phone.deleteCharAt(phone.length() - 1);
-			name.deleteCharAt(phone.length() - 1);
+		}
+		if (name.length() > 0) {
+			name.deleteCharAt(name.length() - 1);
 		}
 		// 迁移
 		if (updateParentTask != null) {
