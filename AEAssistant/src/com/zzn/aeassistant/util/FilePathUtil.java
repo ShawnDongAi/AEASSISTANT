@@ -33,7 +33,7 @@ public class FilePathUtil {
 		try {
 			int byteread = 0;
 			File oldfile = new File(oldPath);
-			if (oldfile.exists()) { // 文件存在时
+			if (oldfile.exists() && oldfile.canRead()) { // 文件存在时
 				InputStream inStream = new FileInputStream(oldPath); // 读入原文件
 				FileOutputStream fs = new FileOutputStream(newPath);
 				byte[] buffer = new byte[1024];

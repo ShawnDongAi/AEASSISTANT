@@ -29,6 +29,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.ContactsContract;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -69,23 +70,22 @@ public class PhoneContactActivity extends BaseActivity {
 		mListView = (PinnedSectionListView) findViewById(R.id.base_list);
 		mSideBar = (SideBar) findViewById(R.id.side_bar);
 		TextView mLetter = (TextView) findViewById(R.id.letter);
-		/*View headView = View.inflate(this, R.layout.layout_search, null);
-		ClearEditText filterInput = (ClearEditText) headView.findViewById(R.id.filter);
-		filterInput.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				filterData(s.toString().toLowerCase());
-			}
-		});
-		mListView.addHeaderView(headView);*/
+		/*
+		 * View headView = View.inflate(this, R.layout.layout_search, null);
+		 * ClearEditText filterInput = (ClearEditText)
+		 * headView.findViewById(R.id.filter);
+		 * filterInput.addTextChangedListener(new TextWatcher() {
+		 * 
+		 * @Override public void onTextChanged(CharSequence s, int start, int
+		 * before, int count) { }
+		 * 
+		 * @Override public void beforeTextChanged(CharSequence s, int start,
+		 * int count, int after) { }
+		 * 
+		 * @Override public void afterTextChanged(Editable s) {
+		 * filterData(s.toString().toLowerCase()); } });
+		 * mListView.addHeaderView(headView);
+		 */
 		mSideBar.setPopView(mLetter);
 		mSideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
 			@Override
@@ -102,7 +102,7 @@ public class PhoneContactActivity extends BaseActivity {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				PhoneContact item = mAdapter.getItem(position - 1);
+				PhoneContact item = mAdapter.getItem(position);
 				if (selectDatas.containsKey(item.getName() + item.getPhone())) {
 					selectDatas.remove(item.getName() + item.getPhone());
 				} else {
@@ -126,11 +126,14 @@ public class PhoneContactActivity extends BaseActivity {
 			return;
 		}
 		StringBuilder phone = new StringBuilder();
+		StringBuilder name = new StringBuilder();
 		for (String key : selectDatas.keySet()) {
 			phone.append(selectDatas.get(key) + ",");
+			name.append(key.replaceAll(selectDatas.get(key), ""));
 		}
 		if (phone.length() > 0) {
 			phone.deleteCharAt(phone.length() - 1);
+			name.deleteCharAt(phone.length() - 1);
 		}
 		// 迁移
 		if (updateParentTask != null) {
@@ -138,7 +141,7 @@ public class PhoneContactActivity extends BaseActivity {
 			updateParentTask = null;
 		}
 		updateParentTask = new UpdateParentTask();
-		updateParentTask.execute(new String[] { projectID, phone.toString() });
+		updateParentTask.execute(new String[] { projectID, phone.toString(), name.toString() });
 	}
 
 	class FastScrollerAdapter extends AppAdapter implements SectionIndexer {
@@ -258,12 +261,13 @@ public class PhoneContactActivity extends BaseActivity {
 			holder.name.setText(item.getName());
 			holder.phone.setText(item.getPhone());
 			if (isItemViewTypePinned(getItemViewType(position))) {
-				holder.name.setTextSize(12f);
+				holder.name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f);
 				holder.phone.setVisibility(View.GONE);
 				holder.checkbox.setVisibility(View.GONE);
 				convertView.setBackgroundColor(Color.GRAY);
 			} else {
-				holder.name.setTextSize(getResources().getDimension(R.dimen.menu_text_size));
+				holder.name.setTextSize(TypedValue.COMPLEX_UNIT_PX,
+						getResources().getDimension(R.dimen.menu_text_size));
 				holder.phone.setVisibility(View.VISIBLE);
 				holder.checkbox.setVisibility(View.VISIBLE);
 			}
@@ -415,7 +419,8 @@ public class PhoneContactActivity extends BaseActivity {
 		protected HttpResult doInBackground(String... params) {
 			String project_id = params[0];
 			String phone = params[1];
-			String param = "parent_project_id=" + project_id + "&leaf_user_phone=" + phone;
+			String name = params[2];
+			String param = "parent_project_id=" + project_id + "&leaf_user_phone=" + phone + "&leaf_user_name=" + name;
 			HttpResult result = AEHttpUtil.doPost(URLConstants.URL_UPDATE_PARENT, param);
 			return result;
 		}

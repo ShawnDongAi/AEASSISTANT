@@ -9,11 +9,11 @@ public class URLConstants {
 	//卧龙晓城
 //	public static final String URL_BASE = "http://192.168.0.100:8080/AENote_Server/";
 	//服务器
-//	public static final String URL_BASE = "http://www.zzn.net.cn/AENote_Server/";
+	public static final String URL_BASE = "http://www.zzn.net.cn/AENote_Server/";
 	//斗西路
 //	public static final String URL_BASE = "http://172.18.117.9:8080/AENote_Server/";
 	//南方科宇
-	public static final String URL_BASE = "http://192.168.3.125:8080/AENote_Server/";
+//	public static final String URL_BASE = "http://192.168.3.125:8080/AENote_Server/";
 	public static final String URL_HOST = URL_BASE + "app/";
 	/**
 	 * 注册接口

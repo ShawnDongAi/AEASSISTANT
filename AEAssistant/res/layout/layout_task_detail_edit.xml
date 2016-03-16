@@ -16,6 +16,7 @@
 
     <com.zzn.aeassistant.view.FastenGridView
         android:id="@+id/task_process_attach_list"
-        style="@style/base_attach_grid" />
+        style="@style/base_attach_grid"
+        android:layoutDirection="rtl" />
 
 </LinearLayout>

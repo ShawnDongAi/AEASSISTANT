@@ -34,6 +34,7 @@ import com.zzn.aeassistant.util.AttchUtil;
 import com.zzn.aeassistant.util.BitmapUtil;
 import com.zzn.aeassistant.util.FilePathUtil;
 import com.zzn.aeassistant.util.PhoneUtil;
+import com.zzn.aeassistant.util.ToastUtil;
 import com.zzn.aeassistant.view.AEProgressDialog;
 import com.zzn.aeassistant.view.swipeback.SwipeBackActivity;
 import com.zzn.aeassistant.vo.UserVO;
@@ -255,6 +256,7 @@ public abstract class BaseActivity extends SwipeBackActivity implements
 					}
 					imagePath = AttchUtil.getPath(mContext, imageUri);
 					if (imagePath == null || imagePath.equals("")) {
+						ToastUtil.show(R.string.can_not_read_img);
 						return;
 					}
 					if (FilePathUtil.copyFile(imagePath, getImgPath())) {

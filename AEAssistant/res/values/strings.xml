@@ -127,6 +127,7 @@
     <string name="photograph">拍照</string>
     <string name="album">从相册选取</string>
     <string name="pick_error">没有可用的图片资源管理器</string>
+    <string name="can_not_read_img">无法读取图片</string>
     <string name="title_image_crop">头像设置</string>
 
     <!-- 项目管理 -->

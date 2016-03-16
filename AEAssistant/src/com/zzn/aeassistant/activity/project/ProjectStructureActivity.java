@@ -141,7 +141,7 @@ public class ProjectStructureActivity extends BaseActivity {
 				case 1:
 					Intent intent = new Intent(mContext, PhoneContactActivity.class);
 					intent.putExtra(CodeConstants.KEY_PROJECT_ID, project_id);
-					startActivity(intent);
+					startActivityForResult(intent, CodeConstants.REQUEST_CODE_REFRESH);
 					break;
 				default:
 					break;

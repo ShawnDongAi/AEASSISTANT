@@ -57,6 +57,39 @@ public class UserService extends BaseService {
 			return null;
 		}
 	}
+	
+	/**
+	 * 注册
+	 * @param phone
+	 * @param name
+	 * @param password
+	 * @return
+	 */
+	public UserVO register(String phone, String name, String password) {
+		try {
+			UserVO user = new UserVO();
+			Map<String, Object> data = new HashMap<String, Object>();
+			String userID = UtilUniqueKey.getKey(phone);
+			data.put("user_id", userID);
+			user.setUSER_ID(userID);
+			data.put("user_name", name);
+			user.setUSER_NAME(name);
+			data.put("phone", phone);
+			user.setPHONE(phone);
+			data.put("sex", "0");
+			user.setSEX("0");
+			data.put("password", password);
+			String date = fromat.format(new Date(System.currentTimeMillis()));
+			data.put("create_time", date);
+			data.put("time", date);
+			user.setCREATE_TIME(date);
+			getJdbc().execute(getSql("insert_user_info", data));
+			return user;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * 校验用户密码

@@ -29,6 +29,7 @@ public class JoinProject implements CmHandler {
 		try {
 			String parent_project_id = req.getParameter("parent_project_id");
 			String leaf_user_phone = req.getParameter("leaf_user_phone");
+			String leaf_user_name = req.getParameter("leaf_user_name");
 			if (StringUtil.isEmpty(parent_project_id)) {
 				logger.info("缺少项目信息");
 				rs.setRES_CODE(Global.PROJECT_NULL_PARAMS);
@@ -42,29 +43,34 @@ public class JoinProject implements CmHandler {
 				return;
 			}
 			String[] leafPhones = leaf_user_phone.split(",");
+			String[] leafNames = leaf_user_name.split(",");
 			if (leafPhones.length > 1) {
 				StringBuilder failedPhone = new StringBuilder();
-				for (String leafPhone : leafPhones) {
+				for (int i = 0; i < leafPhones.length; i++) {
+					String leafPhone = leafPhones[i].replaceAll(" ", "");
 					if (StringUtil.isEmpty(leafPhone)) {
 						continue;
 					}
 					// 先取用户
 					List<Map<String, Object>> users = userService.queryUserByPhone(leafPhone);
 					String leaf_user_id = "";
-					String leaf_user_name = "";
+					String leafName = leafPhone;
+					if (leafNames.length > i || !StringUtil.isEmpty(leafNames[i])) {
+						leafName = leafNames[i];
+					}
 					if (users == null || users.size() == 0) {
-						UserVO userVO = userService.register(leafPhone, UtilUniqueKey.getKey());
+						UserVO userVO = userService.register(leafPhone, leafName, UtilUniqueKey.getKey());
 						if (userVO != null) {
 							leaf_user_id = userVO.getUSER_ID();
-							leaf_user_name = userVO.getUSER_NAME();
+							leafName = userVO.getUSER_NAME();
 						}
 					} else {
 						if (users.get(0).get("user_id") != null) {
 							leaf_user_id = users.get(0).get("user_id").toString();
-							leaf_user_name = users.get(0).get("user_name").toString();
+							leafName = users.get(0).get("user_name").toString();
 						}
 					}
-					if (StringUtil.isEmpty(leaf_user_name)) {
+					if (StringUtil.isEmpty(leaf_user_id)) {
 						logger.info("用户信息查询失败或插入新用户失败");
 						failedPhone.append(leafPhone + ",");
 						continue;
@@ -104,7 +110,7 @@ public class JoinProject implements CmHandler {
 						}
 					}
 					if (leafProjectVO == null) {
-						leafProjectVO = projectService.createProject(leaf_user_name + "的项目", "",
+						leafProjectVO = projectService.createProject(leafName + "的项目", "",
 								parentProjectVO.getPROJECT_ID(), parentProjectVO.getROOT_ID(), leaf_user_id,
 								parentProjectVO.getADDRESS(), parentProjectVO.getLONGITUDE(),
 								parentProjectVO.getLATITUDE(), parentProjectVO.getROOT_PROJECT_NAME());
@@ -142,20 +148,23 @@ public class JoinProject implements CmHandler {
 				// 先取用户
 				List<Map<String, Object>> users = userService.queryUserByPhone(leaf_user_phone);
 				String leaf_user_id = "";
-				String leaf_user_name = "";
+				String leafName = leaf_user_phone;
+				if (!StringUtil.isEmpty(leaf_user_name)) {
+					leafName = leaf_user_name;
+				}
 				if (users == null || users.size() == 0) {
 					UserVO userVO = userService.register(leaf_user_phone, UtilUniqueKey.getKey());
 					if (userVO != null) {
 						leaf_user_id = userVO.getUSER_ID();
-						leaf_user_name = userVO.getUSER_NAME();
+						leafName = userVO.getUSER_NAME();
 					}
 				} else {
 					if (users.get(0).get("user_id") != null) {
 						leaf_user_id = users.get(0).get("user_id").toString();
-						leaf_user_name = users.get(0).get("user_name").toString();
+						leafName = users.get(0).get("user_name").toString();
 					}
 				}
-				if (StringUtil.isEmpty(leaf_user_name)) {
+				if (StringUtil.isEmpty(leaf_user_id)) {
 					logger.info("用户信息查询失败或插入新用户失败");
 					rs.setRES_CODE(Global.USER_ID_NULL);
 					rs.setRES_MESSAGE("用户信息查询失败,请重试");
@@ -198,9 +207,9 @@ public class JoinProject implements CmHandler {
 					}
 				}
 				if (leafProjectVO == null) {
-					leafProjectVO = projectService.createProject(leaf_user_name + "的项目", "",
-							parentProjectVO.getPROJECT_ID(), parentProjectVO.getROOT_ID(), leaf_user_id,
-							parentProjectVO.getADDRESS(), parentProjectVO.getLONGITUDE(), parentProjectVO.getLATITUDE(),
+					leafProjectVO = projectService.createProject(leafName + "的项目", "", parentProjectVO.getPROJECT_ID(),
+							parentProjectVO.getROOT_ID(), leaf_user_id, parentProjectVO.getADDRESS(),
+							parentProjectVO.getLONGITUDE(), parentProjectVO.getLATITUDE(),
 							parentProjectVO.getROOT_PROJECT_NAME());
 					if (leafProjectVO == null) {
 						logger.info("创建子项目失败");
